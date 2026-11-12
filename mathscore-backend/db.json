@@ -1,0 +1,1169 @@
+{
+  "settings": {
+    "heroTitle": "SAT Matematikani zamonaviy metodlar yordamida, ingliz tilida tez va samarali o'rganing",
+    "heroSubtitle": "Jahon standartlariga mos ta'lim. Yuqori ball oling va nufuzli xorijiy universitetlarga grant yutish imkoniyatini qo'lga kiriting.",
+    "contactPhone": "+998 99 824 46 18",
+    "contactAddress": "Toshkent shahri, Sergeli tumani",
+    "telegramLink": "https://t.me/math_teacher_m"
+  },
+  "results": [
+    {
+      "id": 1780124367654,
+      "score": "A Level",
+      "name": "Musulmon",
+      "color": "text-secondary",
+      "imageUrl": "https://api.mathscore.uz/uploads/919f1cad-42c0-4c41-9984-86929d1494bb.jpg",
+      "imagePosition": "object-bottom"
+    },
+    {
+      "id": 1780124404928,
+      "score": "SAT: 1430 ball",
+      "name": "Mirzoxon Muxtorov",
+      "color": "text-primary",
+      "imageUrl": "https://api.mathscore.uz/uploads/8eadd075-de6a-4860-9f42-6255a9ef7e64.jpg"
+    },
+    {
+      "id": 1780132689119,
+      "score": "SAT 1400",
+      "name": "Fayzullayev Jonibek",
+      "color": "text-secondary",
+      "imageUrl": "https://api.mathscore.uz/uploads/8a57a913-3377-41e6-a617-038949356d93.jpg",
+      "imagePosition": "object-center"
+    },
+    {
+      "id": 1780134000900,
+      "score": "A level",
+      "name": "Asliddin",
+      "color": "text-tertiary",
+      "imageUrl": "",
+      "imagePosition": "object-center"
+    },
+    {
+      "id": 1780134018675,
+      "score": "SAT 1500",
+      "name": "Abdulla",
+      "color": "text-secondary"
+    }
+  ],
+  "pricing": [
+    {
+      "id": 2,
+      "title": "A-Level Math",
+      "description": "Kembrij dasturi asosida chuqurlashtirilgan matematika. Pure Math va Mechanics.",
+      "price": "700,000",
+      "type": "tertiary"
+    },
+    {
+      "id": 1,
+      "title": "SAT Matematika",
+      "description": "Noldan boshlab yuqori darajagacha intensiv tayyorgarlik. Ingliz tilida masalalar yechish.",
+      "price": "600,000",
+      "type": "primary"
+    },
+    {
+      "id": 3,
+      "title": "Matematika Foundation",
+      "description": "Asosiy matematik bilimlarni mustahkamlash va ingliz tilidagi terminlarga moslashish.",
+      "price": "500,000",
+      "type": "secondary"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1794393592165,
+      "courseTitle": "Speak Skill",
+      "courses": [
+        "Speak Skill"
+      ],
+      "title": "aaaa",
+      "description": "ssss",
+      "deadline": "2026-11-18T18:59:59.000Z",
+      "linkUrl": "",
+      "fileUrl": "",
+      "fileName": "",
+      "fileSize": 0,
+      "coins": 50,
+      "xp": 100,
+      "tasksCount": 1,
+      "uploadedStudentsCount": 0,
+      "linksCount": 0,
+      "submissions": [],
+      "createdAt": "2026-11-11T10:39:52.165Z"
+    },
+    {
+      "id": 1794243648677,
+      "courseTitle": "Speak Skill",
+      "courses": [
+        "Speak Skill"
+      ],
+      "title": "Speech Time",
+      "description": "izoh",
+      "deadline": "2026-11-11T18:59:59.000Z",
+      "linkUrl": "https://youtube.com/shorts/C7xc68iFm_A?si=ZkEGT_geeEKpvpWs",
+      "fileUrl": "http://localhost:5000/uploads/f8974a79-6f2a-4861-9e59-69ab0e1bf8b7.png",
+      "fileName": "01 poster.png",
+      "fileSize": 2156532,
+      "coins": 150,
+      "xp": 150,
+      "tasksCount": 1,
+      "uploadedStudentsCount": 1,
+      "linksCount": 1,
+      "submissions": [
+        {
+          "id": 1794243726075,
+          "studentName": "Azizbek Turg`unboyev",
+          "studentId": "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96",
+          "studentEmail": "demouserrr333@gmail.com",
+          "studentPhone": "+998 50 773 44 17",
+          "studentAvatar": "http://localhost:5000/uploads/a99a7336-2627-4eb9-8b16-a9e4a2f9f728.jpg",
+          "fileName": "ovozli_yechim_1794250690837.webm",
+          "fileUrl": "http://localhost:5000/uploads/636f13e9-28f0-43a9-91c7-50c52a3aa13b.webm",
+          "fileSize": 68882,
+          "submittedAt": "2026-11-09T18:58:10.963Z",
+          "attemptNumber": 2,
+          "attemptsAllowed": 2,
+          "resubmitAllowed": false,
+          "grade": "55",
+          "feedback": "qayta topshiring",
+          "resubmitGrantedAt": "2026-11-09T17:03:22.778Z",
+          "gradedAt": "2026-11-09T18:58:49.889Z",
+          "gradedBy": "Malika",
+          "resubmittedAt": "2026-11-09T18:58:10.963Z",
+          "previousSubmissions": [
+            {
+              "fileName": "ovozli_yechim_1794243726034.webm",
+              "fileUrl": "http://localhost:5000/uploads/8467c3c4-2be9-4bf3-a96e-d6c6c34177a2.webm",
+              "fileSize": 107522,
+              "submittedAt": "2026-11-09T17:02:06.075Z",
+              "grade": "20",
+              "feedback": "qayta topshiring",
+              "attemptNumber": 1
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-11-09T17:00:48.677Z"
+    },
+    {
+      "id": 1794235721439,
+      "courseTitle": "IELTS Speaking Masterclass (Band 8.0+), General English Speaking & Fluency, Pronunciation & American Accent Training, Everyday English Conversations & Idioms, Business English Spoken Communication",
+      "courses": [
+        "IELTS Speaking Masterclass (Band 8.0+)",
+        "General English Speaking & Fluency",
+        "Pronunciation & American Accent Training",
+        "Everyday English Conversations & Idioms",
+        "Business English Spoken Communication"
+      ],
+      "title": "audio task",
+      "description": "vazifani audio shaklida yuboring hurmatli shogird!",
+      "deadline": "2026-11-16T18:59:59.000Z",
+      "linkUrl": "",
+      "fileUrl": "http://localhost:5000/uploads/c353d763-11d4-4ea8-9756-90e6ca09e9fb.mp4",
+      "fileName": "!_Main.mp4",
+      "coins": 200,
+      "xp": 100,
+      "tasksCount": 1,
+      "uploadedStudentsCount": 1,
+      "linksCount": 0,
+      "submissions": [
+        {
+          "id": 1794392490200,
+          "studentName": "Mirzoxon Muxtorov",
+          "studentId": "61550dee-0bdc-4940-b12a-e109b743366b",
+          "studentEmail": "student@mathscore.uz",
+          "studentPhone": "+998 94 024 13 71",
+          "studentAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+          "fileName": "ovozli_yechim_1794392489995.webm",
+          "fileUrl": "http://localhost:5000/uploads/269b7141-fd06-4d0d-84b6-b0ded226d3b0.webm",
+          "fileSize": 166448,
+          "submittedAt": "2026-11-11T10:21:30.200Z",
+          "attemptNumber": 1,
+          "attemptsAllowed": 1,
+          "resubmitAllowed": false,
+          "grade": null,
+          "feedback": ""
+        }
+      ],
+      "createdAt": "2026-11-09T14:48:41.439Z"
+    },
+    {
+      "id": 1794162500272,
+      "courseTitle": "IELTS Speaking Masterclass (Band 8.0+), General English Speaking & Fluency, Pronunciation & American Accent Training, Everyday English Conversations & Idioms, Business English Spoken Communication",
+      "courses": [
+        "IELTS Speaking Masterclass (Band 8.0+)",
+        "General English Speaking & Fluency",
+        "Pronunciation & American Accent Training",
+        "Everyday English Conversations & Idioms",
+        "Business English Spoken Communication"
+      ],
+      "title": "New Task English",
+      "description": "qisqacha",
+      "deadline": "2026-11-15T18:59:59.000Z",
+      "linkUrl": "",
+      "fileUrl": "http://localhost:5000/uploads/b74d52b3-81d3-44e8-9adc-dce0cbb75af1.mp3",
+      "fileName": "audio-3.mp3",
+      "coins": 50,
+      "xp": 120,
+      "tasksCount": 1,
+      "uploadedStudentsCount": 0,
+      "linksCount": 0,
+      "submissions": [],
+      "createdAt": "2026-11-08T18:28:20.272Z"
+    }
+  ],
+  "liveClasses": [
+    {
+      "id": 1794242182149,
+      "title": "Speaking Club",
+      "platform": "google-meet",
+      "url": "https://meet.google.com/nas-xczz-ast",
+      "date": "09-11-2026",
+      "time": "21:37",
+      "description": "izoh",
+      "createdAt": "2026-11-09T16:36:22.149Z"
+    },
+    {
+      "id": 1794200001,
+      "title": "IELTS Speaking: Band 8.0 Live Mock Interview & Part 2 Strategy",
+      "platform": "google-meet",
+      "url": "https://meet.google.com/abc-defg-hij",
+      "date": "09-11-2026",
+      "time": "19:00",
+      "description": "Part 2 Cue kartalari, intonatsiya va ravon gapirish bo'yicha jonli interaktiv master-klass.",
+      "createdAt": "2026-11-08T18:15:31.804Z"
+    },
+    {
+      "id": 1794200002,
+      "title": "Everyday English Fluency: Idioms & American Accent Live Practice",
+      "platform": "youtube",
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "date": "10-11-2026",
+      "time": "20:00",
+      "description": "Jonli efirda amerika talaffuzi, birikmalar va tezkor javob berish mashqlari.",
+      "createdAt": "2026-11-08T18:15:31.811Z"
+    }
+  ],
+  "library": [
+    {
+      "id": 1,
+      "title": "I WANT MY HAT",
+      "author": "Jon Klassen",
+      "date": "2024",
+      "cover": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 2,
+      "title": "THE HOBBIT",
+      "author": "J.R.R. Tolkien",
+      "date": "2023",
+      "cover": "https://images.unsplash.com/photo-1629992101753-56d196c8aabb?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 3,
+      "title": "Harry Potter",
+      "author": "J.K. Rowling",
+      "date": "2024",
+      "cover": "https://images.unsplash.com/photo-1618666012174-83b441c0bc76?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 4,
+      "title": "What Do You Want To Do Before You Die?",
+      "author": "The Buried Life",
+      "date": "2022",
+      "cover": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 5,
+      "title": "THINKING, FAST AND SLOW",
+      "author": "Daniel Kahneman",
+      "date": "2023",
+      "cover": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 6,
+      "title": "Fifty Shades Darker",
+      "author": "E L James",
+      "date": "2021",
+      "cover": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 7,
+      "title": "TOWNIE",
+      "author": "Andre Dubus III",
+      "date": "2022",
+      "cover": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 8,
+      "title": "Steve Jobs",
+      "author": "Walter Isaacson",
+      "date": "2023",
+      "cover": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 9,
+      "title": "SUTTON",
+      "author": "J.R. Moehringer",
+      "date": "2022",
+      "cover": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 10,
+      "title": "JOSEPH ANTON",
+      "author": "Salman Rushdie",
+      "date": "2021",
+      "cover": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=300&auto=format&fit=crop",
+      "pdfUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
+    },
+    {
+      "id": 1794242638159,
+      "title": "Harry Potter",
+      "author": "KimChin In",
+      "date": "2026-11-09",
+      "cover": "http://localhost:5000/uploads/8e05e3fe-ee0e-4951-a826-3fbbecf2a6a7.jpg",
+      "pdfUrl": "http://localhost:5000/uploads/e725a35c-e2c4-47c2-b3fd-8f860bc36214.pdf",
+      "createdAt": "2026-11-09T16:43:58.159Z"
+    }
+  ],
+  "challenges": [
+    {
+      "id": "ch_day_1_1794244694642",
+      "day": 1,
+      "title": "Day 1: Speaking Practice",
+      "description": "Day 1 mavzusi bo&#x27;yicha berilgan materiallarni ko&#x27;rib chiqing va vazifalarni o&#x27;z muddatida bajaring.",
+      "image": "http://localhost:5000/uploads/ad154cfd-1700-4d74-abdd-cd3853bd899d.jpg",
+      "images": [
+        "http://localhost:5000/uploads/ad154cfd-1700-4d74-abdd-cd3853bd899d.jpg"
+      ],
+      "tasks": [
+        "1. Mavzu materiallari va rasmlarini diqqat bilan o‘rganing",
+        "2. Asosiy iboralar bilan amaliy mashqni bajaring"
+      ],
+      "xp": 100,
+      "coins": 30,
+      "streakBonus": 2,
+      "deadline": "2026-11-11T18:59:00.000Z",
+      "urgentWindowMinutes": 360,
+      "completedBy": [
+        "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96"
+      ],
+      "submissions": {
+        "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96": {
+          "submittedAt": "2026-11-09T17:18:54.198Z",
+          "bonusPercent": 100,
+          "bonusStatus": "on_time",
+          "awarded": {
+            "xp": 100,
+            "coins": 30,
+            "streak": 2
+          },
+          "note": ""
+        }
+      },
+      "createdAt": "2026-11-09T17:18:14.642Z",
+      "updatedAt": "2026-11-09T17:18:14.642Z"
+    }
+  ],
+  "speakingChats": [
+    {
+      "id": 1794244316198,
+      "topic": "speak 2",
+      "color": "rose",
+      "creatorId": "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96",
+      "creatorName": "Azizbek Turg`unboyev",
+      "creatorEmail": "demouserrr333@gmail.com",
+      "creatorAvatar": "http://localhost:5000/uploads/a99a7336-2627-4eb9-8b16-a9e4a2f9f728.jpg",
+      "partnerId": "61550dee-0bdc-4940-b12a-e109b743366b",
+      "partnerName": "Mirzoxon Muxtorov",
+      "partnerEmail": "student@mathscore.uz",
+      "partnerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+      "status": "active",
+      "messages": [],
+      "createdAt": "2026-11-09T17:11:56.198Z",
+      "updatedAt": "2026-11-09T17:12:10.987Z"
+    },
+    {
+      "id": 1794244060934,
+      "topic": "Practise with my friends",
+      "color": "indigo",
+      "creatorId": "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96",
+      "creatorName": "Azizbek Turg`unboyev",
+      "creatorEmail": "demouserrr333@gmail.com",
+      "creatorAvatar": "http://localhost:5000/uploads/a99a7336-2627-4eb9-8b16-a9e4a2f9f728.jpg",
+      "partnerId": "61550dee-0bdc-4940-b12a-e109b743366b",
+      "partnerName": "Mirzoxon Muxtorov",
+      "partnerEmail": "student@mathscore.uz",
+      "partnerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+      "status": "active",
+      "messages": [
+        {
+          "id": 1794244158680,
+          "chatId": 1794244060934,
+          "senderId": "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderEmail": "demouserrr333@gmail.com",
+          "audioUrl": "http://localhost:5000/uploads/fc3e4b6e-3c78-4fb3-8f22-aa64527e9f32.webm",
+          "duration": "00:03",
+          "createdAt": "2026-11-09T17:09:18.680Z"
+        },
+        {
+          "id": 1794244188937,
+          "chatId": 1794244060934,
+          "senderId": "61550dee-0bdc-4940-b12a-e109b743366b",
+          "senderName": "Mirzoxon Muxtorov",
+          "senderEmail": "student@mathscore.uz",
+          "audioUrl": "http://localhost:5000/uploads/ef0bdace-0f8a-4351-b4d4-6b85de82a7a1.webm",
+          "duration": "00:04",
+          "createdAt": "2026-11-09T17:09:48.937Z"
+        }
+      ],
+      "createdAt": "2026-11-09T17:07:40.934Z",
+      "updatedAt": "2026-11-09T17:08:28.582Z",
+      "lastMessageAt": "2026-11-09T17:09:48.937Z"
+    }
+  ],
+  "challengesInitialized": true,
+  "scheduledPushes": [
+    {
+      "id": "push_1794430966238_mm9z",
+      "title": "30 day Challenge boshlandi! 🎙️🏆",
+      "message": "Admin tomonidan yangi 30 day Challenge e&#x27;lon qilindi! Har kuni vazifani bajarib Coin, Streak va XP ballar yuting.",
+      "scheduledAt": "2026-11-11T21:02:46.213Z",
+      "createdAt": "2026-11-11T21:02:46.238Z",
+      "usageDate": "2026-11-12",
+      "status": "sent",
+      "sentAt": "2026-11-11T21:02:46.242Z",
+      "recipientCount": 3
+    },
+    {
+      "id": "push_1794244821682_oqc6",
+      "title": "E`lon!",
+      "message": "Yangi kurs ochdim",
+      "scheduledAt": "2026-11-09T17:20:00.000Z",
+      "createdAt": "2026-11-09T17:20:21.682Z",
+      "usageDate": "2026-11-09",
+      "status": "sent",
+      "sentAt": "2026-11-09T17:20:21.685Z",
+      "recipientCount": 3
+    },
+    {
+      "id": "push_1794244780112_u5bq",
+      "title": "E`lon!",
+      "message": "Yangi kurs ochdim",
+      "scheduledAt": "2026-11-09T17:20:00.000Z",
+      "createdAt": "2026-11-09T17:19:40.113Z",
+      "usageDate": "2026-11-09",
+      "status": "sent",
+      "sentAt": "2026-11-09T17:20:00.975Z",
+      "recipientCount": 3
+    }
+  ],
+  "passwordResetTokens": [],
+  "studentDesign": {
+    "preset": "burnt-orange",
+    "updatedAt": "2026-11-11T16:11:49.610Z",
+    "updatedBy": "ver_sp_adm_1794413475777@test.local"
+  },
+  "battles": [
+    {
+      "id": "battle_1794429042227_au1u2",
+      "status": "active",
+      "coinPerCorrect": 10,
+      "xpPerCorrect": 10,
+      "challengerId": "c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+      "challengerName": "Muborak Xonkeldiyeva",
+      "challengerAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop",
+      "challengerXp": 10,
+      "opponentId": "61550dee-0bdc-4940-b12a-e109b743366b",
+      "opponentName": "Mirzoxon Muxtorov",
+      "opponentAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+      "opponentXp": 565,
+      "questions": [
+        {
+          "id": "bq12",
+          "q": "Do'stona suhbatda \"How have you been keeping?\" savoliga tabiiy javob:",
+          "options": [
+            "I am keeping a book.",
+            "I've been doing great, thanks!",
+            "Yes, yesterday night.",
+            "In the supermarket."
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq6",
+          "q": "\"Once in a blue moon\" iborasi qanday ma'noda qo'llanadi?",
+          "options": [
+            "Har kuni muntazam",
+            "Juda kamdan-kam hollarda",
+            "Kecha tunda",
+            "Oy yorug'ida"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq4",
+          "q": "\"Eloquent\" so'zining ma'nosiga eng yaqin sinonim qaysi?",
+          "options": [
+            "Boring",
+            "Articulate",
+            "Silent",
+            "Careless"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq8",
+          "q": "\"Hit the nail on the head\" qachon ishlatiladi?",
+          "options": [
+            "Xato javob berganda",
+            "Aynan to'g'ri fikrni topib aytganda",
+            "Mix qoqqanda",
+            "Charchaganda"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq13",
+          "q": "\"Look forward to\" iborasidan keyin fe'l qanday shaklda keladi?",
+          "options": [
+            "Infinitive (go)",
+            "Gerund (-ing, meeting)",
+            "Past simple (went)",
+            "Base form with to"
+          ],
+          "correct": 1
+        }
+      ],
+      "challengerAnswers": [
+        {
+          "qIndex": 0,
+          "selectedIdx": 0,
+          "correctIdx": 1,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-11T20:31:00.865Z"
+        },
+        {
+          "qIndex": 1,
+          "selectedIdx": 1,
+          "correctIdx": 1,
+          "isCorrect": true,
+          "coinsAwarded": 10,
+          "answeredAt": "2026-11-11T20:31:04.300Z"
+        }
+      ],
+      "opponentAnswers": [
+        {
+          "qIndex": 0,
+          "selectedIdx": 0,
+          "correctIdx": 1,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-11T20:30:56.134Z"
+        },
+        {
+          "qIndex": 1,
+          "selectedIdx": 1,
+          "correctIdx": 1,
+          "isCorrect": true,
+          "coinsAwarded": 10,
+          "answeredAt": "2026-11-11T20:31:07.386Z"
+        },
+        {
+          "qIndex": 2,
+          "selectedIdx": 1,
+          "correctIdx": 1,
+          "isCorrect": true,
+          "coinsAwarded": 10,
+          "answeredAt": "2026-11-11T20:31:09.862Z"
+        }
+      ],
+      "challengerScore": 1,
+      "opponentScore": 2,
+      "challengerCoinsEarned": 10,
+      "opponentCoinsEarned": 20,
+      "winnerId": null,
+      "createdAt": "2026-11-11T20:30:42.228Z",
+      "acceptedAt": "2026-11-11T20:30:50.573Z",
+      "completedAt": null,
+      "updatedAt": "2026-11-11T20:30:50.573Z"
+    },
+    {
+      "id": "battle_1794245085731_4f0ji",
+      "status": "active",
+      "coinPerCorrect": 10,
+      "xpPerCorrect": 10,
+      "challengerId": "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96",
+      "challengerName": "Azizbek Turg`unboyev",
+      "challengerAvatar": "http://localhost:5000/uploads/a99a7336-2627-4eb9-8b16-a9e4a2f9f728.jpg",
+      "challengerXp": 325,
+      "opponentId": "61550dee-0bdc-4940-b12a-e109b743366b",
+      "opponentName": "Mirzoxon Muxtorov",
+      "opponentAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+      "opponentXp": 180,
+      "questions": [
+        {
+          "id": "bq5",
+          "q": "\"Break the ice\" idiomasi suhbatda nimani bildiradi?",
+          "options": [
+            "Muzni sindirish",
+            "Ilk suhbatdagi noqulaylikni yo'qotish",
+            "Sovuq choy ichish",
+            "Janjal chiqarish"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq14",
+          "q": "\"Bite the bullet\" idiomasi nimani anglatadi?",
+          "options": [
+            "Qiyin vaziyatga mardona chidab kirishish",
+            "Tez ovqatlanish",
+            "So'zlarni unutish",
+            "Qochib ketish"
+          ],
+          "correct": 0
+        },
+        {
+          "id": "bq4",
+          "q": "\"Eloquent\" so'zining ma'nosiga eng yaqin sinonim qaysi?",
+          "options": [
+            "Boring",
+            "Articulate",
+            "Silent",
+            "Careless"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq9",
+          "q": "\"Piece of cake\" iborasining to'g'ri ma'nosi qaysi?",
+          "options": [
+            "Juda qiyin masala",
+            "Shirinlik pishirish",
+            "Juda oson ish",
+            "Qimmat sovg'a"
+          ],
+          "correct": 2
+        },
+        {
+          "id": "bq13",
+          "q": "\"Look forward to\" iborasidan keyin fe'l qanday shaklda keladi?",
+          "options": [
+            "Infinitive (go)",
+            "Gerund (-ing, meeting)",
+            "Past simple (went)",
+            "Base form with to"
+          ],
+          "correct": 1
+        }
+      ],
+      "challengerAnswers": [
+        {
+          "qIndex": 0,
+          "selectedIdx": 0,
+          "correctIdx": 1,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-09T17:25:14.551Z"
+        },
+        {
+          "qIndex": 1,
+          "selectedIdx": 2,
+          "correctIdx": 0,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-09T17:25:27.429Z"
+        },
+        {
+          "qIndex": 2,
+          "selectedIdx": 1,
+          "correctIdx": 1,
+          "isCorrect": true,
+          "coinsAwarded": 10,
+          "answeredAt": "2026-11-09T17:27:53.893Z"
+        },
+        {
+          "qIndex": 3,
+          "selectedIdx": 1,
+          "correctIdx": 2,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-09T17:28:08.115Z"
+        },
+        {
+          "qIndex": 4,
+          "selectedIdx": 0,
+          "correctIdx": 1,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-09T18:56:51.557Z"
+        }
+      ],
+      "opponentAnswers": [
+        {
+          "qIndex": 0,
+          "selectedIdx": 2,
+          "correctIdx": 1,
+          "isCorrect": false,
+          "coinsAwarded": 0,
+          "answeredAt": "2026-11-09T17:25:20.480Z"
+        },
+        {
+          "qIndex": 1,
+          "selectedIdx": 0,
+          "correctIdx": 0,
+          "isCorrect": true,
+          "coinsAwarded": 10,
+          "answeredAt": "2026-11-09T17:25:32.922Z"
+        }
+      ],
+      "challengerScore": 1,
+      "opponentScore": 1,
+      "challengerCoinsEarned": 10,
+      "opponentCoinsEarned": 10,
+      "winnerId": null,
+      "createdAt": "2026-11-09T17:24:45.812Z",
+      "acceptedAt": "2026-11-09T17:25:03.776Z",
+      "completedAt": null,
+      "updatedAt": "2026-11-09T17:25:03.776Z"
+    }
+  ],
+  "oneTimePasswordUsers": {
+    "6e75e9b2-e83b-4119-8892-47ea5640f0cd": {
+      "active": true,
+      "issuedAt": "2026-11-11T18:35:43.023Z",
+      "loginUrl": "http://localhost:5173/student"
+    },
+    "8858587a-4e9f-4f67-a74c-94fe033580f2": {
+      "active": false,
+      "issuedAt": "2026-11-11T18:52:40.639Z",
+      "loginUrl": "http://localhost:5173/student",
+      "clearedAt": "2026-11-11T18:53:35.934Z"
+    },
+    "a1023b88-647c-4c56-8ca7-b4d3c25467a5": {
+      "active": false,
+      "issuedAt": "2026-11-11T18:55:55.132Z",
+      "loginUrl": "http://localhost:5173/student",
+      "clearedAt": "2026-11-11T18:56:46.012Z"
+    },
+    "87ad721b-0d55-42ac-8bab-446bafc09fbb": {
+      "active": false,
+      "issuedAt": "2026-11-11T18:58:58.392Z",
+      "loginUrl": "http://localhost:5173/student",
+      "clearedAt": "2026-11-11T18:59:18.584Z"
+    },
+    "e511bce7-1b72-4ff1-b767-07d71d1bc90d": {
+      "active": false,
+      "issuedAt": "2026-11-11T19:02:51.746Z",
+      "loginUrl": "http://localhost:5173/student",
+      "clearedAt": "2026-11-11T19:03:20.865Z"
+    },
+    "c623f1f9-8704-4ca3-a4f5-159ef42323e5": {
+      "active": false,
+      "issuedAt": "2026-11-11T19:14:58.437Z",
+      "loginUrl": "http://localhost:5173/student",
+      "clearedAt": "2026-11-11T19:16:04.971Z"
+    },
+    "60e26fb1-d186-47b2-b724-7d4fe7ab75f0": {
+      "active": true,
+      "issuedAt": "2026-11-11T19:17:45.329Z",
+      "loginUrl": "http://localhost:5173/student"
+    },
+    "c332d7b2-55cd-4c91-9296-764d7ab2fe22": {
+      "active": false,
+      "issuedAt": "2026-11-11T19:30:21.286Z",
+      "loginUrl": "http://localhost:5174",
+      "clearedAt": "2026-11-11T19:35:46.702Z"
+    }
+  },
+  "studentDailyGoals": {
+    "61550dee-0bdc-4940-b12a-e109b743366b": 100
+  },
+  "practiseQuestions": [
+    {
+      "id": "sp_q_1",
+      "question": "Speaking English smoothly without long awkward pauses is called _____.",
+      "answer": "FLUENCY",
+      "hint": "Starts with F (7 letters)",
+      "category": "IELTS Speaking",
+      "xp": 15,
+      "coins": 10,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_2",
+      "question": "Could you _____ that question, please? I did not catch the last word.",
+      "answer": "REPEAT",
+      "hint": "Say it one more time (6 letters)",
+      "category": "Conversation",
+      "xp": 15,
+      "coins": 10,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_3",
+      "question": "In my _____, practising English aloud every morning builds strong confidence.",
+      "answer": "OPINION",
+      "hint": "Personal point of view (7 letters)",
+      "category": "Expressing Ideas",
+      "xp": 15,
+      "coins": 10,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_4",
+      "question": "Before giving a two-minute talk in IELTS Part 2, take a deep breath to stay _____.",
+      "answer": "CALM",
+      "hint": "Relaxed and not nervous (4 letters)",
+      "category": "Speaking Confidence",
+      "xp": 15,
+      "coins": 10,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_5",
+      "question": "An English _____ like \"break a leg\" has a figurative meaning rather than a literal one.",
+      "answer": "IDIOM",
+      "hint": "Natural expression (5 letters)",
+      "category": "Vocabulary",
+      "xp": 20,
+      "coins": 12,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_6",
+      "question": "To make your IELTS Speaking answer convincing, always support your point with a real _____.",
+      "answer": "EXAMPLE",
+      "hint": "Case or illustration (7 letters)",
+      "category": "IELTS Part 3",
+      "xp": 20,
+      "coins": 12,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_7",
+      "question": "Good speakers maintain natural eye _____ with the listener while talking.",
+      "answer": "CONTACT",
+      "hint": "Looking directly at someone (7 letters)",
+      "category": "Body Language",
+      "xp": 20,
+      "coins": 12,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_8",
+      "question": "Could you _____ what you mean by that phrase using simpler words?",
+      "answer": "EXPLAIN",
+      "hint": "Make something clear (7 letters)",
+      "category": "Conversation",
+      "xp": 20,
+      "coins": 15,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_9",
+      "question": "Practising shadowing native audio helps improve your natural English _____ and rhythm.",
+      "answer": "ACCENT",
+      "hint": "Way of pronouncing words (6 letters)",
+      "category": "Pronunciation",
+      "xp": 25,
+      "coins": 15,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    },
+    {
+      "id": "sp_q_10",
+      "question": "Delivering a short _____ in front of an audience improves your public speaking skills.",
+      "answer": "SPEECH",
+      "hint": "Spoken talk or presentation (6 letters)",
+      "category": "Public Speaking",
+      "xp": 25,
+      "coins": 15,
+      "createdAt": "2026-11-09T18:06:27.791Z",
+      "updatedAt": "2026-11-09T18:06:27.791Z"
+    }
+  ],
+  "practiseInitialized": true,
+  "adminPanelSettings": {
+    "brandName": "Practise",
+    "primaryColor": "Ko&#x27;k (Royal Indigo)",
+    "supabaseKey": "sb_proj_key_mathscore_18972412",
+    "vimeoToken": ""
+  },
+  "studentTariffs": {
+    "c332d7b2-55cd-4c91-9296-764d7ab2fe22": "FREE",
+    "61550dee-0bdc-4940-b12a-e109b743366b": "VIP"
+  },
+  "supportAdmins": {},
+  "adminActivityLogs": [
+    {
+      "id": "act_1794430896691_fhw9a",
+      "action": "login",
+      "label": "Kirish",
+      "userId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+      "name": "Azizbek Turg`unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "adminType": "primary",
+      "roleLabel": "Asosiy Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-11T21:01:36.691Z"
+    },
+    {
+      "id": "act_1794430894029_ga4s7",
+      "action": "logout",
+      "label": "Chiqish",
+      "userId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+      "name": "Azizbek Turg`unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "adminType": "primary",
+      "roleLabel": "Asosiy Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-11T21:01:34.029Z"
+    },
+    {
+      "id": "act_1794429985727_bhamf",
+      "action": "login",
+      "label": "Kirish",
+      "userId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+      "name": "Azizbek Turg`unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "adminType": "primary",
+      "roleLabel": "Asosiy Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-11T20:46:25.727Z"
+    },
+    {
+      "id": "act_1794426610772_scc87",
+      "action": "login",
+      "label": "Kirish",
+      "userId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+      "name": "Azizbek Turg`unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "adminType": "primary",
+      "roleLabel": "Asosiy Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-11T19:50:10.772Z"
+    },
+    {
+      "id": "act_1794426575083_uw2tj",
+      "action": "login",
+      "label": "Kirish",
+      "userId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+      "name": "Azizbek Turg`unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "adminType": "primary",
+      "roleLabel": "Asosiy Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-11T19:49:35.083Z"
+    }
+  ],
+  "supportChats": {
+    "61550dee-0bdc-4940-b12a-e109b743366b": {
+      "studentId": "61550dee-0bdc-4940-b12a-e109b743366b",
+      "unreadByAdmin": 0,
+      "unreadByStudent": 0,
+      "updatedAt": "2026-11-12T09:46:22.741Z",
+      "messages": [
+        {
+          "id": "greet_61550dee-0bdc-4940-b12a-e109b743366b",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek",
+          "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": "Hello! I am Azizbek. How can I help you?",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:24:31.740Z"
+        },
+        {
+          "id": "msg_1794425188810_wz2l",
+          "senderRole": "student",
+          "senderId": "61550dee-0bdc-4940-b12a-e109b743366b",
+          "senderName": "Mirzoxon Muxtorov",
+          "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": "Hello teacher! here it has a problem that ....",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:26:28.810Z"
+        },
+        {
+          "id": "msg_1794425258973_htul",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "audio",
+          "text": "",
+          "audioUrl": "http://localhost:5000/uploads/e0c8cf45-bd42-4013-84e3-2a30f6137efd.webm",
+          "duration": "00:08",
+          "createdAt": "2026-11-11T19:27:38.973Z"
+        },
+        {
+          "id": "msg_1794476772868_594n",
+          "senderRole": "student",
+          "senderId": "61550dee-0bdc-4940-b12a-e109b743366b",
+          "senderName": "Mirzoxon Muxtorov",
+          "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": "Hi?",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-12T09:46:12.868Z"
+        },
+        {
+          "id": "msg_1794476782741_1r77",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "text",
+          "text": "HI",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-12T09:46:22.741Z"
+        }
+      ]
+    },
+    "c332d7b2-55cd-4c91-9296-764d7ab2fe22": {
+      "studentId": "c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+      "unreadByAdmin": 0,
+      "unreadByStudent": 0,
+      "updatedAt": "2026-11-12T09:46:49.796Z",
+      "messages": [
+        {
+          "id": "greet_c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "text",
+          "text": "Hello! I am Azizbek. How can I help you?",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:35:23.939Z"
+        },
+        {
+          "id": "msg_1794425957830_fi5k",
+          "senderRole": "student",
+          "senderId": "c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+          "senderName": "Muborak Xonkeldiyeva",
+          "senderAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": "Assalomu alaykum! Meni VIP tarifga o`tkazing. Kartaga to`lov qildim ustoz",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:39:17.830Z"
+        },
+        {
+          "id": "msg_1794425972913_k3q6",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "text",
+          "text": "xop",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:39:32.913Z"
+        },
+        {
+          "id": "msg_1794425977936_zc16",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "audio",
+          "text": "",
+          "audioUrl": "http://localhost:5000/uploads/8526c98e-7a53-4bd9-9498-15033a6220da.webm",
+          "duration": "00:03",
+          "createdAt": "2026-11-11T19:39:37.936Z"
+        },
+        {
+          "id": "msg_1794426017358_q1q7",
+          "senderRole": "student",
+          "senderId": "c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+          "senderName": "Muborak Xonkeldiyeva",
+          "senderAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": "✅",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:40:17.358Z"
+        },
+        {
+          "id": "msg_1794426051498_4wa3",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "text",
+          "text": ":))",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-11T19:40:51.498Z"
+        },
+        {
+          "id": "msg_1794476746251_1yl9",
+          "senderRole": "student",
+          "senderId": "c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+          "senderName": "Muborak Xonkeldiyeva",
+          "senderAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": "Hello?",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-12T09:45:46.251Z"
+        },
+        {
+          "id": "msg_1794476762081_a1x4",
+          "senderRole": "admin",
+          "senderId": "c2e7fe13-147b-4b1e-94da-19d6c5e11039",
+          "senderName": "Azizbek Turg`unboyev",
+          "senderAvatar": "http://localhost:5000/uploads/9bd7d9c5-1b47-4900-b43b-a59e316b2991",
+          "type": "text",
+          "text": "hi",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-12T09:46:02.081Z"
+        },
+        {
+          "id": "msg_1794476809796_p2a8",
+          "senderRole": "student",
+          "senderId": "c332d7b2-55cd-4c91-9296-764d7ab2fe22",
+          "senderName": "Muborak Xonkeldiyeva",
+          "senderAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop",
+          "type": "text",
+          "text": ":)",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-12T09:46:49.796Z"
+        }
+      ]
+    }
+  },
+  "challengeProgressOverrides": {},
+  "gamificationResetDate": "2026-11-12",
+  "gamificationResetAt": "2026-11-11T21:25:24.831Z",
+  "gamificationResetBy": "turgunboevsss@gmail.com"
+}

@@ -1,0 +1,32 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="gem_shadow" x="0" y="0" width="32" height="32" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#0060A0" flood-opacity="0.35"/>
+    </filter>
+    <linearGradient id="facet_top" x1="16" y1="3" x2="16" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#AEE8FF"/>
+      <stop offset="100%" stop-color="#55C9FF"/>
+    </linearGradient>
+    <linearGradient id="facet_left" x1="5" y1="9" x2="16" y2="29" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0088D6"/>
+      <stop offset="100%" stop-color="#0066AA"/>
+    </linearGradient>
+    <linearGradient id="facet_right" x1="27" y1="9" x2="16" y2="29" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0CA8FD"/>
+      <stop offset="100%" stop-color="#008BE2"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#gem_shadow)">
+    <!-- Base hexagon outline -->
+    <polygon points="16,3 27,9.5 27,22.5 16,29 5,22.5 5,9.5" fill="#008EE0" stroke="#0072B8" stroke-width="0.8" stroke-linejoin="round"/>
+    <!-- Bottom Left facet -->
+    <polygon points="5,9.5 16,14.5 16,29 5,22.5" fill="url(#facet_left)"/>
+    <!-- Bottom Right facet -->
+    <polygon points="27,9.5 16,14.5 16,29 27,22.5" fill="url(#facet_right)"/>
+    <!-- Top triangular facet -->
+    <polygon points="16,3 27,9.5 16,14.5 5,9.5" fill="url(#facet_top)"/>
+    <!-- White specular glint highlight -->
+    <polygon points="16,4.5 22,8.5 16,11.5 10,8.5" fill="#FFFFFF" opacity="0.75"/>
+    <circle cx="8" cy="11.5" r="1.2" fill="#FFFFFF" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Speaking: Health & Fitness Vocabulary Master</title>
+  <style>
+    /* CSS VARIABLES & THEMES */
+    :root {
+      /* Midnight Luxury (Default) */
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --bg-color: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-hover: rgba(51, 65, 85, 0.8);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gold: #fbbf24;
+      --accent-gold-glow: rgba(251, 191, 36, 0.3);
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-red: #f87171;
+      --nav-bg: rgba(15, 23, 42, 0.85);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    [data-theme="platinum"] {
+      --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f8fafc 100%);
+      --bg-color: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(203, 213, 225, 0.8);
+      --card-hover: rgba(241, 245, 249, 1);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent-gold: #d97706;
+      --accent-gold-glow: rgba(217, 119, 6, 0.2);
+      --accent-blue: #0284c7;
+      --accent-green: #059669;
+      --accent-red: #dc2626;
+      --nav-bg: rgba(248, 250, 252, 0.85);
+      --shadow-color: rgba(148, 163, 184, 0.2);
+    }
+
+    [data-theme="emerald"] {
+      --bg-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #022c22 100%);
+      --bg-color: #022c22;
+      --card-bg: rgba(6, 78, 59, 0.6);
+      --card-border: rgba(52, 211, 153, 0.2);
+      --card-hover: rgba(4, 120, 87, 0.7);
+      --text-main: #ecfdf5;
+      --text-muted: #a7f3d0;
+      --accent-gold: #f59e0b;
+      --accent-gold-glow: rgba(245, 158, 11, 0.3);
+      --accent-blue: #2dd4bf;
+      --accent-green: #10b981;
+      --accent-red: #f87171;
+      --nav-bg: rgba(2, 44, 34, 0.85);
+      --shadow-color: rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="purple"] {
+      --bg-gradient: linear-gradient(135deg, #2e1065 0%, #3b0764 50%, #1e1b4b 100%);
+      --bg-color: #2e1065;
+      --card-bg: rgba(88, 28, 135, 0.5);
+      --card-border: rgba(192, 132, 252, 0.2);
+      --card-hover: rgba(107, 33, 168, 0.7);
+      --text-main: #faf5ff;
+      --text-muted: #d8b4fe;
+      --accent-gold: #fbbf24;
+      --accent-gold-glow: rgba(251, 191, 36, 0.3);
+      --accent-blue: #c084fc;
+      --accent-green: #34d399;
+      --accent-red: #f87171;
+      --nav-bg: rgba(46, 16, 101, 0.85);
+      --shadow-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* LIQUID GLASS MESH & AMBIENT ANIMATIONS */
+    .liquid-mesh-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .liquid-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+      animation: floatBlob 18s ease-in-out infinite alternate;
+    }
+
+    .blob-1 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.8) 0%, rgba(14, 165, 233, 0) 70%);
+      top: -100px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.6) 0%, rgba(217, 119, 6, 0) 70%);
+      bottom: -150px;
+      right: -100px;
+      animation-delay: -6s;
+    }
+
+    .blob-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(126, 34, 206, 0) 70%);
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -12s;
+    }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0px, 0px) scale(1); }
+      33% { transform: translate(60px, -80px) scale(1.15); }
+      66% { transform: translate(-50px, 50px) scale(0.9); }
+      100% { transform: translate(40px, 70px) scale(1.05); }
+    }
+
+    /* SPECULAR LIQUID GLASS CARDS */
+    .liquid-glass-card {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      border-left: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 28px;
+      box-shadow: 
+        inset 0 1px 1px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.2),
+        0 20px 50px rgba(0, 0, 0, 0.35);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .liquid-glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.15),
+        transparent
+      );
+      transition: left 0.75s ease;
+      pointer-events: none;
+    }
+
+    .liquid-glass-card:hover::before {
+      left: 100%;
+    }
+
+    .liquid-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 30px 0;
+      text-align: left;
+    }
+
+    .hero-feature-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .hero-feature-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .hero-feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .hero-feature-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .hero-feature-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* GLOBAL STYLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-family);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.5s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* CONTAINER */
+    .app-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+      margin-top: 70px;
+      margin-bottom: 40px;
+      flex: 1;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 4px 20px var(--shadow-color);
+    }
+
+    .nav-brand {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-brand span {
+      color: var(--accent-gold);
+    }
+
+    .nav-stats {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .stat-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-badge .gold {
+      color: var(--accent-gold);
+    }
+
+    .theme-select {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .theme-select option {
+      background: var(--bg-color);
+      color: var(--text-main);
+    }
+
+    /* CARD STYLE & GLASSMORPHISM */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px var(--shadow-color);
+      margin-bottom: 25px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* BUTTONS */
+    .btn {
+      background: linear-gradient(135deg, var(--accent-gold) 0%, #d97706 100%);
+      color: #0f172a;
+      font-weight: 700;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px var(--accent-gold-glow);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-gold-glow);
+      filter: brightness(1.1);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: none;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+    }
+
+    /* INPUTS */
+    .input-field {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-gold);
+    }
+
+    /* WELCOME SCREEN */
+    #welcome-screen {
+      text-align: center;
+      max-width: 500px;
+      margin: 40px auto;
+    }
+
+    #welcome-screen h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: var(--text-main);
+      letter-spacing: 1px;
+    }
+
+    #welcome-screen p.subtitle {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+      font-size: 1.05rem;
+    }
+
+    /* MODULE CONTAINERS */
+    .module {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .module.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .module-header {
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 15px;
+    }
+
+    .module-title h2 {
+      font-size: 1.6rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .module-title p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    /* FLASHCARDS (MODULE 1) */
+    .flashcard-container {
+      perspective: 1000px;
+      width: 100%;
+      height: 320px;
+      margin: 20px 0;
+      cursor: pointer;
+    }
+
+    .flashcard {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 20px;
+    }
+
+    .flashcard.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      align-items: flex-start;
+      text-align: left;
+      justify-content: space-between;
+    }
+
+    .card-face .expression {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 15px;
+    }
+
+    .card-face .tap-hint {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-detail {
+      margin-bottom: 12px;
+      width: 100%;
+    }
+
+    .card-detail label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent-blue);
+      font-weight: 700;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .card-detail p {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.4;
+    }
+
+    .card-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .audio-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .audio-btn:hover {
+      background: var(--accent-gold);
+      color: #0f172a;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* MATCHING GAME (MODULE 2) */
+    .matching-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .matching-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .match-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .match-card:hover {
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .match-card.selected {
+      border-color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.15);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+
+    .match-card.matched {
+      border-color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--accent-green);
+      cursor: default;
+      opacity: 0.7;
+    }
+
+    .match-card.shake {
+      animation: shake 0.4s ease;
+      border-color: var(--accent-red);
+      background: rgba(248, 113, 113, 0.15);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* MCQs (MODULE 3 & FINAL BOSS TASK 1) */
+    .mcq-option {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mcq-option:hover {
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .mcq-option.correct {
+      border-color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.2);
+      color: var(--accent-green);
+    }
+
+    .mcq-option.incorrect {
+      border-color: var(--accent-red);
+      background: rgba(248, 113, 113, 0.2);
+      color: var(--accent-red);
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .explanation-box {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-left: 4px solid var(--accent-blue);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      display: none;
+    }
+
+    /* READING (MODULE 4 & FINAL BOSS TASK 2) */
+    .reading-passage {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+
+    .reading-passage span.highlight {
+      color: var(--accent-gold);
+      font-weight: 600;
+    }
+
+    .tfng-btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+
+    .tfng-btn {
+      flex: 1;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .tfng-btn:hover {
+      border-color: var(--accent-gold);
+    }
+
+    .tfng-btn.selected-correct {
+      background: rgba(52, 211, 153, 0.25);
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .tfng-btn.selected-incorrect {
+      background: rgba(248, 113, 113, 0.25);
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    /* FINAL BOSS STYLING */
+    .boss-card {
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 25px var(--accent-gold-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .boss-badge-header {
+      background: var(--accent-gold);
+      color: #0f172a;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      border-radius: 0 0 8px 8px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* SPEAKING & MASTERED SCREEN */
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .vocab-grid-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 15px;
+    }
+
+    .vocab-grid-item h4 {
+      color: var(--accent-gold);
+      margin-bottom: 5px;
+    }
+
+    .vocab-grid-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .speaking-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 4px solid var(--accent-gold);
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      border-radius: 0 12px 12px 0;
+    }
+
+    .badges-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .badge-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.4;
+      filter: grayscale(1);
+      transition: all 0.3s ease;
+    }
+
+    .badge-item.unlocked {
+      opacity: 1;
+      filter: grayscale(0);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    .badge-icon {
+      font-size: 1.5rem;
+    }
+
+    .badge-info h5 {
+      font-size: 0.9rem;
+      color: var(--text-main);
+    }
+
+    .badge-info p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* CONFETTI CANVAS */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* UTILITIES */
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .mt-20 {
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* RESET BUTTON */
+    .reset-btn {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 20px;
+    }
+
+    .reset-btn:hover {
+      color: var(--accent-red);
+    }
+  </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+
+  <!-- LIQUID GLASS BACKGROUND MESH -->
+  <div class="liquid-mesh-bg">
+    <div class="liquid-blob blob-1"></div>
+    <div class="liquid-blob blob-2"></div>
+    <div class="liquid-blob blob-3"></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span>HEALTH</span> & FITNESS
+    </div>
+    <div class="nav-stats">
+      <div class="stat-badge">
+        <span class="gold">⚡</span> <span id="nav-xp">0 XP</span>
+      </div>
+      <div class="stat-badge">
+        <span id="nav-level">Beginner</span>
+      </div>
+      <select id="theme-selector" class="theme-select" onchange="changeTheme(this.value)">
+        <option value="midnight">🌑 Midnight</option>
+        <option value="platinum">🤍 Platinum</option>
+        <option value="emerald">🌲 Emerald</option>
+        <option value="purple">👑 Purple</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <div class="app-container">
+
+    <!-- WELCOME / LANDING SCREEN (LIQUID GLASS DESIGN) -->
+    <div id="welcome-screen" class="liquid-glass-card" style="padding: 40px 30px; text-align: center;">
+      <div class="liquid-badge">
+        <span>✨ IELTS Band 8.0+ Vocabulary Engine</span>
+      </div>
+
+      <h1 class="hero-title">HEALTH & FITNESS<br><span style="color: var(--accent-gold);">LIQUID MASTER</span></h1>
+      <p class="subtitle" style="max-width: 580px; margin: 0 auto 25px auto;">
+        An immersive, high-yield interactive learning system designed to sharpen your lexical resource, natural collocations, and speaking fluency for IELTS.
+      </p>
+
+      <div class="hero-features-grid">
+        <div class="hero-feature-item">
+          <div class="hero-feature-icon">📚</div>
+          <div class="hero-feature-title">15 Core Chunks</div>
+          <div class="hero-feature-desc">High-scoring collocations & audio pronunciation.</div>
+        </div>
+        <div class="hero-feature-item">
+          <div class="hero-feature-icon">🧩</div>
+          <div class="hero-feature-title">Match & Choose</div>
+          <div class="hero-feature-desc">Active recall exercises for rapid retention.</div>
+        </div>
+        <div class="hero-feature-item">
+          <div class="hero-feature-icon">📖</div>
+          <div class="hero-feature-title">Context Analysis</div>
+          <div class="hero-feature-desc">True/False/Not Given passages & Band 8 explanations.</div>
+        </div>
+        <div class="hero-feature-item">
+          <div class="hero-feature-icon">👑</div>
+          <div class="hero-feature-title">Final Boss Challenge</div>
+          <div class="hero-feature-desc">Ultimate mastery test and speaking practice.</div>
+        </div>
+      </div>
+      
+      <div id="welcome-back">
+        <h3 style="margin-bottom: 10px; font-size: 1.3rem;">Welcome, <span id="display-user-name" style="color: var(--accent-gold);">Student</span> 👋</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px;">Ready to begin or pick up where you left off?</p>
+        <button class="btn" onclick="startModule(state.currentModule || 1)" style="width: 100%; max-width: 320px; padding: 16px; margin-bottom: 15px;">START LESSON →</button>
+        <div>
+          <button class="reset-btn" onclick="confirmReset()">Reset All Progress</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 1: LEARN -->
+    <div id="module-1" class="module">
+      <div class="glass-card">
+        <div class="module-header">
+          <div class="module-title">
+            <h2>📚 Module 1: Learn</h2>
+            <p>Master core expressions in context.</p>
+          </div>
+          <div style="font-size: 0.9rem; font-weight: 700; color: var(--accent-gold);" id="card-counter">1 / 15</div>
+        </div>
+
+        <div class="progress-bar-container">
+          <div id="flashcard-progress" class="progress-bar"></div>
+        </div>
+
+        <div class="flashcard-container" onclick="flipCard()">
+          <div id="current-flashcard" class="flashcard">
+            <div class="card-face card-front">
+              <div class="expression" id="card-front-expr">maintain a healthy lifestyle</div>
+              <div class="tap-hint">Click to reveal meaning</div>
+            </div>
+            <div class="card-face card-back">
+              <div class="card-detail">
+                <label>Meaning</label>
+                <p id="card-back-meaning"></p>
+              </div>
+              <div class="card-detail">
+                <label>IELTS Speaking Example</label>
+                <p id="card-back-example" style="font-style: italic;"></p>
+              </div>
+              <div class="card-detail">
+                <label>Natural Alternative</label>
+                <p id="card-back-alt"></p>
+              </div>
+              <div class="tap-hint">Click to flip back</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-controls">
+          <button class="btn btn-secondary btn-small" onclick="prevCard()">← Previous</button>
+          <button id="audio-btn" class="audio-btn" title="Listen" onclick="event.stopPropagation(); speakCurrentCard();">🔊</button>
+          <button class="btn btn-small" onclick="nextCard()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2: MATCH -->
+    <div id="module-2" class="module">
+      <div class="glass-card">
+        <div class="module-header">
+          <div class="module-title">
+            <h2>🧩 Module 2: Match</h2>
+            <p>Connect expressions to their core meanings.</p>
+          </div>
+          <div style="font-size: 0.9rem; font-weight: bold; color: var(--text-muted);">
+            Matches: <span id="match-score" style="color:var(--accent-green);">0</span>/8 | 
+            Mistakes: <span id="match-mistakes" style="color:var(--accent-red);">0</span>
+          </div>
+        </div>
+
+        <div class="matching-grid" id="matching-grid">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div id="match-complete-box" class="hidden mt-20 text-center">
+          <h3 style="color: var(--accent-green); margin-bottom: 10px;">PERFECT MATCH ✓</h3>
+          <p style="margin-bottom: 15px; color: var(--text-muted);">You've successfully connected all target expressions!</p>
+          <button class="btn" onclick="startModule(3)">PROCEED TO MODULE 3 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3: CHOOSE -->
+    <div id="module-3" class="module">
+      <div class="glass-card">
+        <div class="module-header">
+          <div class="module-title">
+            <h2>🎯 Module 3: Choose</h2>
+            <p>Select natural collocations and contextually accurate phrases.</p>
+          </div>
+          <div style="font-size: 0.9rem; font-weight: bold; color: var(--accent-gold);" id="mcq-progress">Question 1/8</div>
+        </div>
+
+        <div id="mcq-container">
+          <h3 id="mcq-question" style="margin-bottom: 20px; line-height: 1.4; font-size: 1.1rem;"></h3>
+          <div id="mcq-options"></div>
+          <div id="mcq-explanation" class="explanation-box"></div>
+        </div>
+
+        <div class="card-controls" style="margin-top: 20px;">
+          <div></div>
+          <button id="mcq-next-btn" class="btn btn-small hidden" onclick="nextMCQ()">Next Question →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4: READ & DECIDE -->
+    <div id="module-4" class="module">
+      <div class="glass-card">
+        <div class="module-header">
+          <div class="module-title">
+            <h2>📖 Module 4: Read & Decide</h2>
+            <p>Analyze context and answer True / False / Not Given.</p>
+          </div>
+          <div style="font-size: 0.9rem; font-weight: bold; color: var(--accent-gold);" id="reading-nav">Text 1 / 3</div>
+        </div>
+
+        <div id="reading-container">
+          <div class="reading-passage" id="reading-passage-text"></div>
+          
+          <div id="reading-questions"></div>
+        </div>
+
+        <div class="card-controls" style="margin-top: 20px;">
+          <button id="reading-prev-btn" class="btn btn-secondary btn-small hidden" onclick="prevReadingText()">← Previous Text</button>
+          <button id="reading-next-btn" class="btn btn-small" onclick="nextReadingText()">Next Text →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5: FINAL BOSS -->
+    <div id="module-5" class="module">
+      <div class="glass-card boss-card">
+        <div class="boss-badge-header">FINAL BOSS</div>
+        <div class="module-header" style="margin-top: 15px;">
+          <div class="module-title">
+            <h2>👑 Ultimate Challenge</h2>
+            <p>Prove your vocabulary mastery across high-level challenges.</p>
+          </div>
+        </div>
+
+        <!-- BOSS TASK 1 -->
+        <div id="boss-task-1">
+          <h3 style="color: var(--accent-gold); margin-bottom: 10px;">⚔️ Task 1: Context Challenge</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Choose the exact expression that matches high-level IELTS speaking scenarios.</p>
+          
+          <div id="boss-mcq-container">
+            <h4 id="boss-mcq-question" style="margin-bottom: 15px;"></h4>
+            <div id="boss-mcq-options"></div>
+            <div id="boss-mcq-explanation" class="explanation-box"></div>
+          </div>
+
+          <div class="card-controls" style="margin-top: 20px;">
+            <div></div>
+            <button id="boss-mcq-next-btn" class="btn btn-small hidden" onclick="nextBossMCQ()">Next Boss Question →</button>
+          </div>
+        </div>
+
+        <!-- BOSS TASK 2 -->
+        <div id="boss-task-2" class="hidden">
+          <h3 style="color: var(--accent-gold); margin-bottom: 10px;">📜 Task 2: Evidence Challenge</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Analyze this complex passage and solve the final True/False/Not Given statements.</p>
+          
+          <div class="reading-passage" id="boss-passage-text"></div>
+          <div id="boss-tfng-questions"></div>
+
+          <button id="boss-submit-btn" class="btn hidden mt-20" style="width: 100%;" onclick="completeBoss()">CLAIM VICTORY 👑</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MASTERED & FINAL SPEAKING SCREEN -->
+    <div id="mastered-screen" class="module">
+      <div class="glass-card text-center">
+        <h1 style="color: var(--accent-gold); font-size: 2.2rem; margin-bottom: 5px;">HEALTH & FITNESS — MASTERED</h1>
+        <p style="color: var(--text-muted); margin-bottom: 25px;">Congratulations, <span id="mastered-user-name" style="color: var(--text-main); font-weight: bold;"></span>!</p>
+
+        <div style="display: flex; justify-content: space-around; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; margin-bottom: 25px;">
+          <div>
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent-gold);" id="final-xp">0</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Total XP</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent-blue);" id="final-level">Master</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Final Rank</div>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--accent-green);" id="final-badges-count">6/6</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Badges Unlocked</div>
+          </div>
+        </div>
+
+        <h3 style="text-align: left; margin-bottom: 15px;">🏅 Your Earned Badges</h3>
+        <div class="badges-container" id="badges-grid"></div>
+
+        <div style="margin-top: 30px; text-align: left;">
+          <h3>🎤 Final Speaking Challenge</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Practice speaking out loud! Answer these 5 IELTS Speaking questions using at least 3 target expressions learned today.</p>
+
+          <div class="speaking-card">
+            <strong style="color: var(--accent-blue); font-size: 0.8rem; text-transform: uppercase;">Part 1</strong>
+            <p style="font-weight: 600; margin-top: 4px;">Do you do anything to stay healthy?</p>
+          </div>
+          <div class="speaking-card">
+            <strong style="color: var(--accent-blue); font-size: 0.8rem; text-transform: uppercase;">Part 1</strong>
+            <p style="font-weight: 600; margin-top: 4px;">How often do you exercise?</p>
+          </div>
+          <div class="speaking-card">
+            <strong style="color: var(--accent-blue); font-size: 0.8rem; text-transform: uppercase;">Part 2</strong>
+            <p style="font-weight: 600; margin-top: 4px;">Describe a healthy habit you would like to develop in the future.</p>
+          </div>
+          <div class="speaking-card">
+            <strong style="color: var(--accent-blue); font-size: 0.8rem; text-transform: uppercase;">Part 3</strong>
+            <p style="font-weight: 600; margin-top: 4px;">Why do some people struggle to maintain a healthy lifestyle nowadays?</p>
+          </div>
+          <div class="speaking-card">
+            <strong style="color: var(--accent-blue); font-size: 0.8rem; text-transform: uppercase;">Part 3</strong>
+            <p style="font-weight: 600; margin-top: 4px;">What measures can governments take to encourage healthier living choices?</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 30px; text-align: left;">
+          <h3 style="margin-bottom: 15px;">📚 Vocabulary Bank</h3>
+          <div class="vocab-grid" id="vocab-bank-grid"></div>
+        </div>
+
+        <div style="margin-top: 30px;">
+          <button class="btn btn-secondary" onclick="confirmReset()">RESET & RESTART LESSON</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONFETTI CANVAS -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    const __PRACTISE_LESSON_ID = 'health_fitness';
+    const __PRACTISE_PARAMS = (() => {
+      try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+    })();
+    const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+    const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+    function __vocabKey(baseKey) {
+      return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+    }
+    function __notifyPractiseParentXP(amount, totalLessonXp) {
+      const pts = Math.round(Number(amount) || 0);
+      if (pts <= 0) return;
+      try {
+        if (window.parent && window.parent !== window) {
+          const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+          window.parent.postMessage({
+            type: 'PRACTISE_VOCAB_XP',
+            lessonId: __PRACTISE_LESSON_ID,
+            amount: pts,
+            totalLessonXp: Number(totalLessonXp) || pts
+          }, targetOrigin);
+        }
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       DATA STRUCTURES (VOCABULARY, QUESTIONS, READINGS)
+       ========================================================================== */
+    const FLASHCARDS = [
+      {
+        id: 1,
+        expression: "maintain a healthy lifestyle",
+        meaning: "Consistently keep up habits that preserve physical and mental well-being over time.",
+        example: "It can be difficult to maintain a healthy lifestyle when working long hours at a corporate desk job.",
+        alt: "live healthily / keep fit and healthy"
+      },
+      {
+        id: 2,
+        expression: "stay physically active",
+        meaning: "Regularly engage in physical movement or exercise rather than sitting continuously.",
+        example: "I try to stay physically active by walking to university rather than taking the bus.",
+        alt: "keep active / remain mobile"
+      },
+      {
+        id: 3,
+        expression: "get regular exercise",
+        meaning: "Participate in workouts or physical fitness routines on a consistent basis.",
+        example: "Getting regular exercise has helped me reduce stress during exam periods.",
+        alt: "work out consistently"
+      },
+      {
+        id: 4,
+        expression: "eat a balanced diet",
+        meaning: "Consume a variety of food groups in appropriate proportions to supply needed nutrition.",
+        example: "Instead of following extreme crash diets, I simply focus on eating a balanced diet.",
+        alt: "have a healthy, varied diet"
+      },
+      {
+        id: 5,
+        expression: "cut down on sugar",
+        meaning: "Reduce the overall quantity of sweet foods or sugary drinks consumed.",
+        example: "I've been trying to cut down on sugar recently by swapping fizzy drinks for sparkling water.",
+        alt: "reduce sugar intake"
+      },
+      {
+        id: 6,
+        expression: "build healthy habits",
+        meaning: "Gradually establish positive routines like good sleeping patterns and nutrition.",
+        example: "It takes discipline to build healthy habits, but the long-term benefits are definitely worth it.",
+        alt: "develop positive lifestyle routines"
+      },
+      {
+        id: 7,
+        expression: "lead a sedentary lifestyle",
+        meaning: "Live a way of life involving very little physical activity and lots of sitting down.",
+        example: "Many office workers lead a sedentary lifestyle simply due to the nature of their desk jobs.",
+        alt: "have an inactive lifestyle"
+      },
+      {
+        id: 8,
+        expression: "take a toll on my health",
+        meaning: "Gradually cause damage, exhaustion, or negative physical/mental consequences.",
+        example: "Working night shifts eventually took a heavy toll on my health.",
+        alt: "negatively affect my well-being"
+      },
+      {
+        id: 9,
+        expression: "deal with stress",
+        meaning: "Manage or cope with psychological tension and pressure effectively.",
+        example: "Going for a run in the evening is my main way to deal with stress after a busy workday.",
+        alt: "manage stress levels"
+      },
+      {
+        id: 10,
+        expression: "take care of my mental health",
+        meaning: "Actively protect and nurture one's emotional and psychological state.",
+        example: "I realize it's just as important to take care of my mental health as it is to stay physically fit.",
+        alt: "look after my psychological well-being"
+      },
+      {
+        id: 11,
+        expression: "boost my energy levels",
+        meaning: "Increase physical vitality and feel less fatigued or lethargic.",
+        example: "A quick 20-minute morning workout really helps to boost my energy levels for the day.",
+        alt: "make me feel more energetic"
+      },
+      {
+        id: 12,
+        expression: "struggle with motivation",
+        meaning: "Find it difficult to stay inspired or committed to doing a specific task or routine.",
+        example: "During cold winter months, I often struggle with motivation to go to the gym.",
+        alt: "lack willpower / find it hard to stay driven"
+      },
+      {
+        id: 13,
+        expression: "stay in shape",
+        meaning: "Keep one's body fit, strong, and in good physical condition.",
+        example: "My father is over sixty, but he still manages to stay in shape by swimming twice a week.",
+        alt: "keep fit"
+      },
+      {
+        id: 14,
+        expression: "feel mentally drained",
+        meaning: "Experience intense psychological fatigue due to heavy mental exertion or worry.",
+        example: "After studying in the library all day, I felt completely mentally drained.",
+        alt: "be psychologically exhausted"
+      },
+      {
+        id: 15,
+        expression: "have a positive impact on my health",
+        meaning: "Produce a beneficial effect on one's overall wellness and physical condition.",
+        example: "Switching from processed snacks to fresh fruit had an immediate positive impact on my health.",
+        alt: "benefit my overall health"
+      }
+    ];
+
+    const MATCHING_PAIRS = [
+      { expr: "cut down on sugar", mean: "consume less sweet food than before" },
+      { expr: "lead a sedentary lifestyle", mean: "spend most of your time sitting without physical activity" },
+      { expr: "boost my energy levels", mean: "increase vitality and feel more active" },
+      { expr: "take a toll on my health", mean: "gradually cause harm or fatigue over time" },
+      { expr: "feel mentally drained", mean: "be completely exhausted psychologically" },
+      { expr: "eat a balanced diet", mean: "consume proper proportions of varied nutrients" },
+      { expr: "stay in shape", mean: "maintain good physical fitness and strength" },
+      { expr: "struggle with motivation", mean: "find it hard to stay driven to perform a routine" }
+    ];
+
+    const MCQ_QUESTIONS = [
+      {
+        question: "If someone 'leads a sedentary lifestyle', they probably...",
+        options: [
+          "exercise several times a day",
+          "spend a lot of time being physically inactive",
+          "eat a strictly organic diet",
+          "sleep unusually well"
+        ],
+        correct: 1,
+        explanation: "'Sedentary' refers to sitting down for prolonged periods with minimal physical movement."
+      },
+      {
+        question: "Which verb collocation sounds most natural in IELTS Speaking?",
+        options: [
+          "make regular exercise",
+          "take regular exercise",
+          "get regular exercise",
+          "build regular exercise"
+        ],
+        correct: 2,
+        explanation: "In natural spoken English, we say 'get regular exercise' or 'do regular exercise'."
+      },
+      {
+        question: "I've been feeling mentally drained lately, so I'm trying to find time to ______ in the evening.",
+        options: [
+          "unwind",
+          "burn off my sleep",
+          "build my sugar",
+          "increase my sitting"
+        ],
+        correct: 0,
+        explanation: "'Unwind' means to relax after a stressful or mentally draining period."
+      },
+      {
+        question: "Which sentence sounds most natural and appropriate for IELTS Band 7+?",
+        options: [
+          "I execute a healthy lifestyle.",
+          "I maintain a healthy lifestyle.",
+          "I perform a healthy lifestyle.",
+          "I manufacture a healthy lifestyle."
+        ],
+        correct: 1,
+        explanation: "'Maintain a healthy lifestyle' is a natural high-level collocation."
+      },
+      {
+        question: "Working 60 hours a week without breaks will eventually ______ on your health.",
+        options: [
+          "make a toll",
+          "take a toll",
+          "give a toll",
+          "pay a toll"
+        ],
+        correct: 1,
+        explanation: "The idiomatic chunk is 'take a toll on something'."
+      },
+      {
+        question: "What is a natural alternative to 'eat less fast food' in speaking?",
+        options: [
+          "Cut back on processed food",
+          "Delete fast food completely",
+          "Minimize dinner consumption",
+          "Break down junk food"
+        ],
+        correct: 0,
+        explanation: "'Cut back on processed food' is flexible, precise, and idiomatic."
+      },
+      {
+        question: "A quick 15-minute walk after lunch can really help to ______ your energy levels.",
+        options: [
+          "boost",
+          "rise",
+          "lift up",
+          "climb"
+        ],
+        correct: 0,
+        explanation: "We naturally say 'boost energy levels'."
+      },
+      {
+        question: "Rather than following extreme crash diets, it is much wiser to ______ healthy habits slowly.",
+        options: [
+          "build",
+          "construct",
+          "fabricate",
+          "manufacture"
+        ],
+        correct: 0,
+        explanation: "We collocationally 'build healthy habits' over time."
+      }
+    ];
+
+    const READING_MODULES = [
+      {
+        id: 1,
+        title: "Text 1 — Healthy Habits in Everyday Life",
+        passage: "In today's fast-paced world, many professionals find it demanding to <span class='highlight'>maintain a healthy lifestyle</span>. Between long office hours and household duties, finding time to exercise regularly can feel like a secondary priority. However, health experts emphasize that people do not need to spend hours in the gym to stay physically active. Simple adjustments, such as taking the stairs, walking during lunch breaks, or cycling short distances, can significantly contribute to overall fitness. Furthermore, combining modest exercise with a <span class='highlight'>balanced diet</span> helps maintain steady energy levels throughout the day. Rather than trying to change everything overnight, individuals who focus on <span class='highlight'>building healthy habits</span> gradually are far more likely to sustain them in the long run.",
+        questions: [
+          {
+            statement: "Health experts believe that spending hours in a gym every day is essential for good fitness.",
+            answer: "FALSE",
+            explanation: "The text states that 'health experts emphasize that people do NOT need to spend hours in the gym to stay physically active'."
+          },
+          {
+            statement: "Small changes like using stairs instead of elevators can aid physical activity.",
+            answer: "TRUE",
+            explanation: "The text explicitly mentions 'taking the stairs' as a simple adjustment that contributes to fitness."
+          },
+          {
+            statement: "Gradual habit adjustments are more sustainable than drastic immediate changes.",
+            answer: "TRUE",
+            explanation: "The text notes that focusing on 'building healthy habits gradually' leads to longer sustainability."
+          }
+        ]
+      },
+      {
+        id: 2,
+        title: "Text 2 — Modern Lifestyle & Mental Health",
+        passage: "Modern workplace structures often require employees to spend eight or more hours sitting behind a computer screen. Consequently, millions of adults now <span class='highlight'>lead a sedentary lifestyle</span>, which can eventually <span class='highlight'>take a toll on their physical health</span>. Beyond physical issues, continuous computer work and constant digital notifications contribute heavily to stress. When individuals fail to <span class='highlight'>get enough sleep</span> or neglect relaxation, they frequently <span class='highlight'>feel mentally drained</span> by the end of the week. Psychologists stress that learning to <span class='highlight'>take care of mental health</span> is just as vital as physical conditioning, suggesting that taking short, technology-free breaks during the day can help manage stress effectively.",
+        questions: [
+          {
+            statement: "Prolonged screen time in modern offices leads many adults to be physically inactive.",
+            answer: "TRUE",
+            explanation: "The text links sitting behind computer screens for hours with leading a sedentary lifestyle."
+          },
+          {
+            statement: "Taking short breaks from digital devices is proven to double employee office productivity.",
+            answer: "NOT GIVEN",
+            explanation: "The text mentions taking short breaks to manage stress, but says nothing about doubling office productivity."
+          },
+          {
+            statement: "Mental health requires less active attention than physical fitness.",
+            answer: "FALSE",
+            explanation: "The text states that mental health is 'JUST AS vital as physical conditioning'."
+          }
+        ]
+      },
+      {
+        id: 3,
+        title: "Text 3 — Exercise, Diet & Long-Term Health",
+        passage: "It is a common misconception that getting fit requires expensive gym memberships or professional training plans. In reality, anyone can <span class='highlight'>get regular exercise</span> simply by walking briskly, jogging in local parks, or doing bodyweight exercises at home. The main hurdle for most people is that they <span class='highlight'>struggle with motivation</span> after the initial enthusiasm fades. Additionally, nutrition plays a crucial role in long-term wellness. Choosing to <span class='highlight'>cut down on sugar</span> and refined carbohydrates has a direct, positive impact on blood sugar control and mood stability. Ultimately, combining consistent, enjoyable exercise with sensible eating habits guarantees healthier longevity.",
+        questions: [
+          {
+            statement: "High-cost gym memberships are necessary to achieve high levels of fitness.",
+            answer: "FALSE",
+            explanation: "The text explicitly calls expensive gym memberships a 'misconception'."
+          },
+          {
+            statement: "Many individuals find it challenging to remain committed to fitness over time.",
+            answer: "TRUE",
+            explanation: "The text states that 'the main hurdle for most people is that they struggle with motivation'."
+          },
+          {
+            statement: "Cutting sugar intake is particularly beneficial for elderly populations.",
+            answer: "NOT GIVEN",
+            explanation: "The text highlights general benefits of cutting down on sugar, but does not specifically single out 'elderly populations'."
+          }
+        ]
+      }
+    ];
+
+    const BOSS_MCQS = [
+      {
+        question: "After working at his desk continuously for nine hours, Alex felt completely incapable of focusing on further mental work. Which phrase best describes his state?",
+        options: [
+          "He felt mentally drained.",
+          "He maintained a healthy lifestyle.",
+          "He built up his stamina.",
+          "He had a balanced diet."
+        ],
+        correct: 0,
+        explanation: "'Mentally drained' perfectly describes psychological fatigue resulting from long mental exertion."
+      },
+      {
+        question: "Which of the following speaking responses displays the most natural Band 8 phraseology?",
+        options: [
+          "I execute regular workouts to avoid obesity.",
+          "I make sure to get regular exercise to stay in shape.",
+          "I perform high physical movements for health.",
+          "I do heavy body operations daily."
+        ],
+        correct: 1,
+        explanation: "'Get regular exercise' and 'stay in shape' are fluid, high-level natural chunks."
+      },
+      {
+        question: "If someone decides to drink black coffee instead of sweet sodas and stop eating late-night desserts, they are trying to ______.",
+        options: [
+          "lead a sedentary lifestyle",
+          "cut down on sugar",
+          "take a toll on health",
+          "feel mentally drained"
+        ],
+        correct: 1,
+        explanation: "Swapping sodas and stopping desserts directly describes cutting down on sugar."
+      },
+      {
+        question: "Which sentence contains a CORRECT grammatical and collocational usage?",
+        options: [
+          "Chronic lack of sleep will eventually take a toll on your health.",
+          "Chronic lack of sleep will eventually build a toll to your health.",
+          "Chronic lack of sleep will eventually take a tax on your health.",
+          "Chronic lack of sleep will eventually make a toll for your health."
+        ],
+        correct: 0,
+        explanation: "The fixed chunk is 'take a toll on'."
+      },
+      {
+        question: "Why is 'I lead a sedentary lifestyle' more appropriate in IELTS Speaking Part 3 than 'I sit a lot'?",
+        options: [
+          "Because it is medical jargon used by doctors.",
+          "Because it demonstrates sophisticated lexical resource and precise topic vocabulary.",
+          "Because 'sit a lot' is grammatically incorrect.",
+          "Because it is an obscure academic term."
+        ],
+        correct: 1,
+        explanation: "'Sedentary lifestyle' is precise, natural Band 7-8 topic vocabulary."
+      }
+    ];
+
+    const BOSS_READING = {
+      passage: "The modern wellness landscape has shifted noticeably over the past decade. While previous generations often viewed health merely as the absence of illness, contemporary society increasingly recognizes wellness as a multi-dimensional state. Urban planning in several progressive cities now prioritizes green spaces and pedestrian pathways, allowing citizens to <span class='highlight'>stay physically active</span> seamlessly during their daily commutes. Nevertheless, public health officials warn that digital conveniences—such as food delivery apps and remote work setups—inadvertently encourage populations to <span class='highlight'>lead a sedentary lifestyle</span>. While these services save time, they frequently reduce spontaneous daily movement. Furthermore, the constant connectivity afforded by smartphones makes it difficult for individuals to disconnect, leading to heightened anxiety and chronic fatigue. Consequently, experts advocate that learning to set digital boundaries is essential to <span class='highlight'>take care of mental health</span> in the modern age.",
+      questions: [
+        {
+          statement: "Historically, people defined good health primarily as not having an active disease.",
+          answer: "TRUE",
+          explanation: "The text notes that 'previous generations often viewed health merely as the absence of illness'."
+        },
+        {
+          statement: "Green spaces in urban areas have completely eliminated sedentary habits in large cities.",
+          answer: "FALSE",
+          explanation: "The passage notes that digital conveniences still encourage sedentary lifestyles despite green spaces."
+        },
+        {
+          statement: "Food delivery apps are responsible for a 40% increase in cardiovascular conditions.",
+          answer: "NOT GIVEN",
+          explanation: "Food delivery apps are mentioned as contributing to sedentary habits, but no statistic or cardiovascular link is cited."
+        },
+        {
+          statement: "Constant smartphone connectivity can lead to elevated anxiety levels.",
+          answer: "TRUE",
+          explanation: "The passage explicitly connects constant connectivity with 'heightened anxiety and chronic fatigue'."
+        },
+        {
+          statement: "Psychologists advise deleting all social media accounts to protect mental well-being.",
+          answer: "NOT GIVEN",
+          explanation: "The text advises 'setting digital boundaries', but never mentions deleting social media accounts."
+        }
+      ]
+    };
+
+    const BADGES_LIST = [
+      { id: "first_step", icon: "🌱", title: "First Step", desc: "Completed the Flashcards module." },
+      { id: "perfect_match", icon: "🧩", title: "Perfect Match", desc: "Matched all pairs with zero mistakes." },
+      { id: "sharp_speaker", icon: "🎯", title: "Sharp Speaker", desc: "Scored 100% in the MCQ Choose section." },
+      { id: "careful_reader", icon: "📖", title: "Careful Reader", desc: "Scored 100% in the Reading section." },
+      { id: "boss_slayer", icon: "👑", title: "Boss Slayer", desc: "Defeated the Final Boss challenge." },
+      { id: "master", icon: "🏆", title: "Vocabulary Master", desc: "Completed the entire Health & Fitness lesson." }
+    ];
+
+    /* ==========================================================================
+       APP STATE & STORAGE
+       ========================================================================== */
+    let state = {
+      userName: "",
+      theme: "midnight",
+      xp: 0,
+      level: "Beginner",
+      currentModule: 1,
+      flashcardIndex: 0,
+      unlockedBadges: [],
+      matchingMistakes: 0,
+      matchingScore: 0,
+      mcqIndex: 0,
+      mcqScore: 0,
+      readingTextIndex: 0,
+      readingScores: [0, 0, 0],
+      bossMcqIndex: 0,
+      bossMcqScore: 0,
+      bossReadingScore: 0,
+      completedModules: []
+    };
+
+    // Load state on startup
+    window.onload = function() {
+      loadState();
+      initSpeech();
+      setupCanvas();
+    };
+
+    function saveState() {
+      localStorage.setItem(__vocabKey("ielts_health_vocab_state"), JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem(__vocabKey("ielts_health_vocab_state"));
+      if (saved) {
+        try {
+          state = { ...state, ...JSON.parse(saved) };
+        } catch(e) {}
+      }
+
+      state.userName = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.userName || 'Student');
+      saveState();
+
+      // Update UI elements from loaded state
+      changeTheme(state.theme, false);
+      updateStatsUI();
+
+      const disp = document.getElementById("display-user-name");
+      if (disp) disp.innerText = state.userName;
+    }
+
+    function confirmReset() {
+      if (confirm("Are you sure you want to reset all your progress and start fresh?")) {
+        localStorage.removeItem(__vocabKey("ielts_health_vocab_state"));
+        location.reload();
+      }
+    }
+
+    /* ==========================================================================
+       THEME MANAGEMENT
+       ========================================================================== */
+    function changeTheme(themeName, save = true) {
+      state.theme = themeName;
+      document.documentElement.setAttribute("data-theme", themeName);
+      document.getElementById("theme-selector").value = themeName;
+      if (save) saveState();
+    }
+
+    /* ==========================================================================
+       XP, LEVEL, & BADGE SYSTEM
+       ========================================================================== */
+    function addXP(amount) {
+      const pts = Math.round(Number(amount) || 0);
+      if (pts <= 0) return;
+      state.xp += pts;
+      calculateLevel();
+      updateStatsUI();
+      saveState();
+      __notifyPractiseParentXP(pts, state.xp);
+    }
+
+    function calculateLevel() {
+      if (state.xp < 200) state.level = "Beginner";
+      else if (state.xp < 400) state.level = "Learner";
+      else if (state.xp < 600) state.level = "Confident Speaker";
+      else state.level = "Vocabulary Master";
+    }
+
+    function updateStatsUI() {
+      document.getElementById("nav-xp").innerText = `${state.xp} XP`;
+      document.getElementById("nav-level").innerText = state.level;
+    }
+
+    function unlockBadge(badgeId) {
+      if (!state.unlockedBadges.includes(badgeId)) {
+        state.unlockedBadges.push(badgeId);
+        saveState();
+      }
+    }
+
+    /* ==========================================================================
+       MODULE ROUTING
+       ========================================================================== */
+    function hideAllModules() {
+      document.getElementById("welcome-screen").style.display = "none";
+      document.querySelectorAll(".module").forEach(m => m.classList.remove("active"));
+    }
+
+    function startModule(modNum) {
+      state.currentModule = modNum;
+      saveState();
+      hideAllModules();
+
+      const modElement = document.getElementById(`module-${modNum}`);
+      if (modElement) {
+        modElement.classList.add("active");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      if (modNum === 1) renderFlashcard();
+      else if (modNum === 2) initMatchingGame();
+      else if (modNum === 3) renderMCQ();
+      else if (modNum === 4) renderReadingText();
+      else if (modNum === 5) renderBossMCQ();
+      else if (modNum === 6) showMasteredScreen();
+    }
+
+    /* ==========================================================================
+       MODULE 1: FLASHCARDS
+       ========================================================================== */
+    function renderFlashcard() {
+      const card = FLASHCARDS[state.flashcardIndex];
+      const cardElem = document.getElementById("current-flashcard");
+      
+      cardElem.classList.remove("flipped");
+
+      setTimeout(() => {
+        document.getElementById("card-front-expr").innerText = card.expression;
+        document.getElementById("card-back-meaning").innerText = card.meaning;
+        document.getElementById("card-back-example").innerText = `"${card.example}"`;
+        document.getElementById("card-back-alt").innerText = card.alt;
+        document.getElementById("card-counter").innerText = `${state.flashcardIndex + 1} / ${FLASHCARDS.length}`;
+
+        const pct = ((state.flashcardIndex + 1) / FLASHCARDS.length) * 100;
+        document.getElementById("flashcard-progress").style.width = `${pct}%`;
+      }, 150);
+    }
+
+    function flipCard() {
+      document.getElementById("current-flashcard").classList.toggle("flipped");
+    }
+
+    function nextCard() {
+      if (state.flashcardIndex < FLASHCARDS.length - 1) {
+        state.flashcardIndex++;
+        renderFlashcard();
+      } else {
+        // Module Complete
+        if (!state.completedModules.includes(1)) {
+          state.completedModules.push(1);
+          addXP(100);
+          unlockBadge("first_step");
+          triggerConfetti();
+        }
+        startModule(2);
+      }
+    }
+
+    function prevCard() {
+      if (state.flashcardIndex > 0) {
+        state.flashcardIndex--;
+        renderFlashcard();
+      }
+    }
+
+    // Speech Synthesis
+    let synthAvailable = false;
+    function initSpeech() {
+      if ('speechSynthesis' in window) {
+        synthAvailable = true;
+      } else {
+        document.getElementById("audio-btn").style.display = "none";
+      }
+    }
+
+    function speakCurrentCard() {
+      if (!synthAvailable) return;
+      window.speechSynthesis.cancel();
+      const expr = FLASHCARDS[state.flashcardIndex].expression;
+      const utterance = new SpeechSynthesisUtterance(expr);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    /* ==========================================================================
+       MODULE 2: MATCHING GAME
+       ========================================================================== */
+    let selectedExpr = null;
+    let selectedMean = null;
+
+    function initMatchingGame() {
+      state.matchingMistakes = 0;
+      state.matchingScore = 0;
+      document.getElementById("match-score").innerText = "0";
+      document.getElementById("match-mistakes").innerText = "0";
+      document.getElementById("match-complete-box").classList.add("hidden");
+
+      const grid = document.getElementById("matching-grid");
+      grid.innerHTML = "";
+
+      // Separate and shuffle
+      const exprs = MATCHING_PAIRS.map((p, i) => ({ text: p.expr, id: i })).sort(() => Math.random() - 0.5);
+      const means = MATCHING_PAIRS.map((p, i) => ({ text: p.mean, id: i })).sort(() => Math.random() - 0.5);
+
+      const exprCol = document.createElement("div");
+      exprCol.style.display = "flex";
+      exprCol.style.flexDirection = "column";
+      exprCol.style.gap = "10px";
+
+      const meanCol = document.createElement("div");
+      meanCol.style.display = "flex";
+      meanCol.style.flexDirection = "column";
+      meanCol.style.gap = "10px";
+
+      exprs.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "match-card";
+        div.innerText = item.text;
+        div.dataset.id = item.id;
+        div.onclick = () => selectMatchItem(div, "expr");
+        exprCol.appendChild(div);
+      });
+
+      means.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "match-card";
+        div.innerText = item.text;
+        div.dataset.id = item.id;
+        div.onclick = () => selectMatchItem(div, "mean");
+        meanCol.appendChild(div);
+      });
+
+      grid.appendChild(exprCol);
+      grid.appendChild(meanCol);
+    }
+
+    function selectMatchItem(elem, type) {
+      if (elem.classList.contains("matched")) return;
+
+      if (type === "expr") {
+        document.querySelectorAll("#matching-grid [data-type='expr']").forEach(e => e.classList.remove("selected"));
+        if (selectedExpr) selectedExpr.classList.remove("selected");
+        selectedExpr = elem;
+        selectedExpr.classList.add("selected");
+      } else {
+        if (selectedMean) selectedMean.classList.remove("selected");
+        selectedMean = elem;
+        selectedMean.classList.add("selected");
+      }
+
+      if (selectedExpr && selectedMean) {
+        checkMatch();
+      }
+    }
+
+    function checkMatch() {
+      const id1 = selectedExpr.dataset.id;
+      const id2 = selectedMean.dataset.id;
+
+      if (id1 === id2) {
+        // Success match
+        selectedExpr.classList.remove("selected");
+        selectedMean.classList.remove("selected");
+        selectedExpr.classList.add("matched");
+        selectedMean.classList.add("matched");
+
+        selectedExpr = null;
+        selectedMean = null;
+
+        state.matchingScore++;
+        document.getElementById("match-score").innerText = state.matchingScore;
+
+        if (state.matchingScore === MATCHING_PAIRS.length) {
+          // Completed
+          if (!state.completedModules.includes(2)) {
+            state.completedModules.push(2);
+            addXP(150);
+            if (state.matchingMistakes === 0) unlockBadge("perfect_match");
+            triggerConfetti();
+          }
+          document.getElementById("match-complete-box").classList.remove("hidden");
+        }
+      } else {
+        // Incorrect match
+        const e1 = selectedExpr;
+        const e2 = selectedMean;
+
+        e1.classList.add("shake");
+        e2.classList.add("shake");
+
+        state.matchingMistakes++;
+        document.getElementById("match-mistakes").innerText = state.matchingMistakes;
+
+        setTimeout(() => {
+          e1.classList.remove("shake", "selected");
+          e2.classList.remove("shake", "selected");
+        }, 400);
+
+        selectedExpr = null;
+        selectedMean = null;
+      }
+    }
+
+    /* ==========================================================================
+       MODULE 3: MCQS (CHOOSE)
+       ========================================================================== */
+    function renderMCQ() {
+      const q = MCQ_QUESTIONS[state.mcqIndex];
+      document.getElementById("mcq-progress").innerText = `Question ${state.mcqIndex + 1} / ${MCQ_QUESTIONS.length}`;
+      document.getElementById("mcq-question").innerText = q.question;
+      document.getElementById("mcq-explanation").style.display = "none";
+      document.getElementById("mcq-next-btn").classList.add("hidden");
+
+      const optionsBox = document.getElementById("mcq-options");
+      optionsBox.innerHTML = "";
+
+      const letters = ["A", "B", "C", "D"];
+      q.options.forEach((opt, idx) => {
+        const div = document.createElement("div");
+        div.className = "mcq-option";
+        div.innerHTML = `
+          <div class="option-letter">${letters[idx]}</div>
+          <div>${opt}</div>
+        `;
+        div.onclick = () => selectMCQOption(idx, q.correct);
+        optionsBox.appendChild(div);
+      });
+    }
+
+    function selectMCQOption(chosenIdx, correctIdx) {
+      const options = document.querySelectorAll("#mcq-options .mcq-option");
+      options.forEach(o => o.onclick = null); // disable further clicks
+
+      if (chosenIdx === correctIdx) {
+        options[chosenIdx].classList.add("correct");
+        addXP(20);
+        state.mcqScore++;
+      } else {
+        options[chosenIdx].classList.add("incorrect");
+        options[correctIdx].classList.add("correct");
+      }
+
+      const expBox = document.getElementById("mcq-explanation");
+      expBox.style.display = "block";
+      expBox.innerHTML = `<strong>${chosenIdx === correctIdx ? "✓ Correct!" : "✕ Not quite."}</strong> ${MCQ_QUESTIONS[state.mcqIndex].explanation}`;
+
+      document.getElementById("mcq-next-btn").classList.remove("hidden");
+    }
+
+    function nextMCQ() {
+      if (state.mcqIndex < MCQ_QUESTIONS.length - 1) {
+        state.mcqIndex++;
+        renderMCQ();
+      } else {
+        // Finished MCQ Module
+        if (!state.completedModules.includes(3)) {
+          state.completedModules.push(3);
+          if (state.mcqScore === MCQ_QUESTIONS.length) unlockBadge("sharp_speaker");
+          triggerConfetti();
+        }
+        startModule(4);
+      }
+    }
+
+    /* ==========================================================================
+       MODULE 4: READING (READ & DECIDE)
+       ========================================================================== */
+    function renderReadingText() {
+      const data = READING_MODULES[state.readingTextIndex];
+      document.getElementById("reading-nav").innerText = `Text ${state.readingTextIndex + 1} / 3`;
+      document.getElementById("reading-passage-text").innerHTML = data.passage;
+
+      const qBox = document.getElementById("reading-questions");
+      qBox.innerHTML = "";
+
+      data.questions.forEach((q, idx) => {
+        const card = document.createElement("div");
+        card.style.background = "rgba(0,0,0,0.2)";
+        card.style.padding = "15px";
+        card.style.borderRadius = "12px";
+        card.style.marginBottom = "15px";
+        card.style.border = "1px solid var(--card-border)";
+
+        card.innerHTML = `
+          <p style="font-weight:600; margin-bottom:10px;">${idx + 1}. ${q.statement}</p>
+          <div class="tfng-btn-group">
+            <button class="tfng-btn" onclick="answerTFNG(this, ${idx}, 'TRUE', '${q.answer}', '${q.explanation.replace(/'/g, "\\'")}')">TRUE</button>
+            <button class="tfng-btn" onclick="answerTFNG(this, ${idx}, 'FALSE', '${q.answer}', '${q.explanation.replace(/'/g, "\\'")}')">FALSE</button>
+            <button class="tfng-btn" onclick="answerTFNG(this, ${idx}, 'NOT GIVEN', '${q.answer}', '${q.explanation.replace(/'/g, "\\'")}')">NOT GIVEN</button>
+          </div>
+          <div id="reading-exp-${idx}" class="explanation-box"></div>
+        `;
+        qBox.appendChild(card);
+      });
+
+      // Navigation buttons
+      if (state.readingTextIndex === 0) document.getElementById("reading-prev-btn").classList.add("hidden");
+      else document.getElementById("reading-prev-btn").classList.remove("hidden");
+    }
+
+    function answerTFNG(btnElem, qIdx, userChoice, correctChoice, explanation) {
+      const group = btnElem.parentElement;
+      const buttons = group.querySelectorAll(".tfng-btn");
+      buttons.forEach(b => b.onclick = null); // disable further interaction
+
+      if (userChoice === correctChoice) {
+        btnElem.classList.add("selected-correct");
+        addXP(30);
+      } else {
+        btnElem.classList.add("selected-incorrect");
+        buttons.forEach(b => {
+          if (b.innerText === correctChoice) b.classList.add("selected-correct");
+        });
+      }
+
+      const expBox = document.getElementById(`reading-exp-${qIdx}`);
+      expBox.style.display = "block";
+      expBox.innerHTML = `<strong>${userChoice === correctChoice ? "✓ Correct!" : "✕ Incorrect."}</strong> ${explanation}`;
+    }
+
+    function nextReadingText() {
+      if (state.readingTextIndex < READING_MODULES.length - 1) {
+        state.readingTextIndex++;
+        renderReadingText();
+      } else {
+        // Completed Reading
+        if (!state.completedModules.includes(4)) {
+          state.completedModules.push(4);
+          unlockBadge("careful_reader");
+          triggerConfetti();
+        }
+        startModule(5);
+      }
+    }
+
+    function prevReadingText() {
+      if (state.readingTextIndex > 0) {
+        state.readingTextIndex--;
+        renderReadingText();
+      }
+    }
+
+    /* ==========================================================================
+       MODULE 5: FINAL BOSS
+       ========================================================================== */
+    function renderBossMCQ() {
+      const q = BOSS_MCQS[state.bossMcqIndex];
+      document.getElementById("boss-mcq-question").innerText = `Question ${state.bossMcqIndex + 1}/5: ${q.question}`;
+      document.getElementById("boss-mcq-explanation").style.display = "none";
+      document.getElementById("boss-mcq-next-btn").classList.add("hidden");
+
+      const optionsBox = document.getElementById("boss-mcq-options");
+      optionsBox.innerHTML = "";
+
+      const letters = ["A", "B", "C", "D"];
+      q.options.forEach((opt, idx) => {
+        const div = document.createElement("div");
+        div.className = "mcq-option";
+        div.innerHTML = `
+          <div class="option-letter">${letters[idx]}</div>
+          <div>${opt}</div>
+        `;
+        div.onclick = () => selectBossMCQOption(idx, q.correct);
+        optionsBox.appendChild(div);
+      });
+    }
+
+    function selectBossMCQOption(chosenIdx, correctIdx) {
+      const options = document.querySelectorAll("#boss-mcq-options .mcq-option");
+      options.forEach(o => o.onclick = null);
+
+      if (chosenIdx === correctIdx) {
+        options[chosenIdx].classList.add("correct");
+        addXP(40);
+        state.bossMcqScore++;
+      } else {
+        options[chosenIdx].classList.add("incorrect");
+        options[correctIdx].classList.add("correct");
+      }
+
+      const expBox = document.getElementById("boss-mcq-explanation");
+      expBox.style.display = "block";
+      expBox.innerHTML = `<strong>${chosenIdx === correctIdx ? "✓ Correct!" : "✕ Incorrect."}</strong> ${BOSS_MCQS[state.bossMcqIndex].explanation}`;
+
+      document.getElementById("boss-mcq-next-btn").classList.remove("hidden");
+    }
+
+    function nextBossMCQ() {
+      if (state.bossMcqIndex < BOSS_MCQS.length - 1) {
+        state.bossMcqIndex++;
+        renderBossMCQ();
+      } else {
+        // Switch to Task 2
+        document.getElementById("boss-task-1").classList.add("hidden");
+        document.getElementById("boss-task-2").classList.remove("hidden");
+        renderBossReading();
+      }
+    }
+
+    function renderBossReading() {
+      document.getElementById("boss-passage-text").innerHTML = BOSS_READING.passage;
+      const qBox = document.getElementById("boss-tfng-questions");
+      qBox.innerHTML = "";
+
+      BOSS_READING.questions.forEach((q, idx) => {
+        const card = document.createElement("div");
+        card.style.background = "rgba(0,0,0,0.2)";
+        card.style.padding = "15px";
+        card.style.borderRadius = "12px";
+        card.style.marginBottom = "15px";
+        card.style.border = "1px solid var(--card-border)";
+
+        card.innerHTML = `
+          <p style="font-weight:600; margin-bottom:10px;">${idx + 1}. ${q.statement}</p>
+          <div class="tfng-btn-group">
+            <button class="tfng-btn" onclick="answerBossTFNG(this, ${idx}, 'TRUE', '${q.answer}', '${q.explanation.replace(/'/g, "\\'")}')">TRUE</button>
+            <button class="tfng-btn" onclick="answerBossTFNG(this, ${idx}, 'FALSE', '${q.answer}', '${q.explanation.replace(/'/g, "\\'")}')">FALSE</button>
+            <button class="tfng-btn" onclick="answerBossTFNG(this, ${idx}, 'NOT GIVEN', '${q.answer}', '${q.explanation.replace(/'/g, "\\'")}')">NOT GIVEN</button>
+          </div>
+          <div id="boss-exp-${idx}" class="explanation-box"></div>
+        `;
+        qBox.appendChild(card);
+      });
+
+      document.getElementById("boss-submit-btn").classList.remove("hidden");
+    }
+
+    function answerBossTFNG(btnElem, qIdx, userChoice, correctChoice, explanation) {
+      const group = btnElem.parentElement;
+      const buttons = group.querySelectorAll(".tfng-btn");
+      buttons.forEach(b => b.onclick = null);
+
+      if (userChoice === correctChoice) {
+        btnElem.classList.add("selected-correct");
+        addXP(40);
+        state.bossReadingScore++;
+      } else {
+        btnElem.classList.add("selected-incorrect");
+        buttons.forEach(b => {
+          if (b.innerText === correctChoice) b.classList.add("selected-correct");
+        });
+      }
+
+      const expBox = document.getElementById(`boss-exp-${qIdx}`);
+      expBox.style.display = "block";
+      expBox.innerHTML = `<strong>${userChoice === correctChoice ? "✓ Correct!" : "✕ Incorrect."}</strong> ${explanation}`;
+    }
+
+    function completeBoss() {
+      if (!state.completedModules.includes(5)) {
+        state.completedModules.push(5);
+        addXP(100);
+        unlockBadge("boss_slayer");
+        unlockBadge("master");
+        triggerBossConfetti();
+      }
+      startModule(6);
+    }
+
+    /* ==========================================================================
+       MASTERED & FINAL RESULTS SCREEN
+       ========================================================================== */
+    function showMasteredScreen() {
+      document.getElementById("mastered-user-name").innerText = state.userName;
+      document.getElementById("final-xp").innerText = state.xp;
+      document.getElementById("final-level").innerText = state.level;
+      document.getElementById("final-badges-count").innerText = `${state.unlockedBadges.length} / ${BADGES_LIST.length}`;
+
+      // Render Badges
+      const badgeGrid = document.getElementById("badges-grid");
+      badgeGrid.innerHTML = "";
+      BADGES_LIST.forEach(b => {
+        const isUnlocked = state.unlockedBadges.includes(b.id);
+        const div = document.createElement("div");
+        div.className = `badge-item ${isUnlocked ? 'unlocked' : ''}`;
+        div.innerHTML = `
+          <div class="badge-icon">${b.icon}</div>
+          <div class="badge-info">
+            <h5>${b.title}</h5>
+            <p>${b.desc}</p>
+          </div>
+        `;
+        badgeGrid.appendChild(div);
+      });
+
+      // Render Vocabulary Bank
+      const bankGrid = document.getElementById("vocab-bank-grid");
+      bankGrid.innerHTML = "";
+      FLASHCARDS.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "vocab-grid-item";
+        div.innerHTML = `
+          <h4>${item.expression}</h4>
+          <p>${item.meaning}</p>
+        `;
+        bankGrid.appendChild(div);
+      });
+
+      triggerFinalConfetti();
+    }
+
+    /* ==========================================================================
+       PURE CSS/JS CONFETTI ENGINE (NO EXTERNAL LIBS)
+       ========================================================================== */
+    let canvas, ctx, particles = [];
+
+    function setupCanvas() {
+      canvas = document.getElementById("confetti-canvas");
+      ctx = canvas.getContext("2d");
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+    }
+
+    function resizeCanvas() {
+      if (canvas) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    }
+
+    function triggerConfetti(duration = 2500, particleCount = 60) {
+      createParticles(particleCount);
+      animateConfetti(duration);
+    }
+
+    function triggerBossConfetti() {
+      triggerConfetti(4000, 140);
+    }
+
+    function triggerFinalConfetti() {
+      triggerConfetti(5000, 200);
+    }
+
+    function createParticles(count) {
+      const colors = ["#fbbf24", "#38bdf8", "#34d399", "#f87171", "#c084fc", "#ffffff"];
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -10,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 4 + 2,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 10,
+          opacity: 1
+        });
+      }
+    }
+
+    let animating = false;
+    function animateConfetti(duration) {
+      if (animating) return;
+      animating = true;
+      const startTime = Date.now();
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const elapsed = Date.now() - startTime;
+
+        particles.forEach((p, idx) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rotation += p.rotSpeed;
+          
+          if (elapsed > duration - 1000) {
+            p.opacity -= 0.02;
+          }
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.globalAlpha = Math.max(0, p.opacity);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.restore();
+        });
+
+        particles = particles.filter(p => p.y < canvas.height && p.opacity > 0);
+
+        if (elapsed < duration || particles.length > 0) {
+          requestAnimationFrame(loop);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles = [];
+          animating = false;
+        }
+      }
+
+      requestAnimationFrame(loop);
+    }
+  </script>
+</body>
+</html>

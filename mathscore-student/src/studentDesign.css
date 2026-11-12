@@ -1,0 +1,810 @@
+/* ==========================================================================
+ * Student Panel Design Themes (Controlled dynamically from Admin -> Design)
+ * Supports independent Dark Mode across every Admin Design preset:
+ *   - original      : Platform default Light / Dark appearance (handled in index.css)
+ *   - burnt-orange  : Warm Beige Light (#F3EEE3) <-> Warm Espresso Dark (#16110D)
+ *   - hot-pink      : Royal Navy Default (#0F183D) <-> Deeper Midnight Neon (#080D24)
+ *   - electric-blue : Warm Charcoal Default (#1E1E1C) <-> Deeper Obsidian Studio (#11110F)
+ * ========================================================================== */
+
+/* 1A. Burnt Orange — Light Mode Default */
+html[data-student-design="burnt-orange"],
+.student-shell[data-student-design="burnt-orange"] {
+  color-scheme: light;
+  --design-bg: #F3EEE3;
+  --design-surface: #FAF7F0;
+  --design-surface-alt: #EAE3D5;
+  --design-surface-high: #E0D7C5;
+  --design-font: #111111;
+  --design-muted: #4A443A;
+  --design-border: #D9CFC0;
+  --design-button: #D9641E;
+  --design-button-hover: #BF5414;
+  --design-accent-ink: #C25312;
+  --background: #F3EEE3;
+  --on-background: #111111;
+  --surface: #FAF7F0;
+  --on-surface: #111111;
+  --surface-container: #EAE3D5;
+  --surface-container-low: #F3EEE3;
+  --surface-container-high: #E0D7C5;
+  --outline: #4A443A;
+  --outline-variant: #D9CFC0;
+  --primary: #D9641E;
+  --on-primary: #FFFFFF;
+}
+
+/* 1B. Burnt Orange — Warm Espresso Dark Mode */
+html.dark[data-student-design="burnt-orange"],
+html[data-student-design="burnt-orange"][data-user-dark="true"],
+.student-shell[data-student-design="burnt-orange"][data-user-dark="true"] {
+  color-scheme: dark;
+  --design-bg: #16110D;
+  --design-surface: #211913;
+  --design-surface-alt: #2C2119;
+  --design-surface-high: #382B21;
+  --design-font: #F5EFE6;
+  --design-muted: #C2B5A3;
+  --design-border: rgba(245, 239, 230, 0.16);
+  --design-button: #D9641E;
+  --design-button-hover: #EA752E;
+  --design-accent-ink: #FF8B5E;
+  --background: #16110D;
+  --on-background: #F5EFE6;
+  --surface: #211913;
+  --on-surface: #F5EFE6;
+  --surface-container: #2C2119;
+  --surface-container-low: #1B140F;
+  --surface-container-high: #382B21;
+  --outline: #C2B5A3;
+  --outline-variant: rgba(245, 239, 230, 0.16);
+  --primary: #D9641E;
+  --on-primary: #FFFFFF;
+}
+
+/* 2A. Hot Pink — Royal Navy Default */
+html[data-student-design="hot-pink"],
+html.dark[data-student-design="hot-pink"],
+.student-shell[data-student-design="hot-pink"] {
+  color-scheme: dark;
+  --design-bg: #0F183D;
+  --design-surface: #172457;
+  --design-surface-alt: #1E2E6B;
+  --design-surface-high: #263980;
+  --design-font: #FFFFFF;
+  --design-muted: #C7D2FE;
+  --design-border: rgba(255, 255, 255, 0.16);
+  --design-button: #FF3D8B;
+  --design-button-hover: #E62E78;
+  --design-accent-ink: #FF7EB3;
+  --background: #0F183D;
+  --on-background: #FFFFFF;
+  --surface: #172457;
+  --on-surface: #FFFFFF;
+  --surface-container: #1E2E6B;
+  --surface-container-low: #131E49;
+  --surface-container-high: #263980;
+  --outline: #C7D2FE;
+  --outline-variant: rgba(255, 255, 255, 0.16);
+  --primary: #FF3D8B;
+  --on-primary: #FFFFFF;
+}
+
+/* 2B. Hot Pink — Deeper Midnight Neon Dark Mode */
+html[data-student-design="hot-pink"][data-user-dark="true"],
+html.dark[data-student-design="hot-pink"][data-user-dark="true"],
+.student-shell[data-student-design="hot-pink"][data-user-dark="true"] {
+  color-scheme: dark;
+  --design-bg: #080D24;
+  --design-surface: #101A42;
+  --design-surface-alt: #182559;
+  --design-surface-high: #213275;
+  --design-font: #FFFFFF;
+  --design-muted: #D5DCFF;
+  --design-border: rgba(255, 255, 255, 0.14);
+  --design-button: #FF3D8B;
+  --design-button-hover: #FF579B;
+  --design-accent-ink: #FF96C0;
+  --background: #080D24;
+  --on-background: #FFFFFF;
+  --surface: #101A42;
+  --on-surface: #FFFFFF;
+  --surface-container: #182559;
+  --surface-container-low: #0B1230;
+  --surface-container-high: #213275;
+  --outline: #D5DCFF;
+  --outline-variant: rgba(255, 255, 255, 0.14);
+  --primary: #FF3D8B;
+  --on-primary: #FFFFFF;
+}
+
+/* 3A. Electric Blue — Warm Charcoal Default */
+html[data-student-design="electric-blue"],
+html.dark[data-student-design="electric-blue"],
+.student-shell[data-student-design="electric-blue"] {
+  color-scheme: dark;
+  --design-bg: #1E1E1C;
+  --design-surface: #272724;
+  --design-surface-alt: #31312D;
+  --design-surface-high: #3C3C37;
+  --design-font: #D8CBB3;
+  --design-muted: #AFA28A;
+  --design-border: rgba(216, 203, 179, 0.18);
+  --design-button: #2F6BFF;
+  --design-button-hover: #2157DE;
+  --design-accent-ink: #82ABFF;
+  --background: #1E1E1C;
+  --on-background: #D8CBB3;
+  --surface: #272724;
+  --on-surface: #D8CBB3;
+  --surface-container: #31312D;
+  --surface-container-low: #232320;
+  --surface-container-high: #3C3C37;
+  --outline: #AFA28A;
+  --outline-variant: rgba(216, 203, 179, 0.18);
+  --primary: #2F6BFF;
+  --on-primary: #FFFFFF;
+}
+
+/* 3B. Electric Blue — Deeper Obsidian Studio Dark Mode */
+html[data-student-design="electric-blue"][data-user-dark="true"],
+html.dark[data-student-design="electric-blue"][data-user-dark="true"],
+.student-shell[data-student-design="electric-blue"][data-user-dark="true"] {
+  color-scheme: dark;
+  --design-bg: #11110F;
+  --design-surface: #1A1A17;
+  --design-surface-alt: #242420;
+  --design-surface-high: #2E2E29;
+  --design-font: #E3D7C1;
+  --design-muted: #B5A890;
+  --design-border: rgba(227, 215, 193, 0.16);
+  --design-button: #2F6BFF;
+  --design-button-hover: #4C82FF;
+  --design-accent-ink: #9BBCFF;
+  --background: #11110F;
+  --on-background: #E3D7C1;
+  --surface: #1A1A17;
+  --on-surface: #E3D7C1;
+  --surface-container: #242420;
+  --surface-container-low: #151513;
+  --surface-container-high: #2E2E29;
+  --outline: #B5A890;
+  --outline-variant: rgba(227, 215, 193, 0.16);
+  --primary: #2F6BFF;
+  --on-primary: #FFFFFF;
+}
+
+/* Global canvas & font color (scoped to html + .student-shell so portals also inherit cleanly) */
+html[data-student-design]:not([data-student-design="original"]) body,
+html[data-student-design]:not([data-student-design="original"]) #root,
+.student-shell[data-student-design]:not([data-student-design="original"]),
+.student-shell[data-student-design]:not([data-student-design="original"]) main {
+  background-color: var(--design-bg) !important;
+  color: var(--design-font) !important;
+}
+
+/* Preserve Material Symbols ligature font */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+}
+
+/* Header & Sidebar */
+.student-shell[data-student-design]:not([data-student-design="original"]) header,
+.student-shell[data-student-design]:not([data-student-design="original"]) aside {
+  background-color: var(--design-surface) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+/* Surface cards, panels & React portals (Leaderboard, Daily Goal, Live Classes, Modals, Challenge/Game Cards, Toasts) */
+html[data-student-design]:not([data-student-design="original"]) .bg-surface,
+html[data-student-design]:not([data-student-design="original"]) .dashboard-card-surface,
+html[data-student-design]:not([data-student-design="original"]) section.rounded-3xl,
+.student-shell[data-student-design]:not([data-student-design="original"]) .bg-surface,
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-card-surface,
+.student-shell[data-student-design]:not([data-student-design="original"]) section.rounded-3xl {
+  background-color: var(--design-surface) !important;
+  background-image: none !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .bg-surface-container,
+html[data-student-design]:not([data-student-design="original"]) .dashboard-subcard,
+html[data-student-design]:not([data-student-design="original"]) .leaderboard-self-row,
+.student-shell[data-student-design]:not([data-student-design="original"]) .bg-surface-container,
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-subcard,
+.student-shell[data-student-design]:not([data-student-design="original"]) .leaderboard-self-row,
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-card-surface .inline-flex.rounded-xl,
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-card-surface .flex.items-center.gap-1\.5.p-1.rounded-xl {
+  background-color: var(--design-surface-alt) !important;
+  background-image: none !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .bg-surface-container-high,
+.student-shell[data-student-design]:not([data-student-design="original"]) .bg-surface-container-high {
+  background-color: var(--design-surface-high) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .dashboard-card-surface button.bg-white,
+html[data-student-design]:not([data-student-design="original"]) .dashboard-subcard span.bg-white,
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-card-surface button.bg-white,
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-subcard span.bg-white {
+  background-color: var(--design-surface) !important;
+  color: var(--design-font) !important;
+}
+
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-subcard span.bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.2) !important;
+  border-color: rgba(244, 63, 94, 0.42) !important;
+  color: var(--design-font) !important;
+}
+
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-subcard span.bg-slate-100 {
+  background-color: var(--design-surface) !important;
+  border: 1px solid var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-subcard span.bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+  border-color: rgba(59, 130, 246, 0.42) !important;
+  color: var(--design-font) !important;
+}
+
+.student-shell[data-student-design]:not([data-student-design="original"]) .leaderboard-self-row {
+  border-color: var(--design-button) !important;
+  box-shadow: 0 0 0 1px var(--design-button);
+}
+
+/* Protect paper diplomas / certificates from dark surface overrides */
+html[data-student-design]:not([data-student-design="original"]) .certificate-paper,
+html[data-student-design]:not([data-student-design="original"]) .printable-certificate {
+  background-color: #FFFDF9 !important;
+  color: #18181B !important;
+}
+
+/* Targeted neutral ink overrides (never clobbering emerald/rose/amber/sky semantic badges or special banners) */
+html[data-student-design]:not([data-student-design="original"])
+  :is(
+    .text-slate-950,
+    .text-slate-900,
+    .text-slate-800,
+    .text-slate-700,
+    .text-zinc-950,
+    .text-zinc-900,
+    .text-zinc-800,
+    .text-zinc-700,
+    .text-gray-900,
+    .text-gray-800,
+    .dark\:text-white,
+    .dark\:text-slate-100,
+    .dark\:text-slate-200,
+    .dark\:text-zinc-100,
+    .dark\:text-zinc-200,
+    .text-on-surface,
+    .text-on-background
+  ):not(.hero-banner-keep):not(.hero-banner-keep *):not(.game-gradient-card *):not(.library-shelf-surface *):not(.certificate-paper *):not(.printable-certificate *):not(.certificate-overlay *):not(.design-btn-primary):not(.design-btn-primary *):not(button.bg-primary):not(button.bg-primary *):not(.bg-primary.text-white):not(.bg-primary.text-white *):not(button[type="submit"]:not(.design-keep-bg)):not(button[type="submit"]:not(.design-keep-bg) *):not(button.bg-emerald-600):not(button.bg-emerald-600 *):not(button.bg-rose-600):not(button.bg-rose-600 *):not(.bg-\[\#0084FF\]):not(.bg-\[\#0084FF\] *):not(.bg-\[\#99A6FF\]):not(.bg-\[\#99A6FF\] *):not([class*="bg-gradient-to-br"] *) {
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"])
+  :is(
+    .text-slate-600,
+    .text-slate-500,
+    .text-slate-400,
+    .text-zinc-600,
+    .text-zinc-500,
+    .text-zinc-400,
+    .text-gray-500,
+    .dark\:text-slate-300,
+    .dark\:text-slate-400,
+    .dark\:text-slate-500,
+    .dark\:text-zinc-300,
+    .dark\:text-zinc-400,
+    .text-outline
+  ):not(.hero-banner-keep *):not(.game-gradient-card *):not(.library-shelf-surface *):not(.certificate-paper *):not(.printable-certificate *):not(.certificate-overlay *):not(.design-btn-primary):not(.design-btn-primary *):not(button.bg-primary):not(button.bg-primary *):not(button[type="submit"]:not(.design-keep-bg)):not(button[type="submit"]:not(.design-keep-bg) *):not([class*="bg-gradient-to-br"] *) {
+  color: var(--design-muted) !important;
+}
+
+/* Keep Hero Banner white text readable against photo overlay */
+html[data-student-design]:not([data-student-design="original"]) .hero-banner-keep,
+.student-shell[data-student-design]:not([data-student-design="original"]) .hero-banner-keep {
+  color: #FFFFFF !important;
+}
+
+/* Primary Action Buttons across the Student Panel & Portals */
+html[data-student-design]:not([data-student-design="original"]) button.bg-primary,
+html[data-student-design]:not([data-student-design="original"]) .bg-primary.text-white,
+html[data-student-design]:not([data-student-design="original"]) button[type="submit"]:not(.design-keep-bg),
+html[data-student-design]:not([data-student-design="original"]) .design-btn-primary,
+html[data-student-design]:not([data-student-design="original"]) button.bg-gradient-to-r.from-rose-500.to-indigo-600,
+html[data-student-design]:not([data-student-design="original"]) button.bg-emerald-600,
+html[data-student-design]:not([data-student-design="original"]) button.bg-rose-600,
+html[data-student-design]:not([data-student-design="original"]) .bg-\[\#0084FF\],
+html[data-student-design]:not([data-student-design="original"]) .bg-\[\#99A6FF\],
+.student-shell[data-student-design]:not([data-student-design="original"]) button.bg-primary,
+.student-shell[data-student-design]:not([data-student-design="original"]) .bg-primary.text-white,
+.student-shell[data-student-design]:not([data-student-design="original"]) button[type="submit"]:not(.design-keep-bg),
+.student-shell[data-student-design]:not([data-student-design="original"]) .design-btn-primary,
+.student-shell[data-student-design]:not([data-student-design="original"]) button.bg-gradient-to-r.from-rose-500.to-indigo-600,
+.student-shell[data-student-design]:not([data-student-design="original"]) button.bg-emerald-600,
+.student-shell[data-student-design]:not([data-student-design="original"]) button.bg-rose-600,
+.student-shell[data-student-design]:not([data-student-design="original"]) .bg-\[\#0084FF\],
+.student-shell[data-student-design]:not([data-student-design="original"]) .bg-\[\#99A6FF\] {
+  background: var(--design-button) !important;
+  background-image: none !important;
+  border-color: var(--design-button) !important;
+  color: #FFFFFF !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) :is(
+  button.bg-primary,
+  .bg-primary.text-white,
+  button[type="submit"]:not(.design-keep-bg),
+  .design-btn-primary,
+  button.bg-gradient-to-r.from-rose-500.to-indigo-600,
+  button.bg-emerald-600,
+  button.bg-rose-600,
+  .bg-\[\#0084FF\],
+  .bg-\[\#99A6FF\]
+) * {
+  color: #FFFFFF !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) :is(
+  button.bg-primary,
+  .bg-primary.text-white,
+  button[type="submit"]:not(.design-keep-bg),
+  .design-btn-primary,
+  button.bg-gradient-to-r.from-rose-500.to-indigo-600,
+  button.bg-emerald-600,
+  button.bg-rose-600,
+  .bg-\[\#0084FF\],
+  .bg-\[\#99A6FF\]
+):hover:not(:disabled) {
+  background: var(--design-button-hover) !important;
+  color: #FFFFFF !important;
+}
+
+/* Accessible Accent Ink for Inline Text Links, Active Nav Text, Progress Labels */
+html[data-student-design]:not([data-student-design="original"]) :is(.text-primary, .text-\[\#0084FF\]):not(.design-btn-primary):not(button.bg-primary):not(.bg-primary),
+.student-shell[data-student-design]:not([data-student-design="original"]) :is(.text-primary, .text-\[\#0084FF\]):not(.design-btn-primary):not(button.bg-primary):not(.bg-primary) {
+  color: var(--design-accent-ink) !important;
+}
+
+/* Inputs, Selects & Textareas */
+html[data-student-design]:not([data-student-design="original"]) input:not([type="checkbox"]):not([type="radio"]):not(.practise-letter-box),
+html[data-student-design]:not([data-student-design="original"]) select,
+html[data-student-design]:not([data-student-design="original"]) textarea {
+  background-color: var(--design-surface-alt) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) input::placeholder,
+html[data-student-design]:not([data-student-design="original"]) textarea::placeholder {
+  color: var(--design-muted) !important;
+  opacity: 0.78;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .practise-letter-box {
+  background-color: var(--design-surface-alt) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .practise-letter-box:focus {
+  border-color: var(--design-button) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .practise-letter-box.border-emerald-500 {
+  border-color: #10B981 !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .practise-letter-box.border-rose-500 {
+  border-color: #F43F5E !important;
+}
+
+/* Typing Race letter tiles & target heading across all admin design presets & Dark Mode */
+html[data-student-design]:not([data-student-design="original"]) .typing-race-target-meaning {
+  color: var(--design-accent-ink) !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .typing-race-target-meaning {
+  color: #4F46E5 !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .typing-race-tile.typing-tile-empty {
+  background-color: var(--design-surface-alt) !important;
+  border-color: var(--design-border) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .typing-race-tile.typing-tile-correct {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+  border-color: #10B981 !important;
+  color: #047857 !important;
+}
+
+html.dark[data-student-design="burnt-orange"] .typing-race-tile.typing-tile-correct,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .typing-race-tile.typing-tile-correct,
+html[data-student-design="hot-pink"] .typing-race-tile.typing-tile-correct,
+html[data-student-design="electric-blue"] .typing-race-tile.typing-tile-correct {
+  color: #6EE7B7 !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .typing-race-tile.typing-tile-wrong {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+  border-color: #F43F5E !important;
+  color: #BE123C !important;
+}
+
+html.dark[data-student-design="burnt-orange"] .typing-race-tile.typing-tile-wrong,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .typing-race-tile.typing-tile-wrong,
+html[data-student-design="hot-pink"] .typing-race-tile.typing-tile-wrong,
+html[data-student-design="electric-blue"] .typing-race-tile.typing-tile-wrong {
+  color: #FDA4AF !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .typing-race-input:focus {
+  border-color: var(--design-button) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .typing-race-input.typing-input-complete {
+  border-color: #10B981 !important;
+}
+
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-quick-card:hover {
+  border-color: var(--design-button) !important;
+  box-shadow: 0 10px 24px -12px var(--design-button);
+}
+
+.student-shell[data-student-design]:not([data-student-design="original"]) .dashboard-quick-pill {
+  background-color: var(--design-surface-alt) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+/* ==========================================================================
+ * Speaking Plus — Choose Your Partner (Mock Stream & Sesame)
+ * Adapts to Original (Light/Dark) and all Admin Design Presets
+ * ========================================================================== */
+
+/* 1. Base (Original Light) */
+.speaking-plus-modal {
+  background-color: #FFFFFF;
+  border-color: #10B981;
+  color: #09090B;
+}
+
+.speaking-plus-title {
+  color: #10B981;
+}
+
+.speaking-plus-subtitle {
+  color: #52525B;
+}
+
+.speaking-card-premium {
+  background: linear-gradient(180deg, #CBD6CD 0%, #BFCAC1 100%);
+  border-color: rgba(15, 23, 42, 0.08);
+  color: #FFFFFF;
+}
+
+.speaking-card-premium .speaking-orb {
+  background: radial-gradient(circle at 35% 30%, #FFFFFF 0%, #D9E2DB 60%, #A9B7AC 100%);
+}
+
+.speaking-card-premium .speaking-card-heading {
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+}
+
+.speaking-card-premium .speaking-card-desc {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.speaking-card-premium .speaking-premium-badge {
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+}
+
+.speaking-card-premium .speaking-disabled-pill {
+  background-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.speaking-card-sesame {
+  background: linear-gradient(155deg, #BDCCA9 0%, #7BA257 100%);
+  border-color: rgba(45, 90, 28, 0.25);
+  color: #142611;
+}
+
+.speaking-card-sesame .speaking-sesame-heading {
+  color: #142611;
+}
+
+.speaking-card-sesame .speaking-sesame-desc {
+  color: #1E3319;
+}
+
+.speaking-card-sesame .speaking-free-badge {
+  background-color: rgba(20, 38, 17, 0.14);
+  border: 1px solid rgba(20, 38, 17, 0.18);
+  color: #142611;
+}
+
+.speaking-premium-alert {
+  background-color: #F4F4F5;
+  border-color: #D4D4D8;
+  color: #3F3F46;
+}
+
+.speaking-plus-cancel {
+  background-color: #FFFFFF;
+  border-color: #E4E4E7;
+  color: #52525B;
+}
+
+.speaking-plus-cancel:hover {
+  background-color: #F4F4F5;
+  color: #09090B;
+}
+
+/* 2. Original Dark Mode */
+html.dark .speaking-plus-modal {
+  background-color: #18181B;
+  border-color: rgba(16, 185, 129, 0.65);
+  color: #FAFAFA;
+}
+
+html.dark .speaking-plus-title {
+  color: #34D399;
+}
+
+html.dark .speaking-plus-subtitle {
+  color: #A1A1AA;
+}
+
+html.dark .speaking-card-premium {
+  background: linear-gradient(180deg, #272B29 0%, #1F2422 100%);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html.dark .speaking-card-premium .speaking-card-desc {
+  color: #CBD5E1;
+}
+
+html.dark .speaking-card-premium .speaking-premium-badge {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #F8FAFC;
+}
+
+html.dark .speaking-card-premium .speaking-disabled-pill {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #CBD5E1;
+}
+
+html.dark .speaking-card-sesame {
+  background: linear-gradient(155deg, #1E3824 0%, #2B5334 100%);
+  border-color: rgba(52, 211, 153, 0.45);
+  color: #ECFDF5;
+}
+
+html.dark .speaking-card-sesame .speaking-sesame-heading {
+  color: #FFFFFF;
+}
+
+html.dark .speaking-card-sesame .speaking-sesame-desc {
+  color: #D1FAE5;
+}
+
+html.dark .speaking-card-sesame .speaking-free-badge {
+  background-color: #10B981;
+  border-color: #34D399;
+  color: #052E16;
+}
+
+html.dark .speaking-leaf-stem {
+  stroke: #86EFAC;
+}
+
+html.dark .speaking-premium-alert {
+  background-color: #27272A;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #E4E4E7;
+}
+
+html.dark .speaking-plus-cancel {
+  background-color: #27272A;
+  border-color: rgba(255, 255, 255, 0.14);
+  color: #E4E4E7;
+}
+
+html.dark .speaking-plus-cancel:hover {
+  background-color: #3F3F46;
+  color: #FFFFFF;
+}
+
+/* 3. Custom Admin Designs (burnt-orange, hot-pink, electric-blue — Light & Dark) */
+html[data-student-design]:not([data-student-design="original"]) .speaking-plus-modal {
+  background-color: var(--design-surface) !important;
+  border-color: var(--design-button) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .speaking-plus-title {
+  color: var(--design-accent-ink) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .speaking-plus-subtitle {
+  color: var(--design-muted) !important;
+}
+
+/* Mock Stream Premium Card (muted surface adapted per preset) */
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-premium {
+  background: linear-gradient(180deg, #E7DFD1 0%, #DDD3C2 100%) !important;
+  border-color: #CFC3AF !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-premium .speaking-card-heading {
+  color: #3F382F !important;
+  text-shadow: none !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-premium .speaking-card-desc {
+  color: #5C5347 !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-premium .speaking-premium-badge {
+  background-color: rgba(217, 100, 30, 0.16) !important;
+  border-color: rgba(217, 100, 30, 0.35) !important;
+  color: #9A3B09 !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-premium .speaking-disabled-pill {
+  background-color: rgba(17, 17, 17, 0.08) !important;
+  color: #4A443A !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-premium,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-premium,
+html[data-student-design="hot-pink"] .speaking-card-premium,
+html[data-student-design="electric-blue"] .speaking-card-premium {
+  background: linear-gradient(180deg, var(--design-surface-alt) 0%, var(--design-surface-high) 100%) !important;
+  border-color: var(--design-border) !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-premium .speaking-card-heading,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-premium .speaking-card-heading,
+html[data-student-design="hot-pink"] .speaking-card-premium .speaking-card-heading,
+html[data-student-design="electric-blue"] .speaking-card-premium .speaking-card-heading {
+  color: var(--design-font) !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-premium .speaking-card-desc,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-premium .speaking-card-desc,
+html[data-student-design="hot-pink"] .speaking-card-premium .speaking-card-desc,
+html[data-student-design="electric-blue"] .speaking-card-premium .speaking-card-desc {
+  color: var(--design-muted) !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-premium .speaking-premium-badge,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-premium .speaking-premium-badge,
+html[data-student-design="hot-pink"] .speaking-card-premium .speaking-premium-badge,
+html[data-student-design="electric-blue"] .speaking-card-premium .speaking-premium-badge {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-premium .speaking-disabled-pill,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-premium .speaking-disabled-pill,
+html[data-student-design="hot-pink"] .speaking-card-premium .speaking-disabled-pill,
+html[data-student-design="electric-blue"] .speaking-card-premium .speaking-disabled-pill {
+  background-color: rgba(0, 0, 0, 0.22) !important;
+  color: var(--design-muted) !important;
+}
+
+/* Sesame Active Card per Preset */
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-sesame {
+  background: linear-gradient(155deg, #FCECE1 0%, #F4CBB0 100%) !important;
+  border-color: #D9641E !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-sesame .speaking-sesame-heading {
+  color: #111111 !important;
+}
+
+html[data-student-design="burnt-orange"]:not(.dark):not([data-user-dark="true"]) .speaking-card-sesame .speaking-sesame-desc {
+  color: #3D2B1F !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-sesame,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-sesame {
+  background: linear-gradient(155deg, #352116 0%, #512C17 100%) !important;
+  border-color: #D9641E !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-sesame .speaking-sesame-heading,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-sesame .speaking-sesame-heading {
+  color: #FFFFFF !important;
+}
+
+html[data-student-design="burnt-orange"].dark .speaking-card-sesame .speaking-sesame-desc,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-card-sesame .speaking-sesame-desc {
+  color: #F5E6DA !important;
+}
+
+html[data-student-design="hot-pink"] .speaking-card-sesame {
+  background: linear-gradient(155deg, #252059 0%, #521A4F 100%) !important;
+  border-color: #FF3D8B !important;
+}
+
+html[data-student-design="hot-pink"][data-user-dark="true"] .speaking-card-sesame {
+  background: linear-gradient(155deg, #1A1642 0%, #441342 100%) !important;
+  border-color: #FF3D8B !important;
+}
+
+html[data-student-design="hot-pink"] .speaking-card-sesame .speaking-sesame-heading,
+html[data-student-design="hot-pink"] .speaking-card-sesame .speaking-sesame-desc {
+  color: #FFFFFF !important;
+}
+
+html[data-student-design="electric-blue"] .speaking-card-sesame {
+  background: linear-gradient(155deg, #272B36 0%, #1C3568 100%) !important;
+  border-color: #2F6BFF !important;
+}
+
+html[data-student-design="electric-blue"][data-user-dark="true"] .speaking-card-sesame {
+  background: linear-gradient(155deg, #1B1E28 0%, #152957 100%) !important;
+  border-color: #2F6BFF !important;
+}
+
+html[data-student-design="electric-blue"] .speaking-card-sesame .speaking-sesame-heading {
+  color: #FFFFFF !important;
+}
+
+html[data-student-design="electric-blue"] .speaking-card-sesame .speaking-sesame-desc {
+  color: #E3D7C1 !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .speaking-card-sesame .speaking-free-badge {
+  background-color: var(--design-button) !important;
+  border-color: var(--design-button) !important;
+  color: #FFFFFF !important;
+}
+
+html[data-student-design="hot-pink"] .speaking-leaf-stem,
+html[data-student-design="electric-blue"] .speaking-leaf-stem,
+html[data-student-design="burnt-orange"].dark .speaking-leaf-stem,
+html[data-student-design="burnt-orange"][data-user-dark="true"] .speaking-leaf-stem {
+  stroke: #86EFAC;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .speaking-premium-alert {
+  background-color: var(--design-surface-alt) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .speaking-plus-cancel {
+  background-color: var(--design-surface-alt) !important;
+  border-color: var(--design-border) !important;
+  color: var(--design-font) !important;
+}
+
+html[data-student-design]:not([data-student-design="original"]) .speaking-plus-cancel:hover {
+  background-color: var(--design-surface-high) !important;
+  border-color: var(--design-button) !important;
+}
+
+.student-shell a[data-testid="sidebar-telegram-link"]:hover {
+  border-color: #229ED9 !important;
+}

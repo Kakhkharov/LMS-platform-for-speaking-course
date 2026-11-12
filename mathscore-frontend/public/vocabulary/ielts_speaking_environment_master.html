@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking: Environment Vocabulary Master</title>
+    <style>
+        :root {
+            /* Midnight Luxury Theme (Default) */
+            --bg-main: radial-gradient(circle at 50% 0%, #151d30 0%, #0b0f19 100%);
+            --header-bg: rgba(15, 23, 42, 0.85);
+            --card-bg: rgba(21, 32, 54, 0.65);
+            --card-border: rgba(212, 175, 55, 0.2);
+            --card-hover-border: rgba(212, 175, 55, 0.5);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #d4af37; /* Muted Gold */
+            --accent-glow: rgba(212, 175, 55, 0.25);
+            --accent-gradient: linear-gradient(135deg, #f3e7e8 0%, #e3eeff 100%);
+            --btn-bg: linear-gradient(135deg, #d4af37 0%, #aa820a 100%);
+            --btn-text: #0b0f19;
+            --success: #10b981;
+            --error: #ef4444;
+            --progress-bg: rgba(255, 255, 255, 0.1);
+            --shadow-lux: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.1);
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        [data-theme="platinum"] {
+            --bg-main: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(30, 41, 59, 0.15);
+            --card-hover-border: rgba(30, 41, 59, 0.4);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent: #1e293b;
+            --accent-glow: rgba(30, 41, 59, 0.15);
+            --btn-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --btn-text: #f8fafc;
+            --progress-bg: rgba(0, 0, 0, 0.08);
+            --shadow-lux: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="emerald"] {
+            --bg-main: radial-gradient(circle at 50% 0%, #06382b 0%, #041a14 100%);
+            --header-bg: rgba(4, 26, 20, 0.9);
+            --card-bg: rgba(9, 48, 37, 0.65);
+            --card-border: rgba(16, 185, 129, 0.25);
+            --card-hover-border: rgba(16, 185, 129, 0.6);
+            --text-primary: #f0fdf4;
+            --text-secondary: #a7f3d0;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.3);
+            --btn-bg: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            --btn-text: #ffffff;
+            --progress-bg: rgba(255, 255, 255, 0.1);
+            --shadow-lux: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.15);
+        }
+
+        [data-theme="purple"] {
+            --bg-main: radial-gradient(circle at 50% 0%, #201138 0%, #0d0617 100%);
+            --header-bg: rgba(13, 6, 23, 0.9);
+            --card-bg: rgba(32, 17, 56, 0.65);
+            --card-border: rgba(168, 85, 247, 0.3);
+            --card-hover-border: rgba(168, 85, 247, 0.6);
+            --text-primary: #faf5ff;
+            --text-secondary: #e9d5ff;
+            --accent: #a855f7;
+            --accent-glow: rgba(168, 85, 247, 0.35);
+            --btn-bg: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+            --btn-text: #ffffff;
+            --progress-bg: rgba(255, 255, 255, 0.1);
+            --shadow-lux: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* Canvas for confetti */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Header Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .brand-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+
+        .brand-title span {
+            color: var(--accent);
+        }
+
+        .user-nav-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .badge-pill {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--card-border);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Container Layout */
+        .app-container {
+            max-width: 950px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem 1rem;
+            flex: 1;
+        }
+
+        /* Universal Card Style */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lux);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            padding: 0.85rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: var(--accent);
+        }
+
+        /* Progress Bar */
+        .progress-bar-outer {
+            width: 100%;
+            height: 10px;
+            background: var(--progress-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Screen Transitions */
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* LIQUID GLASS LANDING PAGE STYLES */
+        .liquid-landing-container {
+            position: relative;
+            min-height: calc(100vh - 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            overflow: hidden;
+        }
+
+        /* Animated Ambient Liquid Orbs */
+        .liquid-orb-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .liquid-orb {
+            position: absolute;
+            filter: blur(55px);
+            opacity: 0.65;
+            animation: morphLiquid 14s ease-in-out infinite alternate;
+        }
+
+        .liquid-orb-1 {
+            top: 10%;
+            left: 15%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent) 0%, rgba(212,175,55,0) 70%);
+            animation-duration: 12s;
+        }
+
+        .liquid-orb-2 {
+            bottom: 10%;
+            right: 15%;
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, #3b82f6 0%, rgba(59,130,246,0) 70%);
+            animation-duration: 16s;
+            animation-delay: -4s;
+        }
+
+        .liquid-orb-3 {
+            top: 35%;
+            right: 25%;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, #a855f7 0%, rgba(168,85,247,0) 70%);
+            animation-duration: 10s;
+            animation-delay: -2s;
+        }
+
+        @keyframes morphLiquid {
+            0% {
+                transform: translate(0px, 0px) scale(1) rotate(0deg);
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+            33% {
+                transform: translate(35px, -45px) scale(1.15) rotate(120deg);
+                border-radius: 30% 60% 70% 30% / 50% 60% 30% 60%;
+            }
+            66% {
+                transform: translate(-25px, 40px) scale(0.9) rotate(240deg);
+                border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%;
+            }
+            100% {
+                transform: translate(0px, 0px) scale(1) rotate(360deg);
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+        }
+
+        /* Ultra Liquid Glass Card */
+        .liquid-glass-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 580px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 32px;
+            padding: 3.2rem 2.5rem;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.45),
+                inset 0 1px 1px rgba(255, 255, 255, 0.45),
+                inset 0 -1px 20px rgba(255, 255, 255, 0.05),
+                0 0 35px var(--accent-glow);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+        }
+
+        /* Specular Glass Sheen Highlight */
+        .liquid-glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.28) 0%,
+                rgba(255, 255, 255, 0.05) 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.08) 75%,
+                rgba(255, 255, 255, 0.22) 100%
+            );
+            pointer-events: none;
+            transform: rotate(25deg);
+        }
+
+        .liquid-badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .liquid-glass-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-primary);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .shimmer-hero-title {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            line-height: 1.1;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(135deg, #ffffff 0%, var(--accent) 50%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 6s linear infinite;
+            text-align: center;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+        }
+
+        @keyframes textShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .liquid-subtext {
+            color: var(--text-secondary);
+            font-size: 1.12rem;
+            text-align: center;
+            margin-bottom: 2.2rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .liquid-input-wrapper {
+            position: relative;
+            z-index: 5;
+            margin-bottom: 1.5rem;
+        }
+
+        .liquid-input {
+            width: 100%;
+            padding: 1.1rem 1.4rem;
+            background: rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 18px;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.35);
+        }
+
+        .liquid-input:focus {
+            border-color: var(--accent);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 22px var(--accent-glow), inset 0 2px 4px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
+        }
+
+        .liquid-btn-submit {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            padding: 1.1rem;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .liquid-btn-submit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                60deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.45) 50%,
+                transparent 70%
+            );
+            transform: rotate(30deg) translateY(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .liquid-btn-submit:hover::after {
+            transform: rotate(30deg) translateY(100%);
+        }
+
+        .liquid-btn-submit:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 15px 35px var(--accent-glow);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Onboarding Screen */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.85rem;
+            display: none;
+            margin-top: -8px;
+        }
+
+        /* Dashboard Screen */
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 1.8rem;
+        }
+
+        .dash-welcome h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .dash-welcome p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            padding: 1.2rem;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .stat-card .val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-card .lbl {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .modules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .module-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .module-item:hover:not(.locked) {
+            border-color: var(--accent);
+            transform: translateX(6px);
+            background: rgba(255,255,255,0.06);
+        }
+
+        .module-item.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .module-item.completed {
+            border-color: var(--success);
+        }
+
+        .mod-icon {
+            font-size: 1.6rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .mod-details h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .mod-details p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Flashcards Screen */
+        .card-flip-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 550px;
+            height: 320px;
+            margin: 2rem auto;
+            cursor: pointer;
+        }
+
+        .card-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .card-flip-container.flipped .card-flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-lux);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .card-phrase {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .audio-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+
+        /* Matching Game Screen */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 2rem 0;
+        }
+
+        .match-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.2rem;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+        }
+
+        .match-card:hover:not(.locked) {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .match-card.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .match-card.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            cursor: default;
+        }
+
+        .match-card.incorrect {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* MCQ Screen */
+        .mcq-question {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-item:hover:not(.disabled) {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.07);
+        }
+
+        .option-item.correct-opt {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: #ecfdf5;
+        }
+
+        .option-item.incorrect-opt {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+            color: #fef2f2;
+        }
+
+        .explanation-box {
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            display: none;
+            line-height: 1.5;
+        }
+
+        /* Reading T/F/NG Screen */
+        .reading-text-box {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-bottom: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .statement-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--card-border);
+            padding: 1.2rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+        }
+
+        .tfng-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tfng-btn {
+            flex: 1;
+            padding: 0.6rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tfng-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .tfng-btn.selected-correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .tfng-btn.selected-incorrect {
+            background: var(--error);
+            border-color: var(--error);
+            color: white;
+        }
+
+        /* Modal / Overlays */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lux);
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Badges list */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        .badge-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            padding: 1rem 0.5rem;
+            border-radius: 14px;
+            text-align: center;
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+
+        .badge-item.unlocked {
+            opacity: 1;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .badge-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .badge-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        /* Final Bank Table */
+        .vocab-bank-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .vocab-bank-table th, .vocab-bank-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 0.9rem;
+        }
+
+        .vocab-bank-table th {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Speaking Questions Box */
+        .speaking-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            padding: 1.2rem;
+            border-radius: 14px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 640px) {
+            header {
+                padding: 0.6rem 1rem;
+            }
+
+            .brand-title { font-size: 0.95rem; }
+            .user-nav-info { gap: 8px; font-size: 0.8rem; }
+            .matching-grid { grid-template-columns: 1fr; }
+            .card-flip-container { height: 360px; }
+            .tfng-btns { flex-direction: column; }
+            .shimmer-hero-title { font-size: 2.2rem; }
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+    <!-- Canvas for Confetti Animations -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Top Navigation Header -->
+    <header id="mainHeader" style="display:none;">
+        <div class="brand-title">
+            🌍 <span>ENVIRONMENT</span>
+        </div>
+        <div class="user-nav-info">
+            <div class="badge-pill" id="navXp">⭐ 0 XP</div>
+            <div class="badge-pill" id="navLevel">🏆 Beginner</div>
+            <div class="badge-pill" id="navName">👤 Student</div>
+            <button class="theme-btn" onclick="openThemeModal()">🎨 Theme</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="app-container">
+
+        <!-- STEP 0: NAME ENTRY SCREEN -->
+        <section id="screenName" class="screen active">
+            <div class="liquid-landing-container">
+                <!-- Ambient Liquid Morphing Background Orbs -->
+                <div class="liquid-orb-container">
+                    <div class="liquid-orb liquid-orb-1"></div>
+                    <div class="liquid-orb liquid-orb-2"></div>
+                    <div class="liquid-orb liquid-orb-3"></div>
+                </div>
+
+                <!-- Liquid Glass Hero Card -->
+                <div class="liquid-glass-card" id="liquidCard">
+                    <div class="liquid-badge-row">
+                        <span class="liquid-glass-badge">✨ Band 8+ Collocations</span>
+                        <span class="liquid-glass-badge">🌿 Environment</span>
+                        <span class="liquid-glass-badge">🏆 Interactive</span>
+                    </div>
+
+                    <h1 class="shimmer-hero-title">ENVIRONMENT</h1>
+                    <p class="liquid-subtext">Master natural expressions, boost fluency, and upgrade your IELTS Speaking band score.</p>
+
+                    <button type="button" class="liquid-btn-submit" onclick="initHeader(); showDashboard();">
+                        <span>START LEARNING</span>
+                        <span style="font-size:1.2rem;">→</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARD SCREEN -->
+        <section id="screenDash" class="screen">
+            <div class="glass-card">
+                <div class="dash-header">
+                    <div class="dash-welcome">
+                        <h2 id="dashGreeting">Welcome, Student 👋</h2>
+                        <p>Master natural environment collocations for IELTS Speaking</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="val" id="dashModulesDone">0 / 5</div>
+                        <div class="lbl">Modules Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="val" id="dashXp">0 XP</div>
+                        <div class="lbl">Total Earned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="val" id="dashLevel">Beginner</div>
+                        <div class="lbl">Current Level</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary); margin-bottom:4px;">
+                        <span>Overall Mastery Progress</span>
+                        <span id="dashProgressPct">0%</span>
+                    </div>
+                    <div class="progress-bar-outer">
+                        <div class="progress-bar-inner" id="dashProgressBar"></div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 1rem; font-size: 1.2rem;">Learning Modules</h3>
+                <div class="modules-list">
+                    <div class="module-item" id="modItem1" onclick="startModule(1)">
+                        <div style="display:flex; align-items:center;">
+                            <div class="mod-icon">💡</div>
+                            <div class="mod-details">
+                                <h3>Module 1: Learn the Vocabulary</h3>
+                                <p>Interactive flashcards with meanings & natural examples</p>
+                            </div>
+                        </div>
+                        <span id="modStatus1" class="badge-pill">Start</span>
+                    </div>
+
+                    <div class="module-item locked" id="modItem2" onclick="startModule(2)">
+                        <div style="display:flex; align-items:center;">
+                            <div class="mod-icon">🧩</div>
+                            <div class="mod-details">
+                                <h3>Module 2: Match the Phrase</h3>
+                                <p>Connect target expressions with precise definitions</p>
+                            </div>
+                        </div>
+                        <span id="modStatus2" class="badge-pill">🔒 Locked</span>
+                    </div>
+
+                    <div class="module-item locked" id="modItem3" onclick="startModule(3)">
+                        <div style="display:flex; align-items:center;">
+                            <div class="mod-icon">🎯</div>
+                            <div class="mod-details">
+                                <h3>Module 3: Choose the Natural Expression</h3>
+                                <p>Multiple choice challenge testing collocations & usage</p>
+                            </div>
+                        </div>
+                        <span id="modStatus3" class="badge-pill">🔒 Locked</span>
+                    </div>
+
+                    <div class="module-item locked" id="modItem4" onclick="startModule(4)">
+                        <div style="display:flex; align-items:center;">
+                            <div class="mod-icon">📖</div>
+                            <div class="mod-details">
+                                <h3>Module 4: Read & Decide</h3>
+                                <p>True / False / Not Given context comprehension</p>
+                            </div>
+                        </div>
+                        <span id="modStatus4" class="badge-pill">🔒 Locked</span>
+                    </div>
+
+                    <div class="module-item locked" id="modItem5" onclick="startModule(5)">
+                        <div style="display:flex; align-items:center;">
+                            <div class="mod-icon">⚔️</div>
+                            <div class="mod-details">
+                                <h3>Module 5: Final Boss</h3>
+                                <p>Ultimate context & evidence application challenge</p>
+                            </div>
+                        </div>
+                        <span id="modStatus5" class="badge-pill">🔒 Locked</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 2rem; margin-bottom: 0.8rem; font-size: 1.1rem;">Badges Earned</h3>
+                <div class="badges-grid" id="badgesContainer">
+                    <!-- Dynamic badges populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 1: FLASHCARDS -->
+        <section id="screenMod1" class="screen">
+            <div class="glass-card">
+                <button class="btn-secondary" onclick="showDashboard()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+                <h2>💡 Module 1: Learn the Vocabulary</h2>
+                <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">Learn full natural phrases, not isolated words.</p>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.9rem;">
+                    <span id="cardTracker">Card 1 / 14</span>
+                    <span style="color:var(--accent);">Tap card to flip</span>
+                </div>
+                <div class="progress-bar-outer">
+                    <div class="progress-bar-inner" id="cardProgressBar"></div>
+                </div>
+
+                <div class="card-flip-container" id="flashcardElement" onclick="flipCard()">
+                    <div class="card-flip-inner">
+                        <div class="card-front">
+                            <div class="card-phrase" id="cardFrontPhrase">reduce my carbon footprint</div>
+                            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:10px;">Click to reveal meaning</div>
+                        </div>
+                        <div class="card-back">
+                            <h4 style="color:var(--accent); margin-bottom:4px;">Meaning</h4>
+                            <p id="cardBackMeaning" style="font-size:0.95rem; margin-bottom:12px;"></p>
+                            
+                            <h4 style="color:var(--accent); margin-bottom:4px;">IELTS Example</h4>
+                            <p id="cardBackExample" style="font-size:0.95rem; font-style:italic; margin-bottom:12px;"></p>
+
+                            <h4 style="color:var(--accent); margin-bottom:4px;">Natural Alternative</h4>
+                            <p id="cardBackAlt" style="font-size:0.9rem; color:var(--text-secondary);"></p>
+
+                            <button class="audio-btn" onclick="playAudio(event)" title="Listen Pronunciation">🔊</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1.5rem;">
+                    <button class="btn-secondary" id="btnPrevCard" onclick="prevCard()">← Previous</button>
+                    <button class="btn-primary" id="btnNextCard" onclick="nextCard()">Next →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 2: MATCHING GAME -->
+        <section id="screenMod2" class="screen">
+            <div class="glass-card">
+                <button class="btn-secondary" onclick="showDashboard()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+                <h2>🧩 Module 2: Match the Phrase</h2>
+                <p style="color:var(--text-secondary); margin-bottom: 1rem;">Click a phrase on the left, then click its corresponding definition on the right.</p>
+
+                <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:1rem; font-size:0.95rem;">
+                    <span id="matchScore">Matches: 0 / 8</span>
+                    <span id="matchMistakes" style="color:var(--text-secondary);">Mistakes: 0</span>
+                </div>
+
+                <div class="matching-grid">
+                    <div class="match-col" id="matchPhrasesCol"></div>
+                    <div class="match-col" id="matchDefsCol"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 3: MULTIPLE CHOICE QUESTIONS -->
+        <section id="screenMod3" class="screen">
+            <div class="glass-card">
+                <button class="btn-secondary" onclick="showDashboard()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+                <h2>🎯 Module 3: Choose the Natural Expression</h2>
+                <p style="color:var(--text-secondary); margin-bottom: 1rem;">Select the option that sounds natural and correct in context.</p>
+
+                <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:1rem;">
+                    <span id="mcqTracker">Question 1 / 8</span>
+                    <span id="mcqScore">Score: 0</span>
+                </div>
+
+                <div class="mcq-question" id="mcqQuestionText">Loading...</div>
+                <div class="options-list" id="mcqOptionsList"></div>
+
+                <div class="explanation-box" id="mcqExplanation"></div>
+
+                <div style="margin-top:1.5rem; text-align:right;">
+                    <button class="btn-primary" id="btnNextMcq" onclick="nextMcq()" style="display:none;">Next Question →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 4: READING COMPREHENSION -->
+        <section id="screenMod4" class="screen">
+            <div class="glass-card">
+                <button class="btn-secondary" onclick="showDashboard()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+                <h2>📖 Module 4: Read & Decide</h2>
+                <p style="color:var(--text-secondary); margin-bottom: 1rem;">Read carefully. Decide if the statements are TRUE, FALSE, or NOT GIVEN based strictly on the text.</p>
+
+                <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:1rem;">
+                    <span id="readingPassageTracker" style="font-weight:700; color:var(--accent);">Passage 1 / 3</span>
+                    <span id="readingScore">Score: 0</span>
+                </div>
+
+                <div class="reading-text-box" id="readingTextContent">Loading passage...</div>
+
+                <div id="readingStatementsContainer"></div>
+
+                <div style="margin-top:1.5rem; text-align:right;">
+                    <button class="btn-primary" id="btnNextReading" onclick="nextReadingPassage()" style="display:none;">Next Passage →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODULE 5: FINAL BOSS -->
+        <section id="screenMod5" class="screen">
+            <div class="glass-card">
+                <button class="btn-secondary" onclick="showDashboard()" style="margin-bottom: 1rem;">← Back to Dashboard</button>
+                <h2>⚔️ Module 5: Final Boss Challenge</h2>
+                <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">Combine context evaluation and deep reading logic to prove complete mastery.</p>
+
+                <!-- Boss Task 1 -->
+                <div id="bossTask1Box">
+                    <h3 style="color:var(--accent); margin-bottom:1rem;">Task 1: Context Challenge (<span id="bossT1Tracker">1/5</span>)</h3>
+                    <div class="mcq-question" id="bossT1Question">Loading...</div>
+                    <div class="options-list" id="bossT1Options"></div>
+                    <div class="explanation-box" id="bossT1Expl"></div>
+                    <div style="margin-top:1rem; text-align:right;">
+                        <button class="btn-primary" id="btnBossT1Next" onclick="nextBossT1()" style="display:none;">Next Challenge →</button>
+                    </div>
+                </div>
+
+                <!-- Boss Task 2 -->
+                <div id="bossTask2Box" style="display:none;">
+                    <h3 style="color:var(--accent); margin-bottom:1rem;">Task 2: Evidence Challenge</h3>
+                    <div class="reading-text-box" id="bossT2Passage">Loading...</div>
+                    <div id="bossT2Statements"></div>
+                    <div style="margin-top:1.5rem; text-align:right;">
+                        <button class="btn-primary" id="btnFinishBoss" onclick="finishBoss()" style="display:none;">Claim Victory 🏆</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL RESULTS & VOCABULARY BANK -->
+        <section id="screenResults" class="screen">
+            <div class="glass-card" style="text-align:center;">
+                <h1 style="font-size:2.5rem; color:var(--accent); margin-bottom:0.5rem;">🌍 ENVIRONMENT — MASTERED</h1>
+                <p style="font-size:1.2rem; color:var(--text-secondary); margin-bottom:2rem;">Congratulations, <span id="resStudentName">Student</span>!</p>
+
+                <div class="stats-grid" style="margin-bottom:2rem;">
+                    <div class="stat-card">
+                        <div class="val" id="resTotalXp">0</div>
+                        <div class="lbl">Total XP Earned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="val" id="resLevel">Vocabulary Master</div>
+                        <div class="lbl">Final Rank</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="val" id="resBadgesCount">6 / 6</div>
+                        <div class="lbl">Badges Unlocked</div>
+                    </div>
+                </div>
+
+                <div style="text-align:left; background:rgba(0,0,0,0.2); padding:1.5rem; border-radius:16px; border:1px solid var(--card-border); margin-bottom:2rem;">
+                    <h3 style="margin-bottom:1rem; color:var(--accent);">🎤 PUT IT INTO PRACTICE</h3>
+                    <p style="font-size:0.95rem; margin-bottom:1rem;">Now answer these IELTS Speaking questions out loud. Aim to naturally use at least 3 vocabulary expressions from today's session in each answer:</p>
+                    
+                    <div class="speaking-card">1. What do you personally do to reduce your impact on the environment?</div>
+                    <div class="speaking-card">2. What is the most serious environmental problem facing your country today?</div>
+                    <div class="speaking-card">3. Do you think governments or individuals should take more responsibility for climate change?</div>
+                    <div class="speaking-card">4. How important is it to switch to renewable energy sources in the coming years?</div>
+                    <div class="speaking-card">5. Do you believe future generations will live more sustainable lifestyles?</div>
+                </div>
+
+                <h3 style="text-align:left; color:var(--accent); margin-bottom:1rem;">🧠 YOUR ENVIRONMENT VOCABULARY BANK</h3>
+                <div style="overflow-x:auto;">
+                    <table class="vocab-bank-table">
+                        <thead>
+                            <tr>
+                                <th>Expression</th>
+                                <th>Meaning</th>
+                                <th>IELTS Example</th>
+                                <th>Audio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vocabBankTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display:flex; justify-content:center; gap:15px; margin-top:2.5rem; flex-wrap:wrap;">
+                    <button class="btn-primary" onclick="reviewFlashcards()">🔄 Review Vocabulary</button>
+                    <button class="btn-secondary" onclick="confirmResetProgress()" style="color:var(--error); border-color:var(--error);">Reset Progress</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MODULE COMPLETION MODAL -->
+    <div class="modal-overlay" id="completionModal">
+        <div class="modal-content">
+            <h1 style="font-size:3rem; margin-bottom:0.5rem;">🎉</h1>
+            <h2 id="compModalTitle" style="font-size:1.6rem; margin-bottom:0.5rem;">MODULE COMPLETE!</h2>
+            <p id="compModalXp" style="font-size:1.2rem; color:var(--accent); font-weight:700; margin-bottom:1rem;">+100 XP</p>
+            <p id="compModalText" style="color:var(--text-secondary); margin-bottom:1.5rem;">Your environmental vocabulary bank is growing.</p>
+            <button class="btn-primary" onclick="closeCompletionModal()" style="width:100%;">CONTINUE →</button>
+        </div>
+    </div>
+
+    <!-- THEME SELECTION MODAL -->
+    <div class="modal-overlay" id="themeModal">
+        <div class="modal-content" style="max-width:380px; text-align:left;">
+            <h2 style="margin-bottom:1rem; text-align:center;">Select Visual Theme</h2>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="btn-secondary" style="text-align:left; justify-content:space-between; display:flex;" onclick="setTheme('midnight')">
+                    <span>🌙 Midnight Luxury</span> <span id="chk_midnight">✓</span>
+                </button>
+                <button class="btn-secondary" style="text-align:left; justify-content:space-between; display:flex;" onclick="setTheme('platinum')">
+                    <span>🤍 Platinum Minimal</span> <span id="chk_platinum"></span>
+                </button>
+                <button class="btn-secondary" style="text-align:left; justify-content:space-between; display:flex;" onclick="setTheme('emerald')">
+                    <span>🌿 Emerald Executive</span> <span id="chk_emerald"></span>
+                </button>
+                <button class="btn-secondary" style="text-align:left; justify-content:space-between; display:flex;" onclick="setTheme('purple')">
+                    <span>👑 Royal Purple</span> <span id="chk_purple"></span>
+                </button>
+            </div>
+            <button class="btn-primary" onclick="closeThemeModal()" style="width:100%; margin-top:1.5rem;">Done</button>
+        </div>
+    </div>
+
+    <script>
+        const __PRACTISE_LESSON_ID = 'environment';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        /* -------------------------------------------------------------
+           1. VOCABULARY DATA (14 Core Natural IELTS Expressions)
+        ------------------------------------------------------------- */
+        const VOCABULARY_DATA = [
+            {
+                phrase: "reduce my carbon footprint",
+                meaning: "to reduce the amount of greenhouse gases produced by your direct and indirect activities",
+                example: "I'm trying to reduce my carbon footprint by taking public transport instead of driving.",
+                alternative: "lower my carbon emissions",
+                category: "Sustainability"
+            },
+            {
+                phrase: "adopt a more sustainable lifestyle",
+                meaning: "to change your habits to live in a way that causes less harm to the natural environment",
+                example: "More young people are eager to adopt a more sustainable lifestyle by recycling and wasting less.",
+                alternative: "live more sustainably",
+                category: "Sustainability"
+            },
+            {
+                phrase: "cut down on plastic",
+                meaning: "to deliberately reduce the amount of single-use plastic goods you purchase or throw away",
+                example: "Supermarkets should encourage shoppers to cut down on plastic packaging.",
+                alternative: "minimize single-use plastics",
+                category: "Sustainability"
+            },
+            {
+                phrase: "rely on renewable energy",
+                meaning: "to depend on energy derived from clean sources that replenish naturally, like wind or solar",
+                example: "Forward-thinking nations must rely on renewable energy to ensure long-term energy security.",
+                alternative: "harness clean energy sources",
+                category: "Energy"
+            },
+            {
+                phrase: "reduce our dependence on fossil fuels",
+                meaning: "to stop relying so heavily on oil, coal, and gas for industrial and daily power needs",
+                example: "To combat smog in urban areas, we urgently need to reduce our dependence on fossil fuels.",
+                alternative: "phase out fossil fuel usage",
+                category: "Energy"
+            },
+            {
+                phrase: "tackle environmental problems",
+                meaning: "to take energetic and decisive action to address major environmental challenges",
+                example: "Governments must work alongside local communities to tackle environmental problems effectively.",
+                alternative: "address ecological issues",
+                category: "Solutions"
+            },
+            {
+                phrase: "have a negative impact on the environment",
+                meaning: "to cause harm, degradation, or disruption to ecosystems and natural surroundings",
+                example: "Uncontrolled industrial expansion can have a negative impact on the environment.",
+                alternative: "adversely affect the natural world",
+                category: "Problems"
+            },
+            {
+                phrase: "contribute to climate change",
+                meaning: "to perform actions that release greenhouse gases and increase global warming",
+                example: "Excessive air travel significantly contributes to climate change worldwide.",
+                alternative: "fuel global environmental warming",
+                category: "Problems"
+            },
+            {
+                phrase: "pose a threat to",
+                meaning: "to create a clear risk or cause potential danger to species or delicate ecosystems",
+                example: "Deforestation continues to pose a threat to thousands of unique species.",
+                alternative: "endanger / put at risk",
+                category: "Problems"
+            },
+            {
+                phrase: "conserve natural resources",
+                meaning: "to protect and avoid wasting essential raw materials like water, timber, and minerals",
+                example: "It is crucial for modern industries to conserve natural resources for future generations.",
+                alternative: "preserve finite resources",
+                category: "Nature"
+            },
+            {
+                phrase: "preserve natural habitats",
+                meaning: "to keep natural areas in their original, undisturbed state to protect wildlife",
+                example: "National parks are designed to preserve natural habitats from urban development.",
+                alternative: "protect biological ecosystems",
+                category: "Nature"
+            },
+            {
+                phrase: "protect endangered species",
+                meaning: "to prevent rare animals and plants from going completely extinct",
+                example: "Strict poaching laws are vital if we want to protect endangered species.",
+                alternative: "safeguard vulnerable wildlife",
+                category: "Nature"
+            },
+            {
+                phrase: "raise environmental awareness",
+                meaning: "to increase public understanding and concern regarding ecological and planet issues",
+                example: "School initiatives play a vital role in raising environmental awareness among children.",
+                alternative: "promote ecological consciousness",
+                category: "Solutions"
+            },
+            {
+                phrase: "take steps to protect the planet",
+                meaning: "to implement specific practical measures to safeguard the Earth's ecosystems",
+                example: "Every individual can take steps to protect the planet through simple everyday actions.",
+                alternative: "take action to safeguard the Earth",
+                category: "Solutions"
+            }
+        ];
+
+        /* -------------------------------------------------------------
+           2. MODULE EXERCISES DATA (MCQ, Reading, Final Boss)
+        ------------------------------------------------------------- */
+        const MCQ_DATA = [
+            {
+                question: "Many urban residents are trying to ________ by commuting on bicycles instead of using private cars.",
+                options: [
+                    "reduce their carbon footprint",
+                    "decrease their climate foot",
+                    "lower their atmosphere step",
+                    "diminish their fossil track"
+                ],
+                correct: 0,
+                explanation: "✅ 'Reduce their carbon footprint' is the natural, idiomatic expression meaning to lower greenhouse emissions generated by personal choices."
+            },
+            {
+                question: "Governments must take immediate action to ________ environmental problems before global temperatures rise further.",
+                options: [
+                    "attack to",
+                    "tackle",
+                    "make up",
+                    "solve out"
+                ],
+                correct: 1,
+                explanation: "✅ We naturally say 'tackle environmental problems'. Options like 'attack to' or 'solve out' are unnatural combinations in English."
+            },
+            {
+                question: "If we continue to clear rainforests, we will ________ thousands of rare animal species.",
+                options: [
+                    "pose a threat to",
+                    "make threat against",
+                    "create fear on",
+                    "put endanger into"
+                ],
+                correct: 0,
+                explanation: "✅ 'Pose a threat to' is a sophisticated collocation used to describe danger to wildlife or habitats."
+            },
+            {
+                question: "Transitioning to solar power allows developing nations to ________ clean, infinitely renewable resources.",
+                options: [
+                    "depend in",
+                    "rely on renewable energy",
+                    "trust with solar",
+                    "catch renewable energy"
+                ],
+                correct: 1,
+                explanation: "✅ 'Rely on renewable energy' is the standard high-level collocation in IELTS Speaking."
+            },
+            {
+                question: "Educational campaigns in primary schools are essential to ________ among the younger generation.",
+                options: [
+                    "raise environmental awareness",
+                    "lift eco mind",
+                    "grow environment knowledge",
+                    "rise nature awareness"
+                ],
+                correct: 0,
+                explanation: "✅ The phrase 'raise environmental awareness' is a very common Band 8 collocation."
+            },
+            {
+                question: "Dumping toxic industrial waste into rivers will undoubtedly ________ local water ecosystems.",
+                options: [
+                    "have a negative impact on",
+                    "make bad force on",
+                    "do negative damage into",
+                    "give harsh consequence to"
+                ],
+                correct: 0,
+                explanation: "✅ 'Have a negative impact on' is far more natural than expressions like 'do negative damage into'."
+            },
+            {
+                question: "Consumers are encouraged to ________ by switching to reusable cloth bags for daily shopping.",
+                options: [
+                    "cut down on plastic",
+                    "cut off from plastic",
+                    "break down plasticing",
+                    "fall down plastic"
+                ],
+                correct: 0,
+                explanation: "✅ 'Cut down on plastic' means to reduce usage. 'Cut off' means completely sever."
+            },
+            {
+                question: "By establishing nature reserves, local authorities hope to ________ and protect biodiversity.",
+                options: [
+                    "preserve natural habitats",
+                    "keep nature houses",
+                    "hold wild rooms",
+                    "save ecological addresses"
+                ],
+                correct: 0,
+                explanation: "✅ 'Preserve natural habitats' is the exact scientific and conversational collocation for protecting wildlife environments."
+            }
+        ];
+
+        const READING_DATA = [
+            {
+                title: "TEXT 1 — Everyday Environmental Habits",
+                text: "Over the past three years, the Miller family has made deliberate changes to adopt a more sustainable lifestyle. Recognizing that everyday households generate substantial emissions, they installed solar panels to reduce their carbon footprint. Mrs. Miller also made a strict rule to cut down on plastic packaging by purchasing dry goods from bulk markets using cotton containers. Although these changes required extra effort and planning, the family successfully reduced household non-recyclable waste by over seventy percent. However, they found that relying completely on public transport was impractical due to poor bus connections in their rural village.",
+                questions: [
+                    {
+                        statement: "The Miller family started using solar energy to lower their personal emissions.",
+                        answer: "TRUE",
+                        explanation: "TRUE: The text states they installed solar panels to 'reduce their carbon footprint' because households generate emissions."
+                    },
+                    {
+                        statement: "Mrs. Miller buys all her clothes from ethical organic cotton stores.",
+                        answer: "NOT GIVEN",
+                        explanation: "NOT GIVEN: The text mentions 'cotton containers' for buying bulk dry goods, but says nothing about buying organic clothes."
+                    },
+                    {
+                        statement: "The family now commutes exclusively by public buses.",
+                        answer: "FALSE",
+                        explanation: "FALSE: The text directly states that relying completely on public transport was 'impractical due to poor bus connections'."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 2 — Climate Change & Energy Transition",
+                text: "Rapid industrial expansion over the last century has relied heavily on burning fossil fuels, which directly contributes to climate change. Atmospheric scientists warn that failure to reduce our dependence on fossil fuels will result in irreversible weather extremes. To tackle environmental problems of this scale, many governments are offering tax incentives for companies that switch to solar and wind infrastructure. While some critics argue that green infrastructure demands huge upfront investment, long-term studies demonstrate that failing to act will have a far more devastating negative impact on the global economy and environment.",
+                questions: [
+                    {
+                        statement: "Industrial activities from the past century have played a role in climate change.",
+                        answer: "TRUE",
+                        explanation: "TRUE: The text notes industrial expansion relied on burning fossil fuels which 'directly contributes to climate change'."
+                    },
+                    {
+                        statement: "Tax incentives have successfully convinced all major global corporations to go carbon neutral.",
+                        answer: "NOT GIVEN",
+                        explanation: "NOT GIVEN: The text says tax incentives are offered, but does not claim that *all* major global corporations have become carbon neutral."
+                    },
+                    {
+                        statement: "Ignoring climate change is projected to be cheaper in the long run than building green infrastructure.",
+                        answer: "FALSE",
+                        explanation: "FALSE: The text states failing to act will have a 'far more devastating' impact on the economy than green infrastructure investments."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 3 — Wildlife & Habitat Conservation",
+                text: "Unchecked agricultural development routinely invades forests, threatening to destroy delicate biological balances. To protect endangered species such as the wild mountain lynx, regional conservationists are working to preserve natural habitats by constructing protected wildlife corridors. These corridors allow animals to migrate safely without entering human farmlands. Additionally, local NGOs host weekly workshops to raise environmental awareness among farmland owners, encouraging them to conserve natural resources like clean groundwater. Environmentalists emphasize that individual cooperation is key to keeping ecosystems intact.",
+                questions: [
+                    {
+                        statement: "Protected corridors are being built to help wildlife move safely across habitats.",
+                        answer: "TRUE",
+                        explanation: "TRUE: The text mentions constructing corridors to allow animals to 'migrate safely without entering human farmlands'."
+                    },
+                    {
+                        statement: "The wild mountain lynx population has doubled since the wildlife corridors were created.",
+                        answer: "NOT GIVEN",
+                        explanation: "NOT GIVEN: The lynx is mentioned as an endangered species being protected, but no population figures are provided."
+                    },
+                    {
+                        statement: "Local NGOs believe that farmers should be forced by law to conserve groundwater.",
+                        answer: "FALSE",
+                        explanation: "FALSE: The text explains NGOs host workshops to 'raise environmental awareness' and 'encourage' farmers through individual cooperation, not forced laws."
+                    }
+                ]
+            }
+        ];
+
+        const BOSS_TASK1_DATA = [
+            {
+                scenario: "A city administration notices that local rivers are suffering from industrial run-off and toxic chemicals. Officials draft a strict policy aimed at factory owners to restore clean water and prevent further ecosystem damage.",
+                question: "Which target expression best summarizes the goal of this official policy?",
+                options: [
+                    "preserve natural habitats",
+                    "tackle environmental problems",
+                    "adopt a more sustainable lifestyle",
+                    "protect endangered species"
+                ],
+                correct: 1,
+                explanation: "✅ 'Tackle environmental problems' accurately describes implementing energetic administrative action to address ecological damage like water pollution."
+            },
+            {
+                scenario: "An office worker decides to bring a glass bottle to work instead of buying plastic water bottles every day, and starts using canvas bags for groceries.",
+                question: "This individual's actions are a practical example of trying to:",
+                options: [
+                    "rely on renewable energy",
+                    "reduce our dependence on fossil fuels",
+                    "cut down on plastic",
+                    "conserve natural resources"
+                ],
+                correct: 2,
+                explanation: "✅ Reusable glass bottles and canvas grocery bags are classic methods to 'cut down on plastic'."
+            },
+            {
+                scenario: "Scientists discover a rare tropical orchid species whose remaining population in the wild has dropped below 150 plants due to illegal logging.",
+                question: "International botanical groups are now rushing to construct a sanctuary specifically to:",
+                options: [
+                    "protect endangered species",
+                    "contribute to climate change",
+                    "raise environmental awareness",
+                    "take steps to protect the planet"
+                ],
+                correct: 0,
+                explanation: "✅ Saving a specific rare organism with a critically low population is the exact definition of 'protect endangered species'."
+            },
+            {
+                scenario: "A country replaces three coal-fired power stations with offshore wind farms and solar arrays, supplying 60% of its electrical grid from clean power.",
+                question: "This government strategy primarily enables the nation to:",
+                options: [
+                    "rely on renewable energy",
+                    "preserve natural habitats",
+                    "pose a threat to fossil fuels",
+                    "have a negative impact on energy"
+                ],
+                correct: 0,
+                explanation: "✅ Generating power through wind and solar power grids is 'relying on renewable energy'."
+            },
+            {
+                scenario: "A school organizes a monthly 'Eco-Summit' where students present projects on recycling, water conservation, and global warming to parents.",
+                question: "The primary educational objective of this summit is to:",
+                options: [
+                    "raise environmental awareness",
+                    "reduce our dependence on fossil fuels",
+                    "conserve natural resources",
+                    "tackle environmental problems"
+                ],
+                correct: 0,
+                explanation: "✅ Informing and educating students and parents about ecological issues is designed to 'raise environmental awareness'."
+            }
+        ];
+
+        const BOSS_TASK2_PASSAGE = "The Nordic island of Oakhaven has made historic strides in ecological policy over the past decade. Once heavily dependent on imported diesel for electricity, municipal leaders took radical steps to protect the planet by constructing geothermal and hydroelectric stations. Today, over ninety percent of the island's domestic grid relies on renewable energy. In addition to clean energy, municipal authorities enacted strict maritime boundaries to preserve natural habitats surrounding local coral reefs. These marine reserves have successfully shielded vulnerable sea turtles from commercial fishing nets, helping protect endangered species across the region. Furthermore, citizen initiatives have flourished; local community boards regularly host seminars to raise environmental awareness. Despite these ecological victories, critics note that tourist air traffic to Oakhaven has doubled, which continues to contribute to climate change through high aviation emissions. Nevertheless, Oakhaven demonstrates how targeted policy can help a society adopt a more sustainable lifestyle.";
+
+        const BOSS_TASK2_STATEMENTS = [
+            {
+                statement: "Oakhaven now generates most of its electricity from geothermal and hydroelectric sources.",
+                answer: "TRUE",
+                explanation: "TRUE: Over 90% of electricity relies on renewable energy produced by geothermal and hydroelectric stations."
+            },
+            {
+                statement: "Commercial fishing is strictly permitted inside Oakhaven's protected coral reef zones.",
+                answer: "FALSE",
+                explanation: "FALSE: Strict maritime boundaries shield sea turtles from 'commercial fishing nets', indicating fishing is restricted inside these reserves."
+            },
+            {
+                statement: "The number of sea turtles near Oakhaven has increased by exactly fifty percent.",
+                answer: "NOT GIVEN",
+                explanation: "NOT GIVEN: The passage says the marine reserves help protect endangered sea turtles, but does not state an exact percentage increase."
+            },
+            {
+                statement: "Oakhaven has completely eliminated all sources of carbon emissions from its economy.",
+                answer: "FALSE",
+                explanation: "FALSE: The text states tourist air traffic has doubled and 'continues to contribute to climate change through high aviation emissions'."
+            },
+            {
+                statement: "Local citizens in Oakhaven participate in community workshops regarding ecological issues.",
+                answer: "TRUE",
+                explanation: "TRUE: The text notes citizen initiatives host seminars to 'raise environmental awareness'."
+            }
+        ];
+
+        /* -------------------------------------------------------------
+           3. APPLICATION STATE & LOCALSTORAGE
+        ------------------------------------------------------------- */
+        let state = {
+            studentName: "",
+            xp: 0,
+            theme: "midnight",
+            completedModules: [false, false, false, false, false], // Modules 1..5
+            cardIndex: 0,
+            cardsRevealed: new Set(),
+            matchingMatches: 0,
+            matchingMistakes: 0,
+            mcqIndex: 0,
+            mcqScore: 0,
+            readingPassageIdx: 0,
+            readingScore: 0,
+            bossT1Idx: 0,
+            bossT1Score: 0,
+            bossT2Score: 0,
+            badges: {
+                firstStep: false,
+                perfectMatch: false,
+                sharpSpeaker: false,
+                carefulReader: false,
+                bossSlayer: false,
+                master: false
+            }
+        };
+
+        const BADGES_CONFIG = [
+            { id: "firstStep", name: "First Step", icon: "🔓", desc: "Complete Flashcards" },
+            { id: "perfectMatch", name: "Perfect Match", icon: "🧩", desc: "Complete Matching without mistakes" },
+            { id: "sharpSpeaker", name: "Sharp Speaker", icon: "🎯", desc: "Score 100% in MCQ section" },
+            { id: "carefulReader", name: "Careful Reader", icon: "📖", desc: "Score 100% in Reading section" },
+            { id: "bossSlayer", name: "Boss Slayer", icon: "⚔️", desc: "Defeat the Final Boss" },
+            { id: "master", name: "Master", icon: "🌍", desc: "Complete full lesson" }
+        ];
+
+        function loadState() {
+            const saved = localStorage.getItem(__vocabKey("ielts_env_vocab_state"));
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = { ...state, ...parsed };
+                    if (state.cardsRevealed) {
+                        state.cardsRevealed = new Set(parsed.cardsRevealed);
+                    }
+                } catch(e) {
+                    console.error("Error loading state", e);
+                }
+            }
+        }
+
+        function saveState() {
+            const toSave = {
+                ...state,
+                cardsRevealed: Array.from(state.cardsRevealed)
+            };
+            localStorage.setItem(__vocabKey("ielts_env_vocab_state"), JSON.stringify(toSave));
+        }
+
+        /* -------------------------------------------------------------
+           4. INITIALIZATION & NAVIGATION LOGIC
+        ------------------------------------------------------------- */
+        window.addEventListener("DOMContentLoaded", () => {
+            loadState();
+            setTheme(state.theme || 'midnight');
+            state.studentName = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.studentName || 'Student');
+            saveState();
+            initHeader();
+            showDashboard();
+        });
+
+        function showScreen(screenId) {
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            const target = document.getElementById(screenId);
+            if (target) target.classList.add("active");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function initHeader() {
+            document.getElementById("mainHeader").style.display = "flex";
+            document.getElementById("navName").innerText = `👤 ${state.studentName}`;
+            updateHeaderStats();
+        }
+
+        function updateHeaderStats() {
+            document.getElementById("navXp").innerText = `⭐ ${state.xp} XP`;
+            document.getElementById("navLevel").innerText = `🏆 ${getLevelTitle(state.xp)}`;
+        }
+
+        function getLevelTitle(xp) {
+            if (xp >= 600) return "Vocabulary Master";
+            if (xp >= 400) return "Confident Speaker";
+            if (xp >= 200) return "Learner";
+            return "Beginner";
+        }
+
+        function updateXP(amount) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            state.xp += pts;
+            updateHeaderStats();
+            saveState();
+            __notifyPractiseParentXP(pts, state.xp);
+        }
+
+        function checkLevelBadges() {
+            if (state.completedModules[0]) state.badges.firstStep = true;
+            if (state.completedModules[4]) state.badges.bossSlayer = true;
+            if (state.completedModules.every(m => m)) state.badges.master = true;
+            saveState();
+        }
+
+        /* -------------------------------------------------------------
+           5. DASHBOARD CONTROLLER
+        ------------------------------------------------------------- */
+        function showDashboard() {
+            showScreen("screenDash");
+            updateDashboardUI();
+        }
+
+        function updateDashboardUI() {
+            document.getElementById("dashGreeting").innerText = `Welcome, ${state.studentName} 👋`;
+            
+            const completedCount = state.completedModules.filter(Boolean).length;
+            document.getElementById("dashModulesDone").innerText = `${completedCount} / 5`;
+            document.getElementById("dashXp").innerText = `${state.xp} XP`;
+            document.getElementById("dashLevel").innerText = getLevelTitle(state.xp);
+
+            const pct = Math.round((completedCount / 5) * 100);
+            document.getElementById("dashProgressPct").innerText = `${pct}%`;
+            document.getElementById("dashProgressBar").style.width = `${pct}%`;
+
+            // Modules Unlock Status
+            for (let i = 1; i <= 5; i++) {
+                const item = document.getElementById(`modItem${i}`);
+                const status = document.getElementById(`modStatus${i}`);
+                const isDone = state.completedModules[i - 1];
+                const isUnlocked = i === 1 || state.completedModules[i - 2];
+
+                if (isDone) {
+                    item.className = "module-item completed";
+                    status.innerText = "✅ Completed";
+                    status.style.color = "var(--success)";
+                } else if (isUnlocked) {
+                    item.className = "module-item";
+                    status.innerText = "Start →";
+                    status.style.color = "var(--accent)";
+                } else {
+                    item.className = "module-item locked";
+                    status.innerText = "🔒 Locked";
+                    status.style.color = "var(--text-secondary)";
+                }
+            }
+
+            // Render Badges
+            checkLevelBadges();
+            const container = document.getElementById("badgesContainer");
+            container.innerHTML = BADGES_CONFIG.map(b => {
+                const isUnlocked = state.badges[b.id];
+                return `
+                    <div class="badge-item ${isUnlocked ? 'unlocked' : ''}">
+                        <div class="badge-icon">${b.icon}</div>
+                        <div class="badge-name">${b.name}</div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function startModule(modNum) {
+            if (modNum > 1 && !state.completedModules[modNum - 2]) {
+                alert("Please complete the previous module first!");
+                return;
+            }
+
+            if (modNum === 1) initMod1();
+            if (modNum === 2) initMod2();
+            if (modNum === 3) initMod3();
+            if (modNum === 4) initMod4();
+            if (modNum === 5) initMod5();
+        }
+
+        /* -------------------------------------------------------------
+           6. MODULE 1: FLASHCARDS
+        ------------------------------------------------------------- */
+        function initMod1() {
+            showScreen("screenMod1");
+            state.cardIndex = 0;
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            const data = VOCABULARY_DATA[state.cardIndex];
+            const cardEl = document.getElementById("flashcardElement");
+            cardEl.classList.remove("flipped");
+
+            document.getElementById("cardTracker").innerText = `Card ${state.cardIndex + 1} / ${VOCABULARY_DATA.length}`;
+            document.getElementById("cardProgressBar").style.width = `${((state.cardIndex + 1) / VOCABULARY_DATA.length) * 100}%`;
+
+            document.getElementById("cardFrontPhrase").innerText = data.phrase;
+            document.getElementById("cardBackMeaning").innerText = data.meaning;
+            document.getElementById("cardBackExample").innerText = `"${data.example}"`;
+            document.getElementById("cardBackAlt").innerText = data.alternative;
+
+            document.getElementById("btnPrevCard").disabled = state.cardIndex === 0;
+            document.getElementById("btnNextCard").innerText = (state.cardIndex === VOCABULARY_DATA.length - 1) ? "Finish Module ✓" : "Next →";
+        }
+
+        function flipCard() {
+            const cardEl = document.getElementById("flashcardElement");
+            cardEl.classList.toggle("flipped");
+            state.cardsRevealed.add(state.cardIndex);
+            saveState();
+        }
+
+        function prevCard() {
+            if (state.cardIndex > 0) {
+                state.cardIndex--;
+                renderFlashcard();
+            }
+        }
+
+        function nextCard() {
+            state.cardsRevealed.add(state.cardIndex);
+            saveState();
+
+            if (state.cardIndex < VOCABULARY_DATA.length - 1) {
+                state.cardIndex++;
+                renderFlashcard();
+            } else {
+                // Complete Module 1
+                completeModule(1, 100, "Environment vocabulary unlocked!", "Your environmental vocabulary bank is growing.");
+            }
+        }
+
+        function playAudio(e) {
+            e.stopPropagation();
+            const data = VOCABULARY_DATA[state.cardIndex];
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(data.phrase);
+                utterance.rate = 0.9;
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        /* -------------------------------------------------------------
+           7. MODULE 2: MATCHING GAME
+        ------------------------------------------------------------- */
+        let matchSelectedPhrase = null;
+        let matchSelectedDef = null;
+        let activePairs = [];
+
+        function initMod2() {
+            showScreen("screenMod2");
+            state.matchingMatches = 0;
+            state.matchingMistakes = 0;
+            matchSelectedPhrase = null;
+            matchSelectedDef = null;
+
+            // Pick 8 random vocabulary items
+            activePairs = [...VOCABULARY_DATA].sort(() => 0.5 - Math.random()).slice(0, 8);
+            renderMatchingBoard();
+        }
+
+        function renderMatchingBoard() {
+            document.getElementById("matchScore").innerText = `Matches: ${state.matchingMatches} / ${activePairs.length}`;
+            document.getElementById("matchMistakes").innerText = `Mistakes: ${state.matchingMistakes}`;
+
+            const phrasesShuffled = [...activePairs].sort(() => 0.5 - Math.random());
+            const defsShuffled = [...activePairs].sort(() => 0.5 - Math.random());
+
+            const phrasesCol = document.getElementById("matchPhrasesCol");
+            const defsCol = document.getElementById("matchDefsCol");
+
+            phrasesCol.innerHTML = phrasesShuffled.map(item => `
+                <div class="match-card" data-id="${item.phrase}" onclick="selectMatchPhrase(this)">
+                    ${item.phrase}
+                </div>
+            `).join("");
+
+            defsCol.innerHTML = defsShuffled.map(item => `
+                <div class="match-card" data-id="${item.phrase}" onclick="selectMatchDef(this)">
+                    ${item.meaning}
+                </div>
+            `).join("");
+        }
+
+        function selectMatchPhrase(el) {
+            if (el.classList.contains("correct")) return;
+            document.querySelectorAll("#matchPhrasesCol .match-card").forEach(c => c.classList.remove("selected"));
+            el.classList.add("selected");
+            matchSelectedPhrase = el;
+            checkMatchPair();
+        }
+
+        function selectMatchDef(el) {
+            if (el.classList.contains("correct")) return;
+            document.querySelectorAll("#matchDefsCol .match-card").forEach(c => c.classList.remove("selected"));
+            el.classList.add("selected");
+            matchSelectedDef = el;
+            checkMatchPair();
+        }
+
+        function checkMatchPair() {
+            if (matchSelectedPhrase && matchSelectedDef) {
+                const id1 = matchSelectedPhrase.getAttribute("data-id");
+                const id2 = matchSelectedDef.getAttribute("data-id");
+
+                if (id1 === id2) {
+                    // Correct Match
+                    matchSelectedPhrase.className = "match-card correct locked";
+                    matchSelectedDef.className = "match-card correct locked";
+                    state.matchingMatches++;
+                    document.getElementById("matchScore").innerText = `Matches: ${state.matchingMatches} / ${activePairs.length}`;
+
+                    matchSelectedPhrase = null;
+                    matchSelectedDef = null;
+
+                    if (state.matchingMatches === activePairs.length) {
+                        if (state.matchingMistakes === 0) {
+                            state.badges.perfectMatch = true;
+                        }
+                        setTimeout(() => {
+                            completeModule(2, 150, "Perfect Match!", "Module 2 complete! Unlocked Module 3.");
+                        }, 500);
+                    }
+                } else {
+                    // Incorrect Match
+                    state.matchingMistakes++;
+                    document.getElementById("matchMistakes").innerText = `Mistakes: ${state.matchingMistakes}`;
+                    
+                    const p = matchSelectedPhrase;
+                    const d = matchSelectedDef;
+                    p.classList.add("incorrect");
+                    d.classList.add("incorrect");
+
+                    matchSelectedPhrase = null;
+                    matchSelectedDef = null;
+
+                    setTimeout(() => {
+                        p.classList.remove("incorrect", "selected");
+                        d.classList.remove("incorrect", "selected");
+                    }, 500);
+                }
+            }
+        }
+
+        /* -------------------------------------------------------------
+           8. MODULE 3: MULTIPLE CHOICE QUESTIONS
+        ------------------------------------------------------------- */
+        function initMod3() {
+            showScreen("screenMod3");
+            state.mcqIndex = 0;
+            state.mcqScore = 0;
+            renderMcq();
+        }
+
+        function renderMcq() {
+            const data = MCQ_DATA[state.mcqIndex];
+            document.getElementById("mcqTracker").innerText = `Question ${state.mcqIndex + 1} / ${MCQ_DATA.length}`;
+            document.getElementById("mcqScore").innerText = `Score: ${state.mcqScore}`;
+            document.getElementById("mcqQuestionText").innerText = data.question;
+
+            const optionsList = document.getElementById("mcqOptionsList");
+            const letters = ["A", "B", "C", "D"];
+            optionsList.innerHTML = data.options.map((opt, i) => `
+                <div class="option-item" onclick="chooseMcqOption(${i}, this)">
+                    <span style="font-weight:700; color:var(--accent);">${letters[i]})</span>
+                    <span>${opt}</span>
+                </div>
+            `).join("");
+
+            document.getElementById("mcqExplanation").style.display = "none";
+            document.getElementById("btnNextMcq").style.display = "none";
+        }
+
+        function chooseMcqOption(optIdx, el) {
+            if (el.classList.contains("disabled")) return;
+            const data = MCQ_DATA[state.mcqIndex];
+            const allOpts = document.querySelectorAll("#mcqOptionsList .option-item");
+            allOpts.forEach(o => o.classList.add("disabled"));
+
+            const explBox = document.getElementById("mcqExplanation");
+
+            if (optIdx === data.correct) {
+                el.classList.add("correct-opt");
+                state.mcqScore++;
+                if (!state.completedModules[2]) updateXP(20);
+            } else {
+                el.classList.add("incorrect-opt");
+                allOpts[data.correct].classList.add("correct-opt");
+            }
+
+            explBox.innerText = data.explanation;
+            explBox.style.display = "block";
+
+            document.getElementById("btnNextMcq").style.display = "inline-flex";
+            document.getElementById("btnNextMcq").innerText = (state.mcqIndex === MCQ_DATA.length - 1) ? "Finish Module ✓" : "Next Question →";
+        }
+
+        function nextMcq() {
+            if (state.mcqIndex < MCQ_DATA.length - 1) {
+                state.mcqIndex++;
+                renderMcq();
+            } else {
+                if (state.mcqScore === MCQ_DATA.length) {
+                    state.badges.sharpSpeaker = true;
+                }
+                completeModule(3, 0, "MCQ Challenge Complete!", `You scored ${state.mcqScore} / ${MCQ_DATA.length}. Great progress!`);
+            }
+        }
+
+        /* -------------------------------------------------------------
+           9. MODULE 4: READ & DECIDE (TRUE / FALSE / NOT GIVEN)
+        ------------------------------------------------------------- */
+        function initMod4() {
+            showScreen("screenMod4");
+            state.readingPassageIdx = 0;
+            state.readingScore = 0;
+            renderReadingPassage();
+        }
+
+        function renderReadingPassage() {
+            const data = READING_DATA[state.readingPassageIdx];
+            document.getElementById("readingPassageTracker").innerText = `Passage ${state.readingPassageIdx + 1} / ${READING_DATA.length}`;
+            document.getElementById("readingScore").innerText = `Score: ${state.readingScore}`;
+            document.getElementById("readingTextContent").innerText = data.text;
+
+            const container = document.getElementById("readingStatementsContainer");
+            container.innerHTML = data.questions.map((q, qIdx) => `
+                <div class="statement-card">
+                    <p style="font-weight:600; margin-bottom:8px;">${qIdx + 1}. ${q.statement}</p>
+                    <div class="tfng-btns" id="tfng_btns_${qIdx}">
+                        <button class="tfng-btn" onclick="answerReading(${qIdx}, 'TRUE', this)">TRUE</button>
+                        <button class="tfng-btn" onclick="answerReading(${qIdx}, 'FALSE', this)">FALSE</button>
+                        <button class="tfng-btn" onclick="answerReading(${qIdx}, 'NOT GIVEN', this)">NOT GIVEN</button>
+                    </div>
+                    <div class="explanation-box" id="reading_expl_${qIdx}"></div>
+                </div>
+            `).join("");
+
+            document.getElementById("btnNextReading").style.display = "none";
+        }
+
+        function answerReading(qIdx, choice, btnEl) {
+            const passage = READING_DATA[state.readingPassageIdx];
+            const qData = passage.questions[qIdx];
+            const btnGroup = document.getElementById(`tfng_btns_${qIdx}`);
+            
+            // Disable buttons in this group
+            btnGroup.querySelectorAll(".tfng-btn").forEach(b => b.disabled = true);
+
+            const explBox = document.getElementById(`reading_expl_${qIdx}`);
+
+            if (choice === qData.answer) {
+                btnEl.classList.add("selected-correct");
+                state.readingScore++;
+                if (!state.completedModules[3]) updateXP(30);
+            } else {
+                btnEl.classList.add("selected-incorrect");
+                btnGroup.querySelectorAll(".tfng-btn").forEach(b => {
+                    if (b.innerText === qData.answer) b.classList.add("selected-correct");
+                });
+            }
+
+            explBox.innerText = qData.explanation;
+            explBox.style.display = "block";
+
+            // Check if all questions in this passage answered
+            const allAnswered = Array.from(document.querySelectorAll(".statement-card")).every(card => {
+                return card.querySelector(".explanation-box").style.display === "block";
+            });
+
+            if (allAnswered) {
+                const btnNext = document.getElementById("btnNextReading");
+                btnNext.style.display = "inline-flex";
+                btnNext.innerText = (state.readingPassageIdx === READING_DATA.length - 1) ? "ENTER THE FINAL BOSS ⚔️" : "Next Passage →";
+            }
+        }
+
+        function nextReadingPassage() {
+            if (state.readingPassageIdx < READING_DATA.length - 1) {
+                state.readingPassageIdx++;
+                renderReadingPassage();
+            } else {
+                const totalQuestions = READING_DATA.reduce((acc, p) => acc + p.questions.length, 0);
+                if (state.readingScore === totalQuestions) {
+                    state.badges.carefulReader = true;
+                }
+                completeModule(4, 0, "READING MODULE COMPLETE!", "You've made it through all four core modules. The Final Boss awaits...");
+            }
+        }
+
+        /* -------------------------------------------------------------
+           10. MODULE 5: FINAL BOSS
+        ------------------------------------------------------------- */
+        function initMod5() {
+            showScreen("screenMod5");
+            state.bossT1Idx = 0;
+            state.bossT1Score = 0;
+            state.bossT2Score = 0;
+
+            document.getElementById("bossTask1Box").style.display = "block";
+            document.getElementById("bossTask2Box").style.display = "none";
+
+            renderBossT1();
+        }
+
+        function renderBossT1() {
+            const data = BOSS_TASK1_DATA[state.bossT1Idx];
+            document.getElementById("bossT1Tracker").innerText = `${state.bossT1Idx + 1} / ${BOSS_TASK1_DATA.length}`;
+            document.getElementById("bossT1Question").innerText = `${data.scenario}\n\n${data.question}`;
+
+            const optionsList = document.getElementById("bossT1Options");
+            const letters = ["A", "B", "C", "D"];
+            optionsList.innerHTML = data.options.map((opt, i) => `
+                <div class="option-item" onclick="chooseBossT1Option(${i}, this)">
+                    <span style="font-weight:700; color:var(--accent);">${letters[i]})</span>
+                    <span>${opt}</span>
+                </div>
+            `).join("");
+
+            document.getElementById("bossT1Expl").style.display = "none";
+            document.getElementById("btnBossT1Next").style.display = "none";
+        }
+
+        function chooseBossT1Option(optIdx, el) {
+            const data = BOSS_TASK1_DATA[state.bossT1Idx];
+            const allOpts = document.querySelectorAll("#bossT1Options .option-item");
+            allOpts.forEach(o => o.classList.add("disabled"));
+
+            const explBox = document.getElementById("bossT1Expl");
+
+            if (optIdx === data.correct) {
+                el.classList.add("correct-opt");
+                state.bossT1Score++;
+                updateXP(40);
+            } else {
+                el.classList.add("incorrect-opt");
+                allOpts[data.correct].classList.add("correct-opt");
+            }
+
+            explBox.innerText = data.explanation;
+            explBox.style.display = "block";
+
+            document.getElementById("btnBossT1Next").style.display = "inline-flex";
+            document.getElementById("btnBossT1Next").innerText = (state.bossT1Idx === BOSS_TASK1_DATA.length - 1) ? "Proceed to Task 2 →" : "Next Challenge →";
+        }
+
+        function nextBossT1() {
+            if (state.bossT1Idx < BOSS_TASK1_DATA.length - 1) {
+                state.bossT1Idx++;
+                renderBossT1();
+            } else {
+                // Switch to Task 2
+                document.getElementById("bossTask1Box").style.display = "none";
+                document.getElementById("bossTask2Box").style.display = "block";
+                renderBossT2();
+            }
+        }
+
+        function renderBossT2() {
+            document.getElementById("bossT2Passage").innerText = BOSS_TASK2_PASSAGE;
+
+            const container = document.getElementById("bossT2Statements");
+            container.innerHTML = BOSS_TASK2_STATEMENTS.map((q, qIdx) => `
+                <div class="statement-card">
+                    <p style="font-weight:600; margin-bottom:8px;">${qIdx + 1}. ${q.statement}</p>
+                    <div class="tfng-btns" id="boss_tfng_btns_${qIdx}">
+                        <button class="tfng-btn" onclick="answerBossT2(${qIdx}, 'TRUE', this)">TRUE</button>
+                        <button class="tfng-btn" onclick="answerBossT2(${qIdx}, 'FALSE', this)">FALSE</button>
+                        <button class="tfng-btn" onclick="answerBossT2(${qIdx}, 'NOT GIVEN', this)">NOT GIVEN</button>
+                    </div>
+                    <div class="explanation-box" id="boss_reading_expl_${qIdx}"></div>
+                </div>
+            `).join("");
+
+            document.getElementById("btnFinishBoss").style.display = "none";
+        }
+
+        function answerBossT2(qIdx, choice, btnEl) {
+            const qData = BOSS_TASK2_STATEMENTS[qIdx];
+            const btnGroup = document.getElementById(`boss_tfng_btns_${qIdx}`);
+            btnGroup.querySelectorAll(".tfng-btn").forEach(b => b.disabled = true);
+
+            const explBox = document.getElementById(`boss_reading_expl_${qIdx}`);
+
+            if (choice === qData.answer) {
+                btnEl.classList.add("selected-correct");
+                state.bossT2Score++;
+                updateXP(40);
+            } else {
+                btnEl.classList.add("selected-incorrect");
+                btnGroup.querySelectorAll(".tfng-btn").forEach(b => {
+                    if (b.innerText === qData.answer) b.classList.add("selected-correct");
+                });
+            }
+
+            explBox.innerText = qData.explanation;
+            explBox.style.display = "block";
+
+            const allAnswered = Array.from(document.querySelectorAll("#bossT2Statements .statement-card")).every(card => {
+                return card.querySelector(".explanation-box").style.display === "block";
+            });
+
+            if (allAnswered) {
+                document.getElementById("btnFinishBoss").style.display = "inline-flex";
+            }
+        }
+
+        function finishBoss() {
+            if (!state.completedModules[4]) {
+                state.completedModules[4] = true;
+                updateXP(100); // Boss bonus
+                state.badges.bossSlayer = true;
+                saveState();
+            }
+
+            triggerBossConfetti();
+
+            setTimeout(() => {
+                showResultsScreen();
+            }, 1000);
+        }
+
+        /* -------------------------------------------------------------
+           11. FINAL RESULTS SCREEN & VOCAB BANK
+        ------------------------------------------------------------- */
+        function showResultsScreen() {
+            showScreen("screenResults");
+            document.getElementById("resStudentName").innerText = state.studentName;
+            document.getElementById("resTotalXp").innerText = `${state.xp} XP`;
+            document.getElementById("resLevel").innerText = getLevelTitle(state.xp);
+            
+            const badgeCount = Object.values(state.badges).filter(Boolean).length;
+            document.getElementById("resBadgesCount").innerText = `${badgeCount} / 6`;
+
+            // Populate Vocab Bank Table
+            const tbody = document.getElementById("vocabBankTableBody");
+            tbody.innerHTML = VOCABULARY_DATA.map(item => `
+                <tr>
+                    <td style="font-weight:700; color:var(--accent);">${item.phrase}</td>
+                    <td>${item.meaning}</td>
+                    <td style="font-style:italic;">"${item.example}"</td>
+                    <td>
+                        <button class="audio-btn" onclick="speakText('${item.phrase}')">🔊</button>
+                    </td>
+                </tr>
+            `).join("");
+
+            triggerFinalConfetti();
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9;
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function reviewFlashcards() {
+            initMod1();
+        }
+
+        function confirmResetProgress() {
+            if (confirm("Are you sure you want to reset all your learning progress and XP?")) {
+                localStorage.removeItem(__vocabKey("ielts_env_vocab_state"));
+                location.reload();
+            }
+        }
+
+        /* -------------------------------------------------------------
+           12. MODULE COMPLETION SYSTEM & CONFETTI ENGINE
+        ------------------------------------------------------------- */
+        function completeModule(modNum, xpBonus, title, text) {
+            const firstTime = !state.completedModules[modNum - 1];
+            state.completedModules[modNum - 1] = true;
+            if (xpBonus > 0 && firstTime) updateXP(xpBonus);
+            saveState();
+
+            triggerStandardConfetti();
+
+            document.getElementById("compModalTitle").innerText = title;
+            document.getElementById("compModalXp").innerText = xpBonus > 0 ? `+${xpBonus} XP` : "Module Cleared!";
+            document.getElementById("compModalText").innerText = text;
+            document.getElementById("completionModal").classList.add("active");
+        }
+
+        function closeCompletionModal() {
+            document.getElementById("completionModal").classList.remove("active");
+            showDashboard();
+        }
+
+        /* Pure JS Canvas Confetti Engine */
+        const canvas = document.getElementById("confettiCanvas");
+        const ctx = canvas.getContext("2d");
+        let confettiParticles = [];
+        let confettiAnimationId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function createConfettiParticles(count, colors) {
+            const particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: Math.random() * 4 - 2,
+                    vy: Math.random() * 3 + 2,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 10 - 5
+                });
+            }
+            return particles;
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+
+            confettiParticles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.rotationSpeed;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+
+                if (p.y < canvas.height) active = true;
+            });
+
+            if (active) {
+                confettiAnimationId = requestAnimationFrame(animateConfetti);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function triggerStandardConfetti() {
+            confettiParticles = createConfettiParticles(70, ["#d4af37", "#10b981", "#a855f7", "#3b82f6", "#ffffff"]);
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            animateConfetti();
+        }
+
+        function triggerBossConfetti() {
+            confettiParticles = createConfettiParticles(130, ["#d4af37", "#f59e0b", "#eab308", "#ffffff"]);
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            animateConfetti();
+        }
+
+        function triggerFinalConfetti() {
+            confettiParticles = createConfettiParticles(200, ["#d4af37", "#10b981", "#a855f7", "#f43f5e", "#3b82f6", "#ffffff"]);
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            animateConfetti();
+        }
+
+        /* -------------------------------------------------------------
+           13. THEME SYSTEM
+        ------------------------------------------------------------- */
+        function openThemeModal() {
+            document.getElementById("themeModal").classList.add("active");
+            updateThemeCheckmarks();
+        }
+
+        function closeThemeModal() {
+            document.getElementById("themeModal").classList.remove("active");
+        }
+
+        function setTheme(themeName) {
+            state.theme = themeName;
+            document.documentElement.setAttribute("data-theme", themeName);
+            saveState();
+            updateThemeCheckmarks();
+        }
+
+        function updateThemeCheckmarks() {
+            ['midnight', 'platinum', 'emerald', 'purple'].forEach(t => {
+                const el = document.getElementById(`chk_${t}`);
+                if (el) el.innerText = (state.theme === t) ? "✓" : "";
+            });
+        }
+
+        /* Interactive 3D Parallax Tilt for Liquid Glass Card */
+        document.addEventListener('mousemove', (e) => {
+            const card = document.getElementById('liquidCard');
+            if (!card || !card.offsetParent) return;
+            const rect = card.getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const cardCenterY = rect.top + rect.height / 2;
+            const mouseX = e.clientX - cardCenterX;
+            const mouseY = e.clientY - cardCenterY;
+            
+            const rotateX = (mouseY / rect.height) * -12;
+            const rotateY = (mouseX / rect.width) * 12;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            const card = document.getElementById('liquidCard');
+            if (card) {
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            }
+        });
+    </script>
+</body>
+</html>

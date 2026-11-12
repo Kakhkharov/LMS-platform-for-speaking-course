@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Masterclass: Food & Lifestyle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* MIDNIGHT LUXURY (Default) */
+        [data-theme="midnight"] {
+            --bg-base: #0b0f19;
+            --bg-surface: #111827;
+            --bg-card: #1f2937;
+            --bg-glass: rgba(31, 41, 55, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(245, 158, 11, 0.3);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-gold: #f59e0b;
+            --accent-gold-hover: #d97706;
+            --accent-primary: #3b82f6;
+            --accent-success: #10b981;
+            --accent-error: #ef4444;
+            --shadow-glow: 0 0 25px rgba(245, 158, 11, 0.15);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* PLATINUM MINIMAL */
+        [data-theme="platinum"] {
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-card: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --border-color: #e2e8f0;
+            --border-highlight: rgba(217, 119, 6, 0.4);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #d97706;
+            --accent-gold-hover: #b45309;
+            --accent-primary: #2563eb;
+            --accent-success: #059669;
+            --accent-error: #dc2626;
+            --shadow-glow: 0 4px 20px rgba(217, 119, 6, 0.12);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        /* EMERALD EXECUTIVE */
+        [data-theme="emerald"] {
+            --bg-base: #022c22;
+            --bg-surface: #064e3b;
+            --bg-card: #047857;
+            --bg-glass: rgba(6, 78, 59, 0.75);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --border-highlight: rgba(251, 191, 36, 0.4);
+            --text-main: #ecfdf5;
+            --text-muted: #a7f3d0;
+            --accent-gold: #fbbf24;
+            --accent-gold-hover: #f59e0b;
+            --accent-primary: #34d399;
+            --accent-success: #10b981;
+            --accent-error: #f87171;
+            --shadow-glow: 0 0 25px rgba(16, 185, 129, 0.2);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ROYAL PURPLE */
+        [data-theme="purple"] {
+            --bg-base: #0f0728;
+            --bg-surface: #1e1145;
+            --bg-card: #2d1b69;
+            --bg-glass: rgba(45, 27, 105, 0.75);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-highlight: rgba(245, 158, 11, 0.4);
+            --text-main: #f5f3ff;
+            --text-muted: #c4b5fd;
+            --accent-gold: #f59e0b;
+            --accent-gold-hover: #d97706;
+            --accent-primary: #8b5cf6;
+            --accent-success: #10b981;
+            --accent-error: #f43f5e;
+            --shadow-glow: 0 0 25px rgba(139, 92, 246, 0.25);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Canvas for Confetti */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Sticky Navigation Bar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-hover));
+            color: #000;
+            font-weight: 800;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            letter-spacing: 0.5px;
+        }
+
+        .brand-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--bg-surface);
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            color: var(--accent-gold);
+        }
+
+        .level-pill {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--border-highlight);
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-icon {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 4rem 1rem;
+            flex: 1;
+        }
+
+        /* Stepper Navigation */
+        .module-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: none;
+        }
+
+        .module-stepper::-webkit-scrollbar { display: none; }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .step-item.active {
+            background: var(--bg-card);
+            border-color: var(--accent-gold);
+            color: var(--text-main);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .step-item.completed {
+            border-color: var(--accent-success);
+            color: var(--accent-success);
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 0.4rem;
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-hover));
+            color: #000;
+            font-weight: 700;
+            padding: 0.8rem 1.6rem;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            padding: 0.75rem 1.4rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+        }
+
+        .flashcard-wrapper {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 520px;
+            height: 320px;
+            margin: 1.5rem auto;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-front {
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            border-top: 4px solid var(--accent-primary);
+            text-align: left;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        .card-expression {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: auto 0;
+        }
+
+        .card-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-meta strong {
+            color: var(--accent-gold);
+        }
+
+        .card-example {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 3px solid var(--accent-primary);
+            padding: 0.75rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 0.5rem 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        .flash-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-card);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-primary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .match-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .match-card:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .match-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.15);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .match-card.matched {
+            border-color: var(--accent-success);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-success);
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .match-card.shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: var(--accent-error);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .mcq-option {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .mcq-option:hover {
+            border-color: var(--accent-gold);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .mcq-option.correct {
+            border-color: var(--accent-success) !important;
+            background: rgba(16, 185, 129, 0.15) !important;
+            color: #fff;
+        }
+
+        .mcq-option.incorrect {
+            border-color: var(--accent-error) !important;
+            background: rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .opt-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .explanation-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--accent-primary);
+            padding: 1rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .reading-passage {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .passage-highlight {
+            background: rgba(245, 158, 11, 0.2);
+            border-bottom: 2px solid var(--accent-gold);
+            padding: 0 0.2rem;
+            font-weight: 600;
+        }
+
+        .tfng-btn-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .tfng-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface);
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tfng-btn:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .final-boss-container {
+            border: 2px solid var(--accent-gold);
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, var(--bg-surface) 100%);
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boss-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .boss-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            color: white;
+            font-weight: 900;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .badge-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(1);
+            transition: var(--transition);
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            border-color: var(--accent-gold);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Modals & Name Entry */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+            margin: 1.25rem 0 0.5rem 0;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .error-hint {
+            color: var(--accent-error);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        /* Speaking Drawer / Challenge */
+        .vocab-drawer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 640px) {
+            .navbar { padding: 0.5rem 1rem; }
+            .brand-title { display: none; }
+            .section-card { padding: 1.25rem; }
+            .matching-grid { grid-template-columns: 1fr; }
+            .flashcard-wrapper { height: 360px; }
+            .tfng-btn-group { flex-direction: column; }
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="brand-badge">IELTS 8.0+</span>
+            <span class="brand-title">Food & Lifestyle</span>
+        </div>
+        <div class="nav-stats">
+            <div class="stat-box">
+                <span class="stat-icon">⚡</span>
+                <span id="navXP">0 XP</span>
+            </div>
+            <div class="level-pill" id="navLevel">Beginner</div>
+        </div>
+        <div class="nav-controls">
+            <button class="btn-icon" id="themeBtn" title="Switch Theme" aria-label="Switch Theme">🎨</button>
+            <button class="btn-icon" id="resetBtn" title="Reset Progress" aria-label="Reset Progress">🔄</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+
+        <!-- Module Stepper -->
+        <div class="module-stepper">
+            <div class="step-item active" onclick="switchModule(1)">1. Learn</div>
+            <div class="step-item" onclick="switchModule(2)">2. Match</div>
+            <div class="step-item" onclick="switchModule(3)">3. Choose</div>
+            <div class="step-item" onclick="switchModule(4)">4. Read & Decide</div>
+            <div class="step-item" onclick="switchModule(5)">5. Final Boss</div>
+            <div class="step-item" onclick="switchModule(6)">6. Mastery</div>
+        </div>
+
+        <!-- MODULE 1: LEARN (FLASHCARDS) -->
+        <section id="module1" class="section-card">
+            <div class="section-header">
+                <span class="section-title-badge">MODULE 1 — LEARN</span>
+                <h2 class="section-title">Essential Collocations & Phrases</h2>
+                <p class="section-desc">Tap the flashcard to flip and reveal meaning, authentic IELTS Speaking context, and native alternatives.</p>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="flashProgress"></div>
+            </div>
+
+            <div class="flashcard-wrapper" onclick="flipCard()">
+                <div class="flashcard" id="flashcard">
+                    <div class="card-face card-front">
+                        <span class="brand-badge">IELTS SPEAKING C1/C2</span>
+                        <div class="card-expression" id="cardExpr">Loading...</div>
+                        <div class="card-hint"><span>💡</span> Tap to reveal meaning & example</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-meta"><strong>Meaning:</strong> <span id="cardMeaning"></span></div>
+                        <div class="card-example" id="cardExample"></div>
+                        <div class="card-meta" id="cardAltBox" style="margin-top:0.5rem;"><strong>Natural Alternative:</strong> <span id="cardAlt"></span></div>
+                        <button class="btn-secondary" style="padding:0.3rem 0.6rem; font-size:0.75rem; margin-top:auto;" onclick="event.stopPropagation(); speakCurrentWord();">🔊 Listen Pronunciation</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flash-controls">
+                <button class="btn-secondary" onclick="prevCard()">← Previous</button>
+                <span id="cardCounter" style="font-weight:700; font-size:0.9rem;">Card 1 / 15</span>
+                <button class="btn-primary" onclick="nextCard()">Next →</button>
+            </div>
+        </section>
+
+        <!-- MODULE 2: MATCHING -->
+        <section id="module2" class="section-card" style="display:none;">
+            <div class="section-header">
+                <span class="section-title-badge">MODULE 2 — MATCH</span>
+                <h2 class="section-title">Expression to Meaning Connection</h2>
+                <p class="section-desc">Select an expression on the left, then click its corresponding definition on the right.</p>
+            </div>
+
+            <div class="matching-grid" id="matchingGrid">
+                <!-- Javascript will inject 8 expression cards and 8 meaning cards -->
+            </div>
+        </section>
+
+        <!-- MODULE 3: CHOOSE (MCQ) -->
+        <section id="module3" class="section-card" style="display:none;">
+            <div class="section-header">
+                <span class="section-title-badge">MODULE 3 — CHOOSE</span>
+                <h2 class="section-title">Contextual Precision Quiz</h2>
+                <p class="section-desc">Select the expression that best completes the response naturally for high-band IELTS Speaking.</p>
+            </div>
+
+            <div id="mcqContainer">
+                <!-- Javascript injected MCQ -->
+            </div>
+        </section>
+
+        <!-- MODULE 4: READ & DECIDE -->
+        <section id="module4" class="section-card" style="display:none;">
+            <div class="section-header">
+                <span class="section-title-badge">MODULE 4 — READ & DECIDE</span>
+                <h2 class="section-title">IELTS Part 3 Contextual Analysis</h2>
+                <p class="section-desc">Read realistic discussion transcripts and answer True / False / Not Given questions based strictly on the text.</p>
+            </div>
+
+            <div id="readingContainer">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- MODULE 5: FINAL BOSS -->
+        <section id="module5" class="section-card final-boss-container" style="display:none;">
+            <div class="boss-header">
+                <span class="boss-badge">👑 FINAL BOSS CHALLENGE</span>
+                <h2 class="section-title">Prove Your Speaking Mastery</h2>
+                <p class="section-desc">Transfer your learning across unseen contextual scenarios and complex reading evidence.</p>
+            </div>
+
+            <div id="bossTask1">
+                <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--accent-gold);">TASK 1: Advanced Context Challenge</h3>
+                <div id="bossMcqContainer"></div>
+            </div>
+
+            <div id="bossTask2" style="display:none; margin-top:2rem;">
+                <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--accent-gold);">TASK 2: Evidence Analysis Challenge</h3>
+                <div id="bossReadingContainer"></div>
+            </div>
+        </section>
+
+        <!-- MODULE 6: RESULTS & SPEAKING CHALLENGE -->
+        <section id="module6" class="section-card" style="display:none;">
+            <div class="section-header" style="text-align:center;">
+                <span class="section-title-badge">FOOD & LIFESTYLE — MASTERED</span>
+                <h2 class="section-title" id="resultsGreeting">Congratulations!</h2>
+                <p class="section-desc">You've completed the complete pedagogical pathway for Food & Lifestyle vocabulary.</p>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem; margin:1.5rem 0;">
+                <div class="stat-box" style="flex-direction:column; padding:1rem; justify-content:center;">
+                    <span style="font-size:0.8rem; color:var(--text-muted);">Total XP Earned</span>
+                    <span style="font-size:1.8rem; font-weight:800; color:var(--accent-gold);" id="resTotalXP">0</span>
+                </div>
+                <div class="stat-box" style="flex-direction:column; padding:1rem; justify-content:center;">
+                    <span style="font-size:0.8rem; color:var(--text-muted);">Achieved Level</span>
+                    <span style="font-size:1.2rem; font-weight:800; color:var(--accent-primary);" id="resLevel">Vocabulary Master</span>
+                </div>
+            </div>
+
+            <h3 style="font-size:1.1rem; margin:1.5rem 0 0.8rem 0;">🏆 Earned Badges</h3>
+            <div class="badges-grid" id="badgesGrid">
+                <!-- Badges populated by JS -->
+            </div>
+
+            <div style="margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid var(--border-color);">
+                <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:0.5rem;">🎤 FINAL SPEAKING CHALLENGE</h3>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1rem;">Answer these genuine IELTS Speaking questions aloud. Aim to incorporate at least 3 expressions from this lesson into each response.</p>
+
+                <div style="background:var(--bg-card); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1rem;">
+                    <p style="font-weight:700; color:var(--accent-gold); margin-bottom:0.3rem;">Part 1</p>
+                    <p style="margin-bottom:0.5rem;">1. What kind of food do you usually eat on weekdays?</p>
+                    <p>2. Do you prefer eating out or cooking at home?</p>
+                </div>
+                <div style="background:var(--bg-card); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1rem;">
+                    <p style="font-weight:700; color:var(--accent-gold); margin-bottom:0.3rem;">Part 2</p>
+                    <p>Describe a lifestyle change you made to improve your health. You should say: what it was, why you made it, how easy or difficult it was, and explain how it affected your overall well-being.</p>
+                </div>
+                <div style="background:var(--bg-card); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1rem;">
+                    <p style="font-weight:700; color:var(--accent-gold); margin-bottom:0.3rem;">Part 3</p>
+                    <p style="margin-bottom:0.5rem;">1. Why are modern urban populations increasingly dependent on convenience food?</p>
+                    <p>2. How can governments encourage people to strike a better work-life balance?</p>
+                </div>
+
+                <button class="btn-secondary" onclick="toggleVocabDrawer()">📖 Review Active Vocabulary Bank</button>
+                <div class="vocab-drawer" id="vocabDrawer">
+                    <ul id="vocabList" style="list-style:none; line-height:1.8; font-size:0.85rem;"></ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Confirmation Modal for Reset -->
+    <div class="modal-overlay" id="resetModal" style="display:none;">
+        <div class="modal-box">
+            <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:0.75rem; color:var(--accent-error);">Reset All Progress?</h3>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">This will clear all earned XP, badges, and completed module states. This action cannot be undone.</p>
+            <div style="display:flex; gap:0.75rem;">
+                <button class="btn-secondary" style="flex:1;" onclick="closeResetModal()">Cancel</button>
+                <button class="btn-primary" style="flex:1; background:var(--accent-error); color:#fff;" onclick="confirmReset()">Reset Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const __PRACTISE_LESSON_ID = 'food_lifestyle';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        const VOCAB_DATA = [
+            { id: 1, expr: "cook from scratch", meaning: "to prepare a meal using basic fresh ingredients rather than pre-made foods", example: "I usually cook from scratch at weekends because I can control exactly what goes into my food.", alt: "prepare meals from raw ingredients" },
+            { id: 2, expr: "rely on convenience food", meaning: "to depend heavily on pre-packaged, frozen, or instant meals due to time constraints", example: "During busy workweeks, many people rely on convenience food despite knowing it lacks nutrients.", alt: "depend on ready-made meals" },
+            { id: 3, expr: "grab a quick bite", meaning: "to eat a fast, small meal or snack, often when busy or on the move", example: "Between lectures, I usually grab a quick bite at the campus café.", alt: "have a hasty snack" },
+            { id: 4, expr: "have a sweet tooth", meaning: "to have a strong fondness or intense craving for sugary foods and desserts", example: "I've always had a sweet tooth, so resisting pastries after dinner is a real challenge.", alt: "be partial to sugary treats" },
+            { id: 5, expr: "cut down on processed food", meaning: "to reduce the amount of industrially manufactured food in one's diet", example: "My doctor advised me to cut down on processed food to improve my energy levels.", alt: "reduce highly engineered food intake" },
+            { id: 6, expr: "strike a balance", meaning: "to find a healthy compromise between competing priorities like work and rest", example: "It's vital to strike a balance between working hard and making time for leisure.", alt: "maintain a healthy equilibrium" },
+            { id: 7, expr: "lead a sedentary lifestyle", meaning: "to live a way of life involving very little physical activity or movement", example: "Office workers who lead a sedentary lifestyle face higher risks of cardiovascular problems.", alt: "have a physically inactive routine" },
+            { id: 8, expr: "unwind after a long day", meaning: "to relax and release stress or tension after work or daily obligations", example: "I like to unwind after a long day by listening to classical music or going for a walk.", alt: "decompress following a demanding day" },
+            { id: 9, expr: "take a toll on health", meaning: "to cause gradual but severe damage or negative impacts on well-being", example: "Working continuous night shifts can eventually take a heavy toll on your health.", alt: "adversely impact physical well-being" },
+            { id: 10, expr: "be mindful of what I eat", meaning: "to pay deliberate attention to food choices, nutrition, and portion sizes", example: "Ever since I started exercising, I've been much more mindful of what I eat.", alt: "pay close attention to dietary choices" },
+            { id: 11, expr: "adopt healthier habits", meaning: "to start practicing positive, beneficial lifestyle choices regularly", example: "It takes discipline to adopt healthier habits, but the long-term benefits are immense.", alt: "embrace a more wholesome routine" },
+            { id: 12, expr: "have a soft spot for", meaning: "to possess a strong affection or preference for a specific food or activity", example: "Although I stick to a clean diet, I still have a soft spot for traditional dark chocolate.", alt: "be particularly fond of" },
+            { id: 13, expr: "live a fast-paced lifestyle", meaning: "to live an extremely busy, rapid, and intense daily routine", example: "Living in a major metropolis forces most people to adapt to a fast-paced lifestyle.", alt: "lead a hectic daily life" },
+            { id: 14, expr: "prioritise convenience over health", meaning: "to choose quick and easy options even when knowing they harm physical fitness", example: "When people work 12-hour days, they often prioritize convenience over health.", alt: "opt for speed at the expense of wellness" },
+            { id: 15, expr: "spend quality time", meaning: "to dedicate meaningful, focused, uninterrupted time to family or friends", example: "Cooking together on Sunday is a great way to spend quality time with family.", alt: "engage in enriching personal time" }
+        ];
+
+        /* Module State */
+        let state = {
+            userName: "",
+            theme: "midnight",
+            xp: 0,
+            currentModule: 1,
+            flashIndex: 0,
+            flashViewed: new Set(),
+            matchingSelected: null,
+            matchingMistakes: 0,
+            matchingPairsLeft: 8,
+            mcqIndex: 0,
+            mcqScore: 0,
+            readAnswers: {},
+            readScore: 0,
+            bossTask1Answers: {},
+            bossTask2Answers: {},
+            bossTask1Done: false,
+            bossTask2Done: false,
+            badges: []
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            applyTheme(state.theme);
+            state.userName = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.userName || 'Student');
+            saveProgress();
+            updateUI();
+            setupEventListeners();
+            initFlashcard();
+            initMatching();
+            initMCQ();
+            initReading();
+            initBoss();
+            initVocabBank();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+            document.getElementById('resetBtn').addEventListener('click', openResetModal);
+        }
+
+        function openResetModal() {
+            document.getElementById('resetModal').style.display = 'flex';
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetModal').style.display = 'none';
+        }
+
+        function confirmReset() {
+            localStorage.removeItem(__vocabKey('ielts_food_lifestyle_state'));
+            location.reload();
+        }
+
+        function saveProgress() {
+            localStorage.setItem(__vocabKey('ielts_food_lifestyle_state'), JSON.stringify({
+                userName: state.userName,
+                theme: state.theme,
+                xp: state.xp,
+                badges: state.badges,
+                flashViewed: Array.from(state.flashViewed),
+                bossTask1Answers: state.bossTask1Answers,
+                bossTask2Answers: state.bossTask2Answers,
+                bossTask1Done: state.bossTask1Done,
+                bossTask2Done: state.bossTask2Done
+            }));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem(__vocabKey('ielts_food_lifestyle_state'));
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state.userName = parsed.userName || "";
+                    state.theme = parsed.theme || "midnight";
+                    state.xp = parsed.xp || 0;
+                    state.badges = parsed.badges || [];
+                    state.flashViewed = new Set(parsed.flashViewed || []);
+                    state.bossTask1Answers = parsed.bossTask1Answers || {};
+                    state.bossTask2Answers = parsed.bossTask2Answers || {};
+                    state.bossTask1Done = parsed.bossTask1Done || false;
+                    state.bossTask2Done = parsed.bossTask2Done || false;
+                } catch(e) { console.error(e); }
+            }
+        }
+
+        function toggleTheme() {
+            const themes = ["midnight", "platinum", "emerald", "purple"];
+            let idx = themes.indexOf(state.theme);
+            state.theme = themes[(idx + 1) % themes.length];
+            applyTheme(state.theme);
+            saveProgress();
+        }
+
+        function applyTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+        }
+
+        function addXP(amount) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            state.xp += pts;
+            updateUI();
+            saveProgress();
+            __notifyPractiseParentXP(pts, state.xp);
+        }
+
+        function getLevel(xp) {
+            if (xp < 200) return "Beginner";
+            if (xp < 400) return "Learner";
+            if (xp < 600) return "Confident Speaker";
+            return "Vocabulary Master";
+        }
+
+        function unlockBadge(badgeId, badgeName, badgeIcon) {
+            if (!state.badges.includes(badgeId)) {
+                state.badges.push(badgeId);
+                saveProgress();
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('navXP').innerText = `${state.xp} XP`;
+            document.getElementById('navLevel').innerText = getLevel(state.xp);
+            if (state.userName) {
+                document.getElementById('resultsGreeting').innerText = `Congratulations, ${state.userName}!`;
+            }
+            document.getElementById('resTotalXP').innerText = state.xp;
+            document.getElementById('resLevel').innerText = getLevel(state.xp);
+            renderBadges();
+        }
+
+        function renderBadges() {
+            const allBadges = [
+                { id: 'b1', name: 'First Step', icon: '🌱' },
+                { id: 'b2', name: 'Perfect Match', icon: '🧩' },
+                { id: 'b3', name: 'Sharp Speaker', icon: '⚡' },
+                { id: 'b4', name: 'Careful Reader', icon: '📚' },
+                { id: 'b5', name: 'Boss Slayer', icon: '👑' },
+                { id: 'b6', name: 'Vocab Master', icon: '🎓' }
+            ];
+            const grid = document.getElementById('badgesGrid');
+            grid.innerHTML = allBadges.map(b => `
+                <div class="badge-card ${state.badges.includes(b.id) ? 'unlocked' : ''}">
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-name">${b.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function switchModule(modNum) {
+            state.currentModule = modNum;
+            document.querySelectorAll('.section-card').forEach((el, idx) => {
+                el.style.display = (idx + 1 === modNum) ? 'block' : 'none';
+            });
+            document.querySelectorAll('.step-item').forEach((el, idx) => {
+                el.classList.toggle('active', idx + 1 === modNum);
+            });
+            
+            if (modNum === 5) {
+                renderBossTask1();
+                if (state.bossTask1Done || Object.keys(state.bossTask1Answers).length === BOSS_MCQ.length) {
+                    document.getElementById('bossTask2').style.display = 'block';
+                    renderBossTask2();
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initFlashcard() {
+            updateFlashcard();
+        }
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('flipped');
+            state.flashViewed.add(state.flashIndex);
+            updateFlashProgress();
+
+            if (state.flashViewed.size === VOCAB_DATA.length && !state.badges.includes('b1')) {
+                addXP(100);
+                unlockBadge('b1', 'First Step', '🌱');
+                triggerConfetti(3000);
+            }
+        }
+
+        function updateFlashcard() {
+            const item = VOCAB_DATA[state.flashIndex];
+            document.getElementById('flashcard').classList.remove('flipped');
+            document.getElementById('cardExpr').innerText = item.expr;
+            document.getElementById('cardMeaning').innerText = item.meaning;
+            document.getElementById('cardExample').innerText = `"${item.example}"`;
+            document.getElementById('cardAlt').innerText = item.alt;
+            document.getElementById('cardCounter').innerText = `Card ${state.flashIndex + 1} / ${VOCAB_DATA.length}`;
+            updateFlashProgress();
+        }
+
+        function updateFlashProgress() {
+            const pct = (state.flashViewed.size / VOCAB_DATA.length) * 100;
+            document.getElementById('flashProgress').style.width = `${pct}%`;
+        }
+
+        function nextCard() {
+            state.flashIndex = (state.flashIndex + 1) % VOCAB_DATA.length;
+            updateFlashcard();
+        }
+
+        function prevCard() {
+            state.flashIndex = (state.flashIndex - 1 + VOCAB_DATA.length) % VOCAB_DATA.length;
+            updateFlashcard();
+        }
+
+        function speakCurrentWord() {
+            if ('speechSynthesis' in window) {
+                const text = VOCAB_DATA[state.flashIndex].expr;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-GB';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        let matchData = [];
+        function initMatching() {
+            const selectedVocab = VOCAB_DATA.slice(0, 8);
+            let exprs = selectedVocab.map(v => ({ id: v.id, text: v.expr, type: 'expr' }));
+            let meanings = selectedVocab.map(v => ({ id: v.id, text: v.meaning, type: 'meaning' }));
+
+            // Shuffle separately
+            exprs.sort(() => Math.random() - 0.5);
+            meanings.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('matchingGrid');
+            grid.innerHTML = '';
+
+            const col1 = document.createElement('div');
+            const col2 = document.createElement('div');
+            col1.style.display = col2.style.display = 'flex';
+            col1.style.flexDirection = col2.style.flexDirection = 'column';
+            col1.style.gap = col2.style.gap = '0.75rem';
+
+            exprs.forEach(item => col1.appendChild(createMatchCard(item)));
+            meanings.forEach(item => col2.appendChild(createMatchCard(item)));
+
+            grid.appendChild(col1);
+            grid.appendChild(col2);
+        }
+
+        function createMatchCard(item) {
+            const card = document.createElement('div');
+            card.className = 'match-card';
+            card.innerText = item.text;
+            card.dataset.id = item.id;
+            card.dataset.type = item.type;
+            card.onclick = () => handleMatchClick(card);
+            return card;
+        }
+
+        function handleMatchClick(card) {
+            if (card.classList.contains('matched')) return;
+
+            if (!state.matchingSelected) {
+                state.matchingSelected = card;
+                card.classList.add('selected');
+            } else {
+                if (state.matchingSelected === card) {
+                    card.classList.remove('selected');
+                    state.matchingSelected = null;
+                    return;
+                }
+
+                const card1 = state.matchingSelected;
+                const card2 = card;
+
+                if (card1.dataset.type !== card2.dataset.type && card1.dataset.id === card2.dataset.id) {
+                    // Correct match
+                    card1.classList.remove('selected');
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    state.matchingSelected = null;
+                    state.matchingPairsLeft--;
+
+                    if (state.matchingPairsLeft === 0) {
+                        addXP(150);
+                        if (state.matchingMistakes === 0) {
+                            unlockBadge('b2', 'Perfect Match', '🧩');
+                        }
+                        triggerConfetti(3000);
+                    }
+                } else {
+                    // Wrong match
+                    state.matchingMistakes++;
+                    card1.classList.add('shake');
+                    card2.classList.add('shake');
+                    setTimeout(() => {
+                        card1.classList.remove('selected', 'shake');
+                        card2.classList.remove('shake');
+                        state.matchingSelected = null;
+                    }, 500);
+                }
+            }
+        }
+
+        const MCQ_DATA = [
+            {
+                q: "I know I should eat more healthily, but because of my busy schedule, I often ______ on my way to work.",
+                options: ["cook from scratch", "grab a quick bite", "strike a balance", "have a sweet tooth"],
+                ans: 1,
+                exp: "'Grab a quick bite' naturally fits the context of getting food quickly on the go due to a busy routine."
+            },
+            {
+                q: "Many young professionals find it difficult to ______ between their demanding careers and personal lives.",
+                options: ["strike a balance", "have a soft spot for", "rely on convenience food", "lead a sedentary lifestyle"],
+                ans: 0,
+                exp: "'Strike a balance' means finding a healthy equilibrium between competing demands like work and personal rest."
+            },
+            {
+                q: "If you spend 8 hours sitting at a desk and don't exercise, you essentially ______.",
+                options: ["cook from scratch", "unwind after a long day", "lead a sedentary lifestyle", "adopt healthier habits"],
+                ans: 2,
+                exp: "A 'sedentary lifestyle' refers explicitly to an inactive way of living with prolonged sitting."
+            },
+            {
+                q: "I try to minimize my sugar intake, but I have a real ______ for Belgian chocolate.",
+                options: ["sweet tooth", "soft spot", "sedentary lifestyle", "hectic schedule"],
+                ans: 1,
+                exp: "'Have a soft spot for' means having a particular fondness or affection for something."
+            },
+            {
+                q: "Long-term sleep deprivation will inevitably ______ your physical and mental health.",
+                options: ["grab a quick bite", "take a toll on", "strike a balance", "be mindful of"],
+                ans: 1,
+                exp: "'Take a toll on' means to cause gradual harm or serious damage over time."
+            },
+            {
+                q: "Instead of buying pre-made pasta sauce, I prefer to ______ using fresh tomatoes and herbs.",
+                options: ["rely on convenience food", "cook from scratch", "adopt healthier habits", "unwind after work"],
+                ans: 1,
+                exp: "'Cook from scratch' specifically means preparing a meal from basic raw ingredients."
+            },
+            {
+                q: "To improve my energy levels, I've decided to ______ sugary drinks and fast food.",
+                options: ["cut down on", "prioritise convenience over", "take a toll on", "lead a sedentary lifestyle"],
+                ans: 0,
+                exp: "'Cut down on' is a common phrasal verb meaning to reduce consumption of something."
+            },
+            {
+                q: "In today's fast-paced world, many people end up ______ simply because they lack time to prepare fresh meals.",
+                options: ["cooking from scratch", "relying on convenience food", "striking a balance", "unwinding after a long day"],
+                ans: 1,
+                exp: "'Relying on convenience food' accurately describes depending on ultra-processed ready meals."
+            }
+        ];
+
+        function initMCQ() {
+            renderMCQQuestion();
+        }
+
+        function renderMCQQuestion() {
+            const container = document.getElementById('mcqContainer');
+            if (state.mcqIndex >= MCQ_DATA.length) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:2rem;">
+                        <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:0.5rem;">Module 3 Complete! 🎉</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem;">Your Score: ${state.mcqScore} / ${MCQ_DATA.length}</p>
+                        <button class="btn-primary" onclick="switchModule(4)">Proceed to Read & Decide →</button>
+                    </div>
+                `;
+                if (state.mcqScore === MCQ_DATA.length) {
+                    unlockBadge('b3', 'Sharp Speaker', '⚡');
+                    triggerConfetti(3000);
+                }
+                return;
+            }
+
+            const item = MCQ_DATA[state.mcqIndex];
+            container.innerHTML = `
+                <p style="font-size:0.8rem; font-weight:700; color:var(--accent-gold); margin-bottom:0.5rem;">Question ${state.mcqIndex + 1} of ${MCQ_DATA.length}</p>
+                <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1.25rem;">${item.q}</h3>
+                ${item.options.map((opt, idx) => `
+                    <div class="mcq-option" onclick="selectMCQOption(this, ${idx})">
+                        <span class="opt-letter">${String.fromCharCode(65 + idx)}</span>
+                        <span>${opt}</span>
+                    </div>
+                `).join('')}
+                <div class="explanation-box" id="mcqExpBox">
+                    <strong>Explanation:</strong> ${item.exp}
+                </div>
+                <button class="btn-primary" id="mcqNextBtn" style="display:none; margin-top:1rem; width:100%;" onclick="nextMCQ()">Next Question →</button>
+            `;
+        }
+
+        function selectMCQOption(el, chosenIdx) {
+            const item = MCQ_DATA[state.mcqIndex];
+            const options = document.querySelectorAll('.mcq-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            if (chosenIdx === item.ans) {
+                el.classList.add('correct');
+                state.mcqScore++;
+                addXP(20);
+            } else {
+                el.classList.add('incorrect');
+                options[item.ans].classList.add('correct');
+            }
+
+            document.getElementById('mcqExpBox').style.display = 'block';
+            document.getElementById('mcqNextBtn').style.display = 'block';
+        }
+
+        function nextMCQ() {
+            state.mcqIndex++;
+            renderMCQQuestion();
+        }
+
+        const READING_DATA = [
+            {
+                title: "Text 1 — Modern Eating Habits",
+                passage: "In contemporary urban societies, the pace of life has accelerated dramatically, forcing many individuals to alter their daily nutrition. Due to demanding work hours, people frequently <span class='passage-highlight'>rely on convenience food</span> or <span class='passage-highlight'>grab a quick bite</span> at fast-food outlets rather than enjoying traditional meals. While food delivery applications offer unprecedented convenience, health professionals warn that overdependence on processed meals can lead to chronic health issues. Nevertheless, a growing counter-movement encourages urbanites to <span class='passage-highlight'>cook from scratch</span> during weekends as a form of culinary therapy.",
+                questions: [
+                    { q: "Modern work schedules have forced many city dwellers to change their eating routines.", ans: "TRUE", exp: "The passage explicitly states that accelerated pace of life and demanding hours force individuals to alter daily nutrition." },
+                    { q: "Food delivery apps are universally discouraged by health professionals.", ans: "NOT GIVEN", exp: "The text says health professionals warn against overdependence on processed meals, but does NOT state they universally discourage delivery apps themselves." },
+                    { q: "Cooking from scratch during weekends is becoming increasingly popular as a stress-relief activity.", ans: "TRUE", exp: "The text mentions a growing counter-movement encouraging people to cook from scratch as 'culinary therapy'." }
+                ]
+            },
+            {
+                title: "Text 2 — Healthy Lifestyles & Balance",
+                passage: "Maintaining long-term wellness in a high-pressure environment requires conscious effort. Individuals who <span class='passage-highlight'>lead a sedentary lifestyle</span> often experience fatigue and reduced metabolic efficiency. To counteract these risks, experts emphasize that people must <span class='passage-highlight'>strike a balance</span> between professional duties and physical recreation. Taking short breaks to <span class='passage-highlight'>unwind after a long day</span> is not merely a luxury, but a psychological necessity that prevents burnout and supports cardiovascular health.",
+                questions: [
+                    { q: "Sedentary habits only affect physical health, not mental fatigue.", ans: "FALSE", exp: "The passage links sedentary lifestyles to fatigue and states unwinding prevents psychological burnout, contradicting the claim." },
+                    { q: "Experts believe taking time to relax after work is vital for health.", ans: "TRUE", exp: "The text states unwinding after work is 'a psychological necessity that prevents burnout and supports health'." },
+                    { q: "Most office workers spend at least one hour daily exercising.", ans: "NOT GIVEN", exp: "The text gives no information regarding the specific duration of exercise completed by office workers." }
+                ]
+            }
+        ];
+
+        let currentReadingTextIdx = 0;
+
+        function initReading() {
+            renderReading();
+        }
+
+        function renderReading() {
+            const container = document.getElementById('readingContainer');
+            if (currentReadingTextIdx >= READING_DATA.length) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:2rem;">
+                        <h3 style="font-size:1.4rem; font-weight:800; margin-bottom:0.5rem;">Reading Module Complete! 📚</h3>
+                        <p style="color:var(--text-muted); margin-bottom:1.5rem;">Score: ${state.readScore} / 6</p>
+                        <button class="btn-primary" onclick="switchModule(5)">Face the Final Boss 👑</button>
+                    </div>
+                `;
+                if (state.readScore === 6) {
+                    unlockBadge('b4', 'Careful Reader', '📚');
+                    triggerConfetti(3000);
+                }
+                return;
+            }
+
+            const item = READING_DATA[currentReadingTextIdx];
+            container.innerHTML = `
+                <h3 style="font-size:1.2rem; font-weight:800; margin-bottom:0.8rem; color:var(--accent-gold);">${item.title}</h3>
+                <div class="reading-passage">${item.passage}</div>
+                ${item.questions.map((q, idx) => `
+                    <div style="background:var(--bg-surface); padding:1rem; border-radius:var(--radius-md); margin-bottom:1rem; border:1px solid var(--border-color);">
+                        <p style="font-weight:600; font-size:0.95rem; margin-bottom:0.5rem;">${idx + 1}. ${q.q}</p>
+                        <div class="tfng-btn-group" id="tfngGroup_${idx}">
+                            <button class="tfng-btn" onclick="answerTFNG(${idx}, 'TRUE')">TRUE</button>
+                            <button class="tfng-btn" onclick="answerTFNG(${idx}, 'FALSE')">FALSE</button>
+                            <button class="tfng-btn" onclick="answerTFNG(${idx}, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                        <div class="explanation-box" id="tfngExp_${idx}"></div>
+                    </div>
+                `).join('')}
+                <button class="btn-primary" id="readNextBtn" style="display:none; width:100%; margin-top:1rem;" onclick="nextReadingText()">Next Text →</button>
+            `;
+        }
+
+        let currentTextAnswerCount = 0;
+        function answerTFNG(qIdx, choice) {
+            const item = READING_DATA[currentReadingTextIdx].questions[qIdx];
+            const group = document.getElementById(`tfngGroup_${qIdx}`);
+            const buttons = group.querySelectorAll('.tfng-btn');
+            buttons.forEach(btn => btn.style.pointerEvents = 'none');
+
+            const expBox = document.getElementById(`tfngExp_${qIdx}`);
+            expBox.style.display = 'block';
+
+            if (choice === item.ans) {
+                expBox.innerHTML = `<span style="color:var(--accent-success); font-weight:700;">Correct!</span> ${item.exp}`;
+                state.readScore++;
+                addXP(30);
+            } else {
+                expBox.innerHTML = `<span style="color:var(--accent-error); font-weight:700;">Incorrect. Correct answer: ${item.ans}.</span> ${item.exp}`;
+            }
+
+            currentTextAnswerCount++;
+            if (currentTextAnswerCount === READING_DATA[currentReadingTextIdx].questions.length) {
+                document.getElementById('readNextBtn').style.display = 'block';
+            }
+        }
+
+        function nextReadingText() {
+            currentReadingTextIdx++;
+            currentTextAnswerCount = 0;
+            renderReading();
+        }
+
+        const BOSS_MCQ = [
+            {
+                q: "Despite working exhausting 14-hour shifts, Elena makes a point to ______ every morning to protect her long-term vitality.",
+                options: ["adopt healthier habits", "lead a sedentary lifestyle", "prioritise convenience over health", "have a sweet tooth"],
+                ans: 0,
+                exp: "'Adopt healthier habits' fits the active choice to implement positive wellness changes."
+            },
+            {
+                q: "When students move away to university, they frequently ______ due to limited cooking skills and fast-paced schedules.",
+                options: ["cook from scratch", "rely on convenience food", "strike a balance", "unwind naturally"],
+                ans: 1,
+                exp: "'Rely on convenience food' accurately reflects turning to ready-made meals when busy."
+            },
+            {
+                q: "After months of high-stress corporate deadlines, Marcus took a sabbatical to ______ and restore his mental balance.",
+                options: ["lead a sedentary lifestyle", "unwind after a long day", "prioritise convenience over health", "grab a quick bite"],
+                ans: 1,
+                exp: "'Unwind after a long day' means releasing accumulated tension and decompressing."
+            },
+            {
+                q: "Constantly eating on the run without sitting down to proper meals can eventually ______ your digestive system.",
+                options: ["take a toll on health", "cook from scratch", "adopt healthier habits", "strike a balance"],
+                ans: 0,
+                exp: "'Take a toll on health' describes accumulated negative physical consequences."
+            },
+            {
+                q: "Rather than spending hours preparing complex recipes, busy working parents often ______ when making quick dinners.",
+                options: ["cook from scratch", "prioritise convenience over health", "lead a sedentary lifestyle", "strike a balance"],
+                ans: 1,
+                exp: "'Prioritise convenience over health' means choosing speed and ease over dietary quality."
+            }
+        ];
+
+        const BOSS_READING = {
+            passage: "How modern lifestyles are changing the way we eat and live: In contemporary metropolitan environments, corporate culture and digital connectedness have fundamentally reshaped daily human routines. While technological advancements allow individuals to manage professional affairs without physical exertion, this ease often <span class='passage-highlight'>takes a severe toll on health</span>. Corporate employees who spend long hours at desks frequently <span class='passage-highlight'>lead a sedentary lifestyle</span>, leading to fatigue and diminished physical fitness. Furthermore, when demanding work schedules force individuals to <span class='passage-highlight'>prioritise convenience over health</span>, reliance on processed food delivery accelerates rapidly. Fortunately, wellness movements encouraging citizens to <span class='passage-highlight'>be mindful of what they eat</span> and <span class='passage-highlight'>strike a balance</span> between work and rest are gaining strong traction.",
+            questions: [
+                { q: "Modern technological convenience has reduced the need for physical effort in daily tasks.", ans: "TRUE", exp: "The text states technology allows managing affairs 'without physical exertion'." },
+                { q: "Prioritising fast food delivery has no measurable impact on metropolitan health.", ans: "FALSE", exp: "The passage explicitly notes that prioritizing convenience over health takes a severe toll on physical well-being." },
+                { q: "Health authorities recommend spending at least two hours cooking from scratch every day.", ans: "NOT GIVEN", exp: "The text mentions wellness movements, but gives no specific hourly recommendation for cooking." },
+                { q: "Mindfulness regarding dietary choices is growing in popularity in urban centers.", ans: "TRUE", exp: "The passage affirms that campaigns encouraging people to be mindful of what they eat are 'gaining strong traction'." },
+                { q: "Most corporate workers have successfully eliminated stress from their daily routines.", ans: "FALSE", exp: "The text highlights long desk hours, fatigue, and demanding schedules, contradicting full stress elimination." }
+            ]
+        };
+
+        function initBoss() {
+            renderBossTask1();
+        }
+
+        function renderBossTask1() {
+            const container = document.getElementById('bossMcqContainer');
+            container.innerHTML = BOSS_MCQ.map((item, qIdx) => {
+                const isAnswered = state.bossTask1Answers.hasOwnProperty(qIdx);
+                const chosenIdx = state.bossTask1Answers[qIdx];
+
+                return `
+                <div style="background:var(--bg-card); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1.25rem; border:1px solid var(--border-color);">
+                    <p style="font-weight:700; font-size:0.95rem; margin-bottom:0.75rem; color:var(--text-main);">${qIdx + 1}. ${item.q}</p>
+                    <div id="bossMcqOptions_${qIdx}">
+                        ${item.options.map((opt, oIdx) => {
+                            let extraClass = "";
+                            if (isAnswered) {
+                                if (oIdx === item.ans) extraClass = "correct";
+                                else if (oIdx === chosenIdx) extraClass = "incorrect";
+                            }
+                            return `
+                            <div class="mcq-option ${extraClass}" 
+                                 style="${isAnswered ? 'pointer-events:none;' : ''}"
+                                 onclick="selectBossMCQ(${qIdx}, ${oIdx})">
+                                <span class="opt-letter">${String.fromCharCode(65 + oIdx)}</span>
+                                <span>${opt}</span>
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="explanation-box" id="bossExp_${qIdx}" style="display:${isAnswered ? 'block' : 'none'};">
+                        <strong>Explanation:</strong> ${item.exp}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function selectBossMCQ(qIdx, chosenIdx) {
+            if (state.bossTask1Answers.hasOwnProperty(qIdx)) return;
+
+            state.bossTask1Answers[qIdx] = chosenIdx;
+            const item = BOSS_MCQ[qIdx];
+
+            if (chosenIdx === item.ans) {
+                addXP(40);
+            }
+
+            saveProgress();
+            renderBossTask1();
+
+            const answeredCount = Object.keys(state.bossTask1Answers).length;
+            if (answeredCount === BOSS_MCQ.length) {
+                state.bossTask1Done = true;
+                saveProgress();
+                document.getElementById('bossTask2').style.display = 'block';
+                renderBossTask2();
+            }
+        }
+
+        function renderBossTask2() {
+            const container = document.getElementById('bossReadingContainer');
+            const isTask2Complete = Object.keys(state.bossTask2Answers).length === BOSS_READING.questions.length;
+
+            container.innerHTML = `
+                <div class="reading-passage">${BOSS_READING.passage}</div>
+                ${BOSS_READING.questions.map((q, idx) => {
+                    const isAnswered = state.bossTask2Answers.hasOwnProperty(idx);
+                    const chosen = state.bossTask2Answers[idx];
+
+                    return `
+                    <div style="background:var(--bg-card); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:1.25rem; border:1px solid var(--border-color);">
+                        <p style="font-weight:600; font-size:0.95rem; margin-bottom:0.75rem; color:var(--text-main);">${idx + 1}. ${q.q}</p>
+                        <div class="tfng-btn-group" id="bossTfngGroup_${idx}">
+                            ${['TRUE', 'FALSE', 'NOT GIVEN'].map(choice => {
+                                let btnStyle = "";
+                                if (isAnswered) {
+                                    if (choice === q.ans) btnStyle = "border-color:var(--accent-success); background:rgba(16,185,129,0.2); color:var(--accent-success);";
+                                    else if (choice === chosen) btnStyle = "border-color:var(--accent-error); background:rgba(239,68,68,0.2); color:var(--accent-error);";
+                                }
+                                return `
+                                <button class="tfng-btn" 
+                                        style="${btnStyle} ${isAnswered ? 'pointer-events:none;' : ''}"
+                                        onclick="answerBossTFNG(${idx}, '${choice}')">${choice}</button>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div class="explanation-box" id="bossTfngExp_${idx}" style="display:${isAnswered ? 'block' : 'none'};">
+                            <span style="color:${chosen === q.ans ? 'var(--accent-success)' : 'var(--accent-error)'}; font-weight:700;">
+                                ${chosen === q.ans ? 'Correct!' : 'Incorrect. Correct answer: ' + q.ans}
+                            </span> ${q.exp}
+                        </div>
+                    </div>
+                    `;
+                }).join('')}
+                <button class="btn-primary" id="bossFinishBtn" 
+                        style="display:${isTask2Complete ? 'block' : 'none'}; width:100%; margin-top:1.5rem; padding:1rem; font-size:1.05rem;" 
+                        onclick="completeBoss()">DEFEAT THE BOSS 👑</button>
+            `;
+        }
+
+        function answerBossTFNG(qIdx, choice) {
+            if (state.bossTask2Answers.hasOwnProperty(qIdx)) return;
+
+            state.bossTask2Answers[qIdx] = choice;
+            const item = BOSS_READING.questions[qIdx];
+
+            if (choice === item.ans) {
+                addXP(40);
+            }
+
+            saveProgress();
+            renderBossTask2();
+        }
+
+        function completeBoss() {
+            if (!state.bossTask2Done) {
+                state.bossTask2Done = true;
+                addXP(100);
+                unlockBadge('b5', 'Boss Slayer', '👑');
+                unlockBadge('b6', 'Vocab Master', '🎓');
+                saveProgress();
+            }
+            triggerBossConfetti();
+            setTimeout(() => {
+                switchModule(6);
+            }, 1200);
+        }
+
+        function initVocabBank() {
+            const list = document.getElementById('vocabList');
+            list.innerHTML = VOCAB_DATA.map(v => `
+                <li style="margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+                    <span><strong>${v.expr}</strong> — <span style="color:var(--text-muted);">${v.meaning}</span></span>
+                </li>
+            `).join('');
+        }
+
+        function toggleVocabDrawer() {
+            const drawer = document.getElementById('vocabDrawer');
+            drawer.style.display = drawer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function triggerConfetti(duration = 3000) {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let particles = [];
+            const colors = ['#f59e0b', '#3b82f6', '#10b981', '#ec4899', '#8b5cf6'];
+
+            for (let i = 0; i < 90; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vy: Math.random() * 3 + 2,
+                    vx: Math.random() * 2 - 1
+                });
+            }
+
+            let startTime = Date.now();
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                });
+
+                if (Date.now() - startTime < duration) {
+                    requestAnimationFrame(render);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            render();
+        }
+
+        function triggerBossConfetti() {
+            triggerConfetti(4500);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking: Work & Career Vocabulary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Theme 1: Midnight Luxury (Default) */
+            --bg-primary: #0b0f19;
+            --bg-secondary: #131b2e;
+            --bg-card: rgba(23, 32, 54, 0.7);
+            --bg-card-hover: rgba(30, 42, 71, 0.85);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-gold: #d4af37;
+            --accent-gold-glow: rgba(212, 175, 55, 0.25);
+            --accent-gold-border: rgba(212, 175, 55, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --correct-green: #10b981;
+            --correct-bg: rgba(16, 185, 129, 0.15);
+            --incorrect-red: #ef4444;
+            --incorrect-bg: rgba(239, 68, 68, 0.15);
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-luxury: 'Cinzel', serif;
+            --shadow-card: 0 20px 40px -15px rgba(0,0,0,0.5);
+            --radius-main: 16px;
+            --radius-sm: 10px;
+            --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Theme 2: Platinum Minimal */
+        [data-theme="platinum"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-hover: rgba(255, 255, 255, 1);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #475569;
+            --accent-gold-glow: rgba(71, 85, 105, 0.15);
+            --accent-gold-border: rgba(71, 85, 105, 0.3);
+            --border-subtle: rgba(0, 0, 0, 0.08);
+            --shadow-card: 0 15px 35px -10px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Theme 3: Emerald Executive */
+        [data-theme="emerald"] {
+            --bg-primary: #06140e;
+            --bg-secondary: #0c241a;
+            --bg-card: rgba(15, 41, 30, 0.7);
+            --bg-card-hover: rgba(22, 59, 43, 0.85);
+            --text-main: #f0fdf4;
+            --text-muted: #86efac;
+            --accent-gold: #fbbf24;
+            --accent-gold-glow: rgba(251, 191, 36, 0.2);
+            --accent-gold-border: rgba(251, 191, 36, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --shadow-card: 0 20px 40px -15px rgba(0,0,0,0.7);
+        }
+
+        /* Theme 4: Royal Purple */
+        [data-theme="purple"] {
+            --bg-primary: #0f0a1c;
+            --bg-secondary: #1a122e;
+            --bg-card: rgba(33, 23, 56, 0.7);
+            --bg-card-hover: rgba(46, 32, 79, 0.85);
+            --text-main: #faf5ff;
+            --text-muted: #c084fc;
+            --accent-gold: #f43f5e;
+            --accent-gold-glow: rgba(244, 63, 94, 0.25);
+            --accent-gold-border: rgba(244, 63, 94, 0.4);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --shadow-card: 0 20px 40px -15px rgba(0,0,0,0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Background ambient glow */
+        .ambient-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle, var(--accent-gold-glow) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+            transition: var(--transition-smooth);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            letter-spacing: -0.02em;
+        }
+
+        /* Top Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(11, 15, 25, 0.7);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        [data-theme="platinum"] header {
+            background: rgba(248, 250, 252, 0.8);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-luxury);
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.05em;
+            color: var(--text-main);
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--accent-gold), #b8860b);
+            color: #000;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .user-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .user-name-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .user-name-btn:hover {
+            background: var(--border-subtle);
+        }
+
+        /* Controls / Theme Selector */
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 1rem;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        /* Dropdown Theme Menu */
+        .theme-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-main);
+            padding: 0.75rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-card);
+            z-index: 101;
+            width: 200px;
+        }
+
+        .theme-dropdown.active {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .theme-opt {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-main);
+            cursor: pointer;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+
+        .theme-opt:hover, .theme-opt.selected {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Welcome / Name Entry View */
+        .welcome-card {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-gold-border);
+            border-radius: var(--radius-main);
+            padding: 3.5rem 2.5rem;
+            text-align: center;
+            max-width: 520px;
+            margin: 3rem auto;
+            box-shadow: var(--shadow-card);
+            backdrop-filter: blur(20px);
+        }
+
+        .welcome-card h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-main) 30%, var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-card p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition-smooth);
+            text-align: center;
+        }
+
+        [data-theme="platinum"] .input-group input {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px var(--accent-gold-glow);
+        }
+
+        .error-msg {
+            color: var(--incorrect-red);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Dashboard Overview */
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .dashboard-header p {
+            color: var(--text-muted);
+        }
+
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .stage-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-main);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 160px;
+        }
+
+        .stage-card:hover:not(.locked) {
+            transform: translateY(-4px);
+            border-color: var(--accent-gold-border);
+            box-shadow: var(--shadow-card);
+        }
+
+        .stage-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.6);
+        }
+
+        .stage-card.completed {
+            border-color: var(--correct-green);
+        }
+
+        .stage-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stage-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stage-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .stage-status {
+            align-self: flex-end;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--border-subtle);
+            margin-top: 1rem;
+        }
+
+        .stage-card.completed .stage-status {
+            background: var(--correct-bg);
+            color: var(--correct-green);
+        }
+
+        /* Standard Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #b8860b);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px var(--accent-gold-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 6px 20px var(--accent-gold-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            font-weight: 600;
+            padding: 0.8rem 1.4rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-gold);
+            background: var(--bg-card-hover);
+        }
+
+        /* Stage Header */
+        .stage-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .stage-nav-info h2 {
+            font-size: 1.4rem;
+        }
+
+        .stage-nav-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: var(--border-subtle);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--correct-green));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Stage 1: Flashcards */
+        .flashcard-container {
+            perspective: 1000px;
+            max-width: 550px;
+            margin: 2rem auto;
+            min-height: 320px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-main);
+            background: var(--bg-card);
+            border: 1px solid var(--accent-gold-border);
+            box-shadow: var(--shadow-card);
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .card-front {
+            z-index: 2;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .flashcard-term {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+        }
+
+        .flashcard-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .card-meaning {
+            font-size: 1.1rem;
+            line-height: 1.4;
+            margin-bottom: 1.2rem;
+            color: var(--text-main);
+        }
+
+        .card-example {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--text-muted);
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-alt {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .audio-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-gold);
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+            transition: var(--transition-smooth);
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.15);
+        }
+
+        /* Stage 2: Matching Game */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .match-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.2rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            line-height: 1.3;
+        }
+
+        .match-item:hover:not(.matched):not(.selected) {
+            border-color: var(--accent-gold-border);
+            background: var(--bg-card-hover);
+        }
+
+        .match-item.selected {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold-glow);
+            transform: scale(1.02);
+        }
+
+        .match-item.matched {
+            border-color: var(--correct-green);
+            background: var(--correct-bg);
+            color: var(--correct-green);
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .match-item.shake {
+            animation: shake 0.4s ease;
+            border-color: var(--incorrect-red);
+            background: var(--incorrect-bg);
+        }
+
+        /* Stage 3: MCQ */
+        .mcq-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-main);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .mcq-question {
+            font-size: 1.15rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .mcq-option {
+            background: rgba(0,0,0,0.15);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            text-align: left;
+            color: var(--text-main);
+        }
+
+        [data-theme="platinum"] .mcq-option {
+            background: rgba(255,255,255,0.4);
+        }
+
+        .mcq-option:hover:not(.disabled) {
+            border-color: var(--accent-gold-border);
+            background: var(--bg-card-hover);
+        }
+
+        .mcq-option.correct {
+            border-color: var(--correct-green);
+            background: var(--correct-bg);
+            color: var(--correct-green);
+        }
+
+        .mcq-option.incorrect {
+            border-color: var(--incorrect-red);
+            background: var(--incorrect-bg);
+            color: var(--incorrect-red);
+        }
+
+        .opt-letter {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .mcq-explanation {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            background: rgba(0,0,0,0.2);
+            font-size: 0.88rem;
+            line-height: 1.4;
+            display: none;
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        /* Stage 4: Reading T/F/NG */
+        .reading-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .reading-text-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-main);
+            padding: 1.5rem;
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            position: sticky;
+            top: 90px;
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .reading-text-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+        }
+
+        .highlight-phrase {
+            background: var(--accent-gold-glow);
+            color: var(--accent-gold);
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .tfng-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .tfng-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-main);
+            padding: 1.25rem;
+        }
+
+        .tfng-statement {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .tfng-btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tfng-btn {
+            flex: 1;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 700;
+            transition: var(--transition-smooth);
+        }
+
+        .tfng-btn:hover:not(.disabled) {
+            border-color: var(--accent-gold);
+        }
+
+        .tfng-btn.selected-correct {
+            background: var(--correct-green);
+            color: #000;
+            border-color: var(--correct-green);
+        }
+
+        .tfng-btn.selected-incorrect {
+            background: var(--incorrect-red);
+            color: #fff;
+            border-color: var(--incorrect-red);
+        }
+
+        .tfng-explanation {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            display: none;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        /* Final Results View */
+        .results-container {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .results-header {
+            margin-bottom: 2rem;
+        }
+
+        .results-header h2 {
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .summary-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1.2rem;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 0.2rem;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Badges Display */
+        .badges-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .badges-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .badge-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.4;
+            filter: grayscale(1);
+            transition: var(--transition-smooth);
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            border-color: var(--accent-gold-border);
+            box-shadow: 0 4px 15px var(--accent-gold-glow);
+        }
+
+        .badge-icon {
+            font-size: 1.8rem;
+        }
+
+        .badge-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Vocabulary Bank Section */
+        .vocab-bank-section {
+            text-align: left;
+            margin-bottom: 3rem;
+        }
+
+        .vocab-bank-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 0.5rem;
+        }
+
+        .vocab-bank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .bank-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .bank-term {
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-size: 1rem;
+        }
+
+        .bank-meaning {
+            font-size: 0.88rem;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        /* Speaking Challenge */
+        .speaking-challenge {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-gold-border);
+            border-radius: var(--radius-main);
+            padding: 2rem;
+            text-align: left;
+            margin-bottom: 2.5rem;
+        }
+
+        .speaking-challenge h3 {
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .speaking-questions {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .speaking-q {
+            background: rgba(0,0,0,0.2);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent-gold);
+            font-size: 0.95rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* Modal Confirmation */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-main);
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        /* Responsive Layout Adjustments */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+
+            .reading-container {
+                grid-template-columns: 1fr;
+            }
+
+            .reading-text-card {
+                position: relative;
+                top: 0;
+                max-height: none;
+            }
+
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-stats {
+                gap: 0.75rem;
+            }
+
+            .stat-badge span:nth-child(2) {
+                display: none;
+            }
+
+            .bank-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+            }
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <div class="brand">
+            <span>WORK & CAREER</span>
+            <span class="brand-badge">IELTS</span>
+        </div>
+
+        <div class="user-stats" id="navStats" style="display: none;">
+            <div class="stat-badge">
+                <span>⭐</span>
+                <span id="navXP">0 XP</span>
+            </div>
+            <div class="stat-badge">
+                <span>🏆</span>
+                <span id="navLevel">Beginner</span>
+            </div>
+            <div class="user-name-btn" id="navNameBtn" style="cursor: default;">
+                👤 <span id="navName">Student</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="icon-btn" id="themeToggleBtn" title="Select Theme">🎨</button>
+            <button class="icon-btn" id="resetBtn" title="Reset Progress" style="display: none;">🔄</button>
+        </div>
+
+        <!-- Theme Selector Menu -->
+        <div class="theme-dropdown" id="themeDropdown">
+            <button class="theme-opt" data-set-theme="midnight">🌙 Midnight Luxury</button>
+            <button class="theme-opt" data-set-theme="platinum">🤍 Platinum Minimal</button>
+            <button class="theme-opt" data-set-theme="emerald">🌿 Emerald Executive</button>
+            <button class="theme-opt" data-set-theme="purple">👑 Royal Purple</button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- DASHBOARD VIEW -->
+        <section id="viewDashboard" class="view active">
+            <div class="dashboard-header">
+                <h2 id="dashWelcome">Welcome back!</h2>
+                <p>Your Progress: <span id="dashCompletedCount">0</span> / 4 stages completed</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="dashProgressBar"></div>
+                </div>
+            </div>
+
+            <div class="stage-grid">
+                <div class="stage-card" id="stageCard1" onclick="app.startStage(1)">
+                    <div>
+                        <div class="stage-icon">💡</div>
+                        <div class="stage-title">1. Learn</div>
+                        <div class="stage-subtitle">Master natural phrases with smart flashcards.</div>
+                    </div>
+                    <div class="stage-status" id="stageStatus1">AVAILABLE</div>
+                </div>
+
+                <div class="stage-card locked" id="stageCard2" onclick="app.startStage(2)">
+                    <div>
+                        <div class="stage-icon">🧩</div>
+                        <div class="stage-title">2. Match</div>
+                        <div class="stage-subtitle">Connect expressions with their contextual meanings.</div>
+                    </div>
+                    <div class="stage-status" id="stageStatus2">LOCKED</div>
+                </div>
+
+                <div class="stage-card locked" id="stageCard3" onclick="app.startStage(3)">
+                    <div>
+                        <div class="stage-icon">🎯</div>
+                        <div class="stage-title">3. Choose</div>
+                        <div class="stage-subtitle">Identify natural collocations for IELTS contexts.</div>
+                    </div>
+                    <div class="stage-status" id="stageStatus3">LOCKED</div>
+                </div>
+
+                <div class="stage-card locked" id="stageCard4" onclick="app.startStage(4)">
+                    <div>
+                        <div class="stage-icon">📖</div>
+                        <div class="stage-title">4. Read & Decide</div>
+                        <div class="stage-subtitle">Test comprehension with True / False / Not Given text.</div>
+                    </div>
+                    <div class="stage-status" id="stageStatus4">LOCKED</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STAGE 1: FLASHCARDS -->
+        <section id="viewStage1" class="view">
+            <div class="stage-nav">
+                <div class="stage-nav-info">
+                    <h2>💡 Stage 1 — Learn the Vocabulary</h2>
+                    <p>Learn phrases, not isolated words.</p>
+                </div>
+                <button class="btn-secondary" onclick="app.showView('viewDashboard')">Dashboard</button>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="flashcardProgressBar"></div>
+            </div>
+
+            <div style="text-align: center; font-size: 0.85rem; color: var(--text-muted);" id="flashcardCounter">Card 1 / 12</div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="app.flipCard()">
+                    <div class="card-face card-front">
+                        <div class="card-label">EXPRESSION</div>
+                        <div class="flashcard-term" id="cardFrontTerm">climb the career ladder</div>
+                        <button class="audio-btn" onclick="event.stopPropagation(); app.speakCurrentTerm();" title="Listen">🔊</button>
+                        <div class="flashcard-hint">👆 Click card to reveal meaning</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-label">MEANING</div>
+                        <div class="card-meaning" id="cardBackMeaning">To move up into more senior positions in your career gradually.</div>
+                        <div class="card-label">EXAMPLE</div>
+                        <div class="card-example" id="cardBackExample">"I'm ambitious, so I'd like to climb the career ladder and eventually reach a management role."</div>
+                        <div class="card-alt" id="cardBackAlt">Alternative: work my way up</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard-controls">
+                <button class="btn-secondary" id="cardPrevBtn" onclick="app.prevCard()">← Previous</button>
+                <button class="btn-primary" id="cardNextBtn" onclick="app.nextCard()">Next →</button>
+            </div>
+        </section>
+
+        <!-- STAGE 2: MATCHING GAME -->
+        <section id="viewStage2" class="view">
+            <div class="stage-nav">
+                <div class="stage-nav-info">
+                    <h2>🧩 Stage 2 — Match the Phrase</h2>
+                    <p>Can you connect each phrase with its meaning?</p>
+                </div>
+                <button class="btn-secondary" onclick="app.showView('viewDashboard')">Dashboard</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem; font-weight: 600;">
+                <span>Matches: <span id="matchCount">0</span> / 8</span>
+                <span>Mistakes: <span id="matchMistakes">0</span></span>
+            </div>
+
+            <div class="matching-grid">
+                <div class="matching-column" id="matchPhrasesCol"></div>
+                <div class="matching-column" id="matchMeaningsCol"></div>
+            </div>
+        </section>
+
+        <!-- STAGE 3: MULTIPLE CHOICE -->
+        <section id="viewStage3" class="view">
+            <div class="stage-nav">
+                <div class="stage-nav-info">
+                    <h2>🎯 Stage 3 — Choose the Natural Expression</h2>
+                    <p>Which phrase sounds natural in this situation?</p>
+                </div>
+                <button class="btn-secondary" onclick="app.showView('viewDashboard')">Dashboard</button>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="mcqProgressBar"></div>
+            </div>
+
+            <div class="mcq-container">
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;" id="mcqCounter">Question 1 / 8</div>
+                <div class="mcq-question" id="mcqQuestionText">Loading...</div>
+                <div class="mcq-options" id="mcqOptionsContainer"></div>
+                <div class="mcq-explanation" id="mcqExplanation"></div>
+                <div style="margin-top: 1.5rem; text-align: right;">
+                    <button class="btn-primary" id="mcqNextBtn" style="display: none;" onclick="app.nextMCQ()">Next Question →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- STAGE 4: READING T/F/NG -->
+        <section id="viewStage4" class="view">
+            <div class="stage-nav">
+                <div class="stage-nav-info">
+                    <h2>📖 Stage 4 — Read & Decide</h2>
+                    <p>Read carefully. Test comprehension, not guessing.</p>
+                </div>
+                <button class="btn-secondary" onclick="app.showView('viewDashboard')">Dashboard</button>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <button class="btn-secondary" id="textTab1" onclick="app.switchReadingText(0)">Text 1: Starting Out</button>
+                <button class="btn-secondary" id="textTab2" onclick="app.switchReadingText(1)">Text 2: Work-Life Balance</button>
+                <button class="btn-secondary" id="textTab3" onclick="app.switchReadingText(2)">Text 3: Career Satisfaction</button>
+            </div>
+
+            <div class="reading-container">
+                <div class="reading-text-card">
+                    <h3 id="readingTextTitle">Text Title</h3>
+                    <div id="readingTextBody">Passage body content...</div>
+                </div>
+
+                <div class="tfng-questions" id="tfngContainer">
+                    <!-- Dynamic Questions -->
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL RESULTS VIEW -->
+        <section id="viewResults" class="view">
+            <div class="results-container">
+                <div class="results-header">
+                    <h2>💼 WORK & CAREER — MASTERED</h2>
+                    <p id="resultsCongrats">Congratulations, Azizbek!</p>
+                </div>
+
+                <div class="stats-summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-value" id="resTotalXP">0</div>
+                        <div class="summary-label">Total XP</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" id="resLevel">Master</div>
+                        <div class="summary-label">Final Rank</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" id="resMCQ">0/0</div>
+                        <div class="summary-label">MCQ Score</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" id="resReading">0/0</div>
+                        <div class="summary-label">Reading Score</div>
+                    </div>
+                </div>
+
+                <div class="badges-section">
+                    <h3>🏅 Badges Earned</h3>
+                    <div class="badges-grid" id="badgesContainer"></div>
+                </div>
+
+                <div class="vocab-bank-section">
+                    <h3>🧠 Your Work & Career Vocabulary Bank</h3>
+                    <div class="vocab-bank-list" id="vocabBankList"></div>
+                </div>
+
+                <div class="speaking-challenge">
+                    <h3>🎤 Put It Into Practice (IELTS Speaking)</h3>
+                    <p style="font-size: 0.88rem; color: var(--text-muted);">Answer these IELTS Speaking questions out loud using at least 3 target expressions from today's session:</p>
+                    <div class="speaking-questions">
+                        <div class="speaking-q">1. What kind of job would you like to have in the future?</div>
+                        <div class="speaking-q">2. Do you think it's important to strike a healthy work-life balance?</div>
+                        <div class="speaking-q">3. What factors contribute most to job satisfaction?</div>
+                        <div class="speaking-q">4. Is it common for people in your country to work overtime?</div>
+                        <div class="speaking-q">5. Do you prefer working in a fast-paced environment or a more steady one?</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn-primary" onclick="app.startStage(1)">🔄 REVIEW VOCABULARY</button>
+                    <button class="btn-secondary" onclick="app.showView('viewDashboard')">DASHBOARD</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Confirmation Modal for Reset -->
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal-card">
+            <h3>Reset Progress?</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">This will clear all your progress, XP, and badges. Are you sure?</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="app.hideResetModal()">Cancel</button>
+                <button class="btn-primary" style="background: var(--incorrect-red); color: #fff;" onclick="app.confirmReset()">Yes, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const __PRACTISE_LESSON_ID = 'work_career';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        /* ==================== VOCABULARY DATASET ==================== */
+        const VOCAB_DATA = [
+            {
+                id: 1,
+                phrase: "climb the career ladder",
+                meaning: "To move into higher, more senior positions in a company or profession over time.",
+                example: "I'm ambitious, so I hope to climb the career ladder and eventually manage my own team.",
+                alt: "work my way up"
+            },
+            {
+                id: 2,
+                phrase: "land a job",
+                meaning: "To successfully secure or obtain a job position, usually after an interview process.",
+                example: "After sending out dozens of resumes, she finally landed a job at a prestigious law firm.",
+                alt: "secure a position"
+            },
+            {
+                id: 3,
+                phrase: "gain valuable experience",
+                meaning: "To acquire useful skills and knowledge through practical work.",
+                example: "My first internship allowed me to gain valuable experience in corporate communication.",
+                alt: "build practical expertise"
+            },
+            {
+                id: 4,
+                phrase: "take on more responsibility",
+                meaning: "To accept extra tasks, duties, or leadership obligations in your role.",
+                example: "As you mature in your career, you are expected to take on more responsibility.",
+                alt: "assume greater duties"
+            },
+            {
+                id: 5,
+                phrase: "strike a work-life balance",
+                meaning: "To manage your time successfully between your professional work and personal life.",
+                example: "It can be difficult to strike a work-life balance when working in demanding corporate roles.",
+                alt: "maintain a healthy balance"
+            },
+            {
+                id: 6,
+                phrase: "work in a fast-paced environment",
+                meaning: "To work where things happen, change, or develop very quickly.",
+                example: "Tech startups often require employees to work in a fast-paced environment.",
+                alt: "thrive under high pressure"
+            },
+            {
+                id: 7,
+                phrase: "have a heavy workload",
+                meaning: "To have a large amount of work assigned to you to complete.",
+                example: "During the audit period, our department has a particularly heavy workload.",
+                alt: "be snowed under with work"
+            },
+            {
+                id: 8,
+                phrase: "meet tight deadlines",
+                meaning: "To finish tasks or projects before a strict, very short target time.",
+                example: "Graphic designers frequently have to meet tight deadlines without compromising quality.",
+                alt: "work under severe time constraints"
+            },
+            {
+                id: 9,
+                phrase: "earn a decent salary",
+                meaning: "To receive a fair, respectable amount of money for the work you do.",
+                example: "While money isn't everything, it's important to earn a decent salary to live comfortably.",
+                alt: "be well-compensated"
+            },
+            {
+                id: 10,
+                phrase: "job satisfaction",
+                meaning: "The feeling of pleasure, fulfillment, and achievement that you get from your job.",
+                example: "High job satisfaction often stems from doing meaningful work rather than just earning money.",
+                alt: "career fulfillment"
+            },
+            {
+                id: 11,
+                phrase: "pursue a career in",
+                meaning: "To follow or work towards a specific career path or professional field.",
+                example: "Ever since university, I've wanted to pursue a career in digital marketing.",
+                alt: "carve out a career in"
+            },
+            {
+                id: 12,
+                phrase: "take on a leadership role",
+                meaning: "To step into a position where you guide, direct, or manage other people.",
+                example: "She was asked to take on a leadership role during the company's expansion project.",
+                alt: "assume managerial duties"
+            }
+        ];
+
+        /* ==================== MCQ DATASET ==================== */
+        const MCQ_DATA = [
+            {
+                question: "I've been working at this firm for three years, and I'm hoping to ________ by applying for the senior analyst position.",
+                options: [
+                    "climb the career ladder",
+                    "climb the career stairs",
+                    "rise the career ladder",
+                    "grow the career ladder"
+                ],
+                correct: 0,
+                explanation: "✅ 'Climb the career ladder' is the natural collocation meaning to progress to more senior positions."
+            },
+            {
+                question: "After graduating, it took him almost six months to finally ________ at a tech firm.",
+                options: [
+                    "catch a job",
+                    "land a job",
+                    "win a job",
+                    "fall into a job"
+                ],
+                correct: 1,
+                explanation: "✅ 'Land a job' is a very common idiomatic phrase meaning to successfully obtain employment."
+            },
+            {
+                question: "Working long hours can lead to burnout if you don't learn how to ________.",
+                options: [
+                    "strike a work-life balance",
+                    "hit a work-life balance",
+                    "make a work-life balance",
+                    "catch a work-life balance"
+                ],
+                correct: 0,
+                explanation: "✅ 'Strike a work-life balance' is the correct natural verb collocation."
+            },
+            {
+                question: "Our team is feeling stressed because we have to ________ for the product launch next Monday.",
+                options: [
+                    "meet tight deadlines",
+                    "touch tight deadlines",
+                    "catch small deadlines",
+                    "close tight deadlines"
+                ],
+                correct: 0,
+                explanation: "✅ We 'meet' deadlines. When time is short, deadlines are described as 'tight'."
+            },
+            {
+                question: "I prefer working in marketing because it offers high ________; I feel like my work actually matters.",
+                options: [
+                    "job satisfaction",
+                    "job pleasure",
+                    "work satisfaction",
+                    "career happiness"
+                ],
+                correct: 0,
+                explanation: "✅ 'Job satisfaction' is the established noun phrase for career fulfillment."
+            },
+            {
+                question: "Although the position comes with a lot of stress, it does allow me to ________.",
+                options: [
+                    "earn a decent salary",
+                    "gain a decent salary",
+                    "win a decent salary",
+                    "take a decent salary"
+                ],
+                correct: 0,
+                explanation: "✅ You 'earn' a salary (or 'receive'/'get'). 'Earn a decent salary' sounds completely natural."
+            },
+            {
+                question: "She decided to ________ software engineering because of her passion for coding.",
+                options: [
+                    "pursue a career in",
+                    "chase a job in",
+                    "run a career in",
+                    "follow a work in"
+                ],
+                correct: 0,
+                explanation: "✅ 'Pursue a career in [field]' is the formal and precise natural phrasing."
+            },
+            {
+                question: "In tech companies, employees are expected to ________ and adapt to constant changes quickly.",
+                options: [
+                    "work in a fast-paced environment",
+                    "run in a quick environment",
+                    "work in a high-speed room",
+                    "stay in a rapid space"
+                ],
+                correct: 0,
+                explanation: "✅ 'Work in a fast-paced environment' is a standard description of modern, rapid workplaces."
+            }
+        ];
+
+        /* ==================== READING DATASET ==================== */
+        const READING_DATA = [
+            {
+                title: "Starting a Career",
+                text: "When Elena graduated from university, she knew that competition in the corporate world would be fierce. It took her several months of interviewing before she managed to <span class='highlight-phrase'>land a job</span> at a global consulting firm. Initially, her primary goal was to <span class='highlight-phrase'>gain valuable experience</span> rather than focus purely on earnings. In her first year, she had to adapt to working in a <span class='highlight-phrase'>fast-paced environment</span>, often staying late to complete projects. Recognizing her dedication, her director gradually allowed her to <span class='highlight-phrase'>take on more responsibility</span>, putting her on a clear path to <span class='highlight-phrase'>climb the career ladder</span>.",
+                questions: [
+                    {
+                        statement: "Elena was offered a job immediately after her university graduation.",
+                        answer: "FALSE",
+                        explanation: "The text states it took her 'several months of interviewing' before landing a job."
+                    },
+                    {
+                        statement: "Elena prioritized gaining experience over earning a high income in her initial role.",
+                        answer: "TRUE",
+                        explanation: "The text says her primary goal was to 'gain valuable experience rather than focus purely on earnings'."
+                    },
+                    {
+                        statement: "Elena's company paid her extra money for staying late.",
+                        answer: "NOT GIVEN",
+                        explanation: "The text mentions she stayed late, but does NOT mention whether she received overtime pay."
+                    }
+                ]
+            },
+            {
+                title: "Work-Life Balance",
+                text: "Modern professionals frequently struggle with managing their professional commitments alongside personal life. David, a project manager, used to face a <span class='highlight-phrase'>heavy workload</span> every week, constantly striving to <span class='highlight-phrase'>meet tight deadlines</span> set by client demands. Eventually, working excessive hours forced him to reevaluate his priorities. He negotiated <span class='highlight-phrase'>flexible working hours</span> with his manager so he could spend more time with his young family. By setting clear boundaries and refusing to regularly work overtime, David finally managed to <span class='highlight-phrase'>strike a work-life balance</span>.",
+                questions: [
+                    {
+                        statement: "David changed his work routine because he felt overwhelmed by his workload.",
+                        answer: "TRUE",
+                        explanation: "The text states working excessive hours forced him to reevaluate his priorities."
+                    },
+                    {
+                        statement: "David's manager initially refused his request for flexible working hours.",
+                        answer: "NOT GIVEN",
+                        explanation: "The text says he negotiated flexible hours, but does not say if his manager initially refused."
+                    },
+                    {
+                        statement: "David continues to work overtime on most weekends.",
+                        answer: "FALSE",
+                        explanation: "The text explicitly states that he 'refused to regularly work overtime'."
+                    }
+                ]
+            },
+            {
+                title: "Career Satisfaction",
+                text: "For many young graduates, choosing to <span class='highlight-phrase'>pursue a career in</span> public healthcare stems from a desire to make a social impact. While these roles might not always allow workers to <span class='highlight-phrase'>earn a decent salary</span> compared to finance or tech industries, they offer an incredible degree of <span class='highlight-phrase'>job satisfaction</span>. Over time, experienced healthcare professionals who <span class='highlight-phrase'>take on a leadership role</span> find that mentoring junior staff provides a deep sense of a <span class='highlight-phrase'>rewarding career</span>.",
+                questions: [
+                    {
+                        statement: "Public healthcare jobs always pay higher salaries than finance roles.",
+                        answer: "FALSE",
+                        explanation: "The text suggests public healthcare roles might NOT allow workers to earn as much as finance or tech."
+                    },
+                    {
+                        statement: "Job satisfaction in healthcare often comes from making a social contribution.",
+                        answer: "TRUE",
+                        explanation: "The text connects pursuing healthcare with making a social impact and achieving job satisfaction."
+                    },
+                    {
+                        statement: "Most healthcare workers leave their jobs after five years due to stress.",
+                        answer: "NOT GIVEN",
+                        explanation: "The passage does not mention how long healthcare workers remain in their careers."
+                    }
+                ]
+            }
+        ];
+
+        /* ==================== BADGES DATASET ==================== */
+        const BADGES_DATA = [
+            { id: "b1", icon: "🔓", name: "First Step", desc: "Complete Flashcards" },
+            { id: "b2", icon: "🧩", name: "Perfect Match", desc: "Complete Matching Game" },
+            { id: "b3", icon: "🎯", name: "Sharp Speaker", desc: "Pass Multiple Choice" },
+            { id: "b4", icon: "📖", name: "Careful Reader", desc: "Pass Reading Section" },
+            { id: "b5", icon: "👑", name: "Career Master", desc: "Complete All Stages" }
+        ];
+
+        /* ==================== MAIN APPLICATION LOGIC ==================== */
+        class App {
+            constructor() {
+                this.state = {
+                    name: "",
+                    theme: "midnight",
+                    xp: 0,
+                    completedStages: [false, false, false, false],
+                    cardIndex: 0,
+                    cardFlipped: false,
+                    cardViewed: new Set(),
+                    matchSelectedPhrase: null,
+                    matchSelectedMeaning: null,
+                    matchPairsCompleted: 0,
+                    matchMistakes: 0,
+                    mcqIndex: 0,
+                    mcqScore: 0,
+                    mcqAnswered: false,
+                    readingTextIdx: 0,
+                    readingAnswers: {},
+                    readingScore: 0,
+                    unlockedBadges: new Set()
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.loadState();
+                this.bindEvents();
+                this.applyTheme(this.state.theme);
+                this.renderUI();
+            }
+
+            /* State & Persistence */
+            loadState() {
+                const saved = localStorage.getItem(__vocabKey("ielts_vocab_work_state"));
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        this.state = { ...this.state, ...parsed };
+                        this.state.cardViewed = new Set(parsed.cardViewed || []);
+                        this.state.unlockedBadges = new Set(parsed.unlockedBadges || []);
+                    } catch (e) {
+                        console.error("Failed to load saved state", e);
+                    }
+                }
+            }
+
+            saveState() {
+                const toSave = {
+                    ...this.state,
+                    cardViewed: Array.from(this.state.cardViewed),
+                    unlockedBadges: Array.from(this.state.unlockedBadges)
+                };
+                localStorage.setItem(__vocabKey("ielts_vocab_work_state"), JSON.stringify(toSave));
+            }
+
+            resetProgress() {
+                localStorage.removeItem(__vocabKey("ielts_vocab_work_state"));
+                location.reload();
+            }
+
+            /* XP & Level System */
+            addXP(amount) {
+                const pts = Math.round(Number(amount) || 0);
+                if (pts <= 0) return;
+                this.state.xp += pts;
+                this.saveState();
+                this.updateStatsUI();
+                __notifyPractiseParentXP(pts, this.state.xp);
+            }
+
+            getLevel() {
+                const xp = this.state.xp;
+                if (xp >= 600) return "Vocabulary Master";
+                if (xp >= 400) return "Confident Speaker";
+                if (xp >= 200) return "Learner";
+                return "Beginner";
+            }
+
+            unlockBadge(badgeId) {
+                if (!this.state.unlockedBadges.has(badgeId)) {
+                    this.state.unlockedBadges.add(badgeId);
+                    this.saveState();
+                }
+            }
+
+            /* Event Bindings */
+            bindEvents() {
+                // Theme Dropdown Toggle
+                document.getElementById("themeToggleBtn").addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const menu = document.getElementById("themeDropdown");
+                    menu.classList.toggle("active");
+                });
+
+                document.addEventListener("click", () => {
+                    document.getElementById("themeDropdown").classList.remove("active");
+                });
+
+                // Theme Selection Buttons
+                document.querySelectorAll(".theme-opt").forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        const theme = e.currentTarget.getAttribute("data-set-theme");
+                        this.applyTheme(theme);
+                    });
+                });
+
+                // Reset Button Modal
+                document.getElementById("resetBtn").addEventListener("click", () => {
+                    document.getElementById("resetModal").style.display = "flex";
+                });
+            }
+
+            hideResetModal() {
+                document.getElementById("resetModal").style.display = "none";
+            }
+
+            confirmReset() {
+                this.resetProgress();
+            }
+
+            applyTheme(theme) {
+                this.state.theme = theme;
+                document.documentElement.setAttribute("data-theme", theme);
+                document.querySelectorAll(".theme-opt").forEach(opt => {
+                    if (opt.getAttribute("data-set-theme") === theme) {
+                        opt.classList.add("selected");
+                    } else {
+                        opt.classList.remove("selected");
+                    }
+                });
+                this.saveState();
+            }
+
+            showView(viewId) {
+                document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+                document.getElementById(viewId).classList.add("active");
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                if (viewId === 'viewResults') {
+                    this.renderResultsView();
+                }
+            }
+
+            renderUI() {
+                this.state.name = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (this.state.name || 'Student');
+                this.saveState();
+                document.getElementById("navStats").style.display = "flex";
+                document.getElementById("resetBtn").style.display = "flex";
+                document.getElementById("navName").textContent = this.state.name;
+                document.getElementById("dashWelcome").textContent = `Welcome back, ${this.state.name} 👋`;
+                this.updateStatsUI();
+                this.updateDashboardCards();
+
+                if (this.state.currentView) {
+                    this.showView(this.state.currentView);
+                } else {
+                    this.showView("viewDashboard");
+                }
+            }
+
+            updateStatsUI() {
+                document.getElementById("navXP").textContent = `${this.state.xp} XP`;
+                document.getElementById("navLevel").textContent = this.getLevel();
+            }
+
+            updateDashboardCards() {
+                let completedCount = 0;
+                for (let i = 1; i <= 4; i++) {
+                    const isComp = this.state.completedStages[i - 1];
+                    const card = document.getElementById(`stageCard${i}`);
+                    const status = document.getElementById(`stageStatus${i}`);
+
+                    if (isComp) {
+                        completedCount++;
+                        card.className = "stage-card completed";
+                        status.textContent = "COMPLETED ✅";
+                    } else {
+                        // Stage 1 always unlocked. Stage N unlocked if N-1 complete.
+                        const unlocked = (i === 1) || this.state.completedStages[i - 2];
+                        if (unlocked) {
+                            card.className = "stage-card";
+                            status.textContent = "AVAILABLE";
+                        } else {
+                            card.className = "stage-card locked";
+                            status.textContent = "LOCKED";
+                        }
+                    }
+                }
+
+                document.getElementById("dashCompletedCount").textContent = completedCount;
+                document.getElementById("dashProgressBar").style.width = `${(completedCount / 4) * 100}%`;
+            }
+
+            startStage(stageNum) {
+                // Check lock condition
+                if (stageNum > 1 && !this.state.completedStages[stageNum - 2]) {
+                    return; // Locked
+                }
+
+                if (stageNum === 1) {
+                    this.initFlashcards();
+                    this.showView("viewStage1");
+                } else if (stageNum === 2) {
+                    this.initMatchingGame();
+                    this.showView("viewStage2");
+                } else if (stageNum === 3) {
+                    this.initMCQ();
+                    this.showView("viewStage3");
+                } else if (stageNum === 4) {
+                    this.initReading();
+                    this.showView("viewStage4");
+                }
+            }
+
+            /* ================= STAGE 1: FLASHCARDS ================= */
+            initFlashcards() {
+                this.state.cardIndex = 0;
+                this.renderCard();
+            }
+
+            renderCard() {
+                const item = VOCAB_DATA[this.state.cardIndex];
+                const cardEl = document.getElementById("flashcard");
+                
+                // Reset flip without animation flash
+                cardEl.classList.remove("flipped");
+                this.state.cardFlipped = false;
+
+                // Track card view automatically upon rendering
+                this.state.cardViewed.add(this.state.cardIndex);
+                if (this.state.cardViewed.size === VOCAB_DATA.length && !this.state.completedStages[0]) {
+                    this.state.completedStages[0] = true;
+                    this.addXP(100);
+                    this.unlockBadge("b1");
+                    this.saveState();
+                    this.updateDashboardCards();
+                }
+
+                setTimeout(() => {
+                    document.getElementById("cardFrontTerm").textContent = item.phrase;
+                    document.getElementById("cardBackMeaning").textContent = item.meaning;
+                    document.getElementById("cardBackExample").textContent = `"${item.example}"`;
+                    document.getElementById("cardBackAlt").textContent = item.alt ? `Alternative: ${item.alt}` : "";
+
+                    document.getElementById("flashcardCounter").textContent = `Card ${this.state.cardIndex + 1} / ${VOCAB_DATA.length}`;
+                    document.getElementById("flashcardProgressBar").style.width = `${((this.state.cardIndex + 1) / VOCAB_DATA.length) * 100}%`;
+
+                    document.getElementById("cardPrevBtn").disabled = this.state.cardIndex === 0;
+
+                    const nextBtn = document.getElementById("cardNextBtn");
+                    if (this.state.cardIndex === VOCAB_DATA.length - 1) {
+                        nextBtn.textContent = "Start Stage 2 🧩";
+                    } else {
+                        nextBtn.textContent = "Next →";
+                    }
+                }, 150);
+            }
+
+            flipCard() {
+                const cardEl = document.getElementById("flashcard");
+                cardEl.classList.toggle("flipped");
+                this.state.cardFlipped = !this.state.cardFlipped;
+            }
+
+            speakCurrentTerm() {
+                const item = VOCAB_DATA[this.state.cardIndex];
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(item.phrase);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+
+            nextCard() {
+                if (this.state.cardIndex < VOCAB_DATA.length - 1) {
+                    this.state.cardIndex++;
+                    this.renderCard();
+                } else {
+                    // All cards reached - ensure completion and move to Stage 2
+                    if (!this.state.completedStages[0]) {
+                        this.state.completedStages[0] = true;
+                        this.addXP(100);
+                        this.unlockBadge("b1");
+                        this.saveState();
+                        this.updateDashboardCards();
+                    }
+                    this.startStage(2);
+                }
+            }
+
+            prevCard() {
+                if (this.state.cardIndex > 0) {
+                    this.state.cardIndex--;
+                    this.renderCard();
+                }
+            }
+
+            /* ================= STAGE 2: MATCHING GAME ================= */
+            initMatchingGame() {
+                this.state.matchSelectedPhrase = null;
+                this.state.matchSelectedMeaning = null;
+                this.state.matchPairsCompleted = 0;
+                this.state.matchMistakes = 0;
+
+                document.getElementById("matchCount").textContent = "0";
+                document.getElementById("matchMistakes").textContent = "0";
+
+                // Select 8 items for matching
+                const items = VOCAB_DATA.slice(0, 8);
+                const phrases = [...items].sort(() => Math.random() - 0.5);
+                const meanings = [...items].sort(() => Math.random() - 0.5);
+
+                const phrasesCol = document.getElementById("matchPhrasesCol");
+                const meaningsCol = document.getElementById("matchMeaningsCol");
+
+                phrasesCol.innerHTML = "";
+                meaningsCol.innerHTML = "";
+
+                phrases.forEach(item => {
+                    const div = document.createElement("div");
+                    div.className = "match-item";
+                    div.dataset.id = item.id;
+                    div.dataset.type = "phrase";
+                    div.textContent = item.phrase;
+                    div.onclick = (e) => this.handleMatchClick(e.currentTarget);
+                    phrasesCol.appendChild(div);
+                });
+
+                meanings.forEach(item => {
+                    const div = document.createElement("div");
+                    div.className = "match-item";
+                    div.dataset.id = item.id;
+                    div.dataset.type = "meaning";
+                    div.textContent = item.meaning;
+                    div.onclick = (e) => this.handleMatchClick(e.currentTarget);
+                    meaningsCol.appendChild(div);
+                });
+            }
+
+            handleMatchClick(el) {
+                if (el.classList.contains("matched")) return;
+
+                const type = el.dataset.type;
+
+                if (type === "phrase") {
+                    if (this.state.matchSelectedPhrase) this.state.matchSelectedPhrase.classList.remove("selected");
+                    this.state.matchSelectedPhrase = el;
+                    el.classList.add("selected");
+                } else {
+                    if (this.state.matchSelectedMeaning) this.state.matchSelectedMeaning.classList.remove("selected");
+                    this.state.matchSelectedMeaning = el;
+                    el.classList.add("selected");
+                }
+
+                if (this.state.matchSelectedPhrase && this.state.matchSelectedMeaning) {
+                    this.checkMatch();
+                }
+            }
+
+            checkMatch() {
+                const pEl = this.state.matchSelectedPhrase;
+                const mEl = this.state.matchSelectedMeaning;
+
+                if (pEl.dataset.id === mEl.dataset.id) {
+                    // Correct match
+                    pEl.className = "match-item matched";
+                    mEl.className = "match-item matched";
+                    this.state.matchSelectedPhrase = null;
+                    this.state.matchSelectedMeaning = null;
+                    this.state.matchPairsCompleted++;
+
+                    document.getElementById("matchCount").textContent = this.state.matchPairsCompleted;
+
+                    if (this.state.matchPairsCompleted === 8) {
+                        // Game Won
+                        if (!this.state.completedStages[1]) {
+                            this.state.completedStages[1] = true;
+                            this.addXP(150);
+                            if (this.state.matchMistakes === 0) {
+                                this.unlockBadge("b2");
+                            }
+                            this.saveState();
+                            this.updateDashboardCards();
+                        }
+                        setTimeout(() => this.startStage(3), 1000);
+                    }
+                } else {
+                    // Incorrect match
+                    pEl.classList.add("shake");
+                    mEl.classList.add("shake");
+                    this.state.matchMistakes++;
+                    document.getElementById("matchMistakes").textContent = this.state.matchMistakes;
+
+                    setTimeout(() => {
+                        pEl.classList.remove("shake", "selected");
+                        mEl.classList.remove("shake", "selected");
+                        this.state.matchSelectedPhrase = null;
+                        this.state.matchSelectedMeaning = null;
+                    }, 500);
+                }
+            }
+
+            /* ================= STAGE 3: MULTIPLE CHOICE ================= */
+            initMCQ() {
+                this.state.mcqIndex = 0;
+                this.state.mcqScore = 0;
+                this.renderMCQ();
+            }
+
+            renderMCQ() {
+                this.state.mcqAnswered = false;
+                const q = MCQ_DATA[this.state.mcqIndex];
+
+                document.getElementById("mcqCounter").textContent = `Question ${this.state.mcqIndex + 1} / ${MCQ_DATA.length}`;
+                document.getElementById("mcqProgressBar").style.width = `${((this.state.mcqIndex + 1) / MCQ_DATA.length) * 100}%`;
+                document.getElementById("mcqQuestionText").textContent = q.question;
+
+                const optionsContainer = document.getElementById("mcqOptionsContainer");
+                optionsContainer.innerHTML = "";
+
+                const letters = ["A", "B", "C", "D"];
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement("button");
+                    btn.className = "mcq-option";
+                    btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span> <span>${opt}</span>`;
+                    btn.onclick = () => this.handleMCQAnswer(idx);
+                    optionsContainer.appendChild(btn);
+                });
+
+                document.getElementById("mcqExplanation").style.display = "none";
+                document.getElementById("mcqNextBtn").style.display = "none";
+            }
+
+            handleMCQAnswer(selectedIdx) {
+                if (this.state.mcqAnswered) return;
+                this.state.mcqAnswered = true;
+
+                const q = MCQ_DATA[this.state.mcqIndex];
+                const options = document.querySelectorAll(".mcq-option");
+
+                options.forEach(opt => opt.classList.add("disabled"));
+
+                if (selectedIdx === q.correct) {
+                    options[selectedIdx].classList.add("correct");
+                    this.state.mcqScore++;
+                    this.addXP(20);
+                } else {
+                    options[selectedIdx].classList.add("incorrect");
+                    options[q.correct].classList.add("correct");
+                }
+
+                const exp = document.getElementById("mcqExplanation");
+                exp.textContent = q.explanation;
+                exp.style.display = "block";
+
+                document.getElementById("mcqNextBtn").style.display = "inline-flex";
+            }
+
+            nextMCQ() {
+                if (this.state.mcqIndex < MCQ_DATA.length - 1) {
+                    this.state.mcqIndex++;
+                    this.renderMCQ();
+                } else {
+                    // Complete Stage 3
+                    if (!this.state.completedStages[2]) {
+                        this.state.completedStages[2] = true;
+                        if (this.state.mcqScore === MCQ_DATA.length) {
+                            this.unlockBadge("b3");
+                        }
+                        this.saveState();
+                        this.updateDashboardCards();
+                    }
+                    this.startStage(4);
+                }
+            }
+
+            /* ================= STAGE 4: READING T/F/NG ================= */
+            initReading() {
+                this.state.readingTextIdx = 0;
+                this.switchReadingText(0);
+            }
+
+            switchReadingText(idx) {
+                this.state.readingTextIdx = idx;
+
+                document.querySelectorAll("[id^='textTab']").forEach((tab, i) => {
+                    if (i === idx) tab.style.borderColor = "var(--accent-gold)";
+                    else tab.style.borderColor = "var(--border-subtle)";
+                });
+
+                const data = READING_DATA[idx];
+                document.getElementById("readingTextTitle").textContent = data.title;
+                document.getElementById("readingTextBody").innerHTML = data.text;
+
+                const container = document.getElementById("tfngContainer");
+                container.innerHTML = "";
+
+                data.questions.forEach((q, qIdx) => {
+                    const card = document.createElement("div");
+                    card.className = "tfng-card";
+                    
+                    const qKey = `${idx}_${qIdx}`;
+                    const savedAns = this.state.readingAnswers[qKey];
+
+                    card.innerHTML = `
+                        <div class="tfng-statement">${qIdx + 1}. ${q.statement}</div>
+                        <div class="tfng-btn-group">
+                            <button class="tfng-btn" onclick="app.handleTFNGAnswer('${qKey}', 'TRUE', '${q.answer}', this)">TRUE</button>
+                            <button class="tfng-btn" onclick="app.handleTFNGAnswer('${qKey}', 'FALSE', '${q.answer}', this)">FALSE</button>
+                            <button class="tfng-btn" onclick="app.handleTFNGAnswer('${qKey}', 'NOT GIVEN', '${q.answer}', this)">NOT GIVEN</button>
+                        </div>
+                        <div class="tfng-explanation" id="exp_${qKey}">💡 ${q.explanation}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            handleTFNGAnswer(qKey, userAns, correctAns, btn) {
+                if (this.state.readingAnswers[qKey]) return; // Answered already
+
+                this.state.readingAnswers[qKey] = userAns;
+                const parent = btn.parentElement;
+                const btns = parent.querySelectorAll(".tfng-btn");
+                btns.forEach(b => b.classList.add("disabled"));
+
+                const exp = document.getElementById(`exp_${qKey}`);
+                exp.style.display = "block";
+
+                if (userAns === correctAns) {
+                    btn.classList.add("selected-correct");
+                    this.state.readingScore++;
+                    this.addXP(30);
+                } else {
+                    btn.classList.add("selected-incorrect");
+                    btns.forEach(b => {
+                        if (b.textContent.trim() === correctAns) b.classList.add("selected-correct");
+                    });
+                }
+
+                // Check if all reading questions across all 3 texts answered
+                const totalQuestions = READING_DATA.reduce((acc, text) => acc + text.questions.length, 0);
+                if (Object.keys(this.state.readingAnswers).length === totalQuestions) {
+                    if (!this.state.completedStages[3]) {
+                        this.state.completedStages[3] = true;
+                        if (this.state.readingScore === totalQuestions) {
+                            this.unlockBadge("b4");
+                        }
+                        this.unlockBadge("b5"); // All completed
+                        this.saveState();
+                        this.updateDashboardCards();
+                    }
+                    setTimeout(() => this.showView("viewResults"), 1200);
+                }
+            }
+
+            /* ================= FINAL RESULTS VIEW ================= */
+            renderResultsView() {
+                document.getElementById("resultsCongrats").textContent = `Congratulations, ${this.state.name}!`;
+                document.getElementById("resTotalXP").textContent = this.state.xp;
+                document.getElementById("resLevel").textContent = this.getLevel();
+                document.getElementById("resMCQ").textContent = `${this.state.mcqScore}/${MCQ_DATA.length}`;
+                
+                const totalReadingQ = READING_DATA.reduce((acc, text) => acc + text.questions.length, 0);
+                document.getElementById("resReading").textContent = `${this.state.readingScore}/${totalReadingQ}`;
+
+                // Badges Render
+                const badgesContainer = document.getElementById("badgesContainer");
+                badgesContainer.innerHTML = "";
+                BADGES_DATA.forEach(badge => {
+                    const isUnlocked = this.state.unlockedBadges.has(badge.id);
+                    const div = document.createElement("div");
+                    div.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
+                    div.innerHTML = `
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-name">${badge.name}</div>
+                    `;
+                    badgesContainer.appendChild(div);
+                });
+
+                // Vocab Bank Render
+                const bankList = document.getElementById("vocabBankList");
+                bankList.innerHTML = "";
+                VOCAB_DATA.forEach(v => {
+                    const item = document.createElement("div");
+                    item.className = "bank-item";
+                    item.innerHTML = `
+                        <div class="bank-term">${v.phrase}</div>
+                        <div class="bank-meaning">${v.meaning}</div>
+                        <button class="audio-btn" onclick="app.speakTerm('${v.phrase}')">🔊</button>
+                    `;
+                    bankList.appendChild(item);
+                });
+            }
+
+            speakTerm(term) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(term);
+                    utterance.lang = 'en-US';
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
+        }
+
+        // Initialize App on DOM Load
+        let app;
+        document.addEventListener("DOMContentLoaded", () => {
+            app = new App();
+        });
+    </script>
+</body>
+</html>

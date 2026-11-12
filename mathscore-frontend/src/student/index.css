@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --primary: #4f46e5;
+  --on-primary: #ffffff;
+  --background: #fafafa;
+  --on-background: #09090b;
+  --surface: #ffffff;
+  --on-surface: #09090b;
+  --surface-container: #f4f4f5;
+  --surface-container-low: #fafafa;
+  --surface-container-high: #e4e4e7;
+  --surface-container-highest: #d4d4d8;
+  --outline-variant: #f4f4f5;
+  --outline: #71717a;
+  
+  --secondary: #d97706;
+  --on-secondary: #ffffff;
+  --secondary-container: rgba(217, 119, 6, 0.1);
+  
+  --tertiary: #10b981;
+  --on-tertiary: #ffffff;
+  --tertiary-container: rgba(16, 185, 129, 0.1);
+
+  --error: #ef4444;
+  --on-error: #ffffff;
+  --error-container: rgba(239, 68, 68, 0.1);
+}
+
+.dark {
+  --primary: #6366f1;
+  --on-primary: #ffffff;
+  --background: #09090b;
+  --on-background: #fafafa;
+  --surface: #09090b;
+  --on-surface: #fafafa;
+  --surface-container: #18181b;
+  --surface-container-low: #09090b;
+  --surface-container-high: #27272a;
+  --surface-container-highest: #3f3f46;
+  --outline-variant: #18181b;
+  --outline: #a1a1aa;
+  
+  --secondary: #f59e0b;
+  --secondary-container: rgba(245, 158, 11, 0.15);
+  
+  --tertiary: #34d399;
+  --tertiary-container: rgba(52, 211, 153, 0.15);
+
+  --error: #f87171;
+  --error-container: rgba(248, 113, 113, 0.15);
+}
+
+@theme {
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-background: var(--background);
+  --color-on-background: var(--on-background);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-outline-variant: var(--outline-variant);
+  --color-outline: var(--outline);
+  
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+
+  --spacing-margin-desktop: 40px;
+  --spacing-unit: 4px;
+  --spacing-container-max: 1200px;
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 16px;
+
+  --font-body-lg: "Plus Jakarta Sans";
+  --font-body-md: "Plus Jakarta Sans";
+  --font-headline-lg-mobile: "Plus Jakarta Sans";
+  --font-headline-md: "Plus Jakarta Sans";
+  --font-headline-lg: "Plus Jakarta Sans";
+  --font-display-lg: "Plus Jakarta Sans";
+  --font-label-sm: "Plus Jakarta Sans";
+  --font-label-md: "Plus Jakarta Sans";
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+}
+
+html, body, #root { 
+  font-family: 'Plus Jakarta Sans', sans-serif; 
+  background-color: var(--background); 
+  color: var(--on-background); 
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Material symbols */
+.material-symbols-outlined { 
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+}
+.material-symbols-outlined.fill { 
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; 
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-container-high);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}
+
+/* Custom Quiz Options */
+.quiz-option {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.quiz-option:hover {
+  transform: translateY(-1px);
+}
+
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+@media print {
+  /* Hide all interactive elements, navigation, sidebars and headers */
+  aside, header, nav, .no-print, button, .sidebar, .header-bar, input, select {
+    display: none !important;
+  }
+
+  html, body {
+    width: 297mm !important;
+    height: 210mm !important;
+    max-width: 297mm !important;
+    max-height: 210mm !important;
+    min-width: 297mm !important;
+    min-height: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Show only the certificate */
+  .printable-certificate,
+  .printable-certificate * {
+    visibility: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .printable-certificate img {
+    max-height: 48px !important;
+    width: auto !important;
+    max-width: 130px !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+  }
+
+  .printable-certificate {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 297mm !important;
+    height: 210mm !important;
+    max-width: 297mm !important;
+    max-height: 210mm !important;
+    min-width: 297mm !important;
+    min-height: 210mm !important;
+    margin: 0 !important;
+    padding: 14mm 20mm !important;
+    box-sizing: border-box !important;
+    border: 8px double #d97706 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #FFFDF9 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    page-break-inside: avoid !important;
+    page-break-after: avoid !important;
+    z-index: 999999 !important;
+    transform: none !important;
+  }
+
+  .printable-area {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px !important;
+  }
+}

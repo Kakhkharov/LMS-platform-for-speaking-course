@@ -1,0 +1,7455 @@
+const API_BASE = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) ? 'http://localhost:5000' : 'https://api.mathscore.uz';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import CourseAssignments from './CourseAssignments';
+import LibraryView from './LibraryView';
+import SpeakingPartnerView from './SpeakingPartnerView';
+import ChallengesView from './ChallengesView';
+import StudentProgress from './StudentProgress';
+import { GrammarView, PractiseView, GamesView, BattleView, LeaderboardView, VocabularyView } from './OtherViews';
+import AudioWaveformPlayer from './AudioWaveformPlayer';
+import Cropper from 'react-easy-crop';
+import { getCroppedImg } from './cropImage';
+import 'katex/dist/katex.min.css';
+import katex from 'katex';
+import './studentDesign.css';
+
+// Global active input tracker for Uzbek Alphabet Toolbar
+let lastFocusedInput = null;
+if (typeof window !== 'undefined') {
+  window.addEventListener('focusin', (e) => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+      lastFocusedInput = e.target;
+    }
+  });
+}
+
+export function insertUzbekChar(char) {
+  const target = (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA'))
+    ? document.activeElement
+    : lastFocusedInput;
+
+  if (!target || target.readOnly || target.disabled) return;
+
+  const start = target.selectionStart ?? target.value.length;
+  const end = target.selectionEnd ?? target.value.length;
+  const val = target.value || '';
+
+  const nativeSetter = Object.getOwnPropertyDescriptor(
+    target.tagName === 'TEXTAREA' ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype,
+    'value'
+  )?.set;
+
+  const newVal = val.substring(0, start) + char + val.substring(end);
+  if (nativeSetter) {
+    nativeSetter.call(target, newVal);
+  } else {
+    target.value = newVal;
+  }
+
+  target.selectionStart = target.selectionEnd = start + char.length;
+  target.dispatchEvent(new Event('input', { bubbles: true }));
+  target.dispatchEvent(new Event('change', { bubbles: true }));
+  target.focus();
+}
+
+// LMS Course Data (Loaded dynamically from API or Admin Panel)
+const coursesData = [];
+
+// Rich Premium mock tests (30 SAT Math Questions with robust explanations and custom LaTeX markup)
+const studentTests = [
+  {
+    id: 'sat-diagnostic',
+    title: 'SAT Quantitative Diagnostik Testi',
+    category: 'SAT Quantitative',
+    duration: 60, // in minutes
+    totalQuestions: 30,
+    passingScore: 70, // percentage
+    difficulty: 'Medium',
+    description: 'SAT Math bo\'limi uchun to\'liq 30 ta savoldan iborat premium diagnostika imtihoni. Algebra, Geometriya, Trigonometriya, Statistika va funksiyalar sohasini mukammal qamrab oladi.',
+    questions: [
+      {
+        id: 1,
+        topic: 'Algebra',
+        difficulty: 'Easy',
+        question: 'Solve for x in the equation: 3x - 7 = 14',
+        options: ['x = 5', 'x = 7', 'x = 9', 'x = 6'],
+        correct: 1,
+        explanation: 'Berilgan tenglamani bosqichma-bosqich yechamiz:\n3x - 7 = 14\n3x = 14 + 7\n3x = 21\nx = \\frac{21}{3} = 7.\nTo\'g\'ri javob: B (x = 7).'
+      },
+      {
+        id: 'q2',
+        topic: 'Geometry',
+        difficulty: 'Medium',
+        question: 'Find the area of a circle with a radius of r = 7 cm. (Take \\pi \\approx \\frac{22}{7})',
+        options: ['154 cm^2', '44 cm^2', '77 cm^2', '616 cm^2'],
+        correct: 0,
+        explanation: 'Doira yuzini hisoblash formulasi: A = \\pi r^2.\nBerilgan qiymatlarni qo\'yamiz:\nA = \\frac{22}{7} \\cdot 7^2 = \\frac{22}{7} \\cdot 49 = 22 \\cdot 7 = 154 \\text{ cm}^2.\nTo\'g\'ri javob: A (154 cm^2).'
+      },
+      {
+        id: 3,
+        topic: 'Calculus',
+        difficulty: 'Hard',
+        question: 'Evaluate the definite integral: \\int_{0}^{1} x e^{x} dx',
+        options: ['1', 'e - 1', 'e - 2', 'e'],
+        correct: 0,
+        explanation: 'Ushbu integralni bo\'laklab integrallash usuli bilan yechamiz: \\int u dv = uv - \\int v du.\nBelgilash kiritamiz: u = x \\Rightarrow du = dx\ndv = e^x dx \\Rightarrow v = e^x\nU holda integral: [x e^x]_{0}^{1} - \\int_{0}^{1} e^x dx = [x e^x - e^x]_{0}^{1}.\nChegaralarni hisoblaymiz:\nx = 1 da: (1 \\cdot e^1 - e^1) = 0\nx = 0 da: (0 \\cdot e^0 - e^0) = -1\nNatija: 0 - (-1) = 1.\nTo\'g\'ri javob: A (1).'
+      },
+      {
+        id: 4,
+        topic: 'Calculus',
+        difficulty: 'Hard',
+        question: 'Find the derivative of the function: f(x) = \\ln(x^2 + 1)',
+        options: ['\\frac{2x}{x^2+1}', '\\frac{1}{x^2+1}', '\\frac{x}{x^2+1}', '\\frac{2}{x^2+1}'],
+        correct: 0,
+        explanation: 'Murakkab funksiyani hosila olish qoidasiga binoan: [\\ln(u)]\' = \\frac{u\'}{u}.\nBu yerda u = x^2 + 1 va uning hosilasi u\' = 2x.\nShuning uchun: f\'(x) = \\frac{2x}{x^2 + 1}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 5,
+        topic: 'Algebra',
+        difficulty: 'Medium',
+        question: 'If \\log_2(x) + \\log_2(x - 2) = 3, then find the value of x:',
+        options: ['x = 4', 'x = 2', 'x = -2', 'x = 8'],
+        correct: 0,
+        explanation: 'Logarifm yig\'indisi xossasidan foydalanamiz: \\log_2(x(x - 2)) = 3\nDemak: x(x - 2) = 2^3 = 8\nx^2 - 2x - 8 = 0.\nViyet teoremasiga ko\'ra ildizlar: x = 4 va x = -2.\nLogarifm aniqlanish sohasiga ko\'ra (x > 0 va x - 2 > 0) ya\'ni x > 2 bo\'lishi shart.\nShu sababli x = 4 to\'g\'ri yechim. To\'g\'ri javob: A.'
+      },
+      {
+        id: 6,
+        topic: 'Trigonometry',
+        difficulty: 'Medium',
+        question: 'Determine the exact value of the expression: \\sin(\\frac{\\pi}{3}) \\cdot \\cos(\\frac{\\pi}{6})',
+        options: ['\\frac{3}{4}', '\\frac{1}{2}', '\\frac{\\sqrt{3}}{2}', '1'],
+        correct: 0,
+        explanation: 'Trigonometrik burchaklar jadvalidan foydalanamiz:\n\\sin(\\frac{\\pi}{3}) = \\frac{\\sqrt{3}}{2}\n\\cos(\\frac{\\pi}{6}) = \\frac{\\sqrt{3}}{2}\nKo\'paytma: \\frac{\\sqrt{3}}{2} \\cdot \\frac{\\sqrt{3}}{2} = \\frac{3}{4}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 7,
+        topic: 'Algebra',
+        difficulty: 'Medium',
+        question: 'Find the roots of the quadratic equation: x^2 - 5x + 6 = 0',
+        options: ['x = 2 and x = 3', 'x = -2 and x = -3', 'x = 1 and x = 6', 'x = 0 and x = 5'],
+        correct: 0,
+        explanation: 'Kvadrat tenglamani Viyet teoremasi orqali yozamiz:\nx_1 + x_2 = 5 va x_1 \\cdot x_2 = 6.\nBu shartlarni qanoatlantiruvchi sonlar: 2 va 3. Natijada x = 2 va x = 3.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 8,
+        topic: 'Geometry',
+        difficulty: 'Easy',
+        question: 'What is the sum of interior angles of a regular hexagon?',
+        options: ['720^\\circ', '540^\\circ', '360^\\circ', '900^\\circ'],
+        correct: 0,
+        explanation: 'Qavariq ko\'pburchak ichki burchaklar yig\'indisi formulasi: S_n = (n - 2) \\cdot 180^\\circ.\nMuntazam oltiburchak (hexagon) uchun n = 6.\nS_6 = (6 - 2) \\cdot 180^\\circ = 4 \\cdot 180^\\circ = 720^\\circ.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 9,
+        topic: 'Statistics',
+        difficulty: 'Medium',
+        question: 'A bag contains 4 red and 6 blue marbles. If two marbles are drawn at random without replacement, what is the probability that both are red?',
+        options: ['\\frac{2}{15}', '\\frac{4}{25}', '\\frac{1}{3}', '\\frac{3}{10}'],
+        correct: 0,
+        explanation: 'Birinchi marotaba qizil shar olish ehtimoli: P(R_1) = \\frac{4}{10}.\nShar qaytarib solinmagani sababli bagda 9 ta shar (3 ta qizil) qoladi.\nIkkinchi qizil shar olish ehtimoli: P(R_2|R_1) = \\frac{3}{9} = \\frac{1}{3}.\nIkkalasining birgalikda ro\'y berish ehtimoli: P = \\frac{4}{10} \\cdot \\frac{1}{3} = \\frac{4}{30} = \\frac{2}{15}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 10,
+        topic: 'Algebra',
+        difficulty: 'Hard',
+        question: 'Calculate the sum of the infinite geometric series: \\sum_{n=1}^{\\infty} 3 \\cdot (\\frac{1}{2})^n',
+        options: ['3', '6', '2', '1.5'],
+        correct: 0,
+        explanation: 'Cheksiz kamayuvchi geometrik progressiya yig\'indisi formulasi: S = \\frac{a_1}{1 - q}.\nBirinchi hadi: a_1 = 3 \\cdot (\\frac{1}{2})^1 = \\frac{3}{2} = 1.5.\nMaxraji: q = \\frac{1}{2} = 0.5.\nHisoblaymiz: S = \\frac{1.5}{1 - 0.5} = \\frac{1.5}{0.5} = 3.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 11,
+        topic: 'Calculus',
+        difficulty: 'Hard',
+        question: 'Find the value of the following trigonometric limit: \\lim_{x \\to 0} \\frac{\\sin(5x)}{x}',
+        options: ['5', '1', '0', '\\infty'],
+        correct: 0,
+        explanation: 'Birinchi ajoyib limitdan foydalanamiz: \\lim_{u \\to 0} \\frac{\\sin(u)}{u} = 1.\nIfodani moslashtiramiz: \\frac{\\sin(5x)}{x} = 5 \\cdot \\frac{\\sin(5x)}{5x}.\nLimitni hisoblasak: \\lim_{x \\to 0} 5 \\cdot \\frac{\\sin(5x)}{5x} = 5 \\cdot 1 = 5.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 12,
+        topic: 'Algebra',
+        difficulty: 'Easy',
+        question: 'Simplify the algebraic exponential expression: (2x^3 y^2)^3',
+        options: ['8x^9 y^6', '6x^9 y^6', '8x^6 y^5', '2x^9 y^6'],
+        correct: 0,
+        explanation: 'Daraja xossalaridan foydalanamiz: (a \\cdot b^m \\cdot c^n)^p = a^p \\cdot b^{m \\cdot p} \\cdot c^{n \\cdot p}.\n(2x^3 y^2)^3 = 2^3 \\cdot (x^3)^3 \\cdot (y^2)^3 = 8 \\cdot x^9 \\cdot y^6 = 8x^9y^6.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 13,
+        topic: 'Geometry',
+        difficulty: 'Medium',
+        question: 'A right-angled triangle has a hypotenuse of length 13 cm and one side of length 5 cm. Find the length of the other side.',
+        options: ['12 cm', '8 cm', '10 cm', '11 cm'],
+        correct: 0,
+        explanation: 'Pifagor teoremasi: a^2 + b^2 = c^2.\nBerilgan: a = 5, c = 13.\n5^2 + b^2 = 13^2 \\Rightarrow 25 + b^2 = 169\nb^2 = 169 - 25 = 144 \\Rightarrow b = \\sqrt{144} = 12 \\text{ cm}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 14,
+        topic: 'Trigonometry',
+        difficulty: 'Hard',
+        question: 'Simplify the basic trigonometric difference: \\cos^2(\\theta) - \\sin^2(\\theta)',
+        options: ['\\cos(2\\theta)', '\\sin(2\\theta)', '1', '0'],
+        correct: 0,
+        explanation: 'Ikkilangan burchak trigonometrik formulalariga asosan:\n\\cos^2(\\theta) - \\sin^2(\\theta) = \\cos(2\\theta).\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 15,
+        topic: 'Algebra',
+        difficulty: 'Medium',
+        question: 'If 3^{x+1} = 27^{x-1}, determine the value of x:',
+        options: ['x = 2', 'x = 1', 'x = 3', 'x = 4'],
+        correct: 0,
+        explanation: '27 sonini 3 ning darajasi shaklida yozib olamiz:\n3^{x+1} = (3^3)^{x-1} \\Rightarrow 3^{x+1} = 3^{3x-3}.\nDarajalarini tenglashtiramiz:\nx + 1 = 3x - 3\n1 + 3 = 3x - x \\Rightarrow 2x = 4 \\Rightarrow x = 2.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 16,
+        topic: 'Statistics',
+        difficulty: 'Easy',
+        question: 'Find the statistical median of the following set of values: 3, 8, 5, 12, 10',
+        options: ['8', '7.6', '5', '10'],
+        correct: 0,
+        explanation: 'Medianani hisoblash uchun ma\'lumotlar to\'plamini o\'sish tartibida joylashtiramiz:\n3, 5, 8, 10, 12.\nO\'rtada turgan element - 8. Demak, mediana 8 ga teng.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 17,
+        topic: 'Calculus',
+        difficulty: 'Hard',
+        question: 'Identify the critical points of the function: f(x) = x^3 - 3x',
+        options: ['x = \\pm 1', 'x = 0', 'x = \\pm 3', 'x = \\pm \\sqrt{3}'],
+        correct: 0,
+        explanation: 'Kritik nuqtalarni topish uchun funksiya hosilasini hisoblab nolga tenglashtiramiz:\nf\'(x) = 3x^2 - 3 = 0\n3(x^2 - 1) = 0 \\Rightarrow x^2 = 1 \\Rightarrow x = \\pm 1.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 18,
+        topic: 'Geometry',
+        difficulty: 'Medium',
+        question: 'What is the volume of a sphere with a radius of 3 cm? (Give your answer in terms of \\pi)',
+        options: ['36\\pi cm^3', '12\\pi cm^3', '24\\pi cm^3', '18\\pi cm^3'],
+        correct: 0,
+        explanation: 'Sfera hajmi formulasi: V = \\frac{4}{3} \\pi r^3.\nRadius r = 3 cm ni formulaga qo\'yamiz:\nV = \\frac{4}{3} \\pi (3)^3 = \\frac{4}{3} \\pi \\cdot 27 = 4 \\pi \\cdot 9 = 36\\pi \\text{ cm}^3.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 19,
+        topic: 'Algebra',
+        difficulty: 'Easy',
+        question: 'If f(x) = 2x^2 - 3x + 5, calculate the exact value of f(-2):',
+        options: ['19', '7', '3', '15'],
+        correct: 0,
+        explanation: 'Funksiyaga x = -2 qiymatini qo\'yamiz:\nf(-2) = 2(-2)^2 - 3(-2) + 5 = 2(4) + 6 + 5 = 8 + 6 + 5 = 19.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 20,
+        topic: 'Trigonometry',
+        difficulty: 'Medium',
+        question: 'In a right-angled triangle, if \\tan(\\theta) = \\frac{3}{4}, evaluate the value of \\cos(\\theta):',
+        options: ['\\frac{4}{5}', '\\frac{3}{5}', '\\frac{5}{4}', '\\frac{5}{3}'],
+        correct: 0,
+        explanation: '\\tan(\\theta) = \\frac{\\text{qarama-qarshi katet}}{\\text{yopishgan katet}} = \\frac{3}{4}.\nPifagor sonlariga asosan, gipotenuza c = \\sqrt{3^2 + 4^2} = 5 ga teng.\nKosinus formulasi: \\cos(\\theta) = \\frac{\\text{yopishgan katet}}{\\text{gipotenuza}} = \\frac{4}{5}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 21,
+        topic: 'Algebra',
+        difficulty: 'Hard',
+        question: 'If x + \\frac{1}{x} = 5, then what is the value of x^2 + \\frac{1}{x^2}?',
+        options: ['23', '25', '27', '21'],
+        correct: 0,
+        explanation: 'Berilgan tenglikning ikkala tarafini kvadratga ko\'taramiz:\n(x + \\frac{1}{x})^2 = 5^2\nx^2 + 2 \\cdot x \\cdot \\frac{1}{x} + \\frac{1}{x^2} = 25\nx^2 + 2 + \\frac{1}{x^2} = 25 \\Rightarrow x^2 + \\frac{1}{x^2} = 25 - 2 = 23.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 22,
+        topic: 'Geometry',
+        difficulty: 'Hard',
+        question: 'The diagonal of a square is 8\\sqrt{2} cm. Find the area of the square.',
+        options: ['64 cm^2', '32 cm^2', '16 cm^2', '128 cm^2'],
+        correct: 0,
+        explanation: 'Kvadrat diagonali d = a\\sqrt{2} ga teng, bu yerda a - kvadrat tomoni.\nDemak, a\\sqrt{2} = 8\\sqrt{2} \\Rightarrow a = 8 \\text{ cm}.\nKvadrat yuzi: S = a^2 = 8^2 = 64 \\text{ cm}^2.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 23,
+        topic: 'Statistics',
+        difficulty: 'Medium',
+        question: 'The arithmetic mean of 5 numbers is 12. If a 6th number is added, the new mean becomes 13. What is the value of the 6th number?',
+        options: ['18', '15', '14', '20'],
+        correct: 0,
+        explanation: 'Dastlabki 5 ta sonning umumiy yig\'indisi: 5 \\cdot 12 = 60.\n6 ta sonning yangi yig\'indisi: 6 \\cdot 13 = 78.\nQo\'shilgan oltinchi son: 78 - 60 = 18.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 24,
+        topic: 'Calculus',
+        difficulty: 'Hard',
+        question: 'Find the following limit at infinity: \\lim_{x \\to \\infty} \\frac{3x^2 - 5x + 2}{2x^2 + 7}',
+        options: ['\\frac{3}{2}', '0', '\\infty', '\\frac{2}{7}'],
+        correct: 0,
+        explanation: 'Surat va maxrajni eng yuqori daraja x^2 ga bo\'lib yuboramiz:\n\\lim_{x \\to \\infty} \\frac{3 - \\frac{5}{x} + \\frac{2}{x^2}}{2 + \\frac{7}{x^2}} = \\frac{3 - 0 + 0}{2 + 0} = \\frac{3}{2}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 25,
+        topic: 'Algebra',
+        difficulty: 'Easy',
+        question: 'Solve for y in the equation: 2(y - 3) = 4y + 8',
+        options: ['y = -7', 'y = -1', 'y = 7', 'y = 1'],
+        correct: 0,
+        explanation: 'Qavslarni ochamiz va noma\'lumlar burchagini o\'zgartiramiz:\n2y - 6 = 4y + 8\n-6 - 8 = 4y - 2y\n-14 = 2y \\Rightarrow y = -7.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 26,
+        topic: 'Trigonometry',
+        difficulty: 'Easy',
+        question: 'Find the radian measure of the angle: 120^\\circ',
+        options: ['\\frac{2\\pi}{3}', '\\frac{3\\pi}{4}', '\\frac{\\pi}{3}', '\\frac{5\\pi}{6}'],
+        correct: 0,
+        explanation: 'Gradusdan radianga o\'tish formulasi: \\text{Radian} = \\text{Gradus} \\cdot \\frac{\\pi}{180}.\nHisoblaymiz: 120^\\circ \\cdot \\frac{\\pi}{180} = \\frac{120\\pi}{180} = \\frac{2\\pi}{3}.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 27,
+        topic: 'Geometry',
+        difficulty: 'Medium',
+        question: 'Calculate the Euclidean distance between two points (1, 2) and (4, 6) in the coordinate system.',
+        options: ['5', '7', '25', '\\sqrt{7}'],
+        correct: 0,
+        explanation: 'Ikki nuqta orasidagi masofa formulasi: d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}.\nQiymatlarni qo\'yamiz:\nd = \\sqrt{(4 - 1)^2 + (6 - 2)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{9 + 16} = \\sqrt{25} = 5.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 28,
+        topic: 'Statistics',
+        difficulty: 'Medium',
+        question: 'If the mathematical variance of a sample dataset is 49, determine its standard deviation:',
+        options: ['7', '49', '3.5', '9.8'],
+        correct: 0,
+        explanation: 'O\'rtacha kvadratik chetlanish (standard deviation) dispersiya (variance) ning musbat kvadrat ildiziga teng bo\'ladi:\n\\sigma = \\sqrt{\\text{Variance}} = \\sqrt{49} = 7.\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 29,
+        topic: 'Calculus',
+        difficulty: 'Hard',
+        question: 'Find the derivative using the chain rule: \\frac{d}{dx} (\\sin(x^2))',
+        options: ['2x \\cos(x^2)', '\\cos(x^2)', '2x \\sin(x^2)', '-2x \\cos(x^2)'],
+        correct: 0,
+        explanation: 'Murakkab funksiya hosilasi (Chain Rule): [\\sin(u)]\' = \\cos(u) \\cdot u\'.\nBu yerda u = x^2 bo\'lib, uning hosilasi u\' = 2x.\nDemak: \\frac{d}{dx}(\\sin(x^2)) = \\cos(x^2) \\cdot 2x = 2x \\cos(x^2).\nTo\'g\'ri javob: A.'
+      },
+      {
+        id: 30,
+        topic: 'Algebra',
+        difficulty: 'Hard',
+        question: 'Calculate the sum of the roots of the quadratic equation: 2x^2 - 8x + 5 = 0',
+        options: ['4', '-4', '2.5', '5'],
+        correct: 0,
+        explanation: 'Kvadrat tenglama ildizlarining yig\'indisi Viyet teoremasiga ko\'ra: x_1 + x_2 = -\\frac{b}{a}.\nTenglamada a = 2, b = -8.\nIldizlar yig\'indisi: -\\frac{-8}{2} = \\frac{8}{2} = 4.\nTo\'g\'ri javob: A.'
+      }
+    ]
+  },
+  {
+    id: 'trig-challenge',
+    title: 'Geometriya & Trigonometriya Tezkor Testi',
+    category: 'Geometry & Trig',
+    duration: 15,
+    totalQuestions: 5,
+    passingScore: 80,
+    difficulty: 'Medium',
+    description: 'Burchaklar, trigonometrik ayniyatlar va Pifagor qonuniyatlari bo\'yicha 5 ta tezkor savoldan iborat blits-imtihon.',
+    questions: [
+      {
+        id: 1,
+        topic: 'Trigonometry',
+        difficulty: 'Easy',
+        question: 'Evaluate the trigonometric sum: \\sin(\\frac{\\pi}{2}) + \\cos(\\pi)',
+        options: ['0', '1', '2', '-1'],
+        correct: 0,
+        explanation: 'Jadval qiymatlari: \\sin(\\frac{\\pi}{2}) = 1 va \\cos(\\pi) = -1. Yig\'indi: 1 + (-1) = 0.'
+      },
+      {
+        id: 2,
+        topic: 'Geometry',
+        difficulty: 'Medium',
+        question: 'Tomonlari 6, 8 va 10 bo\'lgan uchburchakning yuzini toping:',
+        options: ['24', '48', '30', '40'],
+        correct: 0,
+        explanation: 'Bu to\'g\'ri burchakli uchburchakdir, chunki 6^2 + 8^2 = 10^2 (36+64=100). Yuzi katetlar ko\'paytmasining yarmi: S = \\frac{1}{2} \\cdot 6 \\cdot 8 = 24.'
+      },
+      {
+        id: 3,
+        topic: 'Trigonometry',
+        difficulty: 'Hard',
+        question: 'If \\sin(x) = 1, then what is the value of \\cos(x)?',
+        options: ['0', '1', '-1', '\\frac{1}{2}'],
+        correct: 0,
+        explanation: 'Asosiy trigonometrik ayniyat: \\sin^2(x) + \\cos^2(x) = 1. Agar \\sin(x) = 1 bo\'lsa, 1^2 + \\cos^2(x) = 1 \\Rightarrow \\cos^2(x) = 0 \\Rightarrow \\cos(x) = 0.'
+      },
+      {
+        id: 4,
+        topic: 'Geometry',
+        difficulty: 'Easy',
+        question: 'Kvadratning perimetri 20 cm bo\'lsa, uning yuzini toping:',
+        options: ['25 cm^2', '20 cm^2', '16 cm^2', '36 cm^2'],
+        correct: 0,
+        explanation: 'Kvadrat perimetri P = 4a = 20 cm, demak uning tomoni a = 5 cm. Yuzi esa S = a^2 = 5^2 = 25 \\text{ cm}^2.'
+      },
+      {
+        id: 5,
+        topic: 'Trigonometry',
+        difficulty: 'Medium',
+        question: 'Soddalashtiring: \\tan(x) \\cdot \\cos(x)',
+        options: ['\\sin(x)', '\\cos(x)', '1', '\\cot(x)'],
+        correct: 0,
+        explanation: '\\tan(x) = \\frac{\\sin(x)}{\\cos(x)} ekanligidan: \\frac{\\sin(x)}{\\cos(x)} \\cdot \\cos(x) = \\sin(x).'
+      }
+    ]
+  }
+];
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('login');
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('theme');
+      const savedDark = localStorage.getItem('darkMode');
+      if (savedTheme) return savedTheme === 'dark';
+      if (savedDark) return savedDark === 'true';
+      return document.documentElement.classList.contains('dark');
+    }
+    return false;
+  });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [designPreset, setDesignPreset] = useState(() => {
+    try {
+      return localStorage.getItem('student_design_preset') || 'original';
+    } catch (e) {
+      return 'original';
+    }
+  });
+  const [resetToken, setResetToken] = useState(() => {
+    try {
+      return new URLSearchParams(window.location.search).get('token') || '';
+    } catch (e) {
+      return '';
+    }
+  });
+  const [resetPasswordInput, setResetPasswordInput] = useState('');
+  const [showResetPassword, setShowResetPassword] = useState(false);
+  const [resetStatus, setResetStatus] = useState(null); // { type: 'error'|'success', text }
+  const [resetSubmitting, setResetSubmitting] = useState(false);
+  const [loginEmailPrefill, setLoginEmailPrefill] = useState('');
+  const [focusBattleId, setFocusBattleId] = useState(null);
+  const [respondingBattleId, setRespondingBattleId] = useState(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tok = params.get('token');
+    if (tok) {
+      setResetToken(tok);
+      setCurrentPage('reset-password');
+    }
+  }, []);
+
+  const activeDesign = designPreset || 'original';
+  const isDarkPreset = activeDesign === 'hot-pink' || activeDesign === 'electric-blue';
+  const isDarkSurface = darkMode || isDarkPreset;
+  const latestUserDarkRef = useRef(darkMode);
+  latestUserDarkRef.current = darkMode;
+
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-student-design', activeDesign);
+      document.documentElement.setAttribute('data-user-dark', darkMode ? 'true' : 'false');
+      localStorage.setItem('student_design_preset', activeDesign);
+    } catch (e) {}
+  }, [activeDesign, darkMode]);
+
+  useEffect(() => {
+    return () => {
+      try {
+        document.documentElement.removeAttribute('data-student-design');
+        document.documentElement.removeAttribute('data-user-dark');
+        const userDark = Boolean(latestUserDarkRef.current);
+        document.documentElement.classList.toggle('dark', userDark);
+        document.documentElement.classList.toggle('light', !userDark);
+      } catch (e) {}
+    };
+  }, []);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/design`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d?.preset) setDesignPreset(d.preset);
+      })
+      .catch(() => {});
+  }, []);
+
+  // User Profile
+  const [profile, setProfile] = useState({
+    id: null,
+    firstName: 'Alex',
+    lastName: 'Johnson',
+    email: 'alex.j@example.com',
+    phone: '+998 99 824 46 18',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop',
+    course: 'SAT Math Masterclass',
+    tariff: 'VIP',
+    streak: 0,
+    coins: 0,
+    xp: 0,
+    dailyXp: 0,
+    weeklyXp: 0,
+    monthlyXp: 0,
+    activityDates: []
+  });
+
+  const [premiumLockModal, setPremiumLockModal] = useState(null);
+  const [supportChatOpen, setSupportChatOpen] = useState(false);
+  const [supportChatThread, setSupportChatThread] = useState({
+    adminName: 'Azizbek',
+    adminAvatar: '',
+    unreadByStudent: 0,
+    messages: []
+  });
+  const [supportChatInput, setSupportChatInput] = useState('');
+  const [supportChatSending, setSupportChatSending] = useState(false);
+  const supportChatOpenRef = useRef(false);
+  supportChatOpenRef.current = supportChatOpen;
+  const supportChatEndRef = useRef(null);
+
+  // Gamification, Daily Goal, Leaderboard & Interactive Live Classes State
+  const [xpToast, setXpToast] = useState(null);
+  const [dailyGoalTarget, setDailyGoalTarget] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = parseInt(localStorage.getItem('student_daily_xp_goal') || '100', 10);
+      return Number.isFinite(saved) && saved >= 10 ? saved : 100;
+    }
+    return 100;
+  });
+  const [editingDailyGoal, setEditingDailyGoal] = useState(false);
+  const [weeklyCheckins, setWeeklyCheckins] = useState(null);
+  const [selectedGoalDayIdx, setSelectedGoalDayIdx] = useState(null);
+  const [claimingDailyCheckin, setClaimingDailyCheckin] = useState(false);
+  const [mustChangePassword, setMustChangePassword] = useState(false);
+  const [otpModalData, setOtpModalData] = useState({ newPassword: '', confirmPassword: '', saving: false, error: '', show: false });
+  const [practiseRefreshKey, setPractiseRefreshKey] = useState(0);
+
+  const [leaderboardPeriod, setLeaderboardPeriod] = useState('all'); // 'daily' | 'weekly' | 'monthly' | 'all'
+  const [leaderboardRows, setLeaderboardRows] = useState([]);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(false);
+  const [currentUserRank, setCurrentUserRank] = useState(null);
+
+  const [liveTick, setLiveTick] = useState(() => Date.now());
+  const [liveFilter, setLiveFilter] = useState('all'); // 'all' | 'google-meet' | 'youtube'
+  const [selectedLiveClass, setSelectedLiveClass] = useState(null);
+  const [copiedLiveId, setCopiedLiveId] = useState(null);
+  const [remindedLiveIds, setRemindedLiveIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('student_reminded_live_classes') || '[]');
+    } catch (e) {
+      return [];
+    }
+  });
+  const [joinedLiveIds, setJoinedLiveIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('student_joined_live_classes') || '[]');
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
+
+  const isYouTube = (url) => url && (url.includes('youtube.com') || url.includes('youtu.be'));
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return '';
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0` : url;
+  };
+  const getInitialsAvatar = (fullName = 'Student') => {
+    const parts = String(fullName || 'S').trim().split(/\s+/);
+    const initials = ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || 'ST';
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#0ea5e9"/></linearGradient></defs><rect width="80" height="80" rx="40" fill="url(#g)"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-weight="700" font-size="28">${initials}</text></svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+  };
+
+  const renderSidebarIcon = (iconName, sizeClass = 'w-[18px] h-[18px]') => {
+    const props = {
+      className: `${sizeClass} shrink-0`,
+      viewBox: '0 0 24 24',
+      fill: 'none',
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round'
+    };
+    switch (iconName) {
+      case 'dashboard':
+        return <svg {...props}><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /></svg>;
+      case 'menu_book':
+        return <svg {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>;
+      case 'local_library':
+        return <svg {...props}><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /></svg>;
+      case 'checklist':
+        return <svg {...props}><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>;
+      case 'assignment':
+        return <svg {...props}><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M9 12h6M9 16h4" /></svg>;
+      case 'spellcheck':
+        return <svg {...props}><path d="m6 16 6-12 6 12" /><path d="M8 12h8" /><path d="m16 20 2 2 4-4" /></svg>;
+      case 'record_voice_over':
+        return <svg {...props}><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="22" /></svg>;
+      case 'emoji_events':
+        return <svg {...props}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></svg>;
+      case 'calculate':
+        return <svg {...props}><rect x="4" y="2" width="16" height="20" rx="2" /><line x1="8" y1="6" x2="16" y2="6" /><path d="M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2" /></svg>;
+      case 'quiz':
+        return <svg {...props}><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg>;
+      case 'sports_esports':
+        return <svg {...props}><line x1="6" y1="12" x2="10" y2="12" /><line x1="8" y1="10" x2="8" y2="14" /><line x1="15" y1="13" x2="15.01" y2="13" /><line x1="18" y1="11" x2="18.01" y2="11" /><rect x="2" y="6" width="20" height="12" rx="4" /></svg>;
+      case 'translate':
+        return <svg {...props}><path d="m5 8 6 6" /><path d="m4 14 6-6 2-3" /><path d="M2 5h12" /><path d="M7 2h1" /><path d="m22 22-5-10-5 10" /><path d="M14 18h6" /></svg>;
+      case 'swords':
+        return <svg {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>;
+      case 'monitoring':
+        return <svg {...props}><path d="M3 3v18h18" /><rect x="7" y="11" width="3" height="6" rx="0.8" /><rect x="12" y="7" width="3" height="10" rx="0.8" /><rect x="17" y="9" width="3" height="8" rx="0.8" /></svg>;
+      case 'leaderboard':
+        return <svg {...props}><path d="M4 13h4v8H4v-8Zm6-7h4v15h-4V6Zm6 4h4v11h-4V10Z" /></svg>;
+      case 'workspace_premium':
+        return <svg {...props}><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>;
+      case 'fact_check':
+        return <svg {...props}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6" /><path d="m9 15 2 2 4-4" /></svg>;
+      case 'insights':
+        return <svg {...props}><path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" /></svg>;
+      case 'settings':
+        return <svg {...props}><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" /></svg>;
+      case 'logout':
+        return <svg {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>;
+      case 'expand_less':
+        return <svg {...props}><polyline points="18 15 12 9 6 15" /></svg>;
+      case 'expand_more':
+        return <svg {...props}><polyline points="6 9 12 15 18 9" /></svg>;
+      case 'lock':
+        return <svg {...props}><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>;
+      default:
+        return <svg {...props}><circle cx="12" cy="12" r="8" /></svg>;
+    }
+  };
+
+  const [courses, setCourses] = useState(coursesData);
+  const [tests, setTests] = useState(studentTests);
+  const [submissions, setSubmissions] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [studentPushToast, setStudentPushToast] = useState(null);
+  const [showNotifDropdown, setShowNotifDropdown] = useState(false);
+  const [showProfileAlert, setShowProfileAlert] = useState(false);
+
+  const xpToastTimeoutRef = useRef(null);
+  const pushToastTimeoutRef = useRef(null);
+  const hasInitialNotifSyncRef = useRef(false);
+  const knownNotifIdsRef = useRef(new Set());
+
+  const showInAppPushToast = useCallback((notif) => {
+    if (!notif) return;
+    setStudentPushToast(notif);
+    if (pushToastTimeoutRef.current) clearTimeout(pushToastTimeoutRef.current);
+    pushToastTimeoutRef.current = setTimeout(() => {
+      setStudentPushToast(null);
+    }, 15000);
+  }, []);
+
+  const extractBattleIdFromNotif = (message) => {
+    const match = String(message || '').match(/\[battle:([^\]]+)\]/);
+    return match ? match[1] : null;
+  };
+
+  const formatNotifText = (text) => {
+    return String(text || '')
+      .replace(/&#x27;/g, "'")
+      .replace(/&quot;/g, '"')
+      .replace(/\s*\[battle:[^\]]+\]/g, '')
+      .trim();
+  };
+
+  const clearFocusBattle = useCallback(() => {
+    setFocusBattleId(null);
+  }, []);
+
+  const handleBattlePushRespond = async (notif, action) => {
+    const battleId = extractBattleIdFromNotif(notif?.message);
+    if (!battleId) return;
+    setRespondingBattleId(battleId);
+    try {
+      const token = localStorage.getItem('student_token');
+      const res = await fetch(`${API_BASE}/api/battle/${battleId}/respond`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ action })
+      });
+      if (notif?.id && token) {
+        fetch(`${API_BASE}/api/notifications/${notif.id}/read`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        }).catch(() => {});
+        setNotifications(prev => prev.map(item => item.id === notif.id ? { ...item, isRead: true } : item));
+      }
+      if (pushToastTimeoutRef.current) clearTimeout(pushToastTimeoutRef.current);
+      setStudentPushToast(null);
+      setShowNotifDropdown(false);
+      if (res.ok && action === 'accept') {
+        setFocusBattleId(battleId);
+        setCurrentPage('battle');
+      }
+    } catch (e) {
+      console.error('Battle notification response error:', e);
+    } finally {
+      setRespondingBattleId(null);
+    }
+  };
+
+  const fetchDashboardLeaderboard = useCallback(async (periodOverride = null) => {
+    const period = periodOverride || leaderboardPeriod;
+    try {
+      setLeaderboardLoading(true);
+      const token = localStorage.getItem('student_token');
+      const res = await fetch(`${API_BASE}/api/leaderboard?period=${encodeURIComponent(period)}`, {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setLeaderboardRows(Array.isArray(data.leaderboard) ? data.leaderboard : []);
+        setCurrentUserRank(data.currentUserRank || null);
+        if (data.currentUserStats && typeof data.currentUserStats === 'object') {
+          const s = data.currentUserStats;
+          setProfile(prev => {
+            if (
+              prev.xp === (s.xp ?? 0) &&
+              prev.coins === (s.coins ?? 0) &&
+              prev.streak === (s.streak ?? 0) &&
+              prev.dailyXp === (s.dailyXp ?? 0) &&
+              prev.weeklyXp === (s.weeklyXp ?? 0) &&
+              prev.monthlyXp === (s.monthlyXp ?? 0)
+            ) {
+              return prev;
+            }
+            const nextProfile = {
+              ...prev,
+              xp: s.xp ?? 0,
+              coins: s.coins ?? 0,
+              streak: s.streak ?? 0,
+              dailyXp: s.dailyXp ?? 0,
+              weeklyXp: s.weeklyXp ?? 0,
+              monthlyXp: s.monthlyXp ?? 0
+            };
+            try {
+              const cached = JSON.parse(localStorage.getItem('student_user') || '{}');
+              localStorage.setItem('student_user', JSON.stringify({ ...cached, ...s }));
+            } catch (e) {}
+            return nextProfile;
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Leaderboard sync error:', err);
+    } finally {
+      setLeaderboardLoading(false);
+    }
+  }, [leaderboardPeriod]);
+
+  const applyUserStats = useCallback((userStats, awarded = null, rewardLabel = '') => {
+    if (userStats && typeof userStats === 'object') {
+      setProfile(prev => {
+        const nextProfile = {
+          ...prev,
+          xp: userStats.xp ?? prev.xp ?? 0,
+          coins: userStats.coins ?? prev.coins ?? 0,
+          streak: userStats.streak ?? prev.streak ?? 0,
+          dailyXp: userStats.dailyXp ?? prev.dailyXp ?? 0,
+          weeklyXp: userStats.weeklyXp ?? prev.weeklyXp ?? 0,
+          monthlyXp: userStats.monthlyXp ?? prev.monthlyXp ?? 0,
+          activityDates: Array.isArray(userStats.activityDates) ? userStats.activityDates : (prev.activityDates || [])
+        };
+        try {
+          const cached = JSON.parse(localStorage.getItem('student_user') || '{}');
+          localStorage.setItem('student_user', JSON.stringify({ ...cached, ...userStats }));
+        } catch (e) {}
+        return nextProfile;
+      });
+      fetchDashboardLeaderboard();
+    }
+    if (awarded && ((Number(awarded.xp) || 0) > 0 || (Number(awarded.coins) || 0) > 0 || (Number(awarded.streak) || 0) > 0)) {
+      if (xpToastTimeoutRef.current) clearTimeout(xpToastTimeoutRef.current);
+      setXpToast({
+        xp: Number(awarded.xp) || 0,
+        coins: Number(awarded.coins) || 0,
+        streak: Number(awarded.streak) || 0,
+        label: rewardLabel || 'Mukofot qo\'shildi!'
+      });
+      xpToastTimeoutRef.current = setTimeout(() => setXpToast(null), 4200);
+    }
+  }, [fetchDashboardLeaderboard]);
+
+  const getWeekDaysProgress = useCallback((activityDates = []) => {
+    if (weeklyCheckins && Array.isArray(weeklyCheckins.days) && weeklyCheckins.days.length === 7) {
+      return weeklyCheckins.days.map(d => ({
+        index: d.index,
+        day: d.label || ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][d.index] || '',
+        uzLabel: d.uzLabel || '',
+        dateStr: d.date,
+        isToday: Boolean(d.isToday),
+        isPast: Boolean(d.isPast),
+        isFuture: Boolean(d.isFuture),
+        missed: Boolean(d.missed),
+        active: Boolean(d.checked),
+        rewardCoins: Number(d.rewardCoins) || [7, 14, 21, 28, 35, 42, 49][d.index] || 7,
+        coinsEarned: Number(d.coinsEarned) || 0
+      }));
+    }
+
+    const coinSchedule = [7, 14, 21, 28, 35, 42, 49];
+    const uzLabels = ['Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba', 'Yakshanba'];
+    const labels = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    const activeSet = new Set(Array.isArray(activityDates) ? activityDates : []);
+    let todayStr = '';
+    try {
+      todayStr = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Tashkent',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).format(new Date());
+    } catch (e) {
+      todayStr = new Date().toISOString().slice(0, 10);
+    }
+    const [y, m, d] = todayStr.split('-').map(Number);
+    const todayUtc = new Date(Date.UTC(y, m - 1, d));
+    const dayOfWeek = todayUtc.getUTCDay(); // 0=Sun..6=Sat
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    return labels.map((day, idx) => {
+      const dt = new Date(Date.UTC(y, m - 1, d + mondayOffset + idx));
+      const dateStr = dt.toISOString().slice(0, 10);
+      const checked = activeSet.has(dateStr);
+      const isPast = dateStr < todayStr;
+      return {
+        index: idx,
+        day,
+        uzLabel: uzLabels[idx],
+        dateStr,
+        isToday: dateStr === todayStr,
+        isPast,
+        isFuture: dateStr > todayStr,
+        missed: isPast && !checked,
+        active: checked,
+        rewardCoins: coinSchedule[idx],
+        coinsEarned: checked ? coinSchedule[idx] : 0
+      };
+    });
+  }, [weeklyCheckins]);
+
+  const handleSaveDailyGoalTarget = async (val) => {
+    const cleanVal = Math.max(10, Math.min(5000, Math.round(Number(val) || 100)));
+    setDailyGoalTarget(cleanVal);
+    try { localStorage.setItem('student_daily_xp_goal', String(cleanVal)); } catch (e) {}
+    setEditingDailyGoal(false);
+    try {
+      await fetchWithAuth('/api/daily-goal', {
+        method: 'PUT',
+        body: JSON.stringify({ dailyGoalXp: cleanVal })
+      });
+    } catch (e) {}
+  };
+
+  const handleManualDailyCheckin = async () => {
+    if (claimingDailyCheckin) return;
+    setClaimingDailyCheckin(true);
+    try {
+      const res = await fetchWithAuth('/api/daily-goal/checkin', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        if (data.weeklyCheckins) {
+          setWeeklyCheckins(data.weeklyCheckins);
+          setSelectedGoalDayIdx(data.weeklyCheckins.todayIndex);
+        }
+        if (data.userStats) {
+          applyUserStats(
+            data.userStats,
+            data.awardedCoins > 0 ? { xp: data.awardedXp || 0, coins: data.awardedCoins } : null,
+            'Kunlik kirish bonusi'
+          );
+        }
+      }
+    } catch (e) {
+      console.error('Daily checkin error:', e);
+    } finally {
+      setClaimingDailyCheckin(false);
+    }
+  };
+
+  const LOCKED_FREE_PAGES = ['library', 'challenges', 'tasks', 'my-progress'];
+  const getSectionDisplayTitle = (page) => {
+    if (page === 'library') return 'Library';
+    if (page === 'challenges') return 'Challenges';
+    if (page === 'tasks') return 'Topshiriqlar';
+    if (page === 'my-progress') return 'My Progress';
+    return page;
+  };
+  const isSectionLocked = (page) =>
+    String(profile?.tariff || 'VIP').toUpperCase() === 'FREE' && LOCKED_FREE_PAGES.includes(page);
+
+  const openPremiumLockModal = useCallback((sectionName = '') => {
+    setPremiumLockModal({ sectionName: sectionName || "Premium bo'lim" });
+  }, []);
+
+  const openMyProgressPremiumModal = useCallback(() => {
+    openPremiumLockModal('My Progress');
+  }, [openPremiumLockModal]);
+
+  const navigateToStudentPage = (page, { openMyTasks = false } = {}) => {
+    if (isSectionLocked(page)) {
+      openPremiumLockModal(getSectionDisplayTitle(page));
+      setIsSidebarOpen(false);
+      return;
+    }
+    if (openMyTasks) setMyTasksOpen(true);
+    setCurrentPage(page);
+    setIsSidebarOpen(false);
+  };
+
+  const fetchSupportChat = useCallback(async (markReadOverride = null) => {
+    const token = localStorage.getItem('student_token');
+    if (!token) return;
+    const markRead = markReadOverride !== null ? markReadOverride : supportChatOpenRef.current;
+    try {
+      const res = await fetch(`${API_BASE}/api/support-chats/my${markRead ? '?markRead=1' : ''}`, {
+        cache: 'no-store',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSupportChatThread({
+          adminName: data.adminName || 'Azizbek',
+          adminAvatar: data.adminAvatar || '',
+          unreadByStudent: markRead ? 0 : (Number(data.unreadByStudent) || 0),
+          messages: Array.isArray(data.messages) ? data.messages : []
+        });
+      }
+    } catch (e) {}
+  }, []);
+
+  useEffect(() => {
+    if (supportChatOpen) {
+      setTimeout(() => {
+        supportChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 60);
+    }
+  }, [supportChatOpen, supportChatThread.messages?.length]);
+
+  const handleToggleSupportChat = () => {
+    const next = !supportChatOpen;
+    setSupportChatOpen(next);
+    if (next) {
+      fetchSupportChat(true);
+    }
+  };
+
+  const handleSendSupportMessage = async (e) => {
+    e.preventDefault();
+    const cleanText = supportChatInput.trim();
+    if (!cleanText || supportChatSending) return;
+    const token = localStorage.getItem('student_token');
+    if (!token) return;
+    setSupportChatSending(true);
+    setSupportChatInput('');
+    try {
+      const res = await fetch(`${API_BASE}/api/support-chats/my/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ text: cleanText })
+      });
+      if (res.ok) {
+        await fetchSupportChat(true);
+      } else {
+        setSupportChatInput(cleanText);
+      }
+    } catch (err) {
+      setSupportChatInput(cleanText);
+    } finally {
+      setSupportChatSending(false);
+    }
+  };
+
+  const fetchWithAuth = async (url, options = {}) => {
+    const token = localStorage.getItem('student_token');
+    const headers = {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${API_BASE}${url}`, {
+      ...options,
+      headers
+    });
+    if (response.status === 401) {
+      localStorage.removeItem('student_token');
+      setCurrentPage('login');
+      throw new Error('Sessiya muddati tugadi. Qayta kirishingiz kerak.');
+    }
+    if (response.status === 403) {
+      const errPeek = await response.clone().json().catch(() => ({}));
+      if (errPeek?.code === 'PREMIUM_REQUIRED') {
+        return response;
+      }
+      localStorage.removeItem('student_token');
+      setCurrentPage('login');
+      throw new Error(errPeek?.error || 'Kirish ruxsati cheklangan.');
+    }
+    return response;
+  };
+
+  const syncData = async (studentProfile = null) => {
+    try {
+      let allowedCourseTitles = [];
+
+      // First, get user data with enrolled courses
+      const meRes = await fetchWithAuth('/api/auth/me');
+      if (meRes.ok) {
+        const meData = await meRes.json();
+        try {
+          localStorage.setItem('student_user', JSON.stringify(meData));
+        } catch (e) {}
+        if (meData.weeklyCheckins) {
+          setWeeklyCheckins(meData.weeklyCheckins);
+        }
+        if (Number.isFinite(Number(meData.dailyGoalXp)) && Number(meData.dailyGoalXp) >= 10) {
+          setDailyGoalTarget(Number(meData.dailyGoalXp));
+        }
+        setMustChangePassword(Boolean(meData.mustChangePassword));
+        if (meData.dailyCheckinAwarded && meData.dailyCheckinAwarded.coins > 0) {
+          applyUserStats(meData, meData.dailyCheckinAwarded, 'Kunlik kirish bonusi');
+        }
+        setProfile(prev => ({
+          ...prev,
+          id: meData.id ?? prev.id,
+          firstName: (meData.name || '').split(' ')[0] || prev.firstName,
+          lastName: (meData.name || '').split(' ').slice(1).join(' ') || prev.lastName,
+          email: meData.email || prev.email,
+          phone: meData.phone ?? prev.phone,
+          avatar: meData.avatar || prev.avatar,
+          course: meData.course || prev.course,
+          tariff: String(meData.tariff || prev.tariff || 'VIP').toUpperCase() === 'FREE' ? 'FREE' : 'VIP',
+          streak: meData.streak ?? prev.streak ?? 0,
+          coins: meData.coins ?? prev.coins ?? 0,
+          xp: meData.xp ?? prev.xp ?? 0,
+          dailyXp: meData.dailyXp ?? prev.dailyXp ?? 0,
+          weeklyXp: meData.weeklyXp ?? prev.weeklyXp ?? 0,
+          monthlyXp: meData.monthlyXp ?? prev.monthlyXp ?? 0,
+          activityDates: Array.isArray(meData.activityDates) ? meData.activityDates : (prev.activityDates || [])
+        }));
+        fetchSupportChat(supportChatOpenRef.current);
+
+        if (meData.enrolledCourses && meData.enrolledCourses.length > 0) {
+          // Use enrolled courses from the backend (multi-course support)
+          const processedCourses = meData.enrolledCourses.map(course => {
+            const baseCourse = coursesData.find(c => c && c.id === course?.id) || {};
+            const procLessons = (course.lessons || []).reduce((acc, lesson, idx) => {
+              const isCompleted = (meData.completedLessons && meData.completedLessons.includes(lesson.id)) || lesson.completed || false;
+              const prevCompleted = idx === 0 ? true : acc[idx - 1].completed;
+              acc.push({
+                ...lesson,
+                completed: isCompleted,
+                locked: lesson.locked !== undefined ? lesson.locked : !prevCompleted
+              });
+              return acc;
+            }, []);
+            const compCount = procLessons.filter(l => l.completed).length;
+            const compProgress = procLessons.length > 0 ? Math.round((compCount / procLessons.length) * 100) : (baseCourse.progress || 0);
+            return {
+              progress: compProgress,
+              tag: baseCourse.tag || 'Easy',
+              ...course,
+              lessons: procLessons
+            };
+          });
+
+          allowedCourseTitles = processedCourses.map(c => c.title);
+          setCourses(processedCourses);
+
+          if (processedCourses.length > 0) {
+            const matchedCourse = processedCourses[0];
+            setActiveCourse(matchedCourse);
+            if (matchedCourse.lessons && matchedCourse.lessons.length > 0) {
+              setActiveLesson(matchedCourse.lessons[0]);
+            } else {
+              setActiveLesson(null);
+            }
+          } else {
+            setActiveCourse(null);
+            setActiveLesson(null);
+          }
+        } else {
+          // Fallback: filter all courses by legacy single course field
+          const coursesRes = await fetchWithAuth('/api/courses');
+          if (coursesRes.ok) {
+            const coursesDataVal = await coursesRes.json();
+            const processedCourses = coursesDataVal.map(course => {
+              const baseCourse = coursesData.find(c => c.id === course.id) || {};
+              const procLessons = (course.lessons || []).reduce((acc, lesson, idx) => {
+                const isCompleted = (meData.completedLessons && meData.completedLessons.includes(lesson.id)) || lesson.completed || false;
+                const prevCompleted = idx === 0 ? true : acc[idx - 1].completed;
+                acc.push({
+                  ...lesson,
+                  completed: isCompleted,
+                  locked: lesson.locked !== undefined ? lesson.locked : !prevCompleted
+                });
+                return acc;
+              }, []);
+              const compCount = procLessons.filter(l => l.completed).length;
+              const compProgress = procLessons.length > 0 ? Math.round((compCount / procLessons.length) * 100) : (baseCourse.progress || 0);
+              return {
+                progress: compProgress,
+                tag: baseCourse.tag || 'Easy',
+                ...course,
+                lessons: procLessons
+              };
+            });
+
+            const currentUser = studentProfile || JSON.parse(localStorage.getItem('student_user') || '{}');
+            const currentEnrolledCourse = currentUser.course || '';
+
+            const filteredCourses = processedCourses.filter(c =>
+              c.title.toLowerCase().includes(currentEnrolledCourse.toLowerCase()) ||
+              c.id.toLowerCase().includes(currentEnrolledCourse.toLowerCase())
+            );
+
+            allowedCourseTitles = filteredCourses.map(c => c.title);
+            setCourses(filteredCourses);
+
+            if (filteredCourses.length > 0) {
+              setActiveCourse(filteredCourses[0]);
+              if (filteredCourses[0].lessons && filteredCourses[0].lessons.length > 0) {
+                setActiveLesson(filteredCourses[0].lessons[0]);
+              } else {
+                setActiveLesson(null);
+              }
+            } else {
+              setActiveCourse(null);
+              setActiveLesson(null);
+            }
+          }
+        }
+      }
+
+      const testsRes = await fetchWithAuth('/api/tests');
+      if (testsRes.ok) {
+        const testsDataVal = await testsRes.json();
+        const matchesCourse = (testCourse) => {
+          if (!testCourse || testCourse === 'All' || testCourse === 'Barchasi' || allowedCourseTitles.length === 0) {
+            return true;
+          }
+          const tc = testCourse.toLowerCase().trim();
+          return allowedCourseTitles.some(act => {
+            const a = act.toLowerCase().trim();
+            if (a === tc) return true;
+            if (a.includes(tc) || tc.includes(a)) return true;
+            const tcWords = tc.split(/\s+/).filter(w => w.length > 2);
+            const aWords = a.split(/\s+/).filter(w => w.length > 2);
+            return tcWords.some(w => aWords.includes(w));
+          });
+        };
+
+        const publishedTests = testsDataVal.filter(t => !t.status || t.status.toLowerCase() === 'published');
+        let filteredTests = publishedTests.filter(t => matchesCourse(t.course || t.category));
+        // Fallback: Agar kurs mos kelishi bo'yicha test chiqmasa, barcha chop etilgan testlarni ko'rsatamiz
+        if (filteredTests.length === 0 && publishedTests.length > 0) {
+          filteredTests = publishedTests;
+        }
+
+        const mappedTests = filteredTests.map(t => ({
+          ...t,
+          totalQuestions: t.questionCount || (t.questions ? t.questions.length : 0),
+          passingScore: t.passingPercentage !== undefined ? t.passingPercentage : (t.passingScore || 70),
+          description: t.description || `${t.title} bo'yicha onlayn diagnostik va yakuniy imtihon testi.`,
+          questions: (t.questions || []).map((q, idx) => {
+            let decodedAnswer = undefined;
+            if (q.correctAnswer !== undefined && q.correctAnswer !== null && q.correctAnswer !== '') {
+              decodedAnswer = q.correctAnswer;
+            } else if (q.correct !== undefined && q.correct !== null && q.correct !== '') {
+              decodedAnswer = q.correct;
+            } else if (q.hint && q.hint.includes('__KEY__:')) {
+              try {
+                const b64 = q.hint.split('__KEY__:')[1].split(' | ')[0].trim();
+                const raw = atob(b64);
+                decodedAnswer = !isNaN(Number(raw)) ? Number(raw) : raw;
+              } catch(e) {}
+            }
+
+            const qType = (q.type || 'single').toLowerCase();
+
+            if (qType === 'single' || qType === 'mcq') {
+              if (typeof decodedAnswer === 'string' && /^[A-Za-z]$/.test(decodedAnswer.trim())) {
+                decodedAnswer = decodedAnswer.trim().toUpperCase().charCodeAt(0) - 65;
+              } else if (!isNaN(Number(decodedAnswer)) && String(decodedAnswer).trim() !== '') {
+                decodedAnswer = Number(decodedAnswer);
+              }
+            }
+            
+            if (qType === 'multiple') {
+              if (q.hint && q.hint.includes('__MULTI__:')) {
+                try {
+                  decodedAnswer = JSON.parse(q.hint.split('__MULTI__:')[1].split(' | ')[0]);
+                } catch(e) {}
+              } else if (Array.isArray(decodedAnswer)) {
+                // keep array
+              } else if (decodedAnswer !== undefined) {
+                decodedAnswer = [Number(decodedAnswer) || 0];
+              }
+            } else if (qType === 'truefalse') {
+              if (q.hint && q.hint.includes('__TF__:')) {
+                decodedAnswer = q.hint.includes('true');
+              } else if (decodedAnswer !== undefined) {
+                decodedAnswer = decodedAnswer === 0 || decodedAnswer === true || decodedAnswer === 'true';
+              }
+            } else if (qType === 'short' || qType === 'math') {
+              const marker = qType === 'short' ? '__SHORT__:' : '__MATH__:';
+              if (q.hint && q.hint.includes(marker)) {
+                decodedAnswer = q.hint.split(marker)[1].split(' | ')[0];
+              } else if (typeof decodedAnswer === 'number' && decodedAnswer === 0 && Array.isArray(q.options) && q.options.length > 0) {
+                decodedAnswer = q.options.join(', ');
+              }
+            }
+
+            return {
+              id: q.id || idx + 1,
+              type: qType,
+              topic: q.topic || t.category || 'Matematika',
+              difficulty: q.difficulty || t.difficulty || 'Medium',
+              question: q.text || q.question || '',
+              options: Array.isArray(q.options) ? q.options : (typeof q.options === 'string' ? JSON.parse(q.options || '[]') : []),
+              correct: decodedAnswer,
+              correctAnswer: decodedAnswer,
+              _decodedCorrect: decodedAnswer,
+              score: q.score !== undefined ? Number(q.score) : 1,
+              explanation: q.explanation || '',
+              hint: q.hint || '',
+              imageUrl: q.imageUrl || null
+            };
+          })
+        }));
+        setTests(mappedTests);
+      }
+
+      const submissionsRes = await fetchWithAuth('/api/submissions');
+      if (submissionsRes.ok) {
+        const subs = await submissionsRes.json();
+        setSubmissions(subs);
+      }
+
+      const notifRes = await fetchWithAuth('/api/notifications');
+      if (notifRes.ok) {
+        const notifs = await notifRes.json();
+        setNotifications(notifs);
+      }
+    } catch (err) {
+      console.error('Data sync failed:', err);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('token')) {
+      return;
+    }
+
+    const token = localStorage.getItem('student_token');
+    if (token) {
+      fetchWithAuth('/api/auth/me')
+        .then(res => {
+          if (res.ok) return res.json();
+          throw new Error('Unauthorized');
+        })
+        .then(user => {
+          try {
+            localStorage.setItem('student_user', JSON.stringify(user));
+          } catch (e) {}
+          const studentProfile = {
+            id: user.id || null,
+            firstName: user.name.split(' ')[0] || user.name,
+            lastName: user.name.split(' ').slice(1).join(' ') || '',
+            email: user.email,
+            phone: user.phone || '',
+            avatar: user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop',
+            course: user.course || 'SAT Math Masterclass',
+            tariff: String(user.tariff || 'VIP').toUpperCase() === 'FREE' ? 'FREE' : 'VIP',
+            streak: user.streak || 0,
+            coins: user.coins || 0,
+            xp: user.xp || 0,
+            dailyXp: user.dailyXp || 0,
+            weeklyXp: user.weeklyXp || 0,
+            monthlyXp: user.monthlyXp || 0,
+            activityDates: Array.isArray(user.activityDates) ? user.activityDates : []
+          };
+          setProfile(studentProfile);
+          if (user.weeklyCheckins) setWeeklyCheckins(user.weeklyCheckins);
+          if (Number.isFinite(Number(user.dailyGoalXp)) && Number(user.dailyGoalXp) >= 10) {
+            setDailyGoalTarget(Number(user.dailyGoalXp));
+          }
+          setMustChangePassword(Boolean(user.mustChangePassword));
+          if (user.dailyCheckinAwarded && user.dailyCheckinAwarded.coins > 0) {
+            applyUserStats(user, user.dailyCheckinAwarded, 'Kunlik kirish bonusi');
+          }
+          fetchDashboardLeaderboard();
+          if (!user.phone || user.phone.trim() === '') {
+            setCurrentPage('profile');
+            setShowProfileAlert(true);
+          } else {
+            setCurrentPage('dashboard');
+          }
+          syncData(studentProfile);
+        })
+        .catch(err => {
+          console.warn(err.message);
+          setCurrentPage('login');
+        });
+    }
+  }, []);
+
+  // Auto-sync when entering test center or tasks
+  useEffect(() => {
+    if (currentPage === 'test-center' || currentPage === 'tasks') {
+      const token = localStorage.getItem('student_token');
+      if (token) {
+        syncData();
+      }
+    }
+  }, [currentPage]);
+
+  // Course Playing State
+  const [activeCourse, setActiveCourse] = useState(coursesData[0] || null);
+  const [activeLesson, setActiveLesson] = useState(coursesData[0]?.lessons?.[1] || null);
+  const [canProceedToNext, setCanProceedToNext] = useState(false);
+
+  // Next Lesson Unlock Timer
+  useEffect(() => {
+    if (currentPage === 'courses') {
+      setCanProceedToNext(false);
+      const timer = setTimeout(() => {
+        setCanProceedToNext(true);
+      }, 10000); // 10 soniyadan keyin aktivlashadi
+      return () => clearTimeout(timer);
+    }
+  }, [activeLesson, currentPage]);
+
+  // Real-time student notifications polling, SSE stream & push toasts
+  useEffect(() => {
+    const playNotifChime = () => {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    };
+
+    const getShownIds = () => {
+      try {
+        const raw = JSON.parse(sessionStorage.getItem('shown_push_toast_ids') || '[]');
+        return new Set(Array.isArray(raw) ? raw : []);
+      } catch (e) {
+        return new Set();
+      }
+    };
+
+    const markShownId = (id) => {
+      if (!id) return;
+      try {
+        const current = JSON.parse(sessionStorage.getItem('shown_push_toast_ids') || '[]');
+        const arr = Array.isArray(current) ? current : [];
+        if (!arr.includes(id)) {
+          const next = [id, ...arr].slice(0, 100);
+          sessionStorage.setItem('shown_push_toast_ids', JSON.stringify(next));
+        }
+      } catch (e) {}
+    };
+
+    let cancelled = false;
+    const checkStudentNotifs = async () => {
+      if (cancelled) return;
+      const token = localStorage.getItem('student_token');
+      if (!token) {
+        hasInitialNotifSyncRef.current = false;
+        knownNotifIdsRef.current.clear();
+        return;
+      }
+
+      try {
+        const notifRes = await fetchWithAuth('/api/notifications');
+        if (cancelled) return;
+        if (notifRes.ok) {
+          const notifs = await notifRes.json();
+          if (cancelled) return;
+          const list = Array.isArray(notifs) ? notifs : [];
+
+          if (!hasInitialNotifSyncRef.current) {
+            list.forEach(n => knownNotifIdsRef.current.add(n.id));
+            hasInitialNotifSyncRef.current = true;
+          } else {
+            const shownSet = getShownIds();
+            const newUnread = list.filter(
+              n => !n.isRead && !knownNotifIdsRef.current.has(n.id) && !shownSet.has(n.id)
+            );
+            list.forEach(n => knownNotifIdsRef.current.add(n.id));
+            if (newUnread.length > 0) {
+              const latest = newUnread[0];
+              markShownId(latest.id);
+              showInAppPushToast(latest);
+              playNotifChime();
+            }
+          }
+          setNotifications(prev => {
+            const isSame =
+              prev.length === list.length &&
+              prev.every(
+                (p, i) =>
+                  p?.id === list[i]?.id &&
+                  Boolean(p?.isRead) === Boolean(list[i]?.isRead) &&
+                  p?.message === list[i]?.message
+              );
+            return isSame ? prev : list;
+          });
+        }
+      } catch (e) {}
+    };
+
+    checkStudentNotifs();
+    const interval = setInterval(checkStudentNotifs, 3000);
+
+    let es = null;
+    try {
+      es = new EventSource(`${API_BASE}/api/system/stream`);
+      es.onmessage = (evt) => {
+        if (cancelled) return;
+        try {
+          const parsed = JSON.parse(evt.data || '{}');
+          if (
+            parsed.type === 'push_notification' ||
+            parsed.type === 'challenge_update' ||
+            parsed.type === 'battle_invite' ||
+            parsed.type === 'battle_update'
+          ) {
+            checkStudentNotifs();
+          } else if (parsed.type === 'notification') {
+            if (!profile?.id || !parsed.data?.userId || parsed.data.userId === profile.id) {
+              checkStudentNotifs();
+            }
+          } else if (parsed.type === 'leaderboard_reset' || (parsed.type === 'gamification_update' && parsed.data?.resetAll)) {
+            applyUserStats({
+              xp: 0,
+              coins: 0,
+              streak: 0,
+              dailyXp: 0,
+              weeklyXp: 0,
+              monthlyXp: 0,
+              activityDates: []
+            });
+            setWeeklyCheckins(prev => prev ? {
+              ...prev,
+              checkedDaysCount: 0,
+              totalEarnedWeekCoins: 0,
+              days: (prev.days || []).map(d => ({ ...d, checked: false, coinsEarned: 0 }))
+            } : prev);
+            try {
+              const cached = JSON.parse(localStorage.getItem('student_user') || '{}');
+              localStorage.setItem('student_user', JSON.stringify({
+                ...cached,
+                xp: 0,
+                coins: 0,
+                streak: 0,
+                dailyXp: 0,
+                weeklyXp: 0,
+                monthlyXp: 0,
+                activityDates: []
+              }));
+            } catch (e) {}
+          } else if (parsed.type === 'gamification_update') {
+            const statsPayload = parsed.data?.userStats || (parsed.data?.xp !== undefined ? parsed.data : null);
+            if (profile?.id && parsed.data?.userId === profile.id && statsPayload) {
+              applyUserStats(statsPayload);
+            }
+          } else if (parsed.type === 'practise_update') {
+            setPractiseRefreshKey(k => k + 1);
+          } else if (parsed.type === 'design_update' && parsed.data?.preset) {
+            setDesignPreset(parsed.data.preset);
+          } else if (parsed.type === 'student_tariff_update') {
+            if (!profile?.id || String(parsed.data?.userId) === String(profile.id)) {
+              const nextTariff = String(parsed.data?.tariff || 'VIP').toUpperCase() === 'FREE' ? 'FREE' : 'VIP';
+              setProfile(prev => {
+                const updated = { ...prev, tariff: nextTariff };
+                try {
+                  const cached = JSON.parse(localStorage.getItem('student_user') || '{}');
+                  localStorage.setItem('student_user', JSON.stringify({ ...cached, tariff: nextTariff }));
+                } catch (e) {}
+                return updated;
+              });
+            }
+          } else if (parsed.type === 'support_chat_update') {
+            if (!profile?.id || !parsed.data?.studentId || String(parsed.data.studentId) === String(profile.id)) {
+              fetchSupportChat(supportChatOpenRef.current);
+            }
+          }
+        } catch (e) {}
+      };
+    } catch (e) {}
+
+    // Cross-tab synchronization via storage event
+    const handleStorageEvent = (e) => {
+      if (e.key === 'lms_notification_sync') {
+        checkStudentNotifs();
+      }
+    };
+    window.addEventListener('storage', handleStorageEvent);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+      if (es) es.close();
+      window.removeEventListener('storage', handleStorageEvent);
+    };
+  }, [profile?.id, showInAppPushToast, applyUserStats, fetchSupportChat]);
+
+  // Test State Variables
+  const [activeQuizTest, setActiveQuizTest] = useState(studentTests[0] || null);
+  const [activeQuestion, setActiveQuestion] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [markedForReview, setMarkedForReview] = useState([]);
+  const [visitedQuestions, setVisitedQuestions] = useState([0]);
+  const [timerSeconds, setTimerSeconds] = useState(3600);
+  const [isTimerPaused, setIsTimerPaused] = useState(false);
+  const [showQuizConfirmationModal, setShowQuizConfirmationModal] = useState(false);
+
+  // Results panel and Certificates
+  const [quizResult, setQuizResult] = useState(null);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [showCourseCertificate, setShowCourseCertificate] = useState(false);
+  const [completedCourseForCert, setCompletedCourseForCert] = useState(null);
+
+  // Uzbek Alphabet Quick Toolbar visibility toggle (Default false to prevent covering dashboard content)
+  const [showUzbekToolbar, setShowUzbekToolbar] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('show_uzbek_toolbar');
+      return saved === 'true';
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('show_uzbek_toolbar', showUzbekToolbar ? 'true' : 'false');
+    }
+  }, [showUzbekToolbar]);
+
+  const isCourseCompleted = (course) => {
+    if (!course) return false;
+    if (course.progress >= 100) return true;
+    if (course.lessons && course.lessons.length > 0) {
+      return course.lessons.every(l => l.completed);
+    }
+    return false;
+  };
+
+  const formatCertificateDate = (dateVal) => {
+    if (!dateVal) {
+      const d = new Date();
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    }
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return String(dateVal);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  // Helper: Extract structured certificate data payload
+  const getCertificatePayload = (param = 'course-certificate-element', customObj = null) => {
+    const isAcademic = param === 'academic-certificate-element' || customObj?.type === 'academic';
+    const studentFullName = `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || 'Muborak Xonkeldiyeva';
+
+    if (isAcademic) {
+      const qTitle = customObj?.testTitle || quizResult?.testTitle || activeQuizTest?.title || 'Matematika Imtihoni';
+      const qScore = customObj?.score || quizResult?.score || 100;
+      const qDate = formatCertificateDate(customObj?.submittedAt || quizResult?.submittedAt || Date.now());
+      return {
+        type: 'academic',
+        studentName: studentFullName,
+        title: qTitle,
+        score: qScore,
+        date: qDate,
+        teacherName: 'Toxirova Malika',
+        teacherRole: "BOSH O'QITUVCHI"
+      };
+    } else {
+      const targetCourse = customObj || completedCourseForCert || activeCourse || courses.find(isCourseCompleted) || { title: 'Pure Mathematics 1' };
+      const cTitle = targetCourse?.title || 'Pure Mathematics 1';
+      const cDate = formatCertificateDate(targetCourse?.completedAt || targetCourse?.updatedAt || targetCourse?.createdAt || Date.now());
+      return {
+        type: 'course',
+        studentName: studentFullName,
+        title: cTitle,
+        score: 100,
+        date: cDate,
+        teacherName: 'Toxirova Malika',
+        teacherRole: "BOSH O'QITUVCHI"
+      };
+    }
+  };
+
+  // Ultra-Crisp Canvas 2D Certificate Generator (2246 x 1588 px, 192+ DPI)
+  // Completely immune to CSS oklch / color-mix bugs, font shifts, or oversized images
+  const generateCertificateCanvas = async (certData) => {
+    const width = 2246;
+    const height = 1588;
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    // 1. Warm Ivory Background
+    ctx.fillStyle = '#FFFDF9';
+    ctx.fillRect(0, 0, width, height);
+
+    // 2. Double Gold Borders
+    ctx.strokeStyle = '#d97706';
+    ctx.lineWidth = 14;
+    ctx.strokeRect(50, 50, width - 100, height - 100);
+
+    ctx.strokeStyle = '#b45309';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(70, 70, width - 140, height - 140);
+
+    // 3. Corner Gold Ornaments
+    ctx.strokeStyle = 'rgba(217, 119, 6, 0.65)';
+    ctx.lineWidth = 4;
+    const cSize = 70;
+    // Top-Left
+    ctx.beginPath();
+    ctx.moveTo(80, 80 + cSize); ctx.lineTo(80, 80); ctx.lineTo(80 + cSize, 80);
+    ctx.stroke();
+    // Top-Right
+    ctx.beginPath();
+    ctx.moveTo(width - 80 - cSize, 80); ctx.lineTo(width - 80, 80); ctx.lineTo(width - 80, 80 + cSize);
+    ctx.stroke();
+    // Bottom-Left
+    ctx.beginPath();
+    ctx.moveTo(80, height - 80 - cSize); ctx.lineTo(80, height - 80); ctx.lineTo(80 + cSize, height - 80);
+    ctx.stroke();
+    // Bottom-Right
+    ctx.beginPath();
+    ctx.moveTo(width - 80 - cSize, height - 80); ctx.lineTo(width - 80, height - 80); ctx.lineTo(width - 80, height - 80 - cSize);
+    ctx.stroke();
+
+    // 4. Center Watermark
+    ctx.save();
+    ctx.font = 'bold 440px Georgia, "Times New Roman", serif';
+    ctx.fillStyle = 'rgba(180, 83, 9, 0.038)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(certData.type === 'academic' ? '∫' : 'Σ', width / 2, height / 2 + 10);
+    ctx.restore();
+
+    // 5. Sigma Logo & Top Brand Bar
+    const logoImg = new Image();
+    logoImg.crossOrigin = 'anonymous';
+    await new Promise((resolve) => {
+      logoImg.onload = () => resolve();
+      logoImg.onerror = () => resolve();
+      logoImg.src = '/sigma-logo.png';
+      if (logoImg.complete) resolve();
+    });
+
+    let logoRight = 110;
+    if (logoImg.naturalWidth && logoImg.naturalHeight) {
+      const logoH = 80;
+      const logoW = (logoImg.naturalWidth / logoImg.naturalHeight) * logoH;
+      ctx.drawImage(logoImg, 110, 105, logoW, logoH);
+      logoRight = 110 + logoW + 20;
+    }
+
+    // Top Brand Left Text
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '900 24px system-ui, -apple-system, sans-serif';
+    ctx.fillText('SIGMA EDUCATION', logoRight, 142);
+
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
+    ctx.fillText("O'QUV MARKAZI", logoRight, 170);
+
+    // Top Brand Right Text
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '900 24px system-ui, -apple-system, sans-serif';
+    ctx.fillText('PRACTISE LMS', width - 110, 142);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 15px system-ui, -apple-system, sans-serif';
+    ctx.fillText("ONLINE TA'LIM", width - 110, 170);
+
+    // 6. Certificate Title & Header
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#92400e';
+    ctx.font = 'bold 20px system-ui, -apple-system, sans-serif';
+    try { ctx.letterSpacing = '5px'; } catch (e) {}
+    ctx.fillText('SIGMA EDUCATION   •   PRACTISE LMS', width / 2, 285);
+    try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+    ctx.fillStyle = '#18181b';
+    ctx.font = '900 86px "Times New Roman", Georgia, serif';
+    try { ctx.letterSpacing = '14px'; } catch (e) {}
+    ctx.fillText('SERTIFIKAT', width / 2, 395);
+    try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+    ctx.fillStyle = '#b45309';
+    ctx.font = 'bold 20px system-ui, -apple-system, sans-serif';
+    try { ctx.letterSpacing = '4px'; } catch (e) {}
+    const subTitle = certData.type === 'academic'
+      ? 'CERTIFICATE OF ACADEMIC ACHIEVEMENT'
+      : 'CERTIFICATE OF COURSE COMPLETION';
+    ctx.fillText(subTitle, width / 2, 445);
+    try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+    // Gold Divider Line
+    const grad = ctx.createLinearGradient(width / 2 - 180, 475, width / 2 + 180, 475);
+    grad.addColorStop(0, 'rgba(217, 119, 6, 0)');
+    grad.addColorStop(0.5, 'rgba(217, 119, 6, 1)');
+    grad.addColorStop(1, 'rgba(217, 119, 6, 0)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(width / 2 - 180, 475);
+    ctx.lineTo(width / 2 + 180, 475);
+    ctx.stroke();
+
+    // 7. Certificate Main Body
+    ctx.fillStyle = '#52525b';
+    ctx.font = 'italic 26px Georgia, serif';
+    const introMsg = certData.type === 'academic'
+      ? 'Ushbu rasmiy akademik hujjat muvaffaqiyat bilan topshiriladi:'
+      : 'Ushbu rasmiy bitiruv hujjati muvaffaqiyat bilan topshiriladi:';
+    ctx.fillText(introMsg, width / 2, 590);
+
+    // Student Full Name
+    const sName = (certData.studentName || 'Talaba').toUpperCase();
+    ctx.fillStyle = '#451a03';
+    ctx.font = '900 64px system-ui, -apple-system, sans-serif';
+    try { ctx.letterSpacing = '2px'; } catch (e) {}
+    ctx.fillText(sName, width / 2, 700);
+    try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+    const nameWidth = ctx.measureText(sName).width;
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(width / 2 - nameWidth / 2 - 30, 725);
+    ctx.lineTo(width / 2 + nameWidth / 2 + 30, 725);
+    ctx.stroke();
+
+    // Course / Test Description with word wrapping
+    ctx.fillStyle = '#3f3f46';
+    ctx.font = '26px Georgia, serif';
+    const courseOrTestName = certData.title || (certData.type === 'academic' ? 'Matematika' : 'Video Kurs');
+    const descText = certData.type === 'academic'
+      ? `talabaning "${courseOrTestName}" bo'limidagi barcha murakkab test sinovlaridan muvaffaqiyatli o'tganligini va ${certData.score || 100}% yuqori ko'rsatkich qayd etganligini tasdiqlaydi.`
+      : `talabaning "${courseOrTestName}" kursi bo'yicha barcha nazariy modullar, video darslar hamda amaliy topshiriqlarni 100% muvaffaqiyat bilan to'liq tamomlaganligini tasdiqlaydi.`;
+
+    const words = descText.split(' ');
+    let currentLine = '';
+    const lines = [];
+    const maxTextWidth = 1450;
+
+    for (let n = 0; n < words.length; n++) {
+      const testLine = currentLine + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxTextWidth && n > 0) {
+        lines.push(currentLine.trim());
+        currentLine = words[n] + ' ';
+      } else {
+        currentLine = testLine;
+      }
+    }
+    lines.push(currentLine.trim());
+
+    const startY = 825;
+    lines.forEach((line, index) => {
+      ctx.fillText(line, width / 2, startY + (index * 42));
+    });
+
+    // 8. Signatures & Verified Gold Medal Seal
+    ctx.strokeStyle = 'rgba(146, 64, 14, 0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(150, 1220);
+    ctx.lineTo(width - 150, 1220);
+    ctx.stroke();
+
+    // Left: Toxirova Malika
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#18181b';
+    ctx.font = 'italic bold 32px Georgia, serif';
+    ctx.fillText(certData.teacherName || 'Toxirova Malika', 420, 1315);
+
+    ctx.strokeStyle = '#71717a';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(270, 1335);
+    ctx.lineTo(570, 1335);
+    ctx.stroke();
+
+    ctx.fillStyle = '#52525b';
+    ctx.font = 'bold 18px system-ui, -apple-system, sans-serif';
+    try { ctx.letterSpacing = '1.5px'; } catch (e) {}
+    ctx.fillText(certData.teacherRole || "BOSH O'QITUVCHI", 420, 1370);
+    try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+    // Center: Verified Gold Medal Seal
+    const sealX = width / 2;
+    const sealY = 1335;
+    const sealR = 76;
+
+    const sealGrad = ctx.createRadialGradient(sealX - 15, sealY - 15, 5, sealX, sealY, sealR);
+    sealGrad.addColorStop(0, '#fef08a');
+    sealGrad.addColorStop(0.3, '#f59e0b');
+    sealGrad.addColorStop(0.8, '#d97706');
+    sealGrad.addColorStop(1, '#92400e');
+
+    ctx.fillStyle = sealGrad;
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = '#fef08a';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([8, 6]);
+    ctx.beginPath();
+    ctx.arc(sealX, sealY, sealR - 15, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 44px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('✓', sealX, sealY + 2);
+
+    // Right: Completion Date
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = '#18181b';
+    ctx.font = 'bold 28px "Courier New", monospace';
+    ctx.fillText(certData.date || '27-10-2026', width - 420, 1315);
+
+    ctx.strokeStyle = '#71717a';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(width - 570, 1335);
+    ctx.lineTo(width - 270, 1335);
+    ctx.stroke();
+
+    ctx.fillStyle = '#52525b';
+    ctx.font = 'bold 18px system-ui, -apple-system, sans-serif';
+    try { ctx.letterSpacing = '1.5px'; } catch (e) {}
+    ctx.fillText("BERILGAN SANA (DD-MM-YYYY)", width - 420, 1370);
+    try { ctx.letterSpacing = '0px'; } catch (e) {}
+
+    return canvas;
+  };
+
+  // Direct Print: Generates crisp A4 Landscape certificate and prints via isolated iframe
+  const printCertificateDirect = async (param = 'course-certificate-element') => {
+    try {
+      setIsGeneratingPDF(true);
+      const certData = (typeof param === 'object' && param !== null) ? param : getCertificatePayload(param);
+      const canvas = await generateCertificateCanvas(certData);
+      if (!canvas) throw new Error("Canvas generation failed");
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.98);
+
+      const printIframe = document.createElement('iframe');
+      printIframe.style.position = 'fixed';
+      printIframe.style.right = '0';
+      printIframe.style.bottom = '0';
+      printIframe.style.width = '0';
+      printIframe.style.height = '0';
+      printIframe.style.border = '0';
+      document.body.appendChild(printIframe);
+
+      const doc = printIframe.contentWindow.document;
+      doc.open();
+      doc.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>SERTIFIKAT</title>
+            <style>
+              @page { size: landscape; margin: 0; }
+              html, body {
+                margin: 0;
+                padding: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+              }
+              img {
+                width: 100vw;
+                height: 100vh;
+                object-fit: contain;
+                display: block;
+              }
+            </style>
+          </head>
+          <body>
+            <img src="${dataUrl}" onload="setTimeout(() => { window.focus(); window.print(); }, 200);" />
+          </body>
+        </html>
+      `);
+      doc.close();
+
+      setTimeout(() => {
+        try { document.body.removeChild(printIframe); } catch(e) {}
+      }, 6000);
+    } catch (err) {
+      console.warn('Canvas print error, fallback to window.print:', err);
+      window.print();
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
+  // Real PDF Download: Generates an authentic A4 Landscape PDF file and triggers direct download
+  const downloadCertificatePDF = async (param = 'course-certificate-element', customFilename = 'Sertifikat.pdf') => {
+    try {
+      setIsGeneratingPDF(true);
+      const certData = (typeof param === 'object' && param !== null) ? param : getCertificatePayload(param);
+      const canvas = await generateCertificateCanvas(certData);
+      if (!canvas) throw new Error("Canvas generation failed");
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.98);
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+      pdf.addImage(imgData, 'JPEG', 0, 0, 297, 210);
+      pdf.save(customFilename);
+    } catch (err) {
+      console.error('PDF error:', err);
+      alert("PDF yuklab olishda xatolik yuz berdi.");
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleCardDownloadPDF = async (course) => {
+    setCompletedCourseForCert(course);
+    const studentName = `${profile.firstName || 'Talaba'}_${profile.lastName || ''}`.trim().replace(/\s+/g, '_');
+    const courseTitle = (course.title || 'Kurs').replace(/[^a-zA-Z0-9\-_]/g, '_');
+    const payload = getCertificatePayload('course-certificate-element', course);
+    await downloadCertificatePDF(payload, `Sertifikat-${studentName}-${courseTitle}.pdf`);
+  };
+
+  const handleCardPrint = async (course) => {
+    setCompletedCourseForCert(course);
+    const payload = getCertificatePayload('course-certificate-element', course);
+    await printCertificateDirect(payload);
+  };
+
+  // Security / Cheat Shield state
+  const [tabSwitchesCount, setTabSwitchesCount] = useState(0);
+
+  // Scientific Calculator states
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [calcInput, setCalcInput] = useState('');
+  const [calcResult, setCalcResult] = useState('');
+
+  // Password hide/show
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Dark Mode & effective dark-preset surface synchronization
+  useEffect(() => {
+    if (isDarkSurface) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+    try {
+      localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+      localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
+    } catch (e) {}
+  }, [darkMode, isDarkSurface]);
+
+  // Quiz Countdown Timer Hook
+  useEffect(() => {
+    let interval = null;
+    if (currentPage === 'test-interface' && !isTimerPaused && timerSeconds > 0) {
+      interval = setInterval(() => {
+        setTimerSeconds(prev => prev - 1);
+      }, 1000);
+    } else if (timerSeconds === 0 && currentPage === 'test-interface') {
+      handleSubmitTest();
+    }
+    return () => clearInterval(interval);
+  }, [currentPage, isTimerPaused, timerSeconds]);
+
+  // Cheat Prevention Tab Focus Detector
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && currentPage === 'test-interface' && activeQuizTest?.preventTabSwitch) {
+        setTabSwitchesCount(prev => {
+          const nextCount = prev + 1;
+
+          fetchWithAuth('/api/system/cheat-report', {
+            method: 'POST',
+            body: JSON.stringify({
+              testTitle: activeQuizTest.title,
+              tabSwitches: nextCount
+            })
+          }).catch(err => console.warn('Cheat alert report failed:', err));
+
+          alert(`OGOHLANTIRISH!\nImtihon paytida brauzer oynasini yoki tabini o'zgartirish qat'iyan man etiladi.\nXatti-harakat tizimda qayd etildi (${nextCount}/3).\n3 ta ogohlantirishdan so'ng testingiz avtomatik tarzda yakunlanadi!`);
+
+          if (nextCount >= 3) {
+            handleSubmitTest();
+          }
+          return nextCount;
+        });
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [currentPage, activeQuizTest]);
+
+  const formatTimer = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // High-Fidelity Client-Side Regex LaTeX Parser
+  const renderMathContent = (text) => {
+    if (!text) return "";
+    try {
+      const parts = text.split(/(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g);
+      return (
+        <span className="inline-flex flex-wrap items-center gap-x-1 gap-y-0.5">
+          {parts.map((part, index) => {
+            if (part.startsWith('$$') && part.endsWith('$$')) {
+              const html = katex.renderToString(part.slice(2, -2), { displayMode: true, throwOnError: false });
+              return <span key={index} dangerouslySetInnerHTML={{ __html: html }} />;
+            } else if (part.startsWith('$') && part.endsWith('$')) {
+              const html = katex.renderToString(part.slice(1, -1), { displayMode: false, throwOnError: false });
+              return <span key={index} dangerouslySetInnerHTML={{ __html: html }} />;
+            }
+            return <span key={index}>{part}</span>;
+          })}
+        </span>
+      );
+    } catch (e) {
+      return <span>{text}</span>;
+    }
+  };
+
+  const handleSelectAnswer = (qIndex, optionIndex) => {
+    setQuizAnswers(prev => ({ ...prev, [qIndex]: optionIndex }));
+
+    // Auto-mark as visited
+    if (!visitedQuestions.includes(qIndex)) {
+      setVisitedQuestions(prev => [...prev, qIndex]);
+    }
+  };
+
+  const handleToggleMultipleAnswer = (qIndex, optionIndex) => {
+    setQuizAnswers(prev => {
+      const current = Array.isArray(prev[qIndex]) ? [...prev[qIndex]] : [];
+      const updated = current.includes(optionIndex)
+        ? current.filter(i => i !== optionIndex)
+        : [...current, optionIndex];
+      return { ...prev, [qIndex]: updated };
+    });
+
+    if (!visitedQuestions.includes(qIndex)) {
+      setVisitedQuestions(prev => [...prev, qIndex]);
+    }
+  };
+
+  const handleTextAnswer = (qIndex, text) => {
+    setQuizAnswers(prev => ({ ...prev, [qIndex]: text }));
+
+    if (!visitedQuestions.includes(qIndex)) {
+      setVisitedQuestions(prev => [...prev, qIndex]);
+    }
+  };
+
+  const renderQuestionInputControls = (currentQ, isSplit = false) => {
+    if (!currentQ) return null;
+    const qType = (currentQ.type || 'single').toLowerCase();
+    const currentAnswer = quizAnswers[activeQuestion];
+
+    // 1. Multiple-response question (Select all that apply)
+    if (qType === 'multiple') {
+      const selectedIndices = Array.isArray(currentAnswer) ? currentAnswer : [];
+      const options = currentQ.options || [];
+
+      return (
+        <div className="space-y-3 pt-4 border-t border-outline-variant/60">
+          <div className="flex items-center gap-1.5 text-secondary text-xs font-bold">
+            <span className="material-symbols-outlined text-[16px]">checklist</span>
+            <span>Ko'p variantli savol (Bir nechta to'g'ri javoblarni belgilang):</span>
+          </div>
+
+          <div className={`grid ${isSplit ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-3`}>
+            {options.map((opt, oIdx) => {
+              const isChecked = selectedIndices.includes(oIdx);
+              return (
+                <button
+                  key={oIdx}
+                  type="button"
+                  onClick={() => handleToggleMultipleAnswer(activeQuestion, oIdx)}
+                  className={`flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all quiz-option cursor-pointer group ${isChecked
+                    ? 'bg-primary/5 border-primary text-primary font-bold shadow-xs'
+                    : 'bg-surface border-outline-variant hover:bg-surface-container text-on-surface hover:border-outline'
+                  }`}
+                >
+                  <div className={`w-7 h-7 rounded-lg border shrink-0 flex items-center justify-center text-xs font-bold transition-all ${isChecked
+                    ? 'bg-primary border-primary text-on-primary'
+                    : 'border-outline-variant text-outline bg-surface-container group-hover:border-outline'
+                  }`}>
+                    {isChecked ? (
+                      <span className="material-symbols-outlined text-[16px]">check</span>
+                    ) : (
+                      String.fromCharCode(65 + oIdx)
+                    )}
+                  </div>
+                  <span className="text-xs font-semibold leading-relaxed">
+                    {renderMathContent(opt)}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    // 2. True / False (Rost yoki Yolg'on)
+    if (qType === 'truefalse') {
+      const isTrueSelected = currentAnswer === true || currentAnswer === 'true';
+      const isFalseSelected = currentAnswer === false || currentAnswer === 'false';
+
+      return (
+        <div className="space-y-3 pt-4 border-t border-outline-variant/60">
+          <div className="flex items-center gap-1.5 text-indigo-500 text-xs font-bold">
+            <span className="material-symbols-outlined text-[16px]">rule</span>
+            <span>Rost yoki Yolg'on holatini belgilang:</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => handleSelectAnswer(activeQuestion, true)}
+              className={`p-4 rounded-xl border flex items-center justify-center gap-3 transition-all font-bold text-sm cursor-pointer shadow-xs ${isTrueSelected
+                ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-extrabold ring-2 ring-emerald-500/20'
+                : 'bg-surface border-outline-variant hover:bg-surface-container text-on-surface'
+              }`}
+            >
+              <div className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 ${isTrueSelected ? 'bg-emerald-500 text-white border-emerald-500' : 'border-outline-variant text-outline bg-surface-container'}`}>
+                <span className="material-symbols-outlined text-[18px]">check</span>
+              </div>
+              <span>Rost (True)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleSelectAnswer(activeQuestion, false)}
+              className={`p-4 rounded-xl border flex items-center justify-center gap-3 transition-all font-bold text-sm cursor-pointer shadow-xs ${isFalseSelected
+                ? 'bg-rose-500/10 border-rose-500 text-rose-600 dark:text-rose-400 font-extrabold ring-2 ring-rose-500/20'
+                : 'bg-surface border-outline-variant hover:bg-surface-container text-on-surface'
+              }`}
+            >
+              <div className={`w-8 h-8 rounded-full border flex items-center justify-center shrink-0 ${isFalseSelected ? 'bg-rose-500 text-white border-rose-500' : 'border-outline-variant text-outline bg-surface-container'}`}>
+                <span className="material-symbols-outlined text-[18px]">close</span>
+              </div>
+              <span>Yolg'on (False)</span>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // 3. Short Answer Question (Descriptive yozma javob)
+    if (qType === 'short') {
+      const textVal = currentAnswer !== undefined && currentAnswer !== null ? String(currentAnswer) : '';
+
+      return (
+        <div className="space-y-3 pt-4 border-t border-outline-variant/60 animate-fade-in">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 text-xs font-bold">
+              <span className="material-symbols-outlined text-[18px]">edit_note</span>
+              <span>Yozma javobingizni o'z so'zlaringiz bilan batafsil yozing:</span>
+            </div>
+            <span className="text-[10px] text-outline font-semibold">
+              {textVal.length} ta belgi
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            {/* Quick Uzbek reform letters inline bar */}
+            <div className="flex items-center gap-1.5 flex-wrap p-1.5 bg-surface-container rounded-xl border border-outline-variant/60">
+              <span className="text-[10px] font-bold text-outline px-1">Tezkor harflar:</span>
+              {['Ğ', 'ğ', 'Ö', 'ö', 'Ş', 'ş', 'Ç', 'ç'].map(ch => (
+                <button
+                  key={ch}
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    insertUzbekChar(ch);
+                  }}
+                  className="w-7 h-7 rounded-lg bg-surface border border-outline-variant hover:bg-primary hover:text-on-primary font-bold text-xs text-on-surface transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-2xs"
+                  title={`"${ch}" harfini kiritish`}
+                >
+                  {ch}
+                </button>
+              ))}
+            </div>
+            <textarea
+              rows={5}
+              value={textVal}
+              onChange={(e) => handleTextAnswer(activeQuestion, e.target.value)}
+              placeholder="Javobingizni bu yerga erkin va tushunarli qilib yozing. Gemini AI sun'iy intellekti uni belgilangan baholash mezonlari (Marking Scheme) asosida semantik baholaydi..."
+              className="w-full p-4 rounded-xl border border-outline-variant bg-surface text-on-surface font-medium text-xs sm:text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-xs transition-all leading-relaxed"
+            />
+            <div className="flex items-center gap-1.5 text-[11px] text-outline font-medium">
+              <span className="material-symbols-outlined text-[15px] text-indigo-500">smart_toy</span>
+              <span>Javobingiz so'zma-so'z nusxa bo'lishi shart emas — tushunchalar to'g'ri ifodalangan bo'lsa, to'liq ball beriladi.</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // 4. Math Equation Answer (Matematik formula / qiymat yechimi)
+    if (qType === 'math') {
+      const textVal = currentAnswer !== undefined && currentAnswer !== null ? String(currentAnswer) : '';
+
+      return (
+        <div className="space-y-3 pt-4 border-t border-outline-variant/60">
+          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 text-xs font-bold">
+            <span className="material-symbols-outlined text-[16px]">calculate</span>
+            <span>Matematik formula / qiymat yechimini kiriting:</span>
+          </div>
+
+          <div className="space-y-2">
+            <input
+              type="text"
+              value={textVal}
+              onChange={(e) => handleTextAnswer(activeQuestion, e.target.value)}
+              placeholder="Javobingiz (masalan: 7 yoki x=4)..."
+              className="w-full p-4 rounded-xl border border-outline-variant bg-surface text-on-surface font-semibold text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-xs transition-all"
+            />
+            <p className="text-[11px] text-outline font-medium">
+              💡 Harflar kattaligi (Katta/kichik) va probellar inobatga olinmaydi.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    // 4. Default: MCQ (Single-choice question)
+    const options = currentQ.options || [];
+    return (
+      <div className={`grid ${isSplit ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2'} gap-3 pt-4 border-t border-outline-variant/60`}>
+        {options.map((opt, oIdx) => {
+          const isChecked = currentAnswer === oIdx;
+          return (
+            <button
+              key={oIdx}
+              type="button"
+              onClick={() => handleSelectAnswer(activeQuestion, oIdx)}
+              className={`flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all quiz-option cursor-pointer group ${isChecked
+                ? 'bg-primary/5 border-primary text-primary font-bold shadow-xs'
+                : 'bg-surface border-outline-variant hover:bg-surface-container text-on-surface hover:border-outline'
+              }`}
+            >
+              <div className={`w-7 h-7 rounded-full border shrink-0 flex items-center justify-center text-[10px] font-bold transition-all ${isChecked
+                ? 'bg-primary border-primary text-on-primary'
+                : 'border-outline-variant text-outline bg-surface-container group-hover:border-outline'
+              }`}>
+                {String.fromCharCode(65 + oIdx)}
+              </div>
+              <span className="text-xs font-semibold leading-relaxed">
+                {renderMathContent(opt)}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const handleToggleFlag = (qIndex) => {
+    if (markedForReview.includes(qIndex)) {
+      setMarkedForReview(prev => prev.filter(item => item !== qIndex));
+    } else {
+      setMarkedForReview(prev => [...prev, qIndex]);
+    }
+  };
+
+  const handleSubmitTest = async () => {
+    setShowQuizConfirmationModal(false);
+
+    const spentTimeSecs = activeQuizTest.duration * 60 - timerSeconds;
+    const timeSpentStr = formatTimer(spentTimeSecs >= 0 ? spentTimeSecs : 0);
+
+    // Multi-type accurate client-side evaluation fallback
+    let clientCorrectCount = 0;
+    let totalScorePossible = 0;
+    let clientEarnedScore = 0;
+
+    (activeQuizTest.questions || []).forEach((q, idx) => {
+      const qScore = Number(q.score) || 1;
+      totalScorePossible += qScore;
+      const studentAns = quizAnswers[idx];
+      const qType = (q.type || 'single').toLowerCase();
+      let isCorrect = false;
+
+      const trueAns = q._decodedCorrect !== undefined ? q._decodedCorrect : (q.correctAnswer !== undefined ? q.correctAnswer : q.correct);
+
+      if (qType === 'single' || qType === 'mcq') {
+        let correctIdx = -1;
+        if (trueAns !== undefined && trueAns !== null) {
+          if (typeof trueAns === 'number') correctIdx = trueAns;
+          else if (!isNaN(Number(trueAns)) && String(trueAns).trim() !== '') correctIdx = Number(trueAns);
+          else if (/^[A-Za-z]$/.test(String(trueAns).trim())) {
+            correctIdx = String(trueAns).trim().toUpperCase().charCodeAt(0) - 65;
+          }
+        }
+        if (studentAns !== undefined && studentAns !== null && correctIdx !== -1 && Number(studentAns) === correctIdx) {
+          isCorrect = true;
+        }
+      } else if (qType === 'multiple') {
+        const correctArr = Array.isArray(trueAns) ? trueAns.map(Number) : [Number(trueAns) || 0];
+        const studentArr = Array.isArray(studentAns) ? studentAns.map(Number) : [];
+        const s1 = [...correctArr].sort((a,b)=>a-b);
+        const s2 = [...studentArr].sort((a,b)=>a-b);
+        if (s1.length > 0 && s1.length === s2.length && s1.every((v, i) => v === s2[i])) {
+          isCorrect = true;
+        }
+      } else if (qType === 'truefalse') {
+        const cBool = trueAns === true || trueAns === 0 || trueAns === 'true' || String(trueAns).toLowerCase() === 'true';
+        let sBool;
+        if (typeof studentAns === 'boolean') sBool = studentAns;
+        else if (typeof studentAns === 'string') sBool = studentAns.toLowerCase() === 'true' || studentAns.toLowerCase() === 'rost' || studentAns === '0';
+        else if (typeof studentAns === 'number') sBool = studentAns === 0;
+        if (sBool !== undefined && sBool === cBool) isCorrect = true;
+      } else if (qType === 'short' || qType === 'math') {
+        if (studentAns !== undefined && studentAns !== null) {
+          const sText = String(studentAns).trim().toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+          const marker = qType === 'short' ? '__SHORT__:' : '__MATH__:';
+          const modelText = String(
+            (q.hint && q.hint.includes(marker) ? q.hint.split(marker)[1].split(' | ')[0] : '') ||
+            (q.hint && q.hint.includes('__SHORT__:') ? q.hint.split('__SHORT__:')[1].split(' | ')[0] : '') ||
+            (q.hint && q.hint.includes('__MATH__:') ? q.hint.split('__MATH__:')[1].split(' | ')[0] : '') ||
+            q.markingScheme?.modelAnswer ||
+            q._decodedCorrect ||
+            q.correctAnswer ||
+            q.correct ||
+            ''
+          ).trim().toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+          const accepted = (String(modelText) + ',' + (Array.isArray(q.options) ? q.options.join(',') : ''))
+            .split(',')
+            .map(x => x.trim().toLowerCase())
+            .filter(Boolean);
+          if (accepted.some(acc => acc === sText || (acc.replace(/\s+/g, '') === sText.replace(/\s+/g, '')) || sText.includes(acc) || acc.includes(sText))) {
+            isCorrect = true;
+          }
+          if (!isCorrect && modelText) {
+            const acronym = modelText.split(' ').map(w => w[0]).join('');
+            if (acronym.length >= 2 && (sText === acronym || sText.includes(acronym))) isCorrect = true;
+            const sAcronym = sText.split(' ').map(w => w[0]).join('');
+            if (sAcronym.length >= 2 && (modelText === sAcronym || modelText.includes(sAcronym))) isCorrect = true;
+          }
+        }
+      }
+
+      if (isCorrect) {
+        clientCorrectCount++;
+        clientEarnedScore += qScore;
+      }
+    });
+
+    const clientPercentage = totalScorePossible > 0 ? Math.round((clientEarnedScore / totalScorePossible) * 100) : 0;
+
+    const payloadAnswers = { ...quizAnswers };
+    (activeQuizTest.questions || []).forEach((q, idx) => {
+      if (q.id && quizAnswers[idx] !== undefined) {
+        payloadAnswers[q.id] = quizAnswers[idx];
+      }
+    });
+
+    try {
+      const response = await fetchWithAuth('/api/submissions', {
+        method: 'POST',
+        body: JSON.stringify({
+          testId: activeQuizTest.id,
+          answers: payloadAnswers,
+          tabSwitches: tabSwitchesCount,
+          timeSpent: timeSpentStr
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Natijani saqlashda xatolik.');
+      }
+
+      // Generate accurate question-by-question reviews reconciled with server data
+      const rawReviews = (data.result && Array.isArray(data.result.reviews) && data.result.reviews.length === (activeQuizTest.questions || []).length)
+        ? data.result.reviews
+        : null;
+
+      const effectiveReviews = (activeQuizTest.questions || []).map((q, idx) => {
+        const studentAns = quizAnswers[idx];
+        const qType = (q.type || 'single').toLowerCase();
+        const qScore = Math.max(1, Number(q.score) || 1);
+        let isCorrect = false;
+        let awardedMarks = 0;
+        let aiGrading = null;
+        const trueAns = q._decodedCorrect !== undefined ? q._decodedCorrect : (q.correctAnswer !== undefined ? q.correctAnswer : q.correct);
+        const serverRev = rawReviews ? rawReviews[idx] : null;
+
+        if (qType === 'short' || qType === 'math') {
+          const sText = String(studentAns || '').trim();
+          const marker = qType === 'short' ? '__SHORT__:' : '__MATH__:';
+          const modelAns = String(
+            (q.hint && q.hint.includes(marker) ? q.hint.split(marker)[1].split(' | ')[0] : '') ||
+            (q.hint && q.hint.includes('__SHORT__:') ? q.hint.split('__SHORT__:')[1].split(' | ')[0] : '') ||
+            (q.hint && q.hint.includes('__MATH__:') ? q.hint.split('__MATH__:')[1].split(' | ')[0] : '') ||
+            q.markingScheme?.modelAnswer ||
+            q._decodedCorrect ||
+            q.correctAnswer ||
+            q.correct ||
+            ''
+          ).trim();
+
+          const normS = sText.toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+          const normM = modelAns.toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+
+          let matched = false;
+          if (normS && normM && (normS === normM || normS.includes(normM) || normM.includes(normS))) {
+            matched = true;
+          }
+          if (!matched && normM) {
+            const acronym = normM.split(' ').map(w => w[0]).join('');
+            if (acronym.length >= 2 && (normS === acronym || normS.includes(acronym))) matched = true;
+            const sAcronym = normS.split(' ').map(w => w[0]).join('');
+            if (sAcronym.length >= 2 && (normM === sAcronym || normM.includes(sAcronym))) matched = true;
+          }
+
+          if (serverRev && (serverRev.isCorrect || Number(serverRev.awardedMarks) > 0)) {
+            isCorrect = true;
+            awardedMarks = Number(serverRev.awardedMarks) || qScore;
+            aiGrading = serverRev.aiGrading || null;
+          } else if (matched && normS) {
+            isCorrect = true;
+            awardedMarks = qScore;
+            aiGrading = {
+              grading_status: 'graded',
+              awarded_marks: qScore,
+              maximum_marks: qScore,
+              student_feedback: "A'lo darajada! Javob namunaviy javob va mezonlarga to'liq mos keladi.",
+              criterion_results: [{ criterion_id: 'c1', maximum_marks: qScore, awarded_marks: qScore, reason: "Mezon to'liq bajarildi." }]
+            };
+          } else if (!normS) {
+            isCorrect = false;
+            awardedMarks = 0;
+            aiGrading = {
+              grading_status: 'graded',
+              awarded_marks: 0,
+              maximum_marks: qScore,
+              student_feedback: "Javob kiritilmadi.",
+              criterion_results: []
+            };
+          } else {
+            isCorrect = false;
+            awardedMarks = 0;
+            aiGrading = serverRev?.aiGrading || {
+              grading_status: 'graded',
+              awarded_marks: 0,
+              maximum_marks: qScore,
+              student_feedback: "Javob model javobga mos kelmadi.",
+              criterion_results: [{ criterion_id: 'c1', maximum_marks: qScore, awarded_marks: 0, reason: "Asosiy tushunchalar yetarli emas." }]
+            };
+          }
+        } else if (qType === 'single' || qType === 'mcq') {
+          let correctIdx = -1;
+          if (trueAns !== undefined && trueAns !== null) {
+            if (typeof trueAns === 'number') correctIdx = trueAns;
+            else if (!isNaN(Number(trueAns)) && String(trueAns).trim() !== '') correctIdx = Number(trueAns);
+            else if (/^[A-Za-z]$/.test(String(trueAns).trim())) {
+              correctIdx = String(trueAns).trim().toUpperCase().charCodeAt(0) - 65;
+            }
+          }
+          if (studentAns !== undefined && studentAns !== null && (Number(studentAns) === correctIdx || (serverRev && serverRev.isCorrect))) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        } else if (qType === 'multiple') {
+          const cArr = Array.isArray(trueAns) ? trueAns.map(Number) : [Number(trueAns) || 0];
+          const sArr = Array.isArray(studentAns) ? studentAns.map(Number) : [];
+          if (
+            (cArr.length > 0 && cArr.length === sArr.length && cArr.every(v => sArr.includes(v))) ||
+            (serverRev && serverRev.isCorrect)
+          ) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        } else if (qType === 'truefalse') {
+          const cBool = trueAns === true || trueAns === 0 || trueAns === 'true' || String(trueAns).toLowerCase() === 'true';
+          let sBool;
+          if (typeof studentAns === 'boolean') sBool = studentAns;
+          else if (typeof studentAns === 'string') sBool = studentAns.toLowerCase() === 'true' || studentAns.toLowerCase() === 'rost' || studentAns === '0';
+          else if (typeof studentAns === 'number') sBool = studentAns === 0;
+          if ((sBool !== undefined && sBool === cBool) || (serverRev && serverRev.isCorrect)) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        }
+
+        return {
+          questionId: q.id || idx + 1,
+          index: idx,
+          type: qType,
+          text: q.question || q.text,
+          options: q.options || [],
+          studentAnswer: studentAns,
+          correctAnswer: trueAns,
+          isCorrect,
+          awardedMarks,
+          maxScore: qScore,
+          aiGrading
+        };
+      });
+
+      // Calculate totals from question-by-question reviews (definitive ground truth)
+      const evaluatedCorrectCount = effectiveReviews.filter(r => r.isCorrect).length;
+      const evaluatedEarnedMarks = effectiveReviews.reduce((sum, r) => sum + (Number(r.awardedMarks) || 0), 0);
+      const evaluatedMaxMarks = effectiveReviews.reduce((sum, r) => sum + (Number(r.maxScore) || 1), 0);
+      const evaluatedPercentage = evaluatedMaxMarks > 0 ? Math.round((evaluatedEarnedMarks / evaluatedMaxMarks) * 100) : 0;
+
+      const finalCorrectCount = Math.max(
+        evaluatedCorrectCount,
+        clientCorrectCount,
+        (data.result && typeof data.result.correctCount === 'number') ? data.result.correctCount : 0
+      );
+      const finalEarnedScore = Math.max(
+        evaluatedEarnedMarks,
+        clientEarnedScore,
+        Number(data.result?.earnedScore) || 0
+      );
+      const finalTotalScore = Math.max(
+        evaluatedMaxMarks,
+        totalScorePossible,
+        Number(data.result?.totalPossibleScore) || (activeQuizTest.questions?.length || 1)
+      );
+      const finalScore = finalTotalScore > 0
+        ? Math.round((finalEarnedScore / finalTotalScore) * 100)
+        : Math.max(
+            evaluatedPercentage,
+            clientPercentage,
+            (data.result && typeof data.result.score === 'number') ? data.result.score : 0
+          );
+      const finalIncorrectCount = Math.max(0, (activeQuizTest.questions?.length || effectiveReviews.length) - finalCorrectCount);
+      const finalPassed = finalScore >= (activeQuizTest.passingScore || activeQuizTest.passingPercentage || 70);
+
+      setQuizResult({
+        testId: activeQuizTest.id,
+        testTitle: activeQuizTest.title,
+        score: finalScore,
+        earnedScore: finalEarnedScore,
+        totalPossibleScore: finalTotalScore,
+        correctCount: finalCorrectCount,
+        incorrectCount: finalIncorrectCount,
+        unansweredCount: activeQuizTest.questions.length - Object.keys(quizAnswers).length,
+        timeSpent: timeSpentStr,
+        answers: quizAnswers,
+        reviews: effectiveReviews,
+        cheatAlerts: tabSwitchesCount
+      });
+
+      // Save locally for instant real-time sync with Admin panel
+      try {
+        const stored = localStorage.getItem('mathscore_submissions');
+        const localList = stored ? JSON.parse(stored) : [];
+        const studentFullName = `${profile?.firstName || ''} ${profile?.lastName || ''}`.trim() || 'Musurmon Qahharov';
+        const newRecord = {
+          id: (data.result && data.result.id) || Date.now(),
+          userId: profile?.id || 'std_' + Date.now(),
+          userName: studentFullName,
+          userEmail: profile?.email || '',
+          userAvatar: profile?.avatar || null,
+          testId: activeQuizTest.id,
+          testTitle: activeQuizTest.title,
+          courseTitle: activeQuizTest.course || activeQuizTest.category || (activeCourse?.title || 'Barcha kurslar'),
+          score: finalScore,
+          earnedScore: finalEarnedScore,
+          totalPossibleScore: finalTotalScore,
+          correctCount: finalCorrectCount,
+          incorrectCount: finalIncorrectCount,
+          passed: finalPassed,
+          timeSpent: timeSpentStr,
+          tabSwitches: tabSwitchesCount,
+          submittedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        };
+        const updated = [newRecord, ...localList.filter(s => String(s.id) !== String(newRecord.id))];
+        localStorage.setItem('mathscore_submissions', JSON.stringify(updated));
+        localStorage.setItem('lms_notification_sync', JSON.stringify({ type: 'test_submitted', at: Date.now() }));
+        window.dispatchEvent(new Event('storage'));
+      } catch (e) {
+        console.error('Local submission cache error:', e);
+      }
+
+      try {
+        if (typeof document !== 'undefined' && document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+
+      setCurrentPage('test-results');
+      if (data.userStats) {
+        applyUserStats(data.userStats, data.awarded, 'Test yakunlandi!');
+      }
+      syncData();
+    } catch (err) {
+      console.warn('Submission network fallback:', err.message);
+      // Fallback: client-side evaluation
+      const fallbackReviews = (activeQuizTest.questions || []).map((q, idx) => {
+        const studentAns = quizAnswers[idx];
+        const qType = (q.type || 'single').toLowerCase();
+        const qScore = Math.max(1, Number(q.score) || 1);
+        let isCorrect = false;
+        let awardedMarks = 0;
+        const trueAns = q._decodedCorrect !== undefined ? q._decodedCorrect : (q.correctAnswer !== undefined ? q.correctAnswer : q.correct);
+
+        if (qType === 'short' || qType === 'math') {
+          const sText = String(studentAns || '').trim();
+          const marker = qType === 'short' ? '__SHORT__:' : '__MATH__:';
+          const modelAns = String(
+            (q.hint && q.hint.includes(marker) ? q.hint.split(marker)[1].split(' | ')[0] : '') ||
+            (q.hint && q.hint.includes('__SHORT__:') ? q.hint.split('__SHORT__:')[1].split(' | ')[0] : '') ||
+            (q.hint && q.hint.includes('__MATH__:') ? q.hint.split('__MATH__:')[1].split(' | ')[0] : '') ||
+            q.markingScheme?.modelAnswer ||
+            q._decodedCorrect ||
+            q.correctAnswer ||
+            q.correct ||
+            ''
+          ).trim();
+
+          const normS = sText.toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+          const normM = modelAns.toLowerCase().replace(/[^a-z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+
+          if (normS && normM && (normS === normM || normS.includes(normM) || normM.includes(normS))) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        } else if (qType === 'single' || qType === 'mcq') {
+          let correctIdx = -1;
+          if (trueAns !== undefined && trueAns !== null) {
+            if (typeof trueAns === 'number') correctIdx = trueAns;
+            else if (!isNaN(Number(trueAns)) && String(trueAns).trim() !== '') correctIdx = Number(trueAns);
+            else if (/^[A-Za-z]$/.test(String(trueAns).trim())) {
+              correctIdx = String(trueAns).trim().toUpperCase().charCodeAt(0) - 65;
+            }
+          }
+          if (studentAns !== undefined && studentAns !== null && correctIdx !== -1 && Number(studentAns) === correctIdx) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        } else if (qType === 'multiple') {
+          const cArr = Array.isArray(trueAns) ? trueAns.map(Number) : [Number(trueAns) || 0];
+          const sArr = Array.isArray(studentAns) ? studentAns.map(Number) : [];
+          if (cArr.length > 0 && cArr.length === sArr.length && cArr.every(v => sArr.includes(v))) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        } else if (qType === 'truefalse') {
+          const cBool = trueAns === true || trueAns === 0 || trueAns === 'true' || String(trueAns).toLowerCase() === 'true';
+          let sBool;
+          if (typeof studentAns === 'boolean') sBool = studentAns;
+          else if (typeof studentAns === 'string') sBool = studentAns.toLowerCase() === 'true' || studentAns.toLowerCase() === 'rost' || studentAns === '0';
+          else if (typeof studentAns === 'number') sBool = studentAns === 0;
+          if (sBool !== undefined && sBool === cBool) {
+            isCorrect = true;
+            awardedMarks = qScore;
+          }
+        }
+
+        return {
+          questionId: q.id || idx + 1,
+          index: idx,
+          type: qType,
+          text: q.question || q.text,
+          options: q.options || [],
+          studentAnswer: studentAns,
+          correctAnswer: trueAns,
+          isCorrect,
+          awardedMarks,
+          maxScore: qScore
+        };
+      });
+
+      const evaluatedCorrectCount = fallbackReviews.filter(r => r.isCorrect).length;
+      const evaluatedEarnedMarks = fallbackReviews.reduce((sum, r) => sum + (Number(r.awardedMarks) || 0), 0);
+      const evaluatedMaxMarks = fallbackReviews.reduce((sum, r) => sum + (Number(r.maxScore) || 1), 0);
+      const finalCorrectCount = Math.max(evaluatedCorrectCount, clientCorrectCount);
+      const finalEarnedScore = Math.max(evaluatedEarnedMarks, clientEarnedScore);
+      const finalTotalScore = Math.max(evaluatedMaxMarks, totalScorePossible);
+      const finalScore = finalTotalScore > 0 ? Math.round((finalEarnedScore / finalTotalScore) * 100) : clientPercentage;
+      const finalIncorrectCount = Math.max(0, activeQuizTest.questions.length - finalCorrectCount);
+      const finalPassed = finalScore >= (activeQuizTest.passingScore || 70);
+
+      setQuizResult({
+        testId: activeQuizTest.id,
+        testTitle: activeQuizTest.title,
+        score: finalScore,
+        earnedScore: finalEarnedScore,
+        totalPossibleScore: finalTotalScore,
+        correctCount: finalCorrectCount,
+        incorrectCount: finalIncorrectCount,
+        unansweredCount: activeQuizTest.questions.length - Object.keys(quizAnswers).length,
+        timeSpent: timeSpentStr,
+        answers: quizAnswers,
+        reviews: fallbackReviews,
+        cheatAlerts: tabSwitchesCount
+      });
+
+      try {
+        const stored = localStorage.getItem('mathscore_submissions');
+        const localList = stored ? JSON.parse(stored) : [];
+        const studentFullName = `${profile?.firstName || ''} ${profile?.lastName || ''}`.trim() || 'Musurmon Qahharov';
+        const newRecord = {
+          id: Date.now(),
+          userId: profile?.id || 'std_' + Date.now(),
+          userName: studentFullName,
+          userEmail: profile?.email || '',
+          userAvatar: profile?.avatar || null,
+          testId: activeQuizTest.id,
+          testTitle: activeQuizTest.title,
+          courseTitle: activeQuizTest.course || activeQuizTest.category || (activeCourse?.title || 'Barcha kurslar'),
+          score: finalScore,
+          earnedScore: finalEarnedScore,
+          totalPossibleScore: finalTotalScore,
+          correctCount: finalCorrectCount,
+          incorrectCount: finalIncorrectCount,
+          passed: finalPassed,
+          timeSpent: timeSpentStr,
+          tabSwitches: tabSwitchesCount,
+          submittedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString()
+        };
+        const updated = [newRecord, ...localList.filter(s => String(s.id) !== String(newRecord.id))];
+        localStorage.setItem('mathscore_submissions', JSON.stringify(updated));
+        localStorage.setItem('lms_notification_sync', JSON.stringify({ type: 'test_submitted', at: Date.now() }));
+        window.dispatchEvent(new Event('storage'));
+      } catch (e) {}
+
+      try {
+        if (typeof document !== 'undefined' && document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+
+      setCurrentPage('test-results');
+    }
+  };
+
+  const handleResetQuiz = () => {
+    setQuizAnswers({});
+    setMarkedForReview([]);
+    setVisitedQuestions([0]);
+    setTimerSeconds(activeQuizTest.duration * 60);
+    setTabSwitchesCount(0);
+    setActiveQuestion(0);
+    setCurrentPage('test-interface');
+
+    try {
+      if (typeof document !== 'undefined' && !document.fullscreenElement && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    } catch (e) {}
+  };
+
+  const handleStartTestFlow = (test) => {
+    let processedTest = JSON.parse(JSON.stringify(test)); // Deep copy to safely modify locally
+
+    // Admin tomonidan belgilangan savollar tartibi va javob variantlari qat'iy o'z holicha saqlanadi.
+    // Savollar va javob variantlari hech qachon tasodifiy almashtirilmaydi (shuffle qilinmaydi).
+    // Admin ko'rsatgan to'g'ri javob varianti har bir o'quvchi uchun o'zgarmasdan saqlanib qoladi.
+
+    setActiveQuizTest(processedTest);
+    setQuizAnswers({});
+    setMarkedForReview([]);
+    setVisitedQuestions([0]);
+    setTimerSeconds(processedTest.duration * 60);
+    setTabSwitchesCount(0);
+    setActiveQuestion(0);
+    setCurrentPage('test-start');
+  };
+
+  // Safe Math evaluator for floating scientific calculator
+  const handleCalcPress = (btn) => {
+    if (btn === 'C') {
+      setCalcInput('');
+      setCalcResult('');
+    } else if (btn === '=') {
+      try {
+        let expression = calcInput;
+        // replace with Math equivalents safely
+        expression = expression.replace(/sin\(/g, 'Math.sin(');
+        expression = expression.replace(/cos\(/g, 'Math.cos(');
+        expression = expression.replace(/tan\(/g, 'Math.tan(');
+        expression = expression.replace(/sqrt\(/g, 'Math.sqrt(');
+        expression = expression.replace(/log\(/g, 'Math.log10(');
+        expression = expression.replace(/π/g, 'Math.PI');
+
+        const evalFn = new Function(`return ${expression}`);
+        const res = evalFn();
+        setCalcResult(Number(res).toFixed(4).replace(/\.?0+$/, ''));
+      } catch (err) {
+        setCalcResult('Xatolik');
+      }
+    } else {
+      const isFunction = ['sin', 'cos', 'tan', 'sqrt', 'log'].includes(btn);
+      setCalcInput(prev => prev + (isFunction ? btn + '(' : btn));
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('student_token');
+    setSupportChatOpen(false);
+    setSupportChatThread({ adminName: 'Azizbek', adminAvatar: '', unreadByStudent: 0, messages: [] });
+    setPremiumLockModal(null);
+    setCurrentPage('login');
+    setIsSidebarOpen(false);
+  };
+
+  const [myTasksOpen, setMyTasksOpen] = useState(true);
+  const [liveClasses, setLiveClasses] = useState([]);
+
+  // Live classes integratsiyasi & Jonli countdown taymeri
+  useEffect(() => {
+    const isFree = String(profile?.tariff || 'VIP').toUpperCase() === 'FREE';
+    if (isFree) {
+      setLiveClasses([]);
+      setSelectedLiveClass(null);
+      return;
+    }
+
+    const fetchLive = async () => {
+      try {
+        const token = localStorage.getItem('student_token');
+        const res = await fetch(`${API_BASE}/api/live-classes`, {
+          cache: 'no-store',
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        if (res.status === 403) {
+          setLiveClasses([]);
+          setSelectedLiveClass(null);
+          return;
+        }
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            setLiveClasses(data);
+          }
+        }
+      } catch (e) {}
+    };
+    fetchLive();
+    const iv = setInterval(fetchLive, 8000);
+    return () => clearInterval(iv);
+  }, [profile?.tariff]);
+
+  useEffect(() => {
+    if (currentPage !== 'dashboard') {
+      const slowTick = setInterval(() => setLiveTick(Date.now()), 30000);
+      return () => clearInterval(slowTick);
+    }
+    setLiveTick(Date.now());
+    fetchDashboardLeaderboard();
+    const lbInterval = setInterval(() => fetchDashboardLeaderboard(), 15000);
+    const tickInterval = setInterval(() => setLiveTick(Date.now()), 1000);
+    return () => {
+      clearInterval(lbInterval);
+      clearInterval(tickInterval);
+    };
+  }, [currentPage, leaderboardPeriod, fetchDashboardLeaderboard]);
+
+  const getTimeOfDayGreeting = (dateInput = new Date()) => {
+    const dt = dateInput instanceof Date ? dateInput : new Date(dateInput);
+    const hour = isNaN(dt.getTime()) ? new Date().getHours() : dt.getHours();
+    if (hour >= 5 && hour < 12) return 'Good morning';
+    if (hour >= 12 && hour < 17) return 'Good afternoon';
+    if (hour >= 17 && hour < 22) return 'Good evening';
+    return 'Good night';
+  };
+
+  const getLiveClassMeta = (dateStr, timeStr, nowMs = liveTick) => {
+    if (!dateStr || !timeStr) {
+      return { status: 'upcoming', label: '02s 15d qoldi', fullCountdown: '02 soat 15 daqiqa qoldi' };
+    }
+    try {
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        const d = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1;
+        const y = parseInt(parts[2], 10);
+        const [hh, mm] = timeStr.split(':').map(Number);
+        const target = new Date(y, m, d, hh || 0, mm || 0, 0).getTime();
+        const diff = target - nowMs;
+
+        // Jonli dars boshlanganidan keyin 3 soatgacha "Jonli efirda" deb ko'rsatamiz
+        if (diff <= 0 && diff >= -3 * 60 * 60 * 1000) {
+          const elapsedMins = Math.max(1, Math.floor(Math.abs(diff) / 60000));
+          return {
+            status: 'live',
+            label: 'Jonli efirda',
+            fullCountdown: `Jonli efir ketmoqda (${elapsedMins} daq)`
+          };
+        }
+        if (diff < -3 * 60 * 60 * 1000) {
+          return {
+            status: 'ended',
+            label: 'Yakunlangan',
+            fullCountdown: 'Dars yakunlangan (Yozuv mavjud)'
+          };
+        }
+
+        const totalSecs = Math.floor(diff / 1000);
+        const days = Math.floor(totalSecs / 86400);
+        const hours = Math.floor((totalSecs % 86400) / 3600);
+        const mins = Math.floor((totalSecs % 3600) / 60);
+        const secs = totalSecs % 60;
+
+        const shortLabel = days > 0
+          ? `${days}k ${String(hours).padStart(2, '0')}s ${String(mins).padStart(2, '0')}d`
+          : hours > 0
+            ? `${String(hours).padStart(2, '0')}s ${String(mins).padStart(2, '0')}d ${String(secs).padStart(2, '0')}s qoldi`
+            : `${String(mins).padStart(2, '0')}d ${String(secs).padStart(2, '0')}s qoldi`;
+
+        const fullLabel = days > 0
+          ? `${days} kun ${hours} soat ${mins} daqiqa qoldi`
+          : `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')} qoldi`;
+
+        return { status: 'upcoming', label: shortLabel, fullCountdown: fullLabel };
+      }
+    } catch (e) {}
+    return { status: 'upcoming', label: '02s 15d qoldi', fullCountdown: '02 soat 15 daqiqa qoldi' };
+  };
+
+  const handleJoinLiveClass = async (cls) => {
+    if (String(profile?.tariff || 'VIP').toUpperCase() === 'FREE') {
+      openPremiumLockModal('Live Classes');
+      return;
+    }
+    if (!cls) return;
+    if (cls.url) {
+      window.open(cls.url, '_blank', 'noopener,noreferrer');
+    }
+    if (!joinedLiveIds.includes(cls.id)) {
+      const nextJoined = [...joinedLiveIds, cls.id];
+      setJoinedLiveIds(nextJoined);
+      try {
+        localStorage.setItem('student_joined_live_classes', JSON.stringify(nextJoined));
+      } catch (e) {}
+    }
+    try {
+      const token = localStorage.getItem('student_token');
+      if (token) {
+        const res = await fetch(`${API_BASE}/api/gamification/award`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            type: 'live_class',
+            eventKey: `live_class_${cls.id}`,
+            xp: 25,
+            coins: 10,
+            meta: { classId: cls.id, title: cls.title, platform: cls.platform }
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          applyUserStats(
+            data.userStats,
+            data.alreadyAwarded ? null : data.awarded,
+            `Jonli dars: ${cls.title}`
+          );
+        }
+      }
+    } catch (e) {}
+  };
+
+  const toggleLiveReminder = (clsId, e) => {
+    if (e) e.stopPropagation();
+    if (String(profile?.tariff || 'VIP').toUpperCase() === 'FREE') {
+      openPremiumLockModal('Live Classes');
+      return;
+    }
+    setRemindedLiveIds(prev => {
+      const exists = prev.includes(clsId);
+      const next = exists ? prev.filter(id => id !== clsId) : [...prev, clsId];
+      try {
+        localStorage.setItem('student_reminded_live_classes', JSON.stringify(next));
+      } catch (err) {}
+      return next;
+    });
+  };
+
+  const handleCopyLiveLink = async (cls, e) => {
+    if (e) e.stopPropagation();
+    if (String(profile?.tariff || 'VIP').toUpperCase() === 'FREE') {
+      openPremiumLockModal('Live Classes');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(cls.url || '');
+      setCopiedLiveId(cls.id);
+      setTimeout(() => setCopiedLiveId(prev => (prev === cls.id ? null : prev)), 2000);
+    } catch (err) {}
+  };
+
+  // 2-talab: Sidebar menyu stilidagi to'liq menyular ro'yxati
+  const sidebarNavItems = [
+    { name: 'Dashboard', icon: 'dashboard', page: 'dashboard' },
+    { name: 'Kurslarim', icon: 'menu_book', page: 'courses' },
+    { name: 'Library', icon: 'local_library', page: 'library' },
+    {
+      name: 'My tasks',
+      icon: 'checklist',
+      hasSubmenu: true,
+      subItems: [
+        { name: 'Topshiriqlar', icon: 'assignment', page: 'tasks' },
+        { name: 'Grammar', icon: 'spellcheck', page: 'grammar' },
+        { name: 'Speaking partner', icon: 'record_voice_over', page: 'speaking-partner' },
+        { name: 'Challenges', icon: 'emoji_events', page: 'challenges' },
+        { name: 'Speaking practise', icon: 'record_voice_over', page: 'practise' },
+        { name: 'Testlar markazi', icon: 'quiz', page: 'test-center' },
+        { name: 'Games', icon: 'sports_esports', page: 'games' },
+        { name: 'Vocabulary', icon: 'translate', page: 'vocabulary' }
+      ]
+    },
+    { name: 'Battle', icon: 'swords', page: 'battle' },
+    { name: 'My Progress', icon: 'monitoring', page: 'my-progress' },
+    { name: 'Leaderboard', icon: 'leaderboard', page: 'leaderboard' },
+    { name: 'Sertifikatlarim', icon: 'workspace_premium', page: 'certificates' },
+    { name: 'Testlar markazi', icon: 'fact_check', page: 'test-center' },
+    { name: 'Imtixon natijalari', icon: 'insights', page: 'test-results' },
+    { name: 'Settings', icon: 'settings', page: 'profile' }
+  ];
+
+  // Domain accuracy computer helper
+  const detectQuestionTopic = (q) => {
+    if (q.topic && !['Matematika', 'General', 'Umumiy', 'SAT Prep', 'A-Level'].includes(q.topic)) {
+      return q.topic;
+    }
+    const text = `${q.text || q.question || ''} ${Array.isArray(q.options) ? q.options.join(' ') : ''}`.toLowerCase();
+    if (text.includes('\\frac{d}{dx}') || text.includes('\\int') || text.includes('integral') || text.includes('hosila') || text.includes('limit') || text.includes('derivative')) {
+      return 'Calculus';
+    }
+    if (text.includes('\\sin') || text.includes('\\cos') || text.includes('\\tan') || text.includes('burchak') || text.includes('sinus') || text.includes('kosinus') || text.includes('trigonometriya')) {
+      return 'Trigonometry';
+    }
+    if (text.includes('radius') || text.includes('yuza') || text.includes('perimetr') || text.includes('aylana') || text.includes('uchburchak') || text.includes('triangle') || text.includes('circle') || text.includes('shakl') || text.includes('geometriya')) {
+      return 'Geometry';
+    }
+    if (text.includes('ehtimollik') || text.includes('probability') || text.includes('statistika') || text.includes('o\'rtacha') || text.includes('table') || text.includes('jadval') || text.includes('grafik') || text.includes('diagramma')) {
+      return 'Statistics';
+    }
+    return 'Algebra';
+  };
+
+  const getCategoryAccuracy = (category) => {
+    if (!activeQuizTest || !quizResult) return 0;
+    const allQuestions = activeQuizTest.questions || [];
+    if (allQuestions.length === 0) return 0;
+
+    const catQuestions = allQuestions.filter(q => detectQuestionTopic(q) === category);
+    
+    if (catQuestions.length > 0) {
+      let correct = 0;
+      catQuestions.forEach(q => {
+        const originalIdx = allQuestions.indexOf(q);
+        const review = quizResult.reviews ? quizResult.reviews[originalIdx] : null;
+        if (review ? review.isCorrect : (quizResult.answers[originalIdx] === (q._decodedCorrect ?? q.correct))) {
+          correct++;
+        }
+      });
+      return Math.round((correct / catQuestions.length) * 100);
+    }
+
+    // Proportional competency so mastery bars accurately reflect performance
+    const revList = Array.isArray(quizResult.reviews) ? quizResult.reviews : [];
+    let overallPct = typeof quizResult.score === 'number' ? quizResult.score : 0;
+    if (revList.length > 0) {
+      const eEarned = revList.reduce((s, r) => s + (Number(r.awardedMarks) || 0), 0);
+      const eTotal = revList.reduce((s, r) => s + (Number(r.maxScore) || 1), 0);
+      if (eTotal > 0) overallPct = Math.max(overallPct, Math.round((eEarned / eTotal) * 100));
+    }
+    if (overallPct > 0) {
+      return Math.max(0, Math.min(100, overallPct));
+    }
+    return 0;
+  };
+
+  const getLessonIndex = () => activeCourse?.lessons?.findIndex(l => l.id === activeLesson?.id) ?? -1;
+
+  const handlePrevLesson = () => {
+    const idx = getLessonIndex();
+    if (idx > 0 && activeCourse?.lessons) setActiveLesson(activeCourse.lessons[idx - 1]);
+  };
+
+  const handleNextLesson = async () => {
+    const idx = getLessonIndex();
+    if (idx !== -1 && activeCourse?.lessons && idx < activeCourse.lessons.length) {
+      // Backendga dars yakunlanganini yuboramiz
+      try {
+        if (activeLesson?.id) {
+          const res = await fetchWithAuth(`/api/lessons/${activeLesson.id}/complete`, { method: 'POST' });
+          if (res.ok) {
+            const lessonData = await res.json();
+            applyUserStats(lessonData.userStats, lessonData.awarded, 'Dars yakunlandi!');
+          }
+        }
+      } catch (err) {
+        console.error('Failed to mark lesson as completed', err);
+      }
+
+      // Joriy darsni "completed" (tugallangan) deb belgilaymiz
+      const updatedLessons = [...(activeCourse?.lessons || [])];
+      updatedLessons[idx] = { ...updatedLessons[idx], completed: true };
+      // Keyingi darsni "unlocked" qilamiz
+      if (idx + 1 < updatedLessons.length) {
+        updatedLessons[idx + 1] = { ...updatedLessons[idx + 1], locked: false };
+      }
+      const compCount = updatedLessons.filter(l => l.completed).length;
+      const compProgress = updatedLessons.length > 0 ? Math.round((compCount / updatedLessons.length) * 100) : 100;
+      const isAllDone = updatedLessons.length > 0 && updatedLessons.every(l => l.completed);
+      const updatedCourse = { ...activeCourse, lessons: updatedLessons, progress: compProgress };
+
+      setActiveCourse(updatedCourse);
+      setCourses(prev => prev.map(c => c.id === updatedCourse.id ? updatedCourse : c));
+
+      // Agar bu oxirgi dars bo'lmasa, keyingisiga o'tamiz
+      if (idx < (activeCourse?.lessons?.length || 0) - 1) {
+        setActiveLesson(updatedCourse.lessons[idx + 1]);
+      } else if (isAllDone) {
+        setCompletedCourseForCert(updatedCourse);
+        setShowCourseCertificate(true);
+      }
+    }
+  };
+
+  const getVideoSrc = (url) => {
+    if (!url) return '';
+    let finalUrl = url;
+    if (url.startsWith('/uploads/')) {
+      finalUrl = `${API_BASE}${url}`;
+    }
+    if (finalUrl.includes('/uploads/')) {
+      const token = localStorage.getItem('student_token');
+      if (token && !finalUrl.includes('token=')) {
+        const separator = finalUrl.includes('?') ? '&' : '?';
+        return `${finalUrl}${separator}token=${token}`;
+      }
+    }
+    return finalUrl;
+  };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Fayl hajmi 5MB dan oshmasligi kerak!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      setImageSrc(reader.result);
+      setCropModalOpen(true);
+    });
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const handleProfileSave = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem('student_token');
+      let currentAvatar = profile.avatar;
+
+      if (avatarFile) {
+        const formData = new FormData();
+        formData.append('file', avatarFile, 'avatar.jpg');
+
+        const uploadRes = await fetch(`${API_BASE}/api/upload`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok) throw new Error(uploadData.error || 'Rasmni yuklashda xatolik');
+        currentAvatar = uploadData.url;
+      }
+
+      const updateRes = await fetch(`${API_BASE}/api/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          ...profile,
+          name: `${profile.firstName} ${profile.lastName}`.trim(),
+          avatar: currentAvatar
+        })
+      });
+
+      const updateData = await updateRes.json();
+      if (!updateRes.ok) throw new Error(updateData.error || "Profilni yangilashda xatolik");
+
+      setProfile(prev => ({ ...prev, avatar: currentAvatar }));
+      setAvatarFile(null);
+      setShowProfileAlert(false);
+      alert("Sozlamalar muvaffaqiyatli saqlandi!");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  return (
+    <div
+      data-student-design={activeDesign}
+      data-user-dark={darkMode ? 'true' : 'false'}
+      className="student-shell min-h-screen bg-background text-on-background antialiased flex flex-col font-sans transition-colors duration-200"
+    >
+
+      {cropModalOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-surface w-full max-w-md rounded-2xl p-6 shadow-xl flex flex-col gap-4 border border-outline-variant">
+            <h3 className="text-lg font-outfit font-bold text-on-surface">Rasmni moslashtirish</h3>
+            <div className="relative w-full h-64 bg-black rounded-xl overflow-hidden">
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+              />
+            </div>
+            <div className="flex gap-3 justify-end mt-2">
+              <button onClick={() => setCropModalOpen(false)} className="px-4 py-2 text-sm font-semibold text-outline hover:text-on-surface transition-colors cursor-pointer">Bekor qilish</button>
+              <button
+                onClick={async () => {
+                  try {
+                    const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+                    setAvatarFile(croppedImage);
+                    setProfile(prev => ({ ...prev, avatar: URL.createObjectURL(croppedImage) }));
+                    setCropModalOpen(false);
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+                className="px-4 py-2 bg-primary text-on-primary text-sm font-semibold rounded-lg hover:bg-primary/90 transition-colors cursor-pointer shadow-xs"
+              >
+                Tasdiqlash
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- MINIMALIST LOGIN -------------------- */}
+      {currentPage === 'login' && (
+        <div
+          data-testid="student-login-page"
+          className="login-banner-stage relative min-h-screen w-full overflow-hidden flex items-center justify-center md:justify-start p-5 sm:p-8 md:pl-12 lg:pl-20 xl:pl-28 bg-[#1B0205]"
+        >
+          <img
+            src="/banner_03.png"
+            alt="Practise"
+            className="absolute inset-0 w-full h-full object-cover object-[78%_top] md:object-right-top select-none pointer-events-none"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#120104]/80 via-[#280408]/35 via-45% to-transparent"
+            aria-hidden="true"
+          />
+          <div
+            data-testid="student-login-card"
+            className="relative z-10 w-full max-w-[400px] lg:max-w-[416px] bg-surface rounded-2xl border border-outline-variant p-7 sm:p-8 shadow-2xl shadow-black/45 flex flex-col gap-6"
+          >
+
+            {/* Logo */}
+            <div className="flex flex-col items-center text-center gap-2.5">
+              <img
+                src={isDarkSurface ? "/logo-03.svg" : "/logo-01.svg"}
+                alt="Practise"
+                className="h-16 sm:h-20 w-auto max-w-[200px] object-contain mb-1 drop-shadow-sm"
+              />
+              <h1 className="font-outfit text-3xl font-black tracking-tight text-on-surface">Practise</h1>
+              <p className="text-xs text-outline font-medium">Tizimga kirish uchun ma'lumotlarni kiriting</p>
+            </div>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const email = e.target.elements.email.value;
+                const password = e.target.elements.password.value;
+
+                try {
+                  const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                  });
+
+                  const data = await response.json();
+                  if (!response.ok) {
+                    throw new Error(data.error || 'Kirishda xatolik yuz berdi.');
+                  }
+
+                  if (data.user.role !== 'student') {
+                    throw new Error('Talaba hisobi emas. Admin paneldan kiring.');
+                  }
+
+                  localStorage.setItem('student_token', data.token);
+                  try {
+                    localStorage.setItem('student_user', JSON.stringify(data.user));
+                  } catch (e) {}
+                  const studentProfile = {
+                    id: data.user.id || null,
+                    firstName: data.user.name.split(' ')[0] || data.user.name,
+                    lastName: data.user.name.split(' ').slice(1).join(' ') || '',
+                    email: data.user.email,
+                    phone: data.user.phone || '',
+                    avatar: data.user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop',
+                    course: data.user.course || 'SAT Math Masterclass',
+                    tariff: String(data.user.tariff || 'VIP').toUpperCase() === 'FREE' ? 'FREE' : 'VIP',
+                    streak: data.user.streak || 0,
+                    coins: data.user.coins || 0,
+                    xp: data.user.xp || 0,
+                    dailyXp: data.user.dailyXp || 0,
+                    weeklyXp: data.user.weeklyXp || 0,
+                    monthlyXp: data.user.monthlyXp || 0,
+                    activityDates: Array.isArray(data.user.activityDates) ? data.user.activityDates : []
+                  };
+                  setProfile(studentProfile);
+                  if (data.user.weeklyCheckins) setWeeklyCheckins(data.user.weeklyCheckins);
+                  if (Number.isFinite(Number(data.user.dailyGoalXp)) && Number(data.user.dailyGoalXp) >= 10) {
+                    setDailyGoalTarget(Number(data.user.dailyGoalXp));
+                  }
+                  setMustChangePassword(Boolean(data.user.mustChangePassword));
+                  if (data.user.dailyCheckinAwarded && data.user.dailyCheckinAwarded.coins > 0) {
+                    applyUserStats(data.user, data.user.dailyCheckinAwarded, 'Kunlik kirish bonusi');
+                  }
+                  fetchDashboardLeaderboard();
+
+                  if (data.user.mustChangePassword) {
+                    setCurrentPage('dashboard');
+                  } else if (!data.user.phone || data.user.phone.trim() === '') {
+                    setCurrentPage('profile');
+                    setShowProfileAlert(true);
+                  } else {
+                    setCurrentPage('dashboard');
+                  }
+                  syncData(studentProfile);
+                  alert("Tizimga muvaffaqiyatli kirildi!");
+                } catch (err) {
+                  alert(err.message);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div className="space-y-1.5 text-xs font-bold">
+                <label className="text-on-surface" htmlFor="email">Email yoki Telefon</label>
+                <input
+                  key={`login-email-${loginEmailPrefill}`}
+                  name="email"
+                  required
+                  defaultValue={loginEmailPrefill}
+                  className="w-full h-11 px-4 bg-surface-container rounded-lg border border-outline-variant text-on-surface focus:border-primary focus:outline-none text-xs font-medium placeholder:text-outline/40"
+                  id="email"
+                  type="text"
+                  placeholder="student@practise.uz"
+                />
+              </div>
+
+              <div className="space-y-1.5 text-xs font-bold">
+                <div className="flex justify-between items-center">
+                  <label className="text-on-surface" htmlFor="password">Parol</label>
+                  <a
+                    data-testid="student-forgot-password-link"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const typed = document.getElementById('email')?.value?.trim();
+                      if (typed && typed.includes('@')) setLoginEmailPrefill(typed);
+                      setResetStatus(null);
+                      setCurrentPage('forgot-password');
+                    }}
+                    className="text-[10px] text-primary hover:underline font-semibold cursor-pointer"
+                  >
+                    Unutdingizmi?
+                  </a>
+                </div>
+                <div className="relative">
+                  <input
+                    name="password"
+                    required
+                    className="w-full h-11 pl-4 pr-10 bg-surface-container rounded-lg border border-outline-variant text-on-surface focus:border-primary focus:outline-none text-xs font-medium placeholder:text-outline/40"
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary cursor-pointer flex items-center justify-center"
+                    type="button"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">
+                      {showPassword ? "visibility_off" : "visibility"}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <button className="w-full h-11 bg-primary text-on-primary font-semibold rounded-lg text-xs hover:bg-primary/95 transition-all mt-4 cursor-pointer" type="submit">
+                Tizimga kirish
+              </button>
+
+              <a
+                href="https://t.me/azizbekbro"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="login-contact-admin"
+                className="w-full h-11 bg-[#229ED9] hover:bg-[#1f8fc4] text-white font-semibold rounded-lg text-xs transition-all mt-3 cursor-pointer flex items-center justify-center gap-2 shadow-sm no-underline"
+              >
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.054-.31-.346-.11l-6.4 4.03-2.76-.86c-.6-.188-.61-.6.126-.89l10.81-4.17c.5-.188.943.114.75 1.485z" /></svg>
+                <span>Admin bilan bog'lanish</span>
+              </a>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- FORGOT PASSWORD -------------------- */}
+      {currentPage === 'forgot-password' && (
+        <div
+          data-testid="student-forgot-page"
+          className="login-banner-stage relative min-h-screen w-full overflow-hidden flex items-center justify-center md:justify-start p-5 sm:p-8 md:pl-12 lg:pl-20 xl:pl-28 bg-[#1B0205] animate-fade-in"
+        >
+          <img
+            src="/banner_03.png"
+            alt="Practise"
+            className="absolute inset-0 w-full h-full object-cover object-[78%_top] md:object-right-top select-none pointer-events-none"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#120104]/80 via-[#280408]/35 via-45% to-transparent"
+            aria-hidden="true"
+          />
+          <div className="relative z-10 w-full max-w-[400px] lg:max-w-[416px] bg-surface rounded-2xl border border-outline-variant p-7 sm:p-8 shadow-2xl shadow-black/45 flex flex-col gap-6">
+            <div className="flex flex-col items-center text-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold">
+                <span className="material-symbols-outlined text-[22px] block">lock_reset</span>
+              </div>
+              <h1 className="font-outfit text-xl font-bold tracking-tight text-on-surface">Parolni Tiklash — Practise</h1>
+              <p className="text-xs text-outline font-medium leading-relaxed">Ro'yxatdan o'tgan Gmail manzilingizni kiriting. Tizimga kirish uchun yangi parol Gmail pochtangizga xat bo'lib yuboriladi.</p>
+            </div>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              const email = e.target.elements.email.value.trim();
+              setResetStatus(null);
+              setResetSubmitting(true);
+              try {
+                const basePath = window.location.pathname.startsWith('/student') ? '/student' : '';
+                const loginUrl = `${window.location.origin}${basePath}`;
+                const resetUrl = `${loginUrl}/reset-password`;
+                const res = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ email, resetUrl, loginUrl })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  setLoginEmailPrefill(data.email || email);
+                  setResetStatus({
+                    type: 'success',
+                    text: data.message || "Kirish uchun yangi parolingiz ro'yxatdan o'tgan Gmail pochtangizga yuborildi!"
+                  });
+                } else {
+                  setResetStatus({
+                    type: 'error',
+                    text: data.error || data.message || 'Parolni tiklashda xatolik yuz berdi.'
+                  });
+                }
+              } catch (err) {
+                setResetStatus({ type: 'error', text: 'Server bilan bog\'lanishda xatolik yuz berdi.' });
+              } finally {
+                setResetSubmitting(false);
+              }
+            }} className="space-y-4">
+              {resetStatus && (
+                <div
+                  data-testid="forgot-password-status"
+                  className={`p-3 rounded-xl text-xs font-bold border ${
+                    resetStatus.type === 'success'
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                      : 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                  }`}
+                >
+                  {resetStatus.text}
+                </div>
+              )}
+              <div className="space-y-1.5 text-xs font-bold">
+                <label className="text-on-surface" htmlFor="reset-email">Gmail manzili</label>
+                <input
+                  key={`reset-email-${loginEmailPrefill}`}
+                  name="email"
+                  required
+                  defaultValue={loginEmailPrefill}
+                  className="w-full h-11 px-4 bg-surface-container rounded-lg border border-outline-variant text-on-surface focus:border-primary focus:outline-none text-xs font-medium placeholder:text-outline/40"
+                  id="reset-email"
+                  type="email"
+                  placeholder="talaba@gmail.com"
+                />
+              </div>
+              <button
+                data-testid="forgot-password-submit"
+                disabled={resetSubmitting}
+                className="w-full h-11 bg-primary text-on-primary font-semibold rounded-lg text-xs hover:bg-primary/95 transition-all mt-4 cursor-pointer disabled:opacity-60"
+                type="submit"
+              >
+                {resetSubmitting ? 'Yangi parol yuborilmoqda...' : 'Yangi parolni Gmailga yuborish'}
+              </button>
+              <button
+                type="button"
+                data-testid="forgot-password-back"
+                onClick={() => { setResetStatus(null); setCurrentPage('login'); }}
+                className={`w-full h-11 font-semibold rounded-lg text-xs transition-all mt-3 cursor-pointer ${
+                  resetStatus?.type === 'success'
+                    ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20'
+                    : 'bg-surface-container text-on-surface hover:bg-outline-variant'
+                }`}
+              >
+                {resetStatus?.type === 'success' ? "Kirish sahifasiga o'tish" : 'Orqaga qaytish'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- RESET PASSWORD -------------------- */}
+      {currentPage === 'reset-password' && (
+        <div
+          data-testid="student-reset-page"
+          className="login-banner-stage relative min-h-screen w-full overflow-hidden flex items-center justify-center md:justify-start p-5 sm:p-8 md:pl-12 lg:pl-20 xl:pl-28 bg-[#1B0205] animate-fade-in"
+        >
+          <img
+            src="/banner_03.png"
+            alt="Practise"
+            className="absolute inset-0 w-full h-full object-cover object-[78%_top] md:object-right-top select-none pointer-events-none"
+          />
+          <div
+            className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#120104]/80 via-[#280408]/35 via-45% to-transparent"
+            aria-hidden="true"
+          />
+          <div className="relative z-10 w-full max-w-[400px] lg:max-w-[416px] bg-surface rounded-2xl border border-outline-variant p-7 sm:p-8 shadow-2xl shadow-black/45 flex flex-col gap-6">
+            <div className="flex flex-col items-center text-center gap-2">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-bold">
+                <span className="material-symbols-outlined text-[22px] block">password</span>
+              </div>
+              <h1 className="font-outfit text-xl font-bold tracking-tight text-on-surface">Yangi Parol O'rnatish</h1>
+              <p className="text-xs text-outline font-medium">Practise hisobingiz uchun o'zingiz xohlagan yangi parolni kiriting (kamida 4 ta belgi).</p>
+            </div>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              const newPassword = resetPasswordInput;
+              const urlToken = new URLSearchParams(window.location.search).get('token');
+              const token = (resetToken || urlToken || '').trim();
+              if (!token) {
+                setResetStatus({ type: 'error', text: 'Tiklash havolasi tokeni topilmadi. Iltimos, emaildagi havolani qayta oching.' });
+                return;
+              }
+              setResetStatus(null);
+              setResetSubmitting(true);
+              try {
+                const res = await fetch(`${API_BASE}/api/auth/reset-password`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ token, newPassword })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                  setResetStatus({ type: 'success', text: data.message || 'Parol muvaffaqiyatli yangilandi! Endi tizimga kirishingiz mumkin.' });
+                  setResetPasswordInput('');
+                  setResetToken('');
+                  const keepPath = window.location.pathname.startsWith('/student') ? '/student' : '/';
+                  window.history.replaceState(null, '', keepPath);
+                  setTimeout(() => {
+                    setResetStatus(null);
+                    setCurrentPage('login');
+                  }, 1400);
+                } else {
+                  setResetStatus({ type: 'error', text: data.error || 'Havola muddati o\'tgan yoki noto\'g\'ri.' });
+                }
+              } catch (err) {
+                setResetStatus({ type: 'error', text: 'Server bilan ulanishda xatolik yuz berdi.' });
+              } finally {
+                setResetSubmitting(false);
+              }
+            }} className="space-y-4">
+              {resetStatus && (
+                <div className={`p-3 rounded-xl text-xs font-bold border ${
+                  resetStatus.type === 'success'
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                    : 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                }`}>
+                  {resetStatus.text}
+                </div>
+              )}
+              <div className="space-y-1.5 text-xs font-bold">
+                <label className="text-on-surface" htmlFor="new-password">Yangi parol</label>
+                <div className="relative">
+                  <input
+                    name="newPassword"
+                    required
+                    minLength={4}
+                    value={resetPasswordInput}
+                    onChange={(e) => setResetPasswordInput(e.target.value)}
+                    className="w-full h-11 pl-4 pr-10 bg-surface-container rounded-lg border border-outline-variant text-on-surface focus:border-primary focus:outline-none text-xs font-medium placeholder:text-outline/40"
+                    id="new-password"
+                    type={showResetPassword ? 'text' : 'password'}
+                    placeholder="Istalgan yangi parolni kiriting"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowResetPassword(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary cursor-pointer flex items-center justify-center"
+                    aria-label="Parolni ko'rish"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">
+                      {showResetPassword ? 'visibility_off' : 'visibility'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <button disabled={resetSubmitting} className="w-full h-11 bg-primary text-on-primary font-semibold rounded-lg text-xs hover:bg-primary/95 transition-all mt-4 cursor-pointer disabled:opacity-60" type="submit">
+                {resetSubmitting ? 'Saqlanmoqda...' : 'Parolni o\'zgartirish'}
+              </button>
+              <button type="button" onClick={() => { setResetStatus(null); setCurrentPage('login'); }} className="w-full h-10 bg-surface-container text-on-surface font-semibold rounded-lg text-xs hover:bg-outline-variant transition-all cursor-pointer">
+                Kirish sahifasiga o'tish
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- MAIN LMS SHELL -------------------- */}
+      {currentPage !== 'login' && currentPage !== 'forgot-password' && currentPage !== 'reset-password' && (
+        <div className="h-screen w-screen overflow-hidden flex flex-col bg-background">
+
+          {/* Premium Header (Toki test yakuniga yetmagunicha test rejimida yashiriladi) */}
+          {currentPage !== 'test-interface' && (
+            <header className="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-6 h-14 bg-surface border-b border-outline-variant shadow-xs shrink-0">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  className="lg:hidden text-on-surface p-1.5 rounded-lg hover:bg-surface-container"
+                >
+                  <span className="material-symbols-outlined text-[20px]">{isSidebarOpen ? 'close' : 'menu'}</span>
+                </button>
+
+                <div
+                  onClick={() => setCurrentPage('dashboard')}
+                  className="flex items-center gap-3 select-none cursor-pointer group py-1"
+                >
+                  <img
+                    src={isDarkSurface ? "/logo-03.svg" : "/logo-01.svg"}
+                    alt="Practise"
+                    className="h-10 sm:h-11 w-auto max-w-[160px] object-contain transition-transform group-hover:scale-105"
+                  />
+                  <span className="font-outfit text-xl sm:text-2xl font-black tracking-tight text-on-surface">Practise</span>
+                </div>
+
+                {/* Horizontal Navbar */}
+                <nav className="hidden md:flex gap-1.5 items-center ml-6 text-xs font-semibold">
+                  <button
+                    onClick={() => setCurrentPage('dashboard')}
+                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'dashboard' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage('courses')}
+                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'courses' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
+                  >
+                    Kurslarim
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage('certificates')}
+                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'certificates' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
+                  >
+                    Sertifikatlarim
+                  </button>
+                </nav>
+              </div>
+
+              <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+                {/* Streak, Coins & XP gamification bar */}
+                <div className="flex items-center gap-1.5 sm:gap-2 mr-1 select-none shrink-0">
+                  {/* Streak */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage('leaderboard')}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-500/10 hover:bg-orange-500/15 border border-orange-500/20 transition-all cursor-pointer whitespace-nowrap shrink-0"
+                    title="Kunlik seriya (Streak) — faol kunlar soni"
+                  >
+                    <img src="/streak_flame.svg" alt="Streak" className="w-4 h-4 sm:w-5 sm:h-5 object-contain shrink-0" />
+                    <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 dark:text-slate-100">
+                      {profile.streak ?? 0}
+                    </span>
+                  </button>
+
+                  {/* Coins / Gems */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage('leaderboard')}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-500/10 hover:bg-sky-500/15 border border-sky-500/20 transition-all cursor-pointer whitespace-nowrap shrink-0"
+                    title="Tangalar / Kristallar (Coins)"
+                  >
+                    <img src="/gem_diamond.svg" alt="Coins" className="w-4 h-4 sm:w-5 sm:h-5 object-contain shrink-0" />
+                    <span className="font-outfit font-black text-xs sm:text-sm text-slate-800 dark:text-slate-100">
+                      {Number(profile.coins ?? 0).toLocaleString()}
+                    </span>
+                  </button>
+
+                  {/* XP Score */}
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage('leaderboard')}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all cursor-pointer shadow-2xs whitespace-nowrap shrink-0"
+                    title={`Jami yig'ilgan XP ball: ${Number(profile.xp ?? 0).toLocaleString()} XP (Bugun: +${profile.dailyXp ?? 0} XP)`}
+                  >
+                    <img src="/xp_badge.svg" alt="XP" className="w-4 h-4 sm:w-5 sm:h-5 object-contain shrink-0" />
+                    <span className="font-outfit font-black text-xs sm:text-sm text-amber-700 dark:text-amber-300">
+                      {Number(profile.xp ?? 0).toLocaleString()} XP
+                    </span>
+                  </button>
+                </div>
+
+                {/* Notifications */}
+                <div className="relative shrink-0">
+                  <button
+                    onClick={() => setShowNotifDropdown(!showNotifDropdown)}
+                    className="w-8 h-8 flex items-center justify-center text-outline hover:text-on-surface rounded-lg hover:bg-surface-container transition-colors cursor-pointer relative shrink-0"
+                    title="Bildirishnomalar"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    {notifications.filter(n => !n.isRead).length > 0 && (
+                      <span className="absolute -top-1 -right-1 px-1.5 py-0.5 min-w-[18px] text-[10px] font-black leading-none rounded-full bg-red-500 text-white shadow-sm ring-2 ring-surface animate-pulse flex items-center justify-center">
+                        {notifications.filter(n => !n.isRead).length}
+                      </span>
+                    )}
+                  </button>
+
+                  {showNotifDropdown && (
+                    <div className="absolute right-0 top-full mt-2 w-80 bg-surface border border-outline-variant/60 rounded-xl shadow-xl z-50 overflow-hidden flex flex-col max-h-[420px]">
+                      <div className="p-3 border-b border-outline-variant/60 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-xs font-bold text-on-surface">Bildirishnomalar</h4>
+                          {notifications.filter(n => !n.isRead).length > 0 && (
+                            <span className="px-1.5 py-0.5 bg-red-500/10 text-red-500 text-[10px] font-bold rounded">
+                              {notifications.filter(n => !n.isRead).length} yangi
+                            </span>
+                          )}
+                        </div>
+                        {notifications.filter(n => !n.isRead).length > 0 && (
+                          <button
+                            onClick={async () => {
+                              await fetchWithAuth('/api/notifications/read-all', { method: 'POST' });
+                              setNotifications(prev => prev.map(item => ({ ...item, isRead: true })));
+                            }}
+                            className="text-[10px] font-bold text-primary hover:underline cursor-pointer"
+                          >
+                            Barchasi o'qildi
+                          </button>
+                        )}
+                      </div>
+                      <div className="overflow-y-auto flex-1">
+                        {notifications.length === 0 ? (
+                          <div className="p-6 text-center text-xs text-outline font-medium">Hozircha yangi bildirishnomalar yo'q</div>
+                        ) : (
+                          notifications.map(n => {
+                            const battleInviteId = extractBattleIdFromNotif(n.message);
+                            return (
+                              <div
+                                key={n.id}
+                                onClick={async () => {
+                                  if (!n.isRead) {
+                                    await fetchWithAuth(`/api/notifications/${n.id}/read`, { method: 'POST' });
+                                    setNotifications(prev => prev.map(item => item.id === n.id ? { ...item, isRead: true } : item));
+                                  }
+                                }}
+                                className={`p-3 border-b border-outline-variant/60 last:border-0 cursor-pointer hover:bg-surface-container transition-colors ${!n.isRead ? 'bg-primary/5' : 'opacity-80'}`}
+                              >
+                                <div className="flex justify-between items-start mb-1">
+                                  <h5 className={`text-xs font-bold ${!n.isRead ? 'text-primary' : 'text-outline'}`}>{formatNotifText(n.title)}</h5>
+                                  <span className="text-[9px] text-outline/80 font-medium whitespace-nowrap ml-2">
+                                    {new Date(n.createdAt).toLocaleDateString('uz-UZ')} {new Date(n.createdAt).toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' })}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-on-surface/90 leading-relaxed">{formatNotifText(n.message)}</p>
+                                {battleInviteId && (
+                                  <div className="flex items-center gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
+                                    <button
+                                      type="button"
+                                      disabled={respondingBattleId === battleInviteId}
+                                      onClick={() => handleBattlePushRespond(n, 'accept')}
+                                      className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black cursor-pointer disabled:opacity-60"
+                                    >
+                                      ✅ Jangni qabul qilish
+                                    </button>
+                                    <button
+                                      type="button"
+                                      disabled={respondingBattleId === battleInviteId}
+                                      onClick={() => handleBattlePushRespond(n, 'decline')}
+                                      className="px-2.5 py-1 rounded-lg bg-surface-container border border-outline-variant text-[10px] font-bold text-outline hover:text-rose-600 cursor-pointer"
+                                    >
+                                      Rad etish
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Dark mode switcher */}
+                <button
+                  onClick={() => setDarkMode(!darkMode)}
+                  className="w-8 h-8 flex items-center justify-center text-outline hover:text-on-surface rounded-lg hover:bg-surface-container transition-colors cursor-pointer shrink-0"
+                  title={darkMode ? "Yorug' rejim" : "Qorong'i rejim"}
+                >
+                  {darkMode ? (
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="4" />
+                      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                    </svg>
+                  )}
+                </button>
+
+                {/* Uzbek Alphabet Toolbar Toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowUzbekToolbar(!showUzbekToolbar)}
+                  title={showUzbekToolbar ? "Alifbo panelini yashirish" : "Alifbo panelini ko'rsatish"}
+                  className={`w-8 h-8 flex items-center justify-center rounded-lg transition-colors cursor-pointer shrink-0 ${
+                    showUzbekToolbar
+                      ? 'text-primary bg-primary/10 ring-1 ring-primary/30'
+                      : 'text-outline hover:text-on-surface hover:bg-surface-container'
+                  }`}
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10" />
+                  </svg>
+                </button>
+
+                {/* User profile dropdown trigger */}
+                <div
+                  onClick={() => {
+                    setCurrentPage('profile');
+                    if (!profile.phone || profile.phone.length < 17) setShowProfileAlert(true);
+                  }}
+                  className="flex items-center gap-2.5 cursor-pointer pl-3 border-l border-outline-variant/60 shrink-0"
+                >
+                  <div className="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-slate-100 shrink-0">
+                    <img
+                      alt="Student Profile"
+                      className="w-full h-full object-cover"
+                      src={getVideoSrc(profile.avatar) || getInitialsAvatar(`${profile.firstName} ${profile.lastName}`)}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = getInitialsAvatar(`${profile.firstName} ${profile.lastName}`);
+                      }}
+                    />
+                  </div>
+                  <div className="hidden lg:block text-left">
+                    <div className="text-xs font-bold text-on-surface leading-none whitespace-nowrap">{profile.firstName} {profile.lastName}</div>
+                  </div>
+                </div>
+              </div>
+            </header>
+          )}
+
+          <div className={`flex flex-1 ${currentPage === 'test-interface' ? 'pt-0 h-screen' : 'pt-14 h-[calc(100vh-3.5rem)]'} overflow-hidden relative`}>
+
+            {/* Sidebar Left Navigation (Frozen - toki test yakuniga yetmagunicha test rejimida yashiriladi) */}
+            {currentPage !== 'test-interface' && (
+              <aside className={`
+                fixed lg:static top-14 left-0 h-full w-56 shrink-0 bg-surface border-r border-outline-variant z-35 transition-transform duration-200 overflow-y-auto select-none
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+              `}>
+                <div className="p-3 flex flex-col h-full justify-between">
+                  <div className="space-y-2.5">
+                    {/* Telegram havola cardi (Premium o'quvchi cardi o'rniga) */}
+                    <a
+                      href="https://t.me/turgunboevs"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-testid="sidebar-telegram-link"
+                      className="dashboard-subcard flex items-center justify-between gap-2.5 p-2.5 rounded-xl bg-surface-container-low border border-outline-variant hover:border-[#229ED9]/60 hover:bg-[#229ED9]/10 transition-all group cursor-pointer no-underline"
+                      title="Telegram kanal / bog'lanish: https://t.me/turgunboevs"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-full bg-[#229ED9] text-white flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                          <svg className="w-3.5 h-3.5 fill-current -ml-0.5" viewBox="0 0 24 24">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.054-.31-.346-.11l-6.4 4.03-2.76-.86c-.6-.188-.61-.6.126-.89l10.81-4.17c.5-.188.943.114.75 1.485z" />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-xs font-bold text-on-surface truncate group-hover:text-[#229ED9] transition-colors">Telegram</h4>
+                          <p className="text-[10px] text-outline font-medium truncate">@turgunboevs</p>
+                        </div>
+                      </div>
+                      <svg className="w-3.5 h-3.5 text-outline group-hover:text-[#229ED9] shrink-0 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M7 17 17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </a>
+
+                    {/* Nav Item list (2-talab: Sidebar menyu uslubi) */}
+                    <nav className="flex flex-col gap-1">
+                      {sidebarNavItems.map((item) => {
+                        if (item.hasSubmenu) {
+                          const isSubActive = item.subItems.some(s => s.page === currentPage);
+                          return (
+                            <div key={item.name} className="flex flex-col gap-0.5">
+                              <button
+                                type="button"
+                                onClick={() => setMyTasksOpen(!myTasksOpen)}
+                                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl font-bold text-xs transition-colors cursor-pointer ${
+                                  isSubActive
+                                    ? 'bg-primary/10 text-primary font-bold'
+                                    : 'text-outline hover:text-on-surface hover:bg-surface-container-low'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  {renderSidebarIcon(item.icon)}
+                                  <span className="truncate">{item.name}</span>
+                                </div>
+                                {renderSidebarIcon(myTasksOpen ? 'expand_less' : 'expand_more', 'w-4 h-4')}
+                              </button>
+
+                              {myTasksOpen && (
+                                <div className="ml-3 pl-2.5 py-0.5 flex flex-col gap-0.5 border-l border-primary/25 animate-fade-in">
+                                  {item.subItems.map((sub) => {
+                                    const isActive = currentPage === sub.page;
+                                    const locked = isSectionLocked(sub.page);
+                                    return (
+                                      <button
+                                        key={sub.name}
+                                        type="button"
+                                        onClick={() => navigateToStudentPage(sub.page)}
+                                        className={`flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                                          isActive && !locked
+                                            ? 'bg-primary text-white shadow-xs'
+                                            : 'text-outline hover:text-on-surface hover:bg-surface-container-low'
+                                        }`}
+                                      >
+                                        <span className="flex items-center gap-2 min-w-0">
+                                          {renderSidebarIcon(sub.icon, 'w-[15px] h-[15px]')}
+                                          <span className="truncate">{sub.name}</span>
+                                        </span>
+                                        {locked && (
+                                          <span
+                                            data-testid={`lock-icon-${sub.page}`}
+                                            title="Premium (VIP) kurs talabalari uchun"
+                                            className="text-amber-500 shrink-0"
+                                          >
+                                            {renderSidebarIcon('lock', 'w-3.5 h-3.5')}
+                                          </span>
+                                        )}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        const isActive = currentPage === item.page || (item.page === 'test-results' && currentPage === 'test-results');
+                        const locked = isSectionLocked(item.page);
+                        return (
+                          <button
+                            key={item.name}
+                            type="button"
+                            onClick={() => navigateToStudentPage(item.page)}
+                            className={`flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl font-semibold text-xs transition-colors cursor-pointer ${
+                              isActive && !locked
+                                ? 'bg-primary/10 text-primary font-bold'
+                                : 'text-outline hover:text-on-surface hover:bg-surface-container-low'
+                            }`}
+                          >
+                            <span className="flex items-center gap-2.5 min-w-0">
+                              {renderSidebarIcon(item.icon)}
+                              <span className="truncate">{item.name}</span>
+                            </span>
+                            {locked && (
+                              <span
+                                data-testid={`lock-icon-${item.page}`}
+                                title="Premium (VIP) kurs talabalari uchun"
+                                className="text-amber-500 shrink-0"
+                              >
+                                {renderSidebarIcon('lock', 'w-3.5 h-3.5')}
+                              </span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </nav>
+                  </div>
+
+                  <div className="pt-3 border-t border-outline-variant space-y-2">
+                    <button
+                      onClick={() => { if (courses.length > 0) { setActiveCourse(courses[0]); setCurrentPage('courses'); setIsSidebarOpen(false); } }}
+                      className="w-full bg-primary text-on-primary font-semibold text-xs py-2 px-3 rounded-lg hover:bg-primary/95 transition-colors cursor-pointer"
+                    >
+                      Darslarni boşlaş
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 px-3 py-1.5 w-full text-error/85 hover:bg-error-container/10 transition-colors rounded-lg font-semibold text-xs cursor-pointer"
+                    >
+                      {renderSidebarIcon('logout')}
+                      <span>Çiqiş</span>
+                    </button>
+                  </div>
+                </div>
+              </aside>
+            )}
+
+            {/* Mobile Sidebar backdrop */}
+            {currentPage !== 'test-interface' && isSidebarOpen && (
+              <div
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur-xs z-30 lg:hidden"
+              ></div>
+            )}
+
+            {/* Primary content area */}
+            <main className={`flex-1 h-full bg-background overflow-y-auto ${currentPage === 'test-interface' ? 'p-3 sm:p-5 lg:p-6' : currentPage === 'vocabulary' || currentPage === 'my-progress' ? 'px-3 sm:px-5 py-3' : 'px-4 sm:px-6 py-6'} relative scroll-smooth`}>
+              <div className={`${currentPage === 'test-interface' ? 'max-w-[1450px]' : currentPage === 'vocabulary' || currentPage === 'my-progress' ? 'max-w-[1440px]' : (currentPage === 'certificates' ? 'max-w-[1250px]' : (currentPage === 'dashboard' ? 'max-w-[1380px]' : 'max-w-[1000px]'))} mx-auto transition-[max-width] duration-300`}>
+
+                {/* -------------------- 1-TALAB: 1-RASMDAGI DASHBOARD VIEW -------------------- */}
+                {currentPage === 'dashboard' && (
+                  <div className="space-y-6 animate-fade-in pb-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                      {/* ==================== LEFT COLUMN (Asosiy kontent ~ 8 cols) ==================== */}
+                      <div className="lg:col-span-8 flex flex-col gap-6">
+
+                        {/* 1. HERO BANNER (banner_03.png + Time-of-day greeting + Continue learning) */}
+                        <div className="hero-banner-keep relative rounded-3xl overflow-hidden border border-red-900/40 dark:border-red-950/70 shadow-md min-h-[220px] sm:min-h-[250px] lg:min-h-[268px] flex items-center bg-[#230308]">
+                          <img
+                            src="/banner_03.png"
+                            alt="Practise Hero Banner"
+                            className="absolute inset-0 w-full h-full object-cover object-[80%_top] sm:object-right-top select-none pointer-events-none"
+                          />
+                          <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#120104]/85 via-[#2a0409]/45 via-50% to-transparent" />
+
+                          {/* Banner Content: Time-based greeting, Matn va Continue learning tugmasi */}
+                          <div className="relative z-10 w-full p-6 sm:p-8 lg:p-10">
+                            <div className="max-w-xs sm:max-w-md space-y-3">
+                              <h1
+                                data-testid="hero-time-greeting"
+                                className="font-outfit text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm"
+                              >
+                                {getTimeOfDayGreeting(new Date(liveTick))},<br />
+                                <span className="text-amber-300">{profile.firstName || profile.name || 'Mirzoxon'}!</span> 👋
+                              </h1>
+                              <p className="text-xs sm:text-sm text-white/90 font-medium leading-relaxed drop-shadow-xs">
+                                One lesson closer to speaking English like a native! 🎙️
+                              </p>
+                              <div className="pt-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (courses.length > 0) {
+                                      setActiveCourse(courses[0]);
+                                      setActiveLesson(courses[0].lessons?.[0] || null);
+                                    }
+                                    setCurrentPage('courses');
+                                  }}
+                                  className="design-btn-primary inline-flex items-center gap-2 bg-white hover:bg-amber-50 text-slate-950 font-outfit font-extrabold text-xs sm:text-sm px-6 py-3 rounded-full shadow-lg shadow-black/30 active:scale-95 transition-all cursor-pointer"
+                                >
+                                  <span>Continue learning</span>
+                                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M5 12h14" />
+                                    <path d="m12 5 7 7-7 7" />
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* 2. QUICK ACCESS CARDS: Grammar, Challenges, Games, Vocabulary, Battle */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+                          {[
+                            {
+                              page: 'grammar',
+                              openMyTasks: true,
+                              title: 'Grammar',
+                              subtitle: '6 ta qoida',
+                              badge: '+15 XP',
+                              icon: 'spellcheck',
+                              gradient: 'from-amber-500 to-orange-500',
+                              hoverAccent: 'hover:border-amber-400/70 dark:hover:border-amber-500/60'
+                            },
+                            {
+                              page: 'challenges',
+                              openMyTasks: true,
+                              title: 'Challenges',
+                              subtitle: '30 kunlik',
+                              badge: 'Bonus',
+                              icon: 'emoji_events',
+                              gradient: 'from-orange-500 to-rose-500',
+                              hoverAccent: 'hover:border-orange-400/70 dark:hover:border-orange-500/60'
+                            },
+                            {
+                              page: 'games',
+                              openMyTasks: true,
+                              title: 'Games',
+                              subtitle: "O'yinlar",
+                              badge: 'Speech',
+                              icon: 'sports_esports',
+                              gradient: 'from-indigo-500 to-violet-600',
+                              hoverAccent: 'hover:border-indigo-400/70 dark:hover:border-indigo-500/60'
+                            },
+                            {
+                              page: 'vocabulary',
+                              openMyTasks: true,
+                              title: 'Vocabulary',
+                              subtitle: '10 ta dars',
+                              badge: 'IELTS',
+                              icon: 'translate',
+                              gradient: 'from-emerald-500 to-teal-600',
+                              hoverAccent: 'hover:border-emerald-400/70 dark:hover:border-emerald-500/60'
+                            },
+                            {
+                              page: 'battle',
+                              openMyTasks: false,
+                              title: 'Battle',
+                              subtitle: '1v1 Jang',
+                              badge: 'Live',
+                              icon: 'swords',
+                              gradient: 'from-rose-500 to-pink-600',
+                              hoverAccent: 'hover:border-rose-400/70 dark:hover:border-rose-500/60',
+                              spanMobile: true
+                            }
+                          ].map((card) => {
+                            const cardLocked = isSectionLocked(card.page);
+                            return (
+                            <button
+                              key={card.page}
+                              type="button"
+                              onClick={() => navigateToStudentPage(card.page, { openMyTasks: card.openMyTasks })}
+                              className={`dashboard-card-surface dashboard-quick-card group text-left bg-white dark:bg-slate-900 rounded-2xl p-3.5 border border-slate-100 dark:border-slate-800 ${card.hoverAccent} shadow-xs hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] transition-all cursor-pointer flex flex-col justify-between gap-2.5 min-w-0 ${
+                                card.spanMobile ? 'col-span-2 sm:col-span-1' : ''
+                              }`}
+                            >
+                              <div className="flex items-center justify-between gap-2 w-full">
+                                <span className={`w-9 h-9 rounded-xl bg-gradient-to-br ${card.gradient} text-white shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+                                  {renderSidebarIcon(card.icon, 'w-[18px] h-[18px]')}
+                                </span>
+                                {cardLocked ? (
+                                  <span
+                                    data-testid={`dashboard-lock-${card.page}`}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-[9px] font-extrabold text-amber-600 dark:text-amber-400"
+                                  >
+                                    {renderSidebarIcon('lock', 'w-3 h-3')}
+                                    <span>VIP</span>
+                                  </span>
+                                ) : (
+                                  <span className="dashboard-quick-pill px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 text-[9px] font-extrabold text-slate-600 dark:text-slate-300 truncate max-w-[78px]">
+                                    {card.badge}
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="min-w-0">
+                                <div className="flex items-center justify-between gap-1">
+                                  <h3 className="font-outfit font-black text-[13px] sm:text-sm text-slate-900 dark:text-white truncate">
+                                    {card.title}
+                                  </h3>
+                                  <svg
+                                    className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0 group-hover:translate-x-0.5 group-hover:text-primary transition-all"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.4"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M5 12h14" />
+                                    <path d="m12 5 7 7-7 7" />
+                                  </svg>
+                                </div>
+                                <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                                  {card.subtitle}
+                                </p>
+                              </div>
+                            </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* 3. LEADERBOARD CARD (2-rasm o'rniga real vaqtda integratsiyalangan reyting) */}
+                        <section className="dashboard-card-surface bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-100 dark:border-slate-800 shadow-xs space-y-5">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center shrink-0">
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M4 13h4v8H4v-8Zm6-7h4v15h-4V6Zm6 4h4v11h-4V10Z" />
+                                </svg>
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <h2 className="font-outfit text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                                    Leaderboard
+                                  </h2>
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-extrabold border border-emerald-500/20">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                    Live
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                                  Talabalar reytingi · XP, Coin va Kunlik streak bo'yicha
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="inline-flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                                {[
+                                  { id: 'daily', label: 'Kunlik' },
+                                  { id: 'weekly', label: 'Haftalik' },
+                                  { id: 'monthly', label: 'Oylik' },
+                                  { id: 'all', label: 'Barchasi' }
+                                ].map((tab) => (
+                                  <button
+                                    key={tab.id}
+                                    type="button"
+                                    onClick={() => setLeaderboardPeriod(tab.id)}
+                                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                                      leaderboardPeriod === tab.id
+                                        ? 'bg-primary text-white shadow-xs'
+                                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                                    }`}
+                                  >
+                                    {tab.label}
+                                  </button>
+                                ))}
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => setCurrentPage('leaderboard')}
+                                className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:underline px-2 py-1 cursor-pointer whitespace-nowrap"
+                              >
+                                <span>To'liq</span>
+                                <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M5 12h14" />
+                                  <path d="m12 5 7 7-7 7" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Sizning natijangiz mini paneli */}
+                          <div className="dashboard-subcard grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3 rounded-2xl bg-gradient-to-r from-sky-50/90 via-indigo-50/60 to-amber-50/70 dark:from-slate-800/90 dark:via-slate-800/75 dark:to-slate-800/90 border border-sky-100 dark:border-slate-700/70">
+                            <div className="flex items-center gap-2">
+                              <span className="w-8 h-8 rounded-xl bg-white dark:bg-slate-900 shadow-2xs flex items-center justify-center font-outfit font-black text-xs text-primary">
+                                #{currentUserRank || '—'}
+                              </span>
+                              <div>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">O'rningiz</p>
+                                <p className="font-outfit font-black text-xs text-slate-900 dark:text-white">
+                                  {currentUserRank ? `${currentUserRank}-o'rin` : 'Reytingda'}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <img src="/streak_flame.svg" alt="Streak" className="w-6 h-6 shrink-0" />
+                              <div>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">Streak</p>
+                                <p className="font-outfit font-black text-xs text-slate-900 dark:text-white">{profile.streak ?? 0} kun</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <img src="/gem_diamond.svg" alt="Coins" className="w-6 h-6 shrink-0" />
+                              <div>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">Coinlar</p>
+                                <p className="font-outfit font-black text-xs text-slate-900 dark:text-white">{Number(profile.coins ?? 0).toLocaleString()}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <img src="/xp_badge.svg" alt="XP" className="w-6 h-6 shrink-0" />
+                              <div>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase">Jami XP</p>
+                                <p className="font-outfit font-black text-xs text-amber-600 dark:text-amber-300">{Number(profile.xp ?? 0).toLocaleString()} XP</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Leaderboard ro'yxati */}
+                          {leaderboardLoading && leaderboardRows.length === 0 ? (
+                            <div className="py-10 text-center text-xs text-slate-400 font-semibold">
+                              Reyting ma'lumotlari yuklanmoqda...
+                            </div>
+                          ) : leaderboardRows.length === 0 ? (
+                            <div className="py-10 text-center text-xs text-slate-400 font-medium">
+                              Hozircha reytingda talabalar topilmadi. Darslar yoki testlarni bajarib birinchi bo'ling!
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              {leaderboardRows.slice(0, 10).map((u) => {
+                                const shownXp = Number(u.displayXp ?? u.xp ?? 0);
+                                return (
+                                  <div
+                                    key={u.id || u.rank}
+                                    className={`flex items-center justify-between gap-3 p-3 rounded-2xl border transition-all ${
+                                      u.isYou
+                                        ? 'leaderboard-self-row bg-[#EBF5FE] dark:bg-sky-950/60 border-sky-300 dark:border-sky-700/70 shadow-xs'
+                                        : 'dashboard-subcard bg-slate-50/60 dark:bg-slate-800/45 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                                      <span className={`w-7 text-center font-outfit font-black text-sm shrink-0 ${
+                                        u.rank === 1 ? 'text-amber-500 text-lg' : u.rank === 2 ? 'text-slate-400 text-base' : u.rank === 3 ? 'text-amber-700 text-base' : u.isYou ? 'text-primary' : 'text-slate-400'
+                                      }`}>
+                                        {u.rank === 1 ? '🥇' : u.rank === 2 ? '🥈' : u.rank === 3 ? '🥉' : `#${u.rank}`}
+                                      </span>
+
+                                      <img
+                                        src={u.avatar || getInitialsAvatar(u.name)}
+                                        alt={u.name}
+                                        onError={(e) => {
+                                          e.currentTarget.onerror = null;
+                                          e.currentTarget.src = getInitialsAvatar(u.name);
+                                        }}
+                                        className={`w-10 h-10 rounded-full object-cover shrink-0 border-2 bg-slate-100 ${
+                                          u.isYou ? 'border-primary' : 'border-white dark:border-slate-700 shadow-2xs'
+                                        }`}
+                                      />
+
+                                      <div className="min-w-0 flex-1">
+                                        <div className="flex items-center gap-1.5">
+                                          <span className={`font-outfit text-xs sm:text-sm truncate ${u.isYou ? 'font-black text-primary dark:text-sky-300' : 'font-bold text-slate-900 dark:text-white'}`}>
+                                            {u.name}
+                                          </span>
+                                          {u.isYou && (
+                                            <span className="px-1.5 py-0.5 rounded-md bg-primary text-white text-[9px] font-black uppercase shrink-0">
+                                              Siz
+                                            </span>
+                                          )}
+                                        </div>
+                                        <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate font-medium">
+                                          {u.course || 'General English Speaking & Fluency'}
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                                      <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-orange-500/10 text-orange-600 dark:text-orange-400 font-bold text-[11px]" title="Kunlik streak">
+                                        <span>🔥</span>
+                                        <span>{u.streak ?? 0}</span>
+                                      </span>
+                                      <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 font-bold text-[11px]" title="Tangalar">
+                                        <span>💎</span>
+                                        <span>{Number(u.coins ?? 0).toLocaleString()}</span>
+                                      </span>
+                                      <div className="text-right min-w-[74px]">
+                                        <span className={`font-outfit font-black text-xs sm:text-sm block ${u.isYou ? 'text-primary dark:text-sky-300' : 'text-slate-900 dark:text-white'}`}>
+                                          {shownXp.toLocaleString()} XP
+                                        </span>
+                                        {leaderboardPeriod !== 'all' && (
+                                          <span className="text-[10px] text-slate-400 font-medium block">
+                                            Jami: {Number(u.xp ?? 0).toLocaleString()}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </section>
+                      </div>
+
+                      {/* ==================== RIGHT SIDEBAR (~ 4 cols) ==================== */}
+                      <div className="lg:col-span-4 flex flex-col gap-6">
+
+                        {/* 1. YOUR DAILY GOAL (Interaktiv haftalik Mon-Sun coin jadvali va kunlik XP) */}
+                        {(() => {
+                          const todayXp = Number(profile.dailyXp ?? 0);
+                          const goalPct = Math.min(100, Math.round((todayXp / Math.max(1, dailyGoalTarget)) * 100));
+                          const weekDays = getWeekDaysProgress(profile.activityDates);
+                          const weekEarnedCoins = weekDays.reduce((sum, d) => sum + (d.active ? d.coinsEarned : 0), 0);
+                          const weekTotalCoins = weekDays.reduce((sum, d) => sum + d.rewardCoins, 0);
+                          const todayDayItem = weekDays.find(d => d.isToday) || weekDays[0];
+                          const activeDayIdx = selectedGoalDayIdx !== null && weekDays[selectedGoalDayIdx]
+                            ? selectedGoalDayIdx
+                            : (todayDayItem?.index ?? 0);
+                          const selectedDay = weekDays[activeDayIdx] || weekDays[0];
+                          return (
+                            <div className="dashboard-card-surface bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-xs space-y-4">
+                              <div className="flex justify-between items-center gap-2">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <h3 className="font-outfit text-sm font-extrabold text-slate-900 dark:text-white truncate">
+                                    Your Daily Goal
+                                  </h3>
+                                  <span
+                                    title="Haftalik kirish coinlari (Mon-Sun)"
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/12 text-amber-700 dark:text-amber-300 border border-amber-500/25 text-[10px] font-black shrink-0"
+                                  >
+                                    🪙 {weekEarnedCoins}/{weekTotalCoins}
+                                  </span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setEditingDailyGoal(v => !v)}
+                                  className="text-xs font-bold text-[#0084FF] hover:underline cursor-pointer shrink-0"
+                                >
+                                  {editingDailyGoal ? 'Yopish' : 'Edit >'}
+                                </button>
+                              </div>
+
+                              {editingDailyGoal && (
+                                <div className="dashboard-subcard p-3 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700 space-y-2 animate-fade-in">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300">Kunlik XP maqsad:</span>
+                                    <div className="flex items-center gap-1">
+                                      {[50, 100, 150, 200].map(val => (
+                                        <button
+                                          key={val}
+                                          type="button"
+                                          onClick={() => handleSaveDailyGoalTarget(val)}
+                                          className={`px-2 py-1 rounded-lg text-[10px] font-black cursor-pointer transition-all ${
+                                            dailyGoalTarget === val
+                                              ? 'bg-[#0084FF] text-white'
+                                              : 'dashboard-subcard bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                                          }`}
+                                        >
+                                          {val}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-1.5">
+                                    <input
+                                      type="number"
+                                      min="10"
+                                      max="5000"
+                                      defaultValue={dailyGoalTarget}
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                          e.preventDefault();
+                                          handleSaveDailyGoalTarget(e.currentTarget.value);
+                                        }
+                                      }}
+                                      id="daily-goal-custom-xp"
+                                      className="flex-1 h-8 px-2.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 outline-none focus:border-[#0084FF]"
+                                      placeholder="Ixtiyoriy XP (masalan 120)"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const el = document.getElementById('daily-goal-custom-xp');
+                                        if (el) handleSaveDailyGoalTarget(el.value);
+                                      }}
+                                      className="h-8 px-3 rounded-lg bg-[#0084FF] text-white text-[11px] font-black cursor-pointer hover:opacity-90"
+                                    >
+                                      Saqlash
+                                    </button>
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="flex items-center gap-4">
+                                {/* Doiraviy progress */}
+                                <div className="relative w-20 h-20 shrink-0 flex items-center justify-center">
+                                  <svg className="w-20 h-20 -rotate-90" viewBox="0 0 36 36">
+                                    <path
+                                      className="text-slate-200 dark:text-slate-700 stroke-current"
+                                      strokeWidth="3.2"
+                                      fill="none"
+                                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    />
+                                    <path
+                                      className="text-[#0084FF] stroke-current transition-all duration-700 ease-out"
+                                      strokeDasharray={`${goalPct}, 100`}
+                                      strokeWidth="3.2"
+                                      strokeLinecap="round"
+                                      fill="none"
+                                      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    />
+                                  </svg>
+                                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-1">
+                                    <span className="text-xs">⚡</span>
+                                    <span className="font-outfit font-black text-[10px] text-slate-900 dark:text-white leading-none mt-0.5">
+                                      {todayXp} / {dailyGoalTarget}
+                                    </span>
+                                    <span className="text-[8px] text-slate-400 font-bold leading-none mt-0.5">XP Today</span>
+                                  </div>
+                                </div>
+
+                                {/* Streak xabari */}
+                                <div className="space-y-1">
+                                  <h4 className="font-outfit text-xs font-extrabold text-slate-900 dark:text-white">
+                                    {goalPct >= 100 ? 'Kunlik reja bajarildi! 🎉' : todayXp > 0 ? 'Ajoyib davom eting!' : 'Bugungi mashqni boshlang!'}
+                                  </h4>
+                                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
+                                    {(profile.streak ?? 0) > 0 ? (
+                                      <>You're on a <span className="font-bold text-slate-800 dark:text-slate-200">{profile.streak} day streak 🔥</span></>
+                                    ) : (
+                                      <>Birinchi faoliyatingiz bilan <span className="font-bold text-slate-800 dark:text-slate-200">1 kunlik streak 🔥</span> oching</>
+                                    )}
+                                  </p>
+                                  <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">
+                                    Har hafta Mon–Sun · bugun +{todayDayItem?.rewardCoins || 7} Coin
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Hafta kunlari (Dush +7 -> Yak +49 Coin, interaktiv) */}
+                              <div className="grid grid-cols-7 gap-1 pt-2.5 border-t border-slate-100 dark:border-slate-800/80">
+                                {weekDays.map((item, idx) => {
+                                  const isSelected = activeDayIdx === idx;
+                                  return (
+                                    <button
+                                      key={idx}
+                                      type="button"
+                                      onClick={() => setSelectedGoalDayIdx(idx)}
+                                      title={`${item.uzLabel} (${item.dateStr}): +${item.rewardCoins} Coin`}
+                                      className={`flex flex-col items-center gap-1 py-1.5 px-0.5 rounded-xl cursor-pointer transition-all ${
+                                        isSelected
+                                          ? 'dashboard-subcard bg-slate-100/90 dark:bg-slate-800 ring-1 ring-[#0084FF]/40'
+                                          : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'
+                                      }`}
+                                    >
+                                      <div
+                                        className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black transition-all ${
+                                          item.active
+                                            ? 'bg-[#0084FF] text-white shadow-xs'
+                                            : item.missed
+                                              ? 'border border-rose-300 dark:border-rose-700/70 bg-rose-50/70 dark:bg-rose-950/30 text-rose-500'
+                                              : item.isToday
+                                                ? 'border-2 border-[#0084FF] text-[#0084FF]'
+                                                : 'border-2 border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600'
+                                        }`}
+                                      >
+                                        {item.active ? '✓' : item.missed ? '✕' : ''}
+                                      </div>
+                                      <span className={`text-[9px] font-bold uppercase ${item.isToday ? 'text-[#0084FF]' : 'text-slate-400 dark:text-slate-500'}`}>
+                                        {item.day}
+                                      </span>
+                                      <span className={`text-[9px] font-extrabold leading-none ${
+                                        item.active
+                                          ? 'text-emerald-600 dark:text-emerald-400'
+                                          : item.missed
+                                            ? 'text-slate-400 line-through'
+                                            : 'text-amber-600 dark:text-amber-400'
+                                      }`}>
+                                        +{item.rewardCoins}
+                                      </span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+
+                              {/* Interaktiv tanlangan kun holati */}
+                              {selectedDay && (
+                                <div className="dashboard-subcard px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700/80 flex items-center justify-between gap-2 text-[11px]">
+                                  <div className="min-w-0">
+                                    <div className="font-bold text-slate-800 dark:text-slate-200 truncate">
+                                      {selectedDay.uzLabel} · {selectedDay.dateStr}
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                                      {selectedDay.active
+                                        ? `Platformaga kirilgan ✓ · +${selectedDay.coinsEarned} Coin berildi`
+                                        : selectedDay.missed
+                                          ? 'Kirmagan kun — 0 Coin berildi (check bo\'lmadi)'
+                                          : selectedDay.isToday
+                                            ? `Bugungi kirish bonusi: +${selectedDay.rewardCoins} Coin`
+                                            : `Kutilmoqda · Kirsangiz +${selectedDay.rewardCoins} Coin beriladi`}
+                                    </div>
+                                  </div>
+                                  {selectedDay.isToday && !selectedDay.active && (
+                                    <button
+                                      type="button"
+                                      disabled={claimingDailyCheckin}
+                                      onClick={handleManualDailyCheckin}
+                                      className="px-2.5 py-1.5 rounded-lg bg-[#0084FF] text-white text-[10px] font-black shrink-0 cursor-pointer hover:opacity-90 disabled:opacity-50"
+                                    >
+                                      {claimingDailyCheckin ? '...' : `+${selectedDay.rewardCoins} Coin olish`}
+                                    </button>
+                                  )}
+                                  {selectedDay.active && (
+                                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 text-[10px] font-black shrink-0">
+                                      +{selectedDay.coinsEarned} 🪙
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
+
+                        {/* 2. LIVE CLASSES CARDI (4-rasm: UI to'g'rilangan va to'liq interaktiv) */}
+                        {(() => {
+                          const isLiveClassesLocked = String(profile?.tariff || 'VIP').toUpperCase() === 'FREE';
+                          const filteredLiveClasses = isLiveClassesLocked
+                            ? []
+                            : liveClasses.filter(cls =>
+                                liveFilter === 'all' ? true : cls.platform === liveFilter
+                              );
+                          return (
+                            <div className="dashboard-card-surface bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-100 dark:border-slate-800 shadow-xs space-y-4">
+                              {/* Header */}
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="relative flex h-2.5 w-2.5">
+                                    {!isLiveClassesLocked && (
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+                                    )}
+                                    <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isLiveClassesLocked ? 'bg-amber-500' : 'bg-rose-500'}`}></span>
+                                  </span>
+                                  <h3 className="font-outfit text-sm font-extrabold text-slate-900 dark:text-white">
+                                    Live Classes
+                                  </h3>
+                                  <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                                    Jonli darslar
+                                  </span>
+                                </div>
+                                {isLiveClassesLocked ? (
+                                  <span
+                                    data-testid="live-classes-vip-badge"
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-[10px] font-extrabold text-amber-600 dark:text-amber-400"
+                                  >
+                                    {renderSidebarIcon('lock', 'w-3 h-3')}
+                                    <span>VIP</span>
+                                  </span>
+                                ) : (
+                                  <span className="text-[11px] font-bold text-slate-400">
+                                    {filteredLiveClasses.length} ta
+                                  </span>
+                                )}
+                              </div>
+
+                              {isLiveClassesLocked ? (
+                                <div
+                                  data-testid="live-classes-locked"
+                                  onClick={() => openPremiumLockModal('Live Classes')}
+                                  className="rounded-2xl border border-amber-500/30 bg-gradient-to-br from-amber-500/10 via-slate-50 to-indigo-500/5 dark:from-amber-500/10 dark:via-slate-800/70 dark:to-indigo-500/10 p-5 text-center space-y-3 cursor-pointer hover:border-amber-500/50 transition-all"
+                                >
+                                  <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-500 border border-amber-500/25 flex items-center justify-center mx-auto shadow-xs">
+                                    {renderSidebarIcon('lock', 'w-6 h-6')}
+                                  </div>
+                                  <div className="space-y-1">
+                                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase tracking-wider">
+                                      <span>Faqat VIP tarif</span>
+                                    </div>
+                                    <h4 className="font-outfit text-sm font-black text-slate-900 dark:text-white">
+                                      Jonli darslar qulflangan
+                                    </h4>
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
+                                      Live Classes bo'limi faqat VIP tarifidagi talabalar uchun. Darslar jadvali va havolalarni ko'rish uchun VIP tarifga o'ting.
+                                    </p>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      openPremiumLockModal('Live Classes');
+                                    }}
+                                    className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-black shadow-xs transition-all cursor-pointer inline-flex items-center justify-center gap-1.5"
+                                  >
+                                    {renderSidebarIcon('lock', 'w-3.5 h-3.5')}
+                                    <span>VIP tarifga o'tish</span>
+                                  </button>
+                                </div>
+                              ) : (
+                                <>
+                                  {/* Interactive platform filter tabs */}
+                                  <div className="flex items-center gap-1.5 bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-xl">
+                                    {[
+                                      { id: 'all', label: 'Barchasi' },
+                                      { id: 'google-meet', label: 'Google Meet' },
+                                      { id: 'youtube', label: 'YouTube' }
+                                    ].map((f) => (
+                                      <button
+                                        key={f.id}
+                                        type="button"
+                                        onClick={() => setLiveFilter(f.id)}
+                                        className={`flex-1 py-1 px-2 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                                          liveFilter === f.id
+                                            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs'
+                                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                                        }`}
+                                      >
+                                        {f.label}
+                                      </button>
+                                    ))}
+                                  </div>
+
+                                  {/* Class cards */}
+                                  {filteredLiveClasses.length === 0 ? (
+                                    <div className="py-6 text-center rounded-xl border border-dashed border-slate-200 dark:border-slate-700 text-xs text-slate-400 font-medium">
+                                      Ushbu yo'nalishda hozircha jonli darslar yo'q.
+                                    </div>
+                                  ) : (
+                                    <div className="space-y-3">
+                                      {filteredLiveClasses.map((cls) => {
+                                        const isGMeet = cls.platform === 'google-meet';
+                                        const meta = getLiveClassMeta(cls.date, cls.time);
+                                        const isReminded = remindedLiveIds.includes(cls.id);
+                                        const isJoined = joinedLiveIds.includes(cls.id);
+                                        const isCopied = copiedLiveId === cls.id;
+
+                                        return (
+                                          <div
+                                            key={cls.id}
+                                            onClick={() => setSelectedLiveClass(cls)}
+                                            className={`dashboard-subcard group rounded-2xl border border-l-4 p-4 transition-all cursor-pointer space-y-3 bg-white dark:bg-slate-800/60 hover:shadow-md hover:-translate-y-0.5 ${
+                                              isGMeet
+                                                ? 'border-slate-200/80 dark:border-slate-800 border-l-emerald-500 hover:border-emerald-300 dark:hover:border-emerald-700'
+                                                : 'border-slate-200/80 dark:border-slate-800 border-l-rose-500 hover:border-rose-300 dark:hover:border-rose-700'
+                                            }`}
+                                          >
+                                            {/* Top row: Fixed non-overlapping status badge + platform + quick interactive actions */}
+                                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                                              {meta.status === 'live' ? (
+                                                <span className="inline-flex items-center gap-1.5 text-[11px] font-black text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-1 rounded-full border border-rose-200 dark:border-rose-800/60 whitespace-nowrap">
+                                                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shrink-0" />
+                                                  <span>{meta.label}</span>
+                                                </span>
+                                              ) : meta.status === 'ended' ? (
+                                                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-full whitespace-nowrap">
+                                                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                                    <polyline points="22 4 12 14.01 9 11.01" />
+                                                  </svg>
+                                                  <span>{meta.label}</span>
+                                                </span>
+                                              ) : (
+                                                <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/50 px-2.5 py-1 rounded-full border border-blue-200/70 dark:border-blue-900/50 whitespace-nowrap">
+                                                  <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <polyline points="12 6 12 12 16 14" />
+                                                  </svg>
+                                                  <span>{meta.label}</span>
+                                                </span>
+                                              )}
+
+                                              <div className="flex items-center gap-1 shrink-0">
+                                                <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap ${
+                                                  isGMeet
+                                                    ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                                                    : 'bg-rose-500/10 text-rose-700 dark:text-rose-400'
+                                                }`}>
+                                                  {isGMeet ? (
+                                                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                      <polygon points="23 7 16 12 23 17 23 7" />
+                                                      <rect x="1" y="5" width="15" height="14" rx="2" />
+                                                    </svg>
+                                                  ) : (
+                                                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                      <rect x="2" y="4" width="20" height="16" rx="3" />
+                                                      <polygon points="10 9 16 12 10 15 10 9" fill="currentColor" />
+                                                    </svg>
+                                                  )}
+                                                  <span>{isGMeet ? 'Google Meet' : 'YouTube'}</span>
+                                                </span>
+
+                                                <button
+                                                  type="button"
+                                                  onClick={(e) => toggleLiveReminder(cls.id, e)}
+                                                  title={isReminded ? "Eslatmani o'chirish" : "Dars boshlanishidan oldin eslatish"}
+                                                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 ${
+                                                    isReminded
+                                                      ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
+                                                      : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                                  }`}
+                                                >
+                                                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill={isReminded ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                                  </svg>
+                                                </button>
+
+                                                <button
+                                                  type="button"
+                                                  onClick={(e) => handleCopyLiveLink(cls, e)}
+                                                  title="Dars havolasini nusxalash"
+                                                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors cursor-pointer shrink-0 ${
+                                                    isCopied
+                                                      ? 'bg-emerald-500/15 text-emerald-600'
+                                                      : 'text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                                  }`}
+                                                >
+                                                  {isCopied ? (
+                                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                      <polyline points="20 6 9 17 4 12" />
+                                                    </svg>
+                                                  ) : (
+                                                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                                                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                                    </svg>
+                                                  )}
+                                                </button>
+                                              </div>
+                                            </div>
+
+                                            {/* Dars nomi va tavsifi */}
+                                            <div className="space-y-1">
+                                              <h4 className="font-outfit text-xs sm:text-sm font-extrabold text-slate-900 dark:text-white leading-snug group-hover:text-primary transition-colors">
+                                                {cls.title}
+                                              </h4>
+                                              {cls.description && (
+                                                <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                                                  {cls.description}
+                                                </p>
+                                              )}
+                                            </div>
+
+                                            {/* Sana, vaqt va XP mukofot pilli */}
+                                            <div className="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                                              <div className="flex items-center gap-2 whitespace-nowrap min-w-0">
+                                                <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                                                  <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                                  </svg>
+                                                  <span className="font-mono font-bold text-slate-700 dark:text-slate-300">{cls.date}</span>
+                                                </span>
+                                                <span>·</span>
+                                                <span className="inline-flex items-center gap-1 whitespace-nowrap">
+                                                  <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <polyline points="12 6 12 12 16 14" />
+                                                  </svg>
+                                                  <span className="font-mono font-bold text-slate-700 dark:text-slate-300">{cls.time}</span>
+                                                </span>
+                                              </div>
+
+                                              {isJoined ? (
+                                                <span className="text-[10px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
+                                                  Qo'shilindi ✓
+                                                </span>
+                                              ) : (
+                                                <span className="text-[10px] font-extrabold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">
+                                                  +25 XP
+                                                </span>
+                                              )}
+                                            </div>
+
+                                            {/* Action CTA + Batafsil havolasi */}
+                                            <div className="space-y-2">
+                                              <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  handleJoinLiveClass(cls);
+                                                }}
+                                                className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95 cursor-pointer whitespace-nowrap ${
+                                                  isGMeet
+                                                    ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20'
+                                                    : 'bg-rose-600 hover:bg-rose-700 shadow-rose-500/20'
+                                                }`}
+                                              >
+                                                {isGMeet ? (
+                                                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polygon points="23 7 16 12 23 17 23 7" />
+                                                    <rect x="1" y="5" width="15" height="14" rx="2" />
+                                                  </svg>
+                                                ) : (
+                                                  <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="2" y="4" width="20" height="16" rx="3" />
+                                                    <polygon points="10 9 16 12 10 15 10 9" fill="currentColor" />
+                                                  </svg>
+                                                )}
+                                                <span>{isGMeet ? 'Google Meet darsiga kirish' : 'YouTubeda ko\'rish'}</span>
+                                                <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                                                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                                  <polyline points="15 3 21 3 21 9" />
+                                                  <line x1="10" y1="14" x2="21" y2="3" />
+                                                </svg>
+                                              </button>
+
+                                              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 px-0.5">
+                                                <span>Batafsil ma'lumot va eslatma</span>
+                                                <button
+                                                  type="button"
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedLiveClass(cls);
+                                                  }}
+                                                  title="Batafsil ma'lumot"
+                                                  className="text-primary hover:underline font-bold inline-flex items-center gap-0.5 cursor-pointer"
+                                                >
+                                                  <span>Ochish</span>
+                                                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="9 18 15 12 9 6" />
+                                                  </svg>
+                                                </button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </div>
+                          );
+                        })()}
+
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* -------------------- LMS COURSE PLAYER VIEW -------------------- */}
+                {currentPage === 'courses' && (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
+
+                    <div className="lg:col-span-8 flex flex-col gap-4">
+
+                      <div className="flex justify-between items-center">
+                        <button
+                          onClick={() => setCurrentPage('dashboard')}
+                          className="flex items-center gap-0.5 text-xs font-bold text-outline hover:text-on-surface transition-colors cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-[15px]">chevron_left</span>
+                          Dashboard
+                        </button>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setCurrentPage('test-center')}
+                            className="bg-secondary-container text-secondary px-4 py-2 rounded-lg font-bold text-xs hover:opacity-90 transition-opacity flex items-center gap-1 border border-secondary/20 cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[15px]">assignment</span>
+                            Test topshirish (Diagnostic)
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Video Embed Player */}
+                      <div className="w-full aspect-video bg-surface rounded-xl border border-outline-variant relative overflow-hidden flex items-center justify-center shadow-xs">
+                        {activeLesson?.videoUrl ? (
+                          isYouTube(activeLesson.videoUrl) ? (
+                            <iframe
+                              className="w-full h-full bg-black"
+                              src={getYouTubeEmbedUrl(activeLesson.videoUrl)}
+                              title={activeLesson.title}
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          ) : (
+                            <video
+                              key={activeLesson?.id}
+                              src={getVideoSrc(activeLesson.videoUrl)}
+                              controls
+                              controlsList="nodownload"
+                              onContextMenu={(e) => e.preventDefault()}
+                              className="w-full h-full object-contain bg-black"
+                              poster={activeCourse?.image}
+                            />
+                          )
+                        ) : (
+                          <>
+                            <img alt="Math class" className="absolute inset-0 w-full h-full object-cover opacity-30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzzisCD3Y_87UDZHcdRNf3vaQ3Ls3tGms1gjNBX0KxX7GoPKU_r2J3rCkHXdLTEL1g8gj4D12dB0byX4DnBjMA198-OTx6OiXtKEFADmR-ZrBKOTDkZv-eptuDp0gW13jPfv3Q4M2XYdW11Xx2jXFaGNcJIPdxb6D0XvfdjJdX1Y6VgutQ2Zlf2YEsAI8fOUHDF_c0eAVJCRdchjvuu004Sw_B81H6zrgopQgbV9Sp2AyRjp3aGy8HmLklVugPTyVXG3GtubL-Xw0l" />
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-white/80 gap-3 z-10 bg-black/40">
+                              <span className="material-symbols-outlined text-5xl">videocam_off</span>
+                              <p className="font-bold text-sm tracking-wide">Video mavjud emas</p>
+                            </div>
+                            <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent flex items-center gap-3 text-white text-[10px] z-10 opacity-50">
+                              <span className="material-symbols-outlined cursor-not-allowed text-[16px]">play_arrow</span>
+                              <div className="flex-1 bg-white/30 h-1 rounded-full overflow-hidden">
+                                <div className="bg-primary h-full w-0"></div>
+                              </div>
+                              <span className="font-bold">00:00 / {activeLesson?.duration ? (activeLesson.duration.includes(':') ? activeLesson.duration : `${activeLesson.duration}:00`) : '00:00'}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+
+                      {/* Lesson Navigation Buttons */}
+                      <div className="flex items-center justify-between gap-3 mt-2 flex-wrap">
+                        <button
+                          onClick={handlePrevLesson}
+                          disabled={getLessonIndex() === 0}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-colors ${getLessonIndex() === 0
+                              ? 'bg-surface-container text-outline cursor-not-allowed border border-outline-variant'
+                              : 'bg-surface border border-outline-variant text-on-surface hover:border-primary/50 cursor-pointer'
+                            }`}
+                        >
+                          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+                          Oldingi dars
+                        </button>
+
+                        <div className="flex items-center gap-2">
+                          {isCourseCompleted(activeCourse) && (
+                            <button
+                              onClick={() => {
+                                setCompletedCourseForCert(activeCourse);
+                                setShowCourseCertificate(true);
+                              }}
+                              className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold text-sm bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md shadow-amber-500/20 hover:scale-105 transition-all cursor-pointer animate-pulse"
+                            >
+                              <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
+                              Sertifikatni yuklab olish
+                            </button>
+                          )}
+
+                          <button
+                            onClick={handleNextLesson}
+                            disabled={!canProceedToNext}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-sm transition-all ${!canProceedToNext
+                                ? 'bg-surface-container text-outline cursor-not-allowed border border-outline-variant'
+                                : 'bg-primary text-on-primary hover:scale-105 shadow-md cursor-pointer'
+                              }`}
+                          >
+                            Keyingi dars
+                            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Lesson Context */}
+                      <div className="bg-surface p-5 rounded-xl border border-outline-variant space-y-3 shadow-xs">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 bg-primary/10 text-primary rounded font-bold text-[9px] uppercase border border-primary/20">
+                            {activeCourse?.title || 'Kurs'}
+                          </span>
+                        </div>
+                        <h2 className="font-outfit text-xl font-bold text-on-surface">{activeLesson?.title || "Dars Tanlanmagan"}</h2>
+                        <p className="text-xs text-outline leading-relaxed font-medium">
+                          Ushbu dars doirasida biz o'rganilgan mavzularning chuqur nazariy va amaliy tahlilini ko'rib chiqamiz. Masalalarni optimal yechish yo'llari, formulalarni isbotlash va ularni SAT quantitative bo'limida qo'llash sirlarini o'rganasiz.
+                        </p>
+
+                        <div className="pt-4 border-t border-outline-variant flex flex-wrap gap-3">
+                          <a href="#" className="flex items-center gap-1.5 p-2 bg-surface-container rounded-lg border border-outline-variant hover:border-primary/50 transition-colors text-[10px] font-bold text-outline">
+                            <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                            <span>Mavzu_Konspekti.pdf</span>
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Course Assignments Component */}
+                      <CourseAssignments
+                        currentCourseTitle={activeCourse?.title}
+                        studentId={profile?.id}
+                        studentName={`${profile?.firstName || ''} ${profile?.lastName || ''}`.trim()}
+                        studentPhone={profile?.phone || ''}
+                        studentEmail={profile?.email || ''}
+                        studentAvatar={profile?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'}
+                        studentCourses={courses}
+                        onStatsUpdate={applyUserStats}
+                        onPremiumRequired={() => openPremiumLockModal('Topshiriqlar')}
+                      />
+                    </div>
+
+                    {/* Course Syllabus */}
+                    <div className="lg:col-span-4 flex flex-col gap-4">
+                      {/* Multi-Course Switcher */}
+                      {courses.length > 1 && (
+                        <div className="bg-surface rounded-xl p-4 border border-outline-variant shadow-xs">
+                          <label className="text-[10px] font-bold text-outline uppercase tracking-wider block mb-2">Kurs tanlang</label>
+                          <select
+                            value={activeCourse?.id || ''}
+                            onChange={(e) => {
+                              const selected = courses.find(c => c.id === e.target.value);
+                              if (selected) {
+                                setActiveCourse(selected);
+                                if (selected.lessons && selected.lessons.length > 0) {
+                                  setActiveLesson(selected.lessons[0]);
+                                } else {
+                                  setActiveLesson(null);
+                                }
+                              }
+                            }}
+                            className="w-full p-2.5 bg-surface-container rounded-lg border border-outline-variant text-on-surface text-xs font-bold focus:border-primary focus:outline-none cursor-pointer"
+                          >
+                            {courses.map(c => (
+                              <option key={c.id} value={c.id}>{c.title}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      <div className="bg-surface rounded-xl p-5 border border-outline-variant flex flex-col gap-4 shadow-xs">
+                        <div className="space-y-1">
+                          <h3 className="font-outfit text-sm font-bold text-on-surface">Kurs Dasturi</h3>
+                          <div className="flex items-center gap-2">
+                            <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                              <div className="bg-primary h-full rounded-full" style={{ width: `${activeCourse?.progress || 0}%` }}></div>
+                            </div>
+                            <span className="text-[10px] font-bold text-primary shrink-0">{activeCourse?.progress || 0}%</span>
+                          </div>
+                        </div>
+
+                        {isCourseCompleted(activeCourse) && (
+                          <button
+                            onClick={() => {
+                              setCompletedCourseForCert(activeCourse);
+                              setShowCourseCertificate(true);
+                            }}
+                            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white rounded-xl font-bold text-xs shadow-md shadow-amber-500/25 transition-all cursor-pointer animate-pulse"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
+                            Kurs Sertifikatini olish
+                          </button>
+                        )}
+
+                        <div className="flex flex-col gap-2">
+                          {(activeCourse?.lessons || []).map((lesson) => (
+                            <button
+                              key={lesson.id}
+                              disabled={lesson.locked}
+                              onClick={() => setActiveLesson(lesson)}
+                              className={`flex items-center gap-3 p-3 rounded-lg border text-left transition-colors ${lesson.locked ? 'opacity-40 cursor-not-allowed border-transparent' : 'cursor-pointer'
+                                } ${activeLesson && activeLesson.id === lesson.id
+                                  ? 'bg-primary/5 border-primary text-primary font-bold'
+                                  : 'border-outline-variant hover:bg-surface-container-low text-on-surface'
+                                }`}
+                            >
+                              {lesson.completed ? (
+                                <span className="material-symbols-outlined text-tertiary fill shrink-0 text-[16px]">check_circle</span>
+                              ) : lesson.locked ? (
+                                <span className="material-symbols-outlined text-outline shrink-0 text-[16px]">lock</span>
+                              ) : (
+                                <span className="material-symbols-outlined text-primary shrink-0 text-[16px]">play_circle</span>
+                              )}
+                              <div className="min-w-0">
+                                <p className="text-[11px] font-bold truncate leading-none">{lesson.title}</p>
+                                <p className="text-[9px] text-outline font-medium mt-1">{lesson.duration ? (lesson.duration.includes(':') ? lesson.duration : `${lesson.duration}:00`) : ''}</p>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* -------------------- SERTIFIKATLARIM VIEW -------------------- */}
+                {currentPage === 'certificates' && (
+                  <div className="space-y-6 animate-fade-in">
+                    {/* Page Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-outline-variant">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shrink-0">
+                          <span className="material-symbols-outlined text-[24px]">workspace_premium</span>
+                        </div>
+                        <div>
+                          <h1 className="font-outfit text-2xl font-black text-on-surface">Sertifikatlarim</h1>
+                          <p className="text-xs text-outline font-medium mt-0.5">
+                            Muvaffaqiyatli tamomlangan kurslaringiz va rasmiy tasdiqlangan sertifikatlaringiz
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span className="px-3.5 py-1.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-on-surface flex items-center gap-1.5 shadow-xs">
+                          <span className="material-symbols-outlined text-[16px] text-amber-600 fill">military_tech</span>
+                          <span>Jami sertifikatlar: {courses.filter(isCourseCompleted).length} ta</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Certificates Grid */}
+                    {(() => {
+                      const completedCourses = courses
+                        .filter(isCourseCompleted)
+                        .sort((a, b) => {
+                          const dateA = new Date(a.completedAt || a.updatedAt || a.createdAt || 0).getTime();
+                          const dateB = new Date(b.completedAt || b.updatedAt || b.createdAt || 0).getTime();
+                          return dateB - dateA;
+                        });
+
+                      if (completedCourses.length === 0) {
+                        return (
+                          <div className="p-12 text-center rounded-3xl bg-surface border border-outline-variant flex flex-col items-center justify-center max-w-lg mx-auto mt-8 shadow-xs">
+                            <div className="w-20 h-20 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4">
+                              <span className="material-symbols-outlined text-[42px]">workspace_premium</span>
+                            </div>
+                            <h3 className="font-outfit font-black text-lg text-on-surface">Hozircha sertifikatlar mavjud emas</h3>
+                            <p className="text-xs text-outline mt-2 leading-relaxed max-w-sm">
+                              Kurslarni 100% muvaffaqiyat bilan tamomlab, o'z rasmiy Sigma Education sertifikatingizni qo'lga kiriting!
+                            </p>
+                            <button
+                              onClick={() => setCurrentPage('courses')}
+                              className="mt-6 px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs transition-all cursor-pointer shadow-md shadow-primary/25 flex items-center gap-2"
+                            >
+                              <span className="material-symbols-outlined text-[16px]">menu_book</span>
+                              <span>Kurslarga o'tish</span>
+                            </button>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {completedCourses.map((c) => {
+                            const compDate = formatCertificateDate(c.completedAt || c.updatedAt || c.createdAt);
+                            return (
+                              <div
+                                key={c.id}
+                                className="certificate-paper group relative rounded-2xl overflow-hidden border border-amber-500/30 hover:border-amber-400 shadow-md hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300 aspect-[1.414/1] bg-[#FFFDF9] flex flex-col justify-between"
+                              >
+                                {/* Horizontal / Landscape Mini Certificate Preview */}
+                                <div
+                                  onClick={() => {
+                                    setCompletedCourseForCert(c);
+                                    setShowCourseCertificate(true);
+                                  }}
+                                  className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between items-center text-center select-none cursor-pointer border-4 border-double border-amber-600/35 rounded-2xl"
+                                  title="Kattalashtirib ko'rish"
+                                >
+                                  {/* Watermark */}
+                                  <div className="absolute inset-0 opacity-[0.05] pointer-events-none flex items-center justify-center font-bold text-7xl font-serif text-amber-900">
+                                    Σ
+                                  </div>
+
+                                  {/* Top mini header */}
+                                  <div className="w-full flex items-center justify-between text-[8px] font-bold text-zinc-500 z-10">
+                                    <div className="flex items-center gap-1.5">
+                                      <img src="/sigma-logo.png" alt="Sigma" className="h-4 w-auto object-contain" />
+                                      <span className="font-outfit font-black text-slate-800 uppercase text-[8px] tracking-wider">Sigma Education</span>
+                                    </div>
+                                    <span className="font-outfit text-amber-700 font-black text-[8px] uppercase tracking-wider">Practise LMS</span>
+                                  </div>
+
+                                  {/* Middle preview info */}
+                                  <div className="z-10 py-1 space-y-0.5 my-auto pb-16">
+                                    <div className="text-[10px] font-black text-amber-800 uppercase tracking-widest font-outfit">
+                                      SERTIFIKAT
+                                    </div>
+                                    <div className="text-[13px] font-black text-zinc-900 font-outfit uppercase truncate max-w-[220px]">
+                                      {profile.firstName} {profile.lastName}
+                                    </div>
+                                    <div className="text-[8.5px] text-zinc-600 line-clamp-1 italic max-w-[240px]">
+                                      "{c.title}"
+                                    </div>
+                                    <div className="flex items-center justify-center gap-1 text-[8px] text-amber-900/80 font-medium">
+                                      <span>Bosh o'qituvchi:</span>
+                                      <span className="font-bold">Toxirova Malika</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Top-right floating 100% badge */}
+                                <div className="absolute top-2.5 right-2.5 z-20 pointer-events-none">
+                                  <span className="px-2 py-0.5 rounded-full bg-slate-950/85 backdrop-blur-md text-emerald-400 border border-emerald-500/40 text-[9.5px] font-black flex items-center gap-1 shadow-md">
+                                    <span className="material-symbols-outlined text-[12px] fill">check_circle</span>
+                                    100%
+                                  </span>
+                                </div>
+
+                                {/* Opposite Effect Overlay: Dark Glassmorphic floating footer right ON TOP of the certificate */}
+                                <div className="certificate-overlay absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-slate-950/95 via-slate-900/90 to-slate-900/80 backdrop-blur-md border-t border-amber-500/30 p-3 pt-2 text-white">
+                                  <div className="flex items-center justify-between gap-2 mb-2">
+                                    <div className="min-w-0 flex-1">
+                                      <h4 className="font-outfit font-black text-xs text-white truncate drop-shadow-sm group-hover:text-amber-300 transition-colors" title={c.title}>
+                                        {c.title}
+                                      </h4>
+                                      <div className="flex items-center gap-1.5 text-[10px] text-slate-300 mt-0.5">
+                                        <span className="material-symbols-outlined text-[12px] text-amber-400">calendar_today</span>
+                                        <span>Tugatgan sana:</span>
+                                        <span className="font-mono font-bold text-amber-200">{compDate}</span>
+                                      </div>
+                                    </div>
+
+                                    {/* Quick view button */}
+                                    <button
+                                      onClick={() => {
+                                        setCompletedCourseForCert(c);
+                                        setShowCourseCertificate(true);
+                                      }}
+                                      className="shrink-0 w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+                                      title="Kattalashtirib ko'rish"
+                                    >
+                                      <span className="material-symbols-outlined text-[15px]">visibility</span>
+                                    </button>
+                                  </div>
+
+                                  {/* Buttons: PDF yuklash & Chop etish */}
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <button
+                                      disabled={isGeneratingPDF}
+                                      onClick={() => handleCardDownloadPDF(c)}
+                                      className="flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg bg-white/10 hover:bg-amber-500 hover:text-slate-950 text-amber-300 border border-amber-500/40 font-bold text-[11px] transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                                      title="Sertifikatni to'g'ridan-to'g'ri PDF fayl qilib yuklab olish"
+                                    >
+                                      <span className="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                                      <span>PDF yuklaş</span>
+                                    </button>
+
+                                    <button
+                                      disabled={isGeneratingPDF}
+                                      onClick={() => handleCardPrint(c)}
+                                      className="flex items-center justify-center gap-1.5 py-1.5 px-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black text-[11px] transition-all cursor-pointer shadow-md shadow-amber-500/20 active:scale-95 disabled:opacity-50"
+                                      title="Gorizontal (Albom) rejimida to'liq sifatli chop etish"
+                                    >
+                                      <span className="material-symbols-outlined text-[14px]">print</span>
+                                      <span>Çop etiş</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* -------------------- TASKS / TOPSHIRIQLAR VIEW -------------------- */}
+                {currentPage === 'tasks' && (
+                  isSectionLocked('tasks') ? (
+                    <div className="bg-surface rounded-3xl p-8 sm:p-10 border border-outline-variant text-center space-y-4 shadow-xs max-w-xl mx-auto mt-6">
+                      <div className="w-16 h-16 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center mx-auto">
+                        {renderSidebarIcon('lock', 'w-8 h-8')}
+                      </div>
+                      <h3 className="font-outfit text-xl font-black text-on-surface">
+                        Topshiriqlar bo'limi yopiq (FREE tarif)
+                      </h3>
+                      <p className="text-sm text-outline leading-relaxed">
+                        Bu bo'limdan foydalanish uchun Premium kursga qo'shilishingiz kerak. Sizni kutamiz va siz maqsad qilgan natijaga olib chiqamiz!
+                      </p>
+                      <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                        <a
+                          href="https://t.me/azizbekbro"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-black shadow-md hover:opacity-95"
+                        >
+                          <span>Premium kursga qo'shilish (@azizbekbro)</span>
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentPage('dashboard')}
+                          className="px-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-on-surface cursor-pointer"
+                        >
+                          Dashboardga qaytish
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <CourseAssignments
+                      studentId={profile?.id}
+                      studentName={`${profile?.firstName || ''} ${profile?.lastName || ''}`.trim()}
+                      studentPhone={profile?.phone || ''}
+                      studentEmail={profile?.email || ''}
+                      studentAvatar={profile?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'}
+                      studentCourses={courses}
+                      currentCourseTitle={activeCourse?.title || profile?.course}
+                      onStatsUpdate={applyUserStats}
+                      onPremiumRequired={() => openPremiumLockModal('Topshiriqlar')}
+                    />
+                  )
+                )}
+
+                {/* -------------------- 4-TALAB: 2-RASMDAGI LIBRARY VIEW (3D Kitob javonlari) -------------------- */}
+                {currentPage === 'library' && (
+                  isSectionLocked('library') ? (
+                    <div className="bg-surface rounded-3xl p-8 sm:p-10 border border-outline-variant text-center space-y-4 shadow-xs max-w-xl mx-auto mt-6">
+                      <div className="w-16 h-16 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center mx-auto">
+                        {renderSidebarIcon('lock', 'w-8 h-8')}
+                      </div>
+                      <h3 className="font-outfit text-xl font-black text-on-surface">
+                        Library bo'limi yopiq (FREE tarif)
+                      </h3>
+                      <p className="text-sm text-outline leading-relaxed">
+                        Bu bo'limdan foydalanish uchun Premium kursga qo'shilishingiz kerak. Sizni kutamiz va siz maqsad qilgan natijaga olib chiqamiz!
+                      </p>
+                      <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                        <a
+                          href="https://t.me/azizbekbro"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-black shadow-md hover:opacity-95"
+                        >
+                          <span>Premium kursga qo'shilish (@azizbekbro)</span>
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentPage('dashboard')}
+                          className="px-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-on-surface cursor-pointer"
+                        >
+                          Dashboardga qaytish
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <LibraryView darkMode={isDarkSurface} onPremiumRequired={() => openPremiumLockModal('Library')} />
+                  )
+                )}
+
+                {/* -------------------- 5-TALAB: SPEAKING PARTNER VIEW -------------------- */}
+                {currentPage === 'speaking-partner' && (
+                  <SpeakingPartnerView
+                    currentUser={profile}
+                    darkMode={isDarkSurface}
+                    onStatsUpdate={applyUserStats}
+                    onClose={() => setCurrentPage('dashboard')}
+                  />
+                )}
+
+                {/* -------------------- 6-TALAB: 30 KUNLIK CHALLENGES VIEW -------------------- */}
+                {currentPage === 'challenges' && (
+                  isSectionLocked('challenges') ? (
+                    <div className="bg-surface rounded-3xl p-8 sm:p-10 border border-outline-variant text-center space-y-4 shadow-xs max-w-xl mx-auto mt-6">
+                      <div className="w-16 h-16 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center mx-auto">
+                        {renderSidebarIcon('lock', 'w-8 h-8')}
+                      </div>
+                      <h3 className="font-outfit text-xl font-black text-on-surface">
+                        Challenges bo'limi yopiq (FREE tarif)
+                      </h3>
+                      <p className="text-sm text-outline leading-relaxed">
+                        Bu bo'limdan foydalanish uchun Premium kursga qo'shilishingiz kerak. Sizni kutamiz va siz maqsad qilgan natijaga olib chiqamiz!
+                      </p>
+                      <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                        <a
+                          href="https://t.me/azizbekbro"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-black shadow-md hover:opacity-95"
+                        >
+                          <span>Premium kursga qo'shilish (@azizbekbro)</span>
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentPage('dashboard')}
+                          className="px-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-on-surface cursor-pointer"
+                        >
+                          Dashboardga qaytish
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <ChallengesView
+                      currentUser={profile}
+                      darkMode={isDarkSurface}
+                      onStatsUpdate={applyUserStats}
+                      onPremiumRequired={() => openPremiumLockModal('Challenges')}
+                    />
+                  )
+                )}
+
+                {/* -------------------- GRAMMAR VIEW -------------------- */}
+                {currentPage === 'grammar' && (
+                  <GrammarView onBack={() => setCurrentPage('dashboard')} onStatsUpdate={applyUserStats} />
+                )}
+
+                {/* -------------------- PRACTISE VIEW -------------------- */}
+                {currentPage === 'practise' && (
+                  <PractiseView onStatsUpdate={applyUserStats} refreshKey={practiseRefreshKey} />
+                )}
+
+                {/* -------------------- GAMES VIEW -------------------- */}
+                {currentPage === 'games' && (
+                  <GamesView onStatsUpdate={applyUserStats} />
+                )}
+
+                {/* -------------------- VOCABULARY VIEW -------------------- */}
+                {currentPage === 'vocabulary' && (
+                  <VocabularyView
+                    profile={profile}
+                    onStatsUpdate={applyUserStats}
+                    designPreset={designPreset}
+                    darkMode={darkMode}
+                  />
+                )}
+
+                {/* -------------------- BATTLE VIEW -------------------- */}
+                {currentPage === 'battle' && (
+                  <BattleView
+                    profile={profile}
+                    onStatsUpdate={applyUserStats}
+                    focusBattleId={focusBattleId}
+                    onClearFocusBattle={clearFocusBattle}
+                  />
+                )}
+
+                {/* -------------------- MY PROGRESS VIEW (Homework & Challenges Reports) -------------------- */}
+                {currentPage === 'my-progress' && (
+                  isSectionLocked('my-progress') ? (
+                    <div className="bg-surface rounded-3xl p-8 sm:p-10 border border-outline-variant text-center space-y-4 shadow-xs max-w-xl mx-auto mt-6">
+                      <div className="w-16 h-16 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center mx-auto">
+                        {renderSidebarIcon('lock', 'w-8 h-8')}
+                      </div>
+                      <h3 className="font-outfit text-xl font-black text-on-surface">
+                        My Progress bo'limi yopiq (FREE tarif)
+                      </h3>
+                      <p className="text-sm text-outline leading-relaxed">
+                        Bu bo'limdan foydalanish uchun Premium kursga qo'shilishingiz kerak. Azizbek bilan bog'lanish uchun quyidagi havola orqali murojaat qiling! Sizni kutamiz va siz maqsad qilgan natijaga olib chiqamiz!
+                      </p>
+                      <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                        <a
+                          href="https://t.me/azizbekbro"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-black shadow-md hover:opacity-95"
+                        >
+                          <span>Premium kursga qo'shilish (@azizbekbro)</span>
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentPage('dashboard')}
+                          className="px-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-on-surface cursor-pointer"
+                        >
+                          Dashboardga qaytish
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <StudentProgress
+                      profile={profile}
+                      onPremiumRequired={openMyProgressPremiumModal}
+                    />
+                  )
+                )}
+
+                {/* -------------------- LEADERBOARD VIEW -------------------- */}
+                {currentPage === 'leaderboard' && (
+                  <LeaderboardView profile={profile} />
+                )}
+
+                {/* -------------------- TEST CENTER / PORTAL VIEW -------------------- */}
+                {currentPage === 'test-center' && (
+                  <div className="space-y-6 animate-fade-in">
+                    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div>
+                        <h1 className="font-outfit text-2xl font-bold text-on-surface">Imtihonlar Markazi</h1>
+                        <p className="text-xs text-outline font-medium">Barcha onlayn testlar va diagnostik imtihonlar ro'yxati.</p>
+                      </div>
+                      <button
+                        onClick={() => { syncData(); }}
+                        className="self-start sm:self-auto bg-surface border border-outline-variant hover:border-primary/50 text-on-surface text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-2 transition-all cursor-pointer shadow-xs hover:bg-surface-container"
+                        title="Testlarni qayta yuklash"
+                      >
+                        <span className="material-symbols-outlined text-[16px] text-primary">sync</span>
+                        <span>Yangilash</span>
+                      </button>
+                    </header>
+
+                    {/* Portal Stats Bento */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1 shadow-xs">
+                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block">Mavjud Testlar</span>
+                        <div className="font-outfit text-xl font-bold text-on-surface">{tests.length} ta</div>
+                      </div>
+                      <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1 shadow-xs">
+                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block">Tugallangan testlar</span>
+                        <div className="font-outfit text-xl font-bold text-tertiary">{quizResult ? '1 ta' : '0 ta'}</div>
+                      </div>
+                      <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1 shadow-xs">
+                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block">Oxirgi Ball</span>
+                        <div className="font-outfit text-xl font-bold text-secondary">{quizResult ? `${quizResult.score}%` : '—'}</div>
+                      </div>
+                      <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1 shadow-xs">
+                        <span className="text-[9px] font-bold text-outline uppercase tracking-wider block">Sertifikatlar</span>
+                        <div className="font-outfit text-xl font-bold text-primary">{quizResult && quizResult.score >= 70 ? '1 ta' : '0 ta'}</div>
+                      </div>
+                    </div>
+
+                    {/* Test List Cards */}
+                    {tests.length === 0 ? (
+                      <div className="bg-surface border border-dashed border-outline-variant rounded-2xl p-12 text-center space-y-3">
+                        <span className="material-symbols-outlined text-4xl text-outline/60">quiz</span>
+                        <h3 className="font-outfit text-base font-bold text-on-surface">Hozircha testlar mavjud emas</h3>
+                        <p className="text-xs text-outline max-w-sm mx-auto">Admin tomonidan chop etilgan sizning kursingizga tegishli barcha yangi testlar shu yerda aks etadi.</p>
+                        <button
+                          onClick={() => syncData()}
+                          className="bg-primary text-on-primary text-xs font-bold px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors inline-flex items-center gap-1.5 cursor-pointer mt-2"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">refresh</span>
+                          <span>Yangilash</span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {tests.map((test) => (
+                          <div key={test.id} className="bg-surface rounded-xl border border-outline-variant overflow-hidden flex flex-col justify-between hover:border-primary/40 transition-all shadow-xs group">
+                            <div className="p-5 space-y-3">
+                              <div className="flex justify-between items-start">
+                                <span className="px-2.5 py-0.5 bg-primary/10 text-primary border border-primary/20 rounded font-bold text-[9px] uppercase tracking-wider">
+                                  {test.category || test.course || 'SAT Math'}
+                                </span>
+                                <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${test.difficulty === 'Easy' ? 'bg-tertiary-container text-tertiary' :
+                                    test.difficulty === 'Medium' ? 'bg-secondary-container text-secondary' : 'bg-error-container text-error'
+                                  }`}>
+                                  {test.difficulty || 'Medium'}
+                                </span>
+                              </div>
+                              <h3 className="font-outfit text-base font-bold text-on-surface group-hover:text-primary transition-colors">{test.title}</h3>
+                              <p className="text-xs text-outline font-medium line-clamp-3 leading-relaxed">
+                                {test.description || `${test.title} bo'yicha onlayn test sinovi.`}
+                              </p>
+
+                              <div className="flex items-center gap-4 text-[10px] text-outline font-bold pt-2">
+                                <div className="flex items-center gap-1">
+                                  <span className="material-symbols-outlined text-[15px]">assignment</span>
+                                  <span>{test.totalQuestions || test.questionCount || (test.questions ? test.questions.length : 0)} ta savol</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <span className="material-symbols-outlined text-[15px]">schedule</span>
+                                  <span>{test.duration || 60} daqiqa</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <span className="material-symbols-outlined text-[15px]">verified</span>
+                                  <span>{test.passingScore || test.passingPercentage || 70}% o'tish</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="p-4 bg-surface-container-low border-t border-outline-variant flex items-center justify-between">
+                              <div className="text-[10px] font-bold text-outline">
+                                {quizResult && quizResult.testId === test.id ? (
+                                  <span className="text-tertiary flex items-center gap-0.5">
+                                    <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                                    Bajarildi ({quizResult.score}%)
+                                  </span>
+                                ) : 'Topshirilmagan'}
+                              </div>
+
+                              <button
+                                onClick={() => handleStartTestFlow(test)}
+                                className="bg-primary text-on-primary text-xs font-bold px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-1 cursor-pointer"
+                              >
+                                <span>Boshlash</span>
+                                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* -------------------- TEST START VIEW -------------------- */}
+                {currentPage === 'test-start' && (
+                  <div className="max-w-2xl mx-auto animate-fade-in">
+                    <div className="bg-surface rounded-2xl border border-outline-variant overflow-hidden flex flex-col shadow-xs">
+
+                      {/* Banner */}
+                      <div className="bg-gradient-to-r from-primary to-primary/80 text-on-primary p-6 text-center space-y-2">
+                        <span className="inline-block px-2.5 py-0.5 bg-white/10 text-white font-bold text-[9px] uppercase tracking-wider rounded border border-white/20">
+                          {activeQuizTest.category}
+                        </span>
+                        <h1 className="font-outfit text-xl font-bold">{activeQuizTest.title}</h1>
+                        <p className="text-[11px] text-on-primary/80 max-w-md mx-auto leading-relaxed font-medium">
+                          {activeQuizTest.description}
+                        </p>
+                      </div>
+
+                      <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div className="md:col-span-2 space-y-5">
+                          <div className="bg-surface-container rounded-xl p-4 border border-outline-variant space-y-2 text-xs font-medium">
+                            <h2 className="font-outfit text-xs font-bold text-on-surface flex items-center gap-1.5">
+                              <span className="material-symbols-outlined text-primary text-[18px]">menu_book</span>
+                              Imtihon Tarkibi & Mavzular
+                            </h2>
+                            <ul className="text-outline space-y-1 list-disc list-inside">
+                              <li>Algebraik funksiyalar va chiziqli tenglamalar.</li>
+                              <li>Geometrik shakllar, yuzalar, sferalar, diagonallar.</li>
+                              <li>Trigonometrik ayniyatlar va nisbatlar.</li>
+                              <li>Ehtimollar nazariyasi, mediana va dispersiya.</li>
+                              <li>Murakkab integrallar va hosila olish qoidalari.</li>
+                            </ul>
+                          </div>
+
+                          <div className="bg-surface-container rounded-xl p-4 border border-outline-variant space-y-3">
+                            <h2 className="font-outfit text-xs font-bold text-on-surface flex items-center gap-1.5">
+                              <span className="material-symbols-outlined text-secondary text-[18px]">gavel</span>
+                              Tizim Qoidalari & Shartlari
+                            </h2>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold">
+                              <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-primary text-[18px]">calculate</span>
+                                <span className="text-on-surface">Formula va hisob-kitoblar mavjud</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-error text-[18px]">lock</span>
+                                <span className="text-on-surface">Tab o'zgartirish taqiqlanadi</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Summary start panel */}
+                        <div className="flex flex-col justify-between gap-4">
+                          <div className="bg-surface-container rounded-xl p-4 border border-outline-variant flex flex-col gap-2 text-xs font-medium">
+                            <div className="flex justify-between items-center">
+                              <span className="text-outline">Savollar soni:</span>
+                              <span className="font-bold text-on-surface">{activeQuizTest.questions?.length || activeQuizTest.questionCount || 0} ta</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-outline">Ajratilgan vaqt:</span>
+                              <span className="font-bold text-on-surface">{activeQuizTest.duration} daqiqa</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-outline">O'tish bali:</span>
+                              <span className="font-bold text-tertiary">{activeQuizTest.passingPercentage || activeQuizTest.passingScore || 70}%</span>
+                            </div>
+                          </div>
+
+                          <button
+                            onClick={handleResetQuiz}
+                            className="w-full bg-primary text-on-primary font-semibold text-xs py-3 rounded-lg hover:bg-primary/95 transition-all cursor-pointer shadow-sm text-center"
+                          >
+                            Imtihonni Boshlash
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* -------------------- TEST INTERFACE VIEW -------------------- */}
+                {currentPage === 'test-interface' && (
+                  <div
+                    className={`grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in relative ${activeQuizTest?.preventCopyPaste ? 'select-none' : ''}`}
+                    onCopy={activeQuizTest?.preventCopyPaste ? (e) => { e.preventDefault(); alert("Diqqat! Test savollaridan nusxa ko'chirish taqiqlangan."); } : undefined}
+                    onPaste={activeQuizTest?.preventCopyPaste ? (e) => { e.preventDefault(); } : undefined}
+                  >
+
+                    {/* Left Sidebar 30-Question Navigator */}
+                    <div className={showDesmos ? "lg:col-span-3 xl:col-span-3 2xl:col-span-2" : "lg:col-span-3"}>
+                      <div className="bg-surface rounded-xl p-4 border border-outline-variant flex flex-col gap-4 shadow-xs sticky top-4">
+                        <div className="flex justify-between items-center pb-2 border-b border-outline-variant">
+                          <h3 className="font-outfit text-xs font-bold text-on-surface">Savollar paneli</h3>
+                          <span className="text-[10px] font-bold text-primary">
+                            {activeQuestion + 1} / {activeQuizTest.questions.length}
+                          </span>
+                        </div>
+
+                        {/* Navigator grid of pills */}
+                        <div className="grid grid-cols-5 gap-1.5">
+                          {activeQuizTest.questions.map((q, idx) => {
+                            const ansVal = quizAnswers[idx];
+                            const isAnswered = ansVal !== undefined && ansVal !== null &&
+                              (Array.isArray(ansVal) ? ansVal.length > 0 : String(ansVal).trim().length > 0);
+                            const isCurrent = idx === activeQuestion;
+                            const isFlagged = markedForReview.includes(idx);
+
+                            let btnClass = "bg-surface border border-outline-variant text-outline hover:bg-surface-container";
+                            if (isAnswered) btnClass = "bg-tertiary/10 border-tertiary/30 text-tertiary font-bold";
+                            if (isFlagged) btnClass = "bg-primary/10 border-primary/30 text-primary font-bold";
+                            if (isCurrent) btnClass = "bg-primary text-on-primary font-bold border-primary shadow-xs scale-105";
+
+                            return (
+                              <button
+                                key={idx}
+                                onClick={() => {
+                                  setActiveQuestion(idx);
+                                  if (!visitedQuestions.includes(idx)) {
+                                    setVisitedQuestions(prev => [...prev, idx]);
+                                  }
+                                }}
+                                className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold transition-all relative cursor-pointer ${btnClass}`}
+                              >
+                                {idx + 1}
+                                {isFlagged && <span className="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Coloring Legend */}
+                        <div className="p-3 bg-surface-container rounded-xl text-[9px] font-bold space-y-1.5 border border-outline-variant">
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2.5 h-2.5 rounded bg-surface border border-outline-variant"></div>
+                            <span className="text-outline">Bosh (Unvisited)</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2.5 h-2.5 rounded bg-surface-container-high border border-outline-variant"></div>
+                            <span className="text-outline">Ko'rilgan (No Answer)</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2.5 h-2.5 rounded bg-tertiary/20 border border-tertiary/30"></div>
+                            <span className="text-tertiary">Yechilgan (Answered)</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2.5 h-2.5 rounded bg-primary/20 border border-primary/30"></div>
+                            <span className="text-primary">Ko'rib chiqish (Flagged)</span>
+                          </div>
+                        </div>
+
+                        {/* Interactive actions */}
+                        <div className="pt-3 border-t border-outline-variant space-y-2">
+                          <button
+                            onClick={() => handleToggleFlag(activeQuestion)}
+                            className="w-full bg-surface-container border border-outline-variant text-outline font-semibold text-[10px] py-2 rounded-lg flex items-center justify-center gap-1 cursor-pointer hover:text-on-surface"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">flag</span>
+                            {markedForReview.includes(activeQuestion) ? "Belgini olib tashlash" : "Ko'rib chiqish belgisi"}
+                          </button>
+
+                          <div className="flex flex-col items-center p-2.5 bg-surface-container rounded-lg border border-outline-variant/50">
+                            <span className="text-[9px] font-bold text-outline uppercase tracking-wider">Qolgan vaqt</span>
+                            <div className={`flex items-center gap-1 font-outfit text-base font-bold transition-all ${timerSeconds < 300 ? 'text-error animate-pulse text-lg' : 'text-secondary'
+                              }`}>
+                              <span className="material-symbols-outlined text-[16px]">timer</span>
+                              {formatTimer(timerSeconds)}
+                            </div>
+
+                            {/* Auto-save light */}
+                            <div className="flex items-center gap-1 mt-1 text-[8px] text-tertiary font-bold">
+                              <span className="w-1.5 h-1.5 bg-tertiary rounded-full animate-ping"></span>
+                              <span>Avtomatik saqlandi</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Central Question Workspace */}
+                    <div className="lg:col-span-9 flex flex-col gap-4">
+
+                      {/* Premium Top Bar */}
+                      <div className="bg-surface border border-outline-variant p-4 rounded-xl flex justify-between items-center shadow-xs">
+                        <div className="flex items-center gap-2.5">
+                          <span className="bg-primary/10 text-primary font-bold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded border border-primary/20">
+                            Savol {activeQuestion + 1}
+                          </span>
+                          <span className="bg-surface-container border border-outline-variant text-outline font-bold text-[9px] uppercase px-1.5 py-0.5 rounded">
+                            {activeQuizTest.questions[activeQuestion]?.topic || ''}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {/* Uzbek Alphabet Toolbar Toggle in Test / Fullscreen mode */}
+                          <button
+                            type="button"
+                            onClick={() => setShowUzbekToolbar(!showUzbekToolbar)}
+                            className={`px-2.5 py-1.5 rounded-lg font-bold text-[10px] flex items-center gap-1 cursor-pointer transition-all border ${
+                              showUzbekToolbar
+                                ? 'bg-primary text-on-primary border-primary shadow-xs'
+                                : 'bg-surface-container text-outline hover:text-on-surface border-outline-variant hover:bg-surface-container-high'
+                            }`}
+                            title={showUzbekToolbar ? "Alifbo panelini yashiriş" : "Alifbo panelini ko'rsatiş"}
+                          >
+                            <span className="material-symbols-outlined text-[16px]">keyboard</span>
+                            <span className="hidden sm:inline">Alifbo</span>
+                          </button>
+
+                          {/* Dark Mode switcher in test mode */}
+                          <button
+                            type="button"
+                            onClick={() => setDarkMode(!darkMode)}
+                            className="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant flex items-center justify-center text-outline hover:text-on-surface transition-all cursor-pointer"
+                            title={darkMode ? "Yorug' rejim" : "Qorong'i rejim"}
+                          >
+                            <span className="material-symbols-outlined text-[18px]">
+                              {darkMode ? 'light_mode' : 'dark_mode'}
+                            </span>
+                          </button>
+
+                          {/* Full Screen Mode Toggle */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(() => {});
+                              } else {
+                                document.exitFullscreen().catch(() => {});
+                              }
+                            }}
+                            className="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high border border-outline-variant flex items-center justify-center text-outline hover:text-on-surface transition-all cursor-pointer"
+                            title="To'liq ekran (Full screen) rejimini almashtirish"
+                          >
+                            <span className="material-symbols-outlined text-[18px]">fullscreen</span>
+                          </button>
+
+                          <button
+                            onClick={() => setShowQuizConfirmationModal(true)}
+                            className="bg-error text-on-error hover:bg-error/95 px-4 py-1.5 rounded-lg font-bold text-[10px] flex items-center gap-1 cursor-pointer transition-colors shadow-xs"
+                          >
+                            <span>Imtihonni Yakunlash</span>
+                            <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Main Question Sheet */}
+                      <div className="bg-surface rounded-2xl p-6 border border-outline-variant flex flex-col gap-6 shadow-xs min-h-[300px]">
+                        {/* Question Text with Live LaTeX parsed values */}
+                        <div className="space-y-4">
+                          <h2 className="text-[11px] font-bold text-outline uppercase tracking-wider">Masala Sharti:</h2>
+                          <div className="font-outfit text-base font-bold text-on-surface leading-relaxed text-left flex flex-wrap items-center gap-1.5">
+                            {renderMathContent(activeQuizTest.questions[activeQuestion]?.question || '')}
+                          </div>
+                          {activeQuizTest.questions[activeQuestion]?.imageUrl && (
+                            <div className="mt-4 flex justify-center">
+                              <img src={getVideoSrc(activeQuizTest.questions[activeQuestion].imageUrl)} alt="Diagramma" className="max-w-full h-auto rounded-xl border border-outline-variant shadow-sm object-contain" style={{ maxHeight: '300px' }} />
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Interactive Answer Input Controls (Multi-Type: MCQ, Multiple, True/False, Short, Math) */}
+                        {renderQuestionInputControls(activeQuizTest.questions[activeQuestion], false)}
+                      </div>
+
+                      {/* Bottom Quick Navigation */}
+                      <div className="bg-surface border border-outline-variant p-4 rounded-xl flex justify-between items-center shadow-xs">
+                        <button
+                          disabled={activeQuestion === 0}
+                          onClick={() => {
+                            setActiveQuestion(prev => prev - 1);
+                            if (!visitedQuestions.includes(activeQuestion - 1)) {
+                              setVisitedQuestions(prev => [...prev, activeQuestion - 1]);
+                            }
+                          }}
+                          className="bg-surface hover:bg-surface-container text-on-surface font-bold text-xs py-2.5 px-4 rounded-lg border border-outline-variant transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <span className="material-symbols-outlined text-[15px]">chevron_left</span> Ortga
+                        </button>
+
+                        <div className="text-[10px] text-outline font-bold">
+                          Savol {activeQuestion + 1} / {activeQuizTest.questions.length}
+                        </div>
+
+                        {activeQuestion === activeQuizTest.questions.length - 1 ? (
+                          <button
+                            onClick={() => setShowQuizConfirmationModal(true)}
+                            className="bg-tertiary text-on-tertiary font-bold text-xs py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1 cursor-pointer shadow-xs"
+                          >
+                            <span>Yuborish</span>
+                            <span className="material-symbols-outlined text-[15px]">check</span>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setActiveQuestion(prev => prev + 1);
+                              if (!visitedQuestions.includes(activeQuestion + 1)) {
+                                setVisitedQuestions(prev => [...prev, activeQuestion + 1]);
+                              }
+                            }}
+                            className="bg-primary text-on-primary font-bold text-xs py-2.5 px-5 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1 cursor-pointer shadow-xs"
+                          >
+                            <span>Keyingi</span>
+                            <span className="material-symbols-outlined text-[15px]">chevron_right</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* -------------------- TEST RESULTS VIEW -------------------- */}
+                {currentPage === 'test-results' && !quizResult && (
+                  <div className="text-center py-12 space-y-4 animate-fade-in">
+                    <span className="material-symbols-outlined text-4xl text-outline block">query_stats</span>
+                    <h2 className="font-outfit text-lg font-bold text-on-surface">Topshirilgan testlar topilmadi</h2>
+                    <p className="text-xs text-outline font-medium">Imtihonlar markazidan testlarni topshiring va sertifikatga ega bo'ling.</p>
+                    <button
+                      onClick={() => setCurrentPage('test-center')}
+                      className="bg-primary text-on-primary font-semibold text-xs py-2 px-5 rounded-lg hover:opacity-90 cursor-pointer"
+                    >
+                      Testlar bo'limiga o'tish
+                    </button>
+                  </div>
+                )}
+
+                {currentPage === 'test-results' && quizResult && (() => {
+                  const reviewList = Array.isArray(quizResult.reviews) ? quizResult.reviews : [];
+                  const revCorrectCount = reviewList.length > 0 ? reviewList.filter(r => r.isCorrect).length : null;
+                  const revEarned = reviewList.length > 0 ? reviewList.reduce((acc, r) => acc + (Number(r.awardedMarks) || 0), 0) : null;
+                  const revTotal = reviewList.length > 0 ? reviewList.reduce((acc, r) => acc + (Number(r.maxScore) || 1), 0) : null;
+                  const revScore = (revEarned !== null && revTotal && revTotal > 0) ? Math.round((revEarned / revTotal) * 100) : null;
+
+                  const displayCorrectCount = revCorrectCount !== null ? Math.max(revCorrectCount, Number(quizResult.correctCount) || 0) : (Number(quizResult.correctCount) || 0);
+                  const totalQCount = activeQuizTest?.questions?.length || reviewList.length || 1;
+                  const displayIncorrectCount = Math.max(0, totalQCount - displayCorrectCount);
+                  const displayScore = revScore !== null ? Math.max(revScore, Number(quizResult.score) || 0) : (Number(quizResult.score) || 0);
+                  const passingGrade = Number(activeQuizTest?.passingScore) || Number(activeQuizTest?.passingPercentage) || 70;
+                  const isPassed = displayScore >= passingGrade;
+
+                  return (
+                  <div className="space-y-6 animate-fade-in">
+                    <header className="text-center space-y-1">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary border border-primary/20 mb-2 shadow-xs">
+                        <span className="material-symbols-outlined text-2xl fill">emoji_events</span>
+                      </div>
+                      <h1 className="font-outfit text-2xl font-bold text-on-surface">Imtihon Natijasi</h1>
+                      <p className="text-xs text-outline font-medium">{quizResult.testTitle}</p>
+                    </header>
+
+                    {/* Bento Results Layout */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+                      {/* Circle Gauge Chart */}
+                      <div className="md:col-span-4 bg-surface rounded-2xl border border-outline-variant p-6 flex flex-col items-center justify-center gap-4 shadow-xs text-center">
+                        <div className="relative w-32 h-32 flex items-center justify-center">
+                          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                            <path className="text-surface-container" stroke="currentColor" strokeWidth="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path
+                              className={isPassed ? "text-tertiary" : "text-error"}
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              strokeDasharray={`${displayScore}, 100`}
+                              fill="none"
+                              strokeLinecap="round"
+                              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                            />
+                          </svg>
+                          <div className="absolute flex flex-col items-center">
+                            <span className="font-outfit text-2xl font-bold text-on-surface">{displayScore}%</span>
+                            <span className="text-[8px] text-outline font-bold uppercase tracking-wider">Umumiy ball</span>
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[9px] font-bold ${isPassed
+                              ? 'bg-tertiary-container border-tertiary/20 text-tertiary'
+                              : 'bg-error-container border-error/20 text-error'
+                            }`}>
+                            <span className="material-symbols-outlined text-[12px]">{isPassed ? 'verified' : 'cancel'}</span>
+                            {isPassed ? 'MUVAFFAQIYATLI O\'TDI' : 'YIQILDI'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Detail Metrics Bento Card */}
+                      <div className="md:col-span-8 grid grid-cols-2 gap-4">
+                        <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1.5 shadow-xs">
+                          <span className="material-symbols-outlined text-secondary text-[20px]">schedule</span>
+                          <p className="text-[9px] font-bold text-outline uppercase tracking-wider">Sarflangan Vaqt</p>
+                          <p className="font-outfit text-base font-bold text-on-surface">{quizResult.timeSpent}</p>
+                        </div>
+
+                        <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1.5 shadow-xs">
+                          <span className="material-symbols-outlined text-tertiary text-[20px]">check_circle</span>
+                          <p className="text-[9px] font-bold text-outline uppercase tracking-wider">To'g'ri Javoblar</p>
+                          <p className="font-outfit text-base font-bold text-tertiary">{displayCorrectCount} ta</p>
+                        </div>
+
+                        <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1.5 shadow-xs">
+                          <span className="material-symbols-outlined text-error text-[20px]">cancel</span>
+                          <p className="text-[9px] font-bold text-outline uppercase tracking-wider">Xato Javoblar</p>
+                          <p className="font-outfit text-base font-bold text-error">{displayIncorrectCount} ta</p>
+                        </div>
+
+                        <div className="bg-surface rounded-xl p-4 border border-outline-variant space-y-1.5 shadow-xs">
+                          <span className="material-symbols-outlined text-outline text-[20px]">security</span>
+                          <p className="text-[9px] font-bold text-outline uppercase tracking-wider">Tab Ogohlantirishlar</p>
+                          <p className="font-outfit text-base font-bold text-on-surface">{quizResult.cheatAlerts} marta</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Domain Category Accuracy Chart */}
+                    <div className="bg-surface rounded-2xl border border-outline-variant p-6 space-y-4 shadow-xs">
+                      <h3 className="font-outfit text-sm font-bold text-on-surface">Mavzular bo'yicha o'zlashtirish tahlili</h3>
+
+                      <div className="space-y-3 text-xs font-bold">
+                        {['Algebra', 'Geometry', 'Calculus', 'Trigonometry', 'Statistics'].map((cat) => {
+                          const acc = getCategoryAccuracy(cat);
+                          return (
+                            <div key={cat} className="space-y-1">
+                              <div className="flex justify-between items-center">
+                                <span className="text-on-surface">{cat}</span>
+                                <span className="text-primary">{acc}%</span>
+                              </div>
+                              <div className="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full transition-all duration-500 ${acc >= 80 ? 'bg-tertiary' :
+                                      acc >= 50 ? 'bg-secondary' : 'bg-error'
+                                    }`}
+                                  style={{ width: `${acc}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Results Actions */}
+                    <div className="flex flex-wrap gap-4 items-center justify-center p-4 bg-surface border border-outline-variant rounded-2xl shadow-xs">
+                      <button
+                        onClick={() => setCurrentPage('test-center')}
+                        className="bg-primary text-on-primary font-bold text-xs py-2.5 px-6 rounded-lg hover:opacity-90 transition-opacity cursor-pointer shadow-xs flex items-center gap-1"
+                      >
+                        <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                        Kursga qaytish
+                      </button>
+
+                      {isPassed && (
+                        <button
+                          onClick={() => setShowCertificate(true)}
+                          className="bg-secondary text-on-secondary font-bold text-xs py-2.5 px-6 rounded-lg hover:opacity-90 transition-opacity cursor-pointer shadow-xs flex items-center gap-1 border border-secondary/20"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">verified</span>
+                          Sertifikatni yuklab olish
+                        </button>
+                      )}
+
+                      <button
+                        onClick={handleResetQuiz}
+                        className="bg-transparent border border-outline text-outline font-bold text-xs py-2.5 px-6 rounded-lg hover:bg-surface-container transition-colors cursor-pointer"
+                      >
+                        Imtihonni qayta topshirish
+                      </button>
+                    </div>
+
+                    {/* Complete 30-Question Review Panel (Tahlil) */}
+                    <div className="space-y-4">
+                      <h3 className="font-outfit text-base font-bold text-on-surface">Savollar tahlili va yechimlari</h3>
+
+                      <div className="space-y-4">
+                        {activeQuizTest.questions.map((q, qIdx) => {
+                          const studentAns = quizResult.answers[qIdx];
+                          const review = (quizResult.reviews && quizResult.reviews[qIdx]) ? quizResult.reviews[qIdx] : null;
+                          
+                          // Normalize official correct answer index for MCQ
+                          let correctIdx = -1;
+                          const rawOfficial = (review && review.correctAnswer !== undefined && review.correctAnswer !== null)
+                            ? review.correctAnswer
+                            : (q._decodedCorrect !== undefined ? q._decodedCorrect : (q.correctAnswer !== undefined ? q.correctAnswer : q.correct));
+
+                          if (rawOfficial !== undefined && rawOfficial !== null) {
+                            if (typeof rawOfficial === 'number') correctIdx = rawOfficial;
+                            else if (!isNaN(Number(rawOfficial)) && String(rawOfficial).trim() !== '') correctIdx = Number(rawOfficial);
+                            else if (/^[A-Za-z]$/.test(String(rawOfficial).trim())) {
+                              correctIdx = String(rawOfficial).trim().toUpperCase().charCodeAt(0) - 65;
+                            } else if (Array.isArray(q.options)) {
+                              const match = q.options.findIndex(opt => String(opt).trim().toLowerCase() === String(rawOfficial).trim().toLowerCase());
+                              if (match !== -1) correctIdx = match;
+                            }
+                          }
+
+                          // Determine real accuracy from server review or accurate client evaluation
+                          const studentMatches = (studentAns !== undefined && studentAns !== null && correctIdx !== -1 && Number(studentAns) === correctIdx);
+                          const isCorrect = review
+                            ? (Boolean(review.isCorrect) || studentMatches)
+                            : studentMatches;
+                          const awardedMarks = review
+                            ? (review.awardedMarks !== undefined ? review.awardedMarks : (isCorrect ? (review.maxScore || q.score || 1) : 0))
+                            : (isCorrect ? (q.score || 1) : 0);
+                          const maxMarks = review ? (review.maxScore || q.score || 1) : (q.score || 1);
+
+                          const qType = (q.type || 'single').toLowerCase();
+
+                          return (
+                            <details key={q.id || qIdx} className="bg-surface rounded-xl border border-outline-variant overflow-hidden shadow-xs group" open={!isCorrect}>
+                              <summary className="p-4 flex items-center justify-between cursor-pointer hover:bg-surface-container-low transition-colors select-none font-bold text-xs">
+                                <div className="flex items-center gap-2">
+                                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                                    studentAns === undefined ? 'bg-zinc-200 text-zinc-600' :
+                                    isCorrect ? 'bg-tertiary/20 text-tertiary' :
+                                    awardedMarks > 0 ? 'bg-amber-500/20 text-amber-600' :
+                                    'bg-error/20 text-error'
+                                  }`}>
+                                    {qIdx + 1}
+                                  </span>
+                                  <span className="text-on-surface text-left line-clamp-1">{renderMathContent(q.question)}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-[10px] text-outline font-bold">
+                                  <span className={`px-2 py-0.5 rounded-md font-bold ${
+                                    isCorrect ? 'bg-emerald-500/10 text-emerald-600' :
+                                    awardedMarks > 0 ? 'bg-amber-500/10 text-amber-600' :
+                                    'bg-rose-500/10 text-rose-600'
+                                  }`}>
+                                    {awardedMarks} / {maxMarks} ball
+                                  </span>
+                                  <span>{q.topic}</span>
+                                  <span className="material-symbols-outlined text-base transition-transform group-open:rotate-180">expand_more</span>
+                                </div>
+                              </summary>
+
+                              <div className="p-5 border-t border-outline-variant space-y-4 bg-surface-container-low/30 text-xs">
+                                <div className="space-y-2">
+                                  <h4 className="font-bold text-outline uppercase tracking-wider text-[9px]">Savol:</h4>
+                                  <p className="font-bold text-on-surface leading-relaxed text-left flex items-center flex-wrap gap-1">
+                                    {renderMathContent(q.question)}
+                                  </p>
+                                  {q.imageUrl && (
+                                    <div className="mt-3 flex justify-center">
+                                      <img src={getVideoSrc(q.imageUrl)} alt="Diagramma" className="max-w-full h-auto rounded-lg border border-outline-variant shadow-sm object-contain" style={{ maxHeight: '200px' }} />
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* 1. MCQ OPTIONS REVIEW */}
+                                {(qType === 'single' || qType === 'mcq' || qType === 'multiple') && Array.isArray(q.options) && q.options.length > 0 && (
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                                    {q.options.map((opt, oIdx) => {
+                                      const isChoice = qType === 'multiple'
+                                        ? (Array.isArray(studentAns) && studentAns.includes(oIdx))
+                                        : (studentAns === oIdx || Number(studentAns) === oIdx);
+                                      const isRight = qType === 'multiple'
+                                        ? (Array.isArray(review?.correctAnswer) ? review.correctAnswer.includes(oIdx) : false)
+                                        : (correctIdx === oIdx);
+
+                                      let cardStyle = "border-outline-variant bg-surface text-on-surface";
+                                      if (isChoice && !isRight) cardStyle = "border-error/50 bg-error/5 text-error ring-1 ring-error/20";
+                                      if (isRight) cardStyle = "border-tertiary/60 bg-tertiary/10 text-tertiary font-bold ring-1 ring-tertiary/30";
+
+                                      return (
+                                        <div key={oIdx} className={`p-3 rounded-lg border flex items-center gap-2.5 transition-all ${cardStyle}`}>
+                                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold border shrink-0 ${
+                                            isRight ? 'bg-tertiary text-on-tertiary border-tertiary' :
+                                            isChoice ? 'bg-error text-on-error border-error' :
+                                            'bg-surface-container text-outline border-outline-variant'
+                                          }`}>
+                                            {isRight ? '✓' : (isChoice ? '✕' : String.fromCharCode(65 + oIdx))}
+                                          </div>
+                                          <span className="text-xs">{renderMathContent(opt)}</span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                )}
+
+                                {/* 2. SHORT ANSWER QUESTION REVIEW (GEMINI AI FEEDBACK & CRITERIA BREAKDOWN) */}
+                                {qType === 'short' && (
+                                  <div className="space-y-3 pt-2">
+                                    <div className="p-3.5 bg-surface rounded-xl border border-outline-variant space-y-1.5">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-outline uppercase tracking-wider">
+                                          Sizning javobingiz:
+                                        </span>
+                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                                          isCorrect ? 'bg-emerald-500/10 text-emerald-600' :
+                                          awardedMarks > 0 ? 'bg-amber-500/10 text-amber-600' :
+                                          'bg-rose-500/10 text-rose-600'
+                                        }`}>
+                                          {isCorrect ? "To'liq to'g'ri ✅" : (awardedMarks > 0 ? "Qisman to'g'ri ⚠️" : "Noto'g'ri ❌")} ({awardedMarks}/{maxMarks} ball)
+                                        </span>
+                                      </div>
+                                      <p className="text-xs font-semibold text-on-surface whitespace-pre-wrap leading-relaxed">
+                                        {review?.studentAnswer || studentAns || "(Javob yozilmadi)"}
+                                      </p>
+                                    </div>
+
+                                    {/* AI Evaluation & Feedback */}
+                                    {review?.aiGrading && (
+                                      <div className="p-3.5 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 rounded-xl border border-indigo-500/20 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-bold text-xs">
+                                            <span className="material-symbols-outlined text-[16px]">smart_toy</span>
+                                            <span>Gemini AI Semantik Baholash Xulosasi:</span>
+                                          </div>
+                                          {review.aiGrading.grading_status === 'pending_review' && (
+                                            <span className="text-[10px] bg-blue-500/10 text-blue-600 px-2 py-0.5 rounded-full font-bold">
+                                              O'qituvchi tekshiruvida ⏳
+                                            </span>
+                                          )}
+                                        </div>
+
+                                        <p className="text-xs text-on-surface leading-relaxed">
+                                          {review.aiGrading.student_feedback || review.feedback}
+                                        </p>
+
+                                        {/* Individual Criteria Results */}
+                                        {Array.isArray(review.aiGrading.criterion_results) && review.aiGrading.criterion_results.length > 0 && (
+                                          <div className="space-y-1.5 pt-2 border-t border-indigo-500/10">
+                                            <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
+                                              Mezonlar bo'yicha tahlil:
+                                            </span>
+                                            <div className="grid grid-cols-1 gap-1.5">
+                                              {review.aiGrading.criterion_results.map((cr, cIdx) => (
+                                                <div key={cr.criterion_id || cIdx} className="p-2 bg-surface/80 rounded-lg border border-outline-variant flex items-center justify-between gap-2 text-[11px]">
+                                                  <div className="flex items-center gap-2">
+                                                    <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
+                                                      cr.awarded_marks >= cr.maximum_marks ? 'bg-emerald-500 text-white' : (cr.awarded_marks > 0 ? 'bg-amber-500 text-white' : 'bg-zinc-300 text-zinc-700')
+                                                    }`}>
+                                                      {cr.awarded_marks >= cr.maximum_marks ? '✓' : (cr.awarded_marks > 0 ? '½' : '✕')}
+                                                    </span>
+                                                    <span className="text-on-surface">{cr.reason || `Mezon ${cIdx + 1}`}</span>
+                                                  </div>
+                                                  <span className="font-mono font-bold text-indigo-600 shrink-0">
+                                                    {cr.awarded_marks}/{cr.maximum_marks} ball
+                                                  </span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+
+                                    {/* Model Answer preview */}
+                                    {review?.markingScheme?.modelAnswer && (
+                                      <div className="p-3 bg-primary/5 rounded-xl border border-primary/10 space-y-1">
+                                        <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1">
+                                          <span className="material-symbols-outlined text-[13px]">lightbulb</span>
+                                          Namunaviy to'liq javob (Model Answer):
+                                        </span>
+                                        <p className="text-xs text-on-surface italic leading-relaxed">
+                                          {review.markingScheme.modelAnswer}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+
+                                {/* Step-by-step math explanation */}
+                                {q.explanation && (
+                                  <div className="p-4 bg-primary/5 rounded-xl border border-primary/10 mt-3 space-y-2 text-left">
+                                    <h4 className="font-outfit text-xs font-bold text-primary flex items-center gap-1.5">
+                                      <span className="material-symbols-outlined text-[16px]">menu_book</span>
+                                      Mukammal Masala Yechimi:
+                                    </h4>
+                                    <div className="text-on-surface leading-relaxed font-semibold font-serif italic text-xs whitespace-pre-line flex flex-wrap items-center gap-1.5">
+                                      {renderMathContent(q.explanation)}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </details>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
+
+
+                {/* -------------------- PROFILE / SETTINGS VIEW -------------------- */}
+                {currentPage === 'profile' && (
+                  <div className="space-y-6 animate-fade-in relative">
+                    {/* Top slide-down alert for missing phone */}
+                    <div className={`absolute top-0 left-0 right-0 z-10 transition-all duration-500 ease-in-out ${showProfileAlert ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'}`}>
+                      <div className="bg-rose-500 text-white px-4 py-3 rounded-xl shadow-lg flex justify-between items-center mx-auto max-w-2xl">
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-[20px]">warning</span>
+                          <span className="text-xs font-bold">Iltimos, profil ma'lumotlaringizni (telefon raqamingizni) to'liq kiriting.</span>
+                        </div>
+                        <button onClick={() => setShowProfileAlert(false)} className="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                          OK
+                        </button>
+                      </div>
+                    </div>
+
+                    <header className={showProfileAlert ? 'mt-14 transition-all duration-500' : 'transition-all duration-500'}>
+                      <h1 className="font-outfit text-2xl font-bold text-on-surface">Shaxsiy Sozlamalar</h1>
+                      <p className="text-xs text-outline font-medium">Akkaunt ma'lumotlarini boshqarish.</p>
+                    </header>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                      <section className="md:col-span-8 bg-surface border border-outline-variant p-6 rounded-xl space-y-6 shadow-xs">
+                        <h2 className="font-outfit text-sm font-bold text-on-surface flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-primary text-[18px]">person</span>
+                          Profilni tahrirlash
+                        </h2>
+
+                        <div className="flex flex-col sm:flex-row gap-6 items-start">
+                          <div className="relative group cursor-pointer w-16 h-16">
+                            <img
+                              alt="Avatar"
+                              className="w-16 h-16 rounded-full border border-outline-variant object-cover bg-slate-100"
+                              src={getVideoSrc(profile.avatar) || getInitialsAvatar(`${profile.firstName} ${profile.lastName}`)}
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = getInitialsAvatar(`${profile.firstName} ${profile.lastName}`);
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                              <span className="material-symbols-outlined text-white text-[18px]">edit</span>
+                            </div>
+                            <input
+                              type="file"
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                              accept="image/*"
+                              onChange={handleAvatarChange}
+                            />
+                          </div>
+
+                          <form className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-bold">
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-outline">Ismingiz</label>
+                              <input
+                                className="h-10 px-3 bg-surface-container rounded-lg border border-outline-variant text-xs font-medium focus:border-primary focus:outline-none text-on-surface"
+                                type="text"
+                                value={profile.firstName}
+                                onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-outline">Familiyangiz</label>
+                              <input
+                                className="h-10 px-3 bg-surface-container rounded-lg border border-outline-variant text-xs font-medium focus:border-primary focus:outline-none text-on-surface"
+                                type="text"
+                                value={profile.lastName}
+                                onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1.5 sm:col-span-2">
+                              <label className="text-outline">Elektron pochta manzili</label>
+                              <input
+                                className="h-10 px-3 bg-surface-container/50 rounded-lg border border-outline-variant text-xs font-medium text-outline cursor-not-allowed focus:outline-none"
+                                type="email"
+                                value={profile.email}
+                                readOnly
+                                disabled
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1.5 sm:col-span-2">
+                              <label className="text-outline">Telefon raqami <span className="text-rose-500">*</span></label>
+                              <input
+                                className="h-10 px-3 bg-surface-container rounded-lg border border-outline-variant text-xs font-bold focus:border-primary focus:outline-none text-on-surface"
+                                type="tel"
+                                placeholder="+998 90 123 45 67"
+                                required
+                                value={profile.phone}
+                                onChange={(e) => {
+                                  let val = e.target.value.replace(/[^\d+]/g, '');
+                                  if (!val.startsWith('+')) {
+                                    val = '+' + val.replace(/\+/g, '');
+                                  }
+                                  const cleaned = val.replace(/\D/g, '').substring(0, 12);
+                                  let formatted = '+';
+                                  if (cleaned.length > 0) formatted += cleaned.substring(0, 3);
+                                  if (cleaned.length > 3) formatted += ' ' + cleaned.substring(3, 5);
+                                  if (cleaned.length > 5) formatted += ' ' + cleaned.substring(5, 8);
+                                  if (cleaned.length > 8) formatted += ' ' + cleaned.substring(8, 10);
+                                  if (cleaned.length > 10) formatted += ' ' + cleaned.substring(10, 12);
+                                  if (cleaned.length === 0) formatted = '';
+                                  setProfile({ ...profile, phone: formatted });
+                                }}
+                              />
+                            </div>
+
+                            <div className="sm:col-span-2 flex justify-end">
+                              <button
+                                onClick={(e) => {
+                                  if (!profile.phone || profile.phone.length < 17) {
+                                    e.preventDefault();
+                                    setShowProfileAlert(true);
+                                    return;
+                                  }
+                                  handleProfileSave(e);
+                                }}
+                                className="bg-primary text-on-primary font-semibold text-xs py-2 px-4 rounded-lg hover:opacity-90 transition-opacity cursor-pointer shadow-xs"
+                                type="button"
+                              >
+                                Saqlash
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </section>
+
+                      <div className="md:col-span-4 flex flex-col gap-6">
+                        <section className="bg-surface border border-outline-variant p-5 rounded-xl space-y-4 shadow-xs">
+                          <h2 className="font-outfit text-xs font-bold text-on-surface flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-tertiary text-[18px]">palette</span>
+                            Interfeys rejimi
+                          </h2>
+                          <div className="flex items-center justify-between p-3 bg-surface-container rounded-lg border border-outline-variant/60">
+                            <span className="text-[11px] font-bold text-on-surface">Tungi rejim (Dark Mode)</span>
+
+                            <label className="relative inline-flex items-center cursor-pointer select-none">
+                              <input
+                                className="sr-only peer"
+                                type="checkbox"
+                                checked={darkMode}
+                                onChange={() => setDarkMode(!darkMode)}
+                              />
+                              <div className="w-9 h-5 bg-outline-variant/80 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary border-2 border-transparent"></div>
+                            </label>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </main>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- CONFIRM SUBMIT MODAL -------------------- */}
+      {showQuizConfirmationModal && (
+        <div className="fixed inset-0 bg-black/45 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-surface rounded-2xl border border-outline-variant p-6 max-w-sm w-full text-center space-y-4 shadow-xl">
+            <div className="w-12 h-12 bg-error-container text-error rounded-full flex items-center justify-center mx-auto">
+              <span className="material-symbols-outlined text-2xl">error</span>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="font-outfit text-base font-bold text-on-surface">Imtihonni yakunlaysizmi?</h3>
+              <p className="text-xs text-outline leading-relaxed font-medium">
+                Siz {Object.keys(quizAnswers).length} ta savolga javob berdingiz ({activeQuizTest.questions.length - Object.keys(quizAnswers).length} ta qoldi).
+                Ushbu qarorni ortga qaytarib bo'lmaydi.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 font-semibold text-xs pt-2">
+              <button
+                onClick={() => setShowQuizConfirmationModal(false)}
+                className="bg-surface-container border border-outline-variant text-outline py-2.5 rounded-lg hover:text-on-surface cursor-pointer"
+              >
+                Yo'q, qaytish
+              </button>
+
+              <button
+                onClick={handleSubmitTest}
+                className="bg-primary text-on-primary py-2.5 rounded-lg hover:opacity-95 cursor-pointer shadow-xs"
+              >
+                Ha, yakunlash
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- PREMIUM ACADEMIC TEST CERTIFICATE MODAL -------------------- */}
+      {showCertificate && quizResult && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 overflow-y-auto animate-fade-in">
+          <div
+            id="academic-certificate-element"
+            className="printable-certificate bg-[#FFFDF9] text-zinc-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 max-w-[760px] w-full border-[8px] border-double border-amber-600/35 shadow-2xl flex flex-col justify-between items-center text-center relative overflow-hidden bg-cover bg-center select-none"
+          >
+
+            {/* Elegant Background Watermark Pattern */}
+            <div className="absolute inset-0 opacity-[0.035] pointer-events-none select-none flex items-center justify-center font-bold text-[180px] font-serif text-amber-900">
+              ∫
+            </div>
+
+            {/* Corner Decorative Ornaments */}
+            <div className="absolute top-3 left-3 w-10 h-10 border-t-2 border-l-2 border-amber-600/40"></div>
+            <div className="absolute top-3 right-3 w-10 h-10 border-t-2 border-r-2 border-amber-600/40"></div>
+            <div className="absolute bottom-3 left-3 w-10 h-10 border-b-2 border-l-2 border-amber-600/40"></div>
+            <div className="absolute bottom-3 right-3 w-10 h-10 border-b-2 border-r-2 border-amber-600/40"></div>
+
+            {/* Top Brand Bar */}
+            <div className="w-full flex items-center justify-between z-10 px-2 sm:px-4">
+              <div className="flex items-center gap-2">
+                <img src="/sigma-logo.png" alt="Sigma Education" className="h-10 sm:h-11 w-auto object-contain drop-shadow-sm" />
+                <div className="text-left leading-tight">
+                  <span className="font-outfit font-black text-xs sm:text-sm tracking-wider text-slate-900 uppercase block">Sigma Education</span>
+                  <span className="text-[8px] sm:text-[9px] font-bold text-amber-700 tracking-wider uppercase block">Öquv Markazi</span>
+                </div>
+              </div>
+
+              <div className="text-right leading-tight">
+                <span className="font-outfit font-black text-xs sm:text-sm tracking-wider text-slate-900 uppercase block">Practise LMS</span>
+                <span className="text-[8px] sm:text-[9px] font-bold text-slate-400 tracking-wider uppercase block">Online Ta'lim</span>
+              </div>
+            </div>
+
+            {/* Certificate Header */}
+            <div className="space-y-1 z-10 w-full text-center mt-2">
+              <div className="text-amber-800 font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[11px] font-outfit">
+                Sigma Education &bull; Practise LMS
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl font-black tracking-[0.25em] text-zinc-900 uppercase">
+                SERTIFIKAT
+              </h2>
+              <p className="font-sans text-[10px] tracking-[0.25em] font-bold uppercase text-amber-700">
+                Certificate of Academic Achievement
+              </p>
+              <div className="w-28 h-[2px] bg-gradient-to-r from-transparent via-amber-600 to-transparent mx-auto mt-1"></div>
+            </div>
+
+            {/* Certificate Main Text */}
+            <div className="my-auto py-3 space-y-2.5 z-10 max-w-xl w-full text-center">
+              <p className="font-serif italic text-zinc-600 text-xs sm:text-sm">
+                Uşbu rasmiy akademik hujjat muvaffaqiyat bilan topshiriladi:
+              </p>
+
+              <h3 className="font-outfit text-2xl sm:text-3xl font-black text-amber-950 border-b-2 border-amber-400 pb-1 px-6 inline-block tracking-wider uppercase">
+                {profile.firstName} {profile.lastName}
+              </h3>
+
+              <p className="text-xs text-zinc-700 leading-relaxed font-serif font-medium px-4">
+                talabaning <strong>"{quizResult.testTitle}"</strong> bölimidagi barça murakkab test sinovlaridan muvaffaqiyatli ötganligini va <strong>{quizResult.score}%</strong> yuqori körsatkiç qayd etganligini tasdiqlaydi.
+              </p>
+            </div>
+
+            {/* Signatures & Seal */}
+            <div className="w-full grid grid-cols-3 items-end pt-3 z-10 border-t border-amber-900/15">
+
+              {/* Left Sign: Toxirova Malika */}
+              <div className="flex flex-col items-center">
+                <span className="font-serif italic text-zinc-900 text-sm font-bold block h-5">Toxirova Malika</span>
+                <div className="w-24 sm:w-28 border-t border-zinc-400 mt-1"></div>
+                <span className="text-zinc-600 uppercase text-[9px] tracking-wider mt-0.5 block font-bold">Boş Öqituvçi</span>
+              </div>
+
+              {/* Gold Medal Seal */}
+              <div className="flex justify-center">
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 rounded-full flex items-center justify-center shadow-lg border-4 border-amber-300">
+                  <div className="absolute inset-1.5 border border-dashed border-white/60 rounded-full flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[26px] sm:text-[30px] text-white fill">verified</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Date */}
+              <div className="flex flex-col items-center">
+                <span className="text-zinc-900 block h-5 font-mono font-bold text-xs sm:text-sm leading-tight">
+                  {formatCertificateDate(quizResult.submittedAt || quizResult.date || quizResult.timestamp)}
+                </span>
+                <div className="w-24 sm:w-28 border-t border-zinc-400 mt-1"></div>
+                <span className="text-zinc-600 uppercase text-[9px] tracking-wider mt-0.5 block font-bold">Berilgan Sana (DD-MM-YYYY)</span>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-3 flex items-center justify-center gap-2.5 z-10 text-xs font-semibold no-print">
+              <button
+                disabled={isGeneratingPDF}
+                onClick={() => printCertificateDirect('academic-certificate-element')}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-amber-600/20 active:scale-95 disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[16px]">print</span>
+                <span>Çop etiş</span>
+              </button>
+
+              <button
+                disabled={isGeneratingPDF}
+                onClick={() => {
+                  const sName = `${profile.firstName || 'Talaba'}_${profile.lastName || ''}`.trim().replace(/\s+/g, '_');
+                  downloadCertificatePDF('academic-certificate-element', `Sertifikat-${sName}-Akademik.pdf`);
+                }}
+                className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-400 px-5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 border border-amber-600/20 font-bold disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                <span>{isGeneratingPDF ? "Yuklanmoqda..." : "PDF saqlaş"}</span>
+              </button>
+
+              <button
+                onClick={() => setShowCertificate(false)}
+                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-700 px-5 py-2.5 rounded-xl cursor-pointer transition-colors"
+              >
+                Yopiş
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------- VIDEO COURSE COMPLETION CERTIFICATE MODAL -------------------- */}
+      {showCourseCertificate && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-6 overflow-y-auto animate-fade-in">
+          <div
+            id="course-certificate-element"
+            className="printable-certificate bg-[#FFFDF9] text-zinc-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 max-w-[760px] w-full border-[8px] border-double border-amber-600/35 shadow-2xl flex flex-col justify-between items-center text-center relative overflow-hidden bg-cover bg-center select-none"
+          >
+
+            {/* Elegant Background Watermark Pattern: Greek Sigma */}
+            <div className="absolute inset-0 opacity-[0.035] pointer-events-none select-none flex items-center justify-center font-bold text-[180px] font-serif text-amber-900">
+              Σ
+            </div>
+
+            {/* Corner Decorative Ornaments */}
+            <div className="absolute top-3 left-3 w-10 h-10 border-t-2 border-l-2 border-amber-600/40"></div>
+            <div className="absolute top-3 right-3 w-10 h-10 border-t-2 border-r-2 border-amber-600/40"></div>
+            <div className="absolute bottom-3 left-3 w-10 h-10 border-b-2 border-l-2 border-amber-600/40"></div>
+            <div className="absolute bottom-3 right-3 w-10 h-10 border-b-2 border-r-2 border-amber-600/40"></div>
+
+            {/* Top Brand Bar */}
+            <div className="w-full flex items-center justify-between z-10 px-2 sm:px-4">
+              <div className="flex items-center gap-2">
+                <img src="/sigma-logo.png" alt="Sigma Education" className="h-10 sm:h-11 w-auto object-contain drop-shadow-sm" />
+                <div className="text-left leading-tight">
+                  <span className="font-outfit font-black text-xs sm:text-sm tracking-wider text-slate-900 uppercase block">Sigma Education</span>
+                  <span className="text-[8px] sm:text-[9px] font-bold text-amber-700 tracking-wider uppercase block">Öquv Markazi</span>
+                </div>
+              </div>
+
+              <div className="text-right leading-tight">
+                <span className="font-outfit font-black text-xs sm:text-sm tracking-wider text-slate-900 uppercase block">Practise LMS</span>
+                <span className="text-[8px] sm:text-[9px] font-bold text-slate-400 tracking-wider uppercase block">Online Ta'lim</span>
+              </div>
+            </div>
+
+            {/* Certificate Header */}
+            <div className="space-y-1 z-10 w-full text-center mt-2">
+              <div className="text-amber-800 font-bold uppercase tracking-[0.3em] text-[10px] sm:text-[11px] font-outfit">
+                Sigma Education &bull; Practise LMS
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl font-black tracking-[0.25em] text-zinc-900 uppercase">
+                SERTIFIKAT
+              </h2>
+              <p className="font-sans text-[10px] tracking-[0.25em] font-bold uppercase text-amber-700">
+                Certificate of Course Completion
+              </p>
+              <div className="w-28 h-[2px] bg-gradient-to-r from-transparent via-amber-600 to-transparent mx-auto mt-1"></div>
+            </div>
+
+            {/* Certificate Main Text */}
+            <div className="my-auto py-3 space-y-2.5 z-10 max-w-xl w-full text-center">
+              <p className="font-serif italic text-zinc-600 text-xs sm:text-sm">
+                Uşbu rasmiy bitiruv hujjati muvaffaqiyat bilan topshiriladi:
+              </p>
+
+              <h3 className="font-outfit text-2xl sm:text-3xl font-black text-amber-950 border-b-2 border-amber-400 pb-1 px-6 inline-block tracking-wider uppercase">
+                {profile.firstName} {profile.lastName}
+              </h3>
+
+              <p className="text-xs text-zinc-700 leading-relaxed font-serif font-medium px-4">
+                talabaning <strong>"{completedCourseForCert?.title || activeCourse?.title || 'Video Kurs'}"</strong> kursi böyiça barça nazariy modullar, video darslar hamda amaliy topşiriqlarni <strong>100% muvaffaqiyat bilan</strong> töliq tamomlaganligini tasdiqlaydi.
+              </p>
+            </div>
+
+            {/* Signatures & Seal */}
+            <div className="w-full grid grid-cols-3 items-end pt-3 z-10 border-t border-amber-900/15">
+
+              {/* Left Sign: Toxirova Malika */}
+              <div className="flex flex-col items-center">
+                <span className="font-serif italic text-zinc-900 text-sm font-bold block h-5">Toxirova Malika</span>
+                <div className="w-24 sm:w-28 border-t border-zinc-400 mt-1"></div>
+                <span className="text-zinc-600 uppercase text-[9px] tracking-wider mt-0.5 block font-bold">Boş Öqituvçi</span>
+              </div>
+
+              {/* Gold Medal Seal */}
+              <div className="flex justify-center">
+                <div className="relative w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 rounded-full flex items-center justify-center shadow-lg border-4 border-amber-300">
+                  <div className="absolute inset-1.5 border border-dashed border-white/60 rounded-full flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[26px] sm:text-[30px] text-white fill">verified</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Date */}
+              <div className="flex flex-col items-center">
+                <span className="text-zinc-900 block h-5 font-mono font-bold text-xs sm:text-sm leading-tight">
+                  {formatCertificateDate(completedCourseForCert?.completedAt || completedCourseForCert?.updatedAt || completedCourseForCert?.createdAt)}
+                </span>
+                <div className="w-24 sm:w-28 border-t border-zinc-400 mt-1"></div>
+                <span className="text-zinc-600 uppercase text-[9px] tracking-wider mt-0.5 block font-bold">Berilgan Sana (DD-MM-YYYY)</span>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-3 flex items-center justify-center gap-2.5 z-10 text-xs font-semibold no-print">
+              <button
+                disabled={isGeneratingPDF}
+                onClick={() => printCertificateDirect('course-certificate-element')}
+                className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-amber-600/20 active:scale-95 disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[16px]">print</span>
+                <span>Çop etiş</span>
+              </button>
+
+              <button
+                disabled={isGeneratingPDF}
+                onClick={() => {
+                  const sName = `${profile.firstName || 'Talaba'}_${profile.lastName || ''}`.trim().replace(/\s+/g, '_');
+                  const cTitle = (completedCourseForCert?.title || activeCourse?.title || 'Kurs').replace(/[^a-zA-Z0-9\-_]/g, '_');
+                  downloadCertificatePDF('course-certificate-element', `Sertifikat-${sName}-${cTitle}.pdf`);
+                }}
+                className="bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-400 px-5 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 border border-amber-600/20 font-bold disabled:opacity-50"
+              >
+                <span className="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                <span>{isGeneratingPDF ? "Yuklanmoqda..." : "PDF saqlaş"}</span>
+              </button>
+
+              <button
+                onClick={() => setShowCourseCertificate(false)}
+                className="bg-zinc-100 hover:bg-zinc-200 text-zinc-700 px-5 py-2.5 rounded-xl cursor-pointer transition-colors"
+              >
+                Yopiş
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Uzbek New Alphabet Quick Character Bar (Floating Bottom Center Toolbar) */}
+      {showUzbekToolbar && (
+        <div className="dashboard-card-surface fixed bottom-3 left-1/2 -translate-x-1/2 z-[9999] bg-surface/95 dark:bg-slate-900/95 backdrop-blur-md border border-outline-variant/80 rounded-full px-3 py-1.5 shadow-2xl flex items-center gap-1.5 select-none animate-fade-in no-print ring-1 ring-primary/20">
+          <div className="flex items-center gap-1 pr-1.5 border-r border-outline-variant/60 text-[10px] font-black text-primary uppercase tracking-wider">
+            <span className="material-symbols-outlined text-[15px]">keyboard</span>
+            <span className="hidden sm:inline">Alifbo</span>
+          </div>
+          <div className="flex items-center gap-1">
+            {['Ğ', 'ğ', 'Ö', 'ö', 'Ş', 'ş', 'Ç', 'ç'].map(ch => (
+              <button
+                key={ch}
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  insertUzbekChar(ch);
+                }}
+                className="w-7 h-7 rounded-lg bg-surface-container hover:bg-primary hover:text-on-primary font-bold text-xs text-on-surface transition-all flex items-center justify-center cursor-pointer shadow-xs active:scale-95"
+                title={`"${ch}" harfini yozish`}
+              >
+                {ch}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowUzbekToolbar(false)}
+            title="Panelni yashirish (Klaviatura tugmasi orqali qayta yoqishingiz mumkin)"
+            className="w-5 h-5 ml-0.5 rounded-full text-outline hover:text-on-surface hover:bg-surface-container flex items-center justify-center cursor-pointer transition-colors"
+          >
+            <span className="material-symbols-outlined text-[13px]">close</span>
+          </button>
+        </div>
+      )}
+
+      {/* Interactive Live Class Detail Modal */}
+      {selectedLiveClass && String(profile?.tariff || 'VIP').toUpperCase() !== 'FREE' && (() => {
+        const isGMeet = selectedLiveClass.platform === 'google-meet';
+        const meta = getLiveClassMeta(selectedLiveClass.date, selectedLiveClass.time);
+        const isReminded = remindedLiveIds.includes(selectedLiveClass.id);
+        const isJoined = joinedLiveIds.includes(selectedLiveClass.id);
+        const isCopied = copiedLiveId === selectedLiveClass.id;
+        return (
+          <div
+            onClick={() => setSelectedLiveClass(null)}
+            className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-surface border border-outline-variant rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl space-y-5 p-6"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-black px-3 py-1 rounded-full ${
+                    isGMeet
+                      ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+                      : 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
+                  }`}>
+                    {isGMeet ? (
+                      <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7" />
+                        <rect x="1" y="5" width="15" height="14" rx="2" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="3" />
+                        <polygon points="10 9 16 12 10 15 10 9" fill="currentColor" />
+                      </svg>
+                    )}
+                    <span>{isGMeet ? 'Google Meet' : 'YouTube'}</span>
+                  </span>
+                  <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full ${
+                    meta.status === 'live'
+                      ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
+                      : 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                  }`}>
+                    {meta.status === 'live' && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+                    <span>{meta.fullCountdown}</span>
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedLiveClass(null)}
+                  aria-label="Yopish"
+                  className="text-outline hover:text-on-surface p-1.5 rounded-xl hover:bg-surface-container cursor-pointer shrink-0"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="font-outfit font-black text-xl text-on-surface leading-snug">
+                  {selectedLiveClass.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-outline leading-relaxed">
+                  {selectedLiveClass.description || "Jonli mashg'ulot davomida savol-javoblar, amaliy mashqlar va talaffuz tahlili bo'lib o'tadi."}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 p-3.5 rounded-2xl bg-surface-container border border-outline-variant/60 text-xs">
+                <div className="flex items-center gap-2.5">
+                  <svg className="w-5 h-5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  <div>
+                    <p className="text-[10px] text-outline font-bold uppercase">Sana</p>
+                    <p className="font-mono font-bold text-on-surface">{selectedLiveClass.date}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <svg className="w-5 h-5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                  <div>
+                    <p className="text-[10px] text-outline font-bold uppercase">Boshlanish vaqti</p>
+                    <p className="font-mono font-bold text-on-surface">{selectedLiveClass.time}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-between text-xs">
+                <span className="font-bold text-amber-800 dark:text-amber-300">
+                  Darsga qatnashish mukofoti:
+                </span>
+                <span className="font-outfit font-black text-amber-900 dark:text-amber-200">
+                  {isJoined ? 'Olingan ✓ (+25 XP, +10 Coin)' : '+25 XP · +10 Coin'}
+                </span>
+              </div>
+
+              <div className="space-y-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => handleJoinLiveClass(selectedLiveClass)}
+                  className={`w-full py-3 px-4 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-2 shadow-md cursor-pointer transition-all active:scale-95 ${
+                    isGMeet
+                      ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20'
+                      : 'bg-rose-600 hover:bg-rose-700 shadow-rose-500/20'
+                  }`}
+                >
+                  {isGMeet ? (
+                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="23 7 16 12 23 17 23 7" />
+                      <rect x="1" y="5" width="15" height="14" rx="2" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="4" width="20" height="16" rx="3" />
+                      <polygon points="10 9 16 12 10 15 10 9" fill="currentColor" />
+                    </svg>
+                  )}
+                  <span>{isGMeet ? 'Google Meet darsiga kirish' : 'YouTubeda ko\'rish'}</span>
+                </button>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={(e) => toggleLiveReminder(selectedLiveClass.id, e)}
+                    className={`px-3 py-2 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
+                      isReminded
+                        ? 'bg-amber-500/15 border-amber-500/40 text-amber-700 dark:text-amber-300'
+                        : 'border-outline-variant text-on-surface hover:bg-surface-container'
+                    }`}
+                  >
+                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill={isReminded ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                    </svg>
+                    <span>{isReminded ? 'Eslatiladi' : 'Eslatish'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={(e) => handleCopyLiveLink(selectedLiveClass, e)}
+                    className="px-3 py-2 rounded-xl border border-outline-variant text-xs font-bold text-on-surface hover:bg-surface-container flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    <span>{isCopied ? 'Nusxalandi' : 'Havola'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedLiveClass(null)}
+                    className="px-3 py-2 rounded-xl bg-surface-container text-xs font-bold text-outline hover:text-on-surface cursor-pointer transition-colors"
+                  >
+                    Yopish
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* First-login One-Time Password -> Set Personal Password Modal */}
+      {mustChangePassword && currentPage !== 'login' && currentPage !== 'forgot-password' && currentPage !== 'reset-password' && (
+        <div className="fixed inset-0 z-[9998] bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="dashboard-card-surface w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl space-y-5">
+            <div className="flex items-start gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-outfit text-lg font-black text-slate-900 dark:text-white">
+                  Doimiy parolingizni o'rnating
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                  Siz bir martalik parol yordamida kirdingiz. Xavfsizlik uchun o'zingiz xohlagan shaxsiy parolni o'rnating — eski bir martalik parol bekor qilinadi.
+                </p>
+              </div>
+            </div>
+
+            {otpModalData.error && (
+              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-bold">
+                {otpModalData.error}
+              </div>
+            )}
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if ((otpModalData.newPassword || '').length < 4) {
+                  setOtpModalData(prev => ({ ...prev, error: 'Parol kamida 4 ta belgidan iborat bo\'lishi kerak.' }));
+                  return;
+                }
+                if (otpModalData.newPassword !== otpModalData.confirmPassword) {
+                  setOtpModalData(prev => ({ ...prev, error: 'Parollar bir-biriga mos emas.' }));
+                  return;
+                }
+                setOtpModalData(prev => ({ ...prev, saving: true, error: '' }));
+                try {
+                  const res = await fetchWithAuth('/api/auth/set-initial-password', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                      newPassword: otpModalData.newPassword,
+                      loginUrl: `${window.location.origin}${window.location.pathname}`
+                    })
+                  });
+                  const d = await res.json();
+                  if (!res.ok) throw new Error(d.error || 'Parolni saqlashda xatolik');
+                  setMustChangePassword(false);
+                  setOtpModalData({ newPassword: '', confirmPassword: '', saving: false, error: '', show: false });
+                  setXpToast({ xp: 0, coins: 0, streak: 0, label: 'Yangi doimiy parolingiz muvaffaqiyatli saqlandi!' });
+                  if (xpToastTimeoutRef.current) clearTimeout(xpToastTimeoutRef.current);
+                  xpToastTimeoutRef.current = setTimeout(() => setXpToast(null), 4000);
+                } catch (err) {
+                  setOtpModalData(prev => ({ ...prev, saving: false, error: err.message }));
+                }
+              }}
+              className="space-y-3.5"
+            >
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300">Yangi doimiy parol (kamida 4 ta belgi)</label>
+                <input
+                  type={otpModalData.show ? 'text' : 'password'}
+                  required
+                  minLength={4}
+                  value={otpModalData.newPassword}
+                  onChange={(e) => setOtpModalData(prev => ({ ...prev, newPassword: e.target.value, error: '' }))}
+                  placeholder="Masalan: meningparolim2026"
+                  className="w-full h-11 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold outline-none focus:border-primary"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300">Parolni tasdiqlang</label>
+                <input
+                  type={otpModalData.show ? 'text' : 'password'}
+                  required
+                  minLength={4}
+                  value={otpModalData.confirmPassword}
+                  onChange={(e) => setOtpModalData(prev => ({ ...prev, confirmPassword: e.target.value, error: '' }))}
+                  placeholder="Yangi parolni qayta kiriting"
+                  className="w-full h-11 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold outline-none focus:border-primary"
+                />
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <label className="inline-flex items-center gap-2 text-[11px] font-semibold text-slate-500 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={otpModalData.show}
+                    onChange={(e) => setOtpModalData(prev => ({ ...prev, show: e.target.checked }))}
+                  />
+                  <span>Parolni ko'rsatish</span>
+                </label>
+              </div>
+              <button
+                type="submit"
+                disabled={otpModalData.saving}
+                className="w-full h-11 rounded-xl bg-primary text-white font-black text-xs shadow-md hover:opacity-95 cursor-pointer disabled:opacity-60"
+              >
+                {otpModalData.saving ? 'Saqlanmoqda...' : 'Doimiy parolni saqlash'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* XP / Coins / Streak Earned Floating Reward Toast */}
+      {xpToast && (
+        <div className="fixed bottom-6 left-6 z-[9999] bg-slate-900 dark:bg-slate-800 text-white border border-amber-400/50 rounded-2xl px-4 py-3 shadow-2xl flex items-center gap-3 animate-fade-in">
+          <img src="/xp_badge.svg" alt="XP" className="w-8 h-8 shrink-0" />
+          <div className="text-xs">
+            <div className="font-outfit font-black text-amber-300 flex flex-wrap items-center gap-2">
+              {xpToast.xp > 0 && <span>+{xpToast.xp} XP</span>}
+              {xpToast.coins > 0 && <span className="text-sky-300">+{xpToast.coins} Coin</span>}
+              {xpToast.streak > 0 && <span className="text-orange-400">+{xpToast.streak} Streak 🔥</span>}
+            </div>
+            <p className="text-[11px] text-slate-300 font-medium">{xpToast.label}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Student Push Notification Toast */}
+      {studentPushToast && (() => {
+        const toastBattleId = extractBattleIdFromNotif(studentPushToast.message);
+        return (
+          <div className="dashboard-card-surface fixed bottom-24 right-5 z-[9999] max-w-sm w-[calc(100vw-2rem)] sm:w-full bg-white dark:bg-slate-900 border border-primary/40 dark:border-primary/50 rounded-2xl p-4 shadow-2xl animate-slide-in flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/15 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <h5 className="text-xs font-black text-slate-900 dark:text-slate-100">{formatNotifText(studentPushToast.title)}</h5>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-0.5 line-clamp-3 leading-relaxed">{formatNotifText(studentPushToast.message)}</p>
+              {toastBattleId && (
+                <div className="flex items-center gap-2 mt-2.5">
+                  <button
+                    type="button"
+                    disabled={respondingBattleId === toastBattleId}
+                    onClick={() => handleBattlePushRespond(studentPushToast, 'accept')}
+                    className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-black shadow-xs cursor-pointer disabled:opacity-60"
+                  >
+                    {respondingBattleId === toastBattleId ? 'Kirilmoqda...' : '✅ Jangni qabul qilish'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={respondingBattleId === toastBattleId}
+                    onClick={() => handleBattlePushRespond(studentPushToast, 'decline')}
+                    className="dashboard-subcard px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-500/15 text-slate-600 dark:text-slate-300 hover:text-rose-600 text-[11px] font-bold cursor-pointer"
+                  >
+                    Rad etish
+                  </button>
+                </div>
+              )}
+              <span className="text-[9px] text-slate-400 dark:text-slate-500 block mt-1.5 font-medium">Push bildirishnoma · Hozirgina</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                if (pushToastTimeoutRef.current) clearTimeout(pushToastTimeoutRef.current);
+                setStudentPushToast(null);
+              }}
+              aria-label="Yopish"
+              className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1 rounded-lg transition-colors cursor-pointer shrink-0"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+        );
+      })()}
+
+      {/* FREE Tariff Premium Upgrade Modal */}
+      {premiumLockModal && (
+        <div
+          data-testid="premium-lock-modal"
+          className="fixed inset-0 z-[9995] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in"
+          onClick={() => setPremiumLockModal(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md bg-surface dark:bg-slate-900 rounded-3xl border border-amber-500/30 p-6 sm:p-7 shadow-2xl space-y-4 text-center"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center mx-auto shadow-xs">
+              {renderSidebarIcon('lock', 'w-7 h-7')}
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 text-[11px] font-black">
+              <span>{premiumLockModal.sectionName}</span>
+              <span>•</span>
+              <span>VIP Kurs</span>
+            </div>
+            <h3 className="font-outfit text-xl font-black text-on-surface leading-snug">
+              Premium kursga qo'shiling!
+            </h3>
+            <p className="text-xs sm:text-sm text-outline leading-relaxed font-medium">
+              Bu bo'limdan foydalanish uchun Premium kursga qo'shilishingiz kerak. Azizbek bilan bog'lanish uchun quyidagi havola orqali murojaat qiling! Sizni kutamiz va siz maqsad qilgan natijaga olib chiqamiz!
+            </p>
+            <div className="flex flex-col gap-2.5 pt-2">
+              <a
+                href="https://t.me/azizbekbro"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="premium-telegram-cta"
+                className="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-[#229ED9] to-indigo-600 text-white font-black text-xs sm:text-sm shadow-lg shadow-sky-500/20 hover:opacity-95 transition-all flex items-center justify-center gap-2 no-underline"
+              >
+                <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.223-.548.223l.188-2.85 5.18-4.68c.223-.198-.054-.31-.346-.11l-6.4 4.03-2.76-.86c-.6-.188-.61-.6.126-.89l10.81-4.17c.5-.188.943.114.75 1.485z" />
+                </svg>
+                <span>Premium kursga qo'shilish (@azizbekbro)</span>
+              </a>
+              <button
+                type="button"
+                onClick={() => setPremiumLockModal(null)}
+                className="w-full py-2.5 rounded-xl bg-surface-container border border-outline-variant text-xs font-bold text-outline hover:text-on-surface cursor-pointer"
+              >
+                Yopish
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Compact Floating Support Chat Widget (4-rasm design + Azizbek Live Support) */}
+      {currentPage !== 'login' && currentPage !== 'forgot-password' && currentPage !== 'reset-password' && currentPage !== 'test-interface' && (
+        <div className="fixed bottom-5 right-5 z-[9990] flex flex-col items-end gap-3">
+          {supportChatOpen && (
+            <div
+              data-testid="student-support-chat-window"
+              className="w-[330px] sm:w-[365px] rounded-3xl bg-surface dark:bg-slate-900 border border-outline-variant shadow-2xl overflow-hidden animate-fade-in flex flex-col"
+            >
+              {/* Compact Header */}
+              <div className="px-4 py-3 bg-gradient-to-r from-amber-500/15 via-primary/10 to-surface dark:from-amber-500/10 dark:via-slate-800 dark:to-slate-900 border-b border-outline-variant flex items-center justify-between gap-2.5">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="relative shrink-0">
+                    <img
+                      src={getVideoSrc(supportChatThread.adminAvatar) || getInitialsAvatar(supportChatThread.adminName || 'Azizbek')}
+                      alt={supportChatThread.adminName || 'Azizbek'}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = getInitialsAvatar(supportChatThread.adminName || 'Azizbek');
+                      }}
+                      className="w-9 h-9 rounded-full object-cover border border-amber-400/60 shadow-2xs"
+                    />
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-surface dark:ring-slate-900" />
+                  </div>
+                  <div className="min-w-0">
+                    <h4 className="font-outfit font-black text-xs sm:text-sm text-on-surface truncate">
+                      {supportChatThread.adminName || 'Azizbek'}
+                    </h4>
+                    <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                      Support Chat • Onlayn
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSupportChatOpen(false)}
+                  aria-label="Chatni yopish"
+                  className="w-7 h-7 rounded-full flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Compact Messages Feed (4-5 messages height) */}
+              <div className="h-[255px] overflow-y-auto px-3.5 py-3 space-y-3 bg-surface-container-low/75 dark:bg-slate-950/60">
+                {(supportChatThread.messages && supportChatThread.messages.length > 0
+                  ? supportChatThread.messages
+                  : [
+                      {
+                        id: 'greeting_default',
+                        senderRole: 'admin',
+                        senderName: 'Azizbek',
+                        senderAvatar: supportChatThread.adminAvatar || '',
+                        type: 'text',
+                        text: 'Hello! I am Azizbek. How can I help you?'
+                      }
+                    ]
+                ).map((msg) => {
+                  const isAdmin = msg.senderRole === 'admin';
+                  if (isAdmin) {
+                    const avatarUrl = getVideoSrc(msg.senderAvatar || supportChatThread.adminAvatar) || getInitialsAvatar('Azizbek');
+                    return (
+                      <div key={msg.id} className="flex items-start gap-2 max-w-[92%]">
+                        <img
+                          src={avatarUrl}
+                          alt="Azizbek"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = getInitialsAvatar('Azizbek');
+                          }}
+                          className="w-7 h-7 rounded-full object-cover shrink-0 border border-outline-variant shadow-2xs mt-0.5"
+                        />
+                        <div className="min-w-0 flex-1 space-y-1">
+                          {msg.type === 'audio' && msg.audioUrl ? (
+                            <div className="rounded-2xl rounded-tl-sm bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 p-1.5 shadow-xs">
+                              <AudioWaveformPlayer
+                                compact
+                                src={msg.audioUrl}
+                                durationSeconds={(() => {
+                                  if (typeof msg.duration === 'number') return msg.duration;
+                                  const parts = String(msg.duration || '').split(':').map(Number);
+                                  if (parts.length === 2 && parts.every(Number.isFinite)) return parts[0] * 60 + parts[1];
+                                  return Number(msg.duration) || 0;
+                                })()}
+                                timestamp={msg.createdAt}
+                                className="w-full"
+                              />
+                              {msg.text && (
+                                <p className="text-[11px] text-slate-700 dark:text-slate-200 px-2 pt-1.5 pb-0.5">{msg.text}</p>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="inline-block rounded-2xl rounded-tl-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700 px-3.5 py-2 text-xs leading-relaxed shadow-xs">
+                              {msg.text}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div key={msg.id} className="flex justify-end">
+                      <div className="max-w-[82%] rounded-2xl rounded-br-sm bg-[#2D3139] dark:bg-primary text-white px-3.5 py-2 text-xs leading-relaxed shadow-xs">
+                        {msg.text}
+                      </div>
+                    </div>
+                  );
+                })}
+                <div ref={supportChatEndRef} />
+              </div>
+
+              {/* Screenshot 4 Pill Input Bar */}
+              <form
+                onSubmit={handleSendSupportMessage}
+                className="p-2.5 bg-surface-container-low/75 dark:bg-slate-950/60 border-t border-outline-variant/60"
+              >
+                <div className="rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm pl-4 pr-1.5 py-1.5 flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={supportChatInput}
+                    onChange={(e) => setSupportChatInput(e.target.value)}
+                    placeholder="Text message"
+                    className="flex-1 bg-transparent text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none min-w-0"
+                  />
+                  <button
+                    type="submit"
+                    disabled={supportChatSending || !supportChatInput.trim()}
+                    aria-label="Xabar yuborish"
+                    className="w-8 h-8 rounded-full bg-amber-50 hover:bg-amber-100 dark:bg-primary/20 dark:hover:bg-primary/30 text-amber-600 dark:text-primary flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:opacity-45"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="19" x2="12" y2="5" />
+                      <polyline points="5 12 12 5 19 12" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+
+          <button
+            type="button"
+            data-testid="student-support-chat-toggle"
+            onClick={handleToggleSupportChat}
+            title="Support Chat (Azizbek bilan aloqa)"
+            className="w-14 h-14 rounded-full bg-primary hover:bg-primary/95 text-on-primary shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center relative cursor-pointer"
+          >
+            {supportChatOpen ? (
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+            )}
+            {!supportChatOpen && supportChatThread.unreadByStudent > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full bg-rose-500 text-white text-[10px] font-black flex items-center justify-center ring-2 ring-surface shadow-sm">
+                {supportChatThread.unreadByStudent}
+              </span>
+            )}
+          </button>
+        </div>
+      )}
+
+    </div>
+  );
+}

@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Band 7–8: Cities & Transport Masterclass</title>
+    <style>
+        /* CSS RESET & VARIABLES */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #070a12 100%);
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --border-color: rgba(212, 175, 55, 0.2);
+            --border-focus: #d4af37;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #fef08a;
+            --accent-glow: rgba(212, 175, 55, 0.25);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --card-radius: 16px;
+            --btn-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+
+        /* THEME VARIATIONS */
+        body.theme-midnight {
+            --bg-gradient: linear-gradient(135deg, #090d16 0%, #111827 50%, #050811 100%);
+            --bg-card: rgba(255, 255, 255, 0.04);
+            --border-color: rgba(212, 175, 55, 0.25);
+            --accent-gold: #d4af37;
+            --text-main: #f3f4f6;
+        }
+
+        body.theme-platinum {
+            --bg-gradient: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+            --bg-card: rgba(255, 255, 255, 0.75);
+            --bg-card-hover: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(71, 85, 105, 0.2);
+            --border-focus: #1e293b;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-gold: #2563eb;
+            --accent-gold-light: #93c5fd;
+            --accent-glow: rgba(37, 99, 235, 0.2);
+        }
+
+        body.theme-emerald {
+            --bg-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #022019 100%);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(52, 211, 153, 0.25);
+            --accent-gold: #34d399;
+            --accent-gold-light: #a7f3d0;
+            --accent-glow: rgba(52, 211, 153, 0.25);
+            --text-main: #ecfdf5;
+            --text-muted: #a7f3d0;
+        }
+
+        body.theme-purple {
+            --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #31104b 50%, #0f0e26 100%);
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(192, 132, 252, 0.25);
+            --accent-gold: #c084fc;
+            --accent-gold-light: #e9d5ff;
+            --accent-glow: rgba(192, 132, 252, 0.25);
+            --text-main: #faf5ff;
+            --text-muted: #d8b4fe;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        /* CANVAS FOR CONFETTI */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* STICKY TOP NAVIGATION */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        .nav-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.9rem;
+        }
+
+        .stat-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            color: var(--accent-gold);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-select {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: var(--btn-radius);
+            outline: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        /* CONTAINER & LAYOUT */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px 16px 60px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* MODULE NAV TABS */
+        .module-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+        }
+
+        .module-tab {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .module-tab.active {
+            background: var(--accent-gold);
+            color: #0f172a;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .module-tab.completed::after {
+            content: "✓";
+            margin-left: 4px;
+            font-weight: bold;
+        }
+
+        /* WELCOME SCREEN */
+        .welcome-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 40px 24px;
+            text-align: center;
+            max-width: 550px;
+            margin: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .welcome-card h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-card p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: var(--btn-radius);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #0f172a;
+            border: none;
+            padding: 14px 28px;
+            border-radius: var(--btn-radius);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: var(--btn-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-gold);
+        }
+
+        /* FLASHCARD STYLES */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            max-width: 600px;
+            height: 320px;
+            margin: 20px auto;
+            width: 100%;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--card-radius);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+            align-items: flex-start;
+            text-align: left;
+            justify-content: space-between;
+        }
+
+        .card-term {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+        }
+
+        .card-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 16px;
+        }
+
+        .card-detail-item {
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+
+        .flashcard-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 600px;
+            margin: 20px auto 0 auto;
+            width: 100%;
+        }
+
+        .audio-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--accent-gold);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .audio-btn:hover {
+            background: var(--accent-gold);
+            color: #0f172a;
+        }
+
+        /* MATCHING GAME STYLES */
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .match-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .match-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 16px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            user-select: none;
+        }
+
+        .match-card:hover {
+            border-color: var(--accent-gold);
+            background: var(--bg-card-hover);
+        }
+
+        .match-card.selected {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 12px var(--accent-glow);
+            background: rgba(212, 175, 55, 0.15);
+        }
+
+        .match-card.matched {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--text-muted);
+            cursor: default;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .match-card.incorrect {
+            animation: shake 0.4s ease;
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        /* MCQ & CONTEXT QUESTIONS */
+        .question-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .question-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--btn-radius);
+            padding: 14px 18px;
+            text-align: left;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent-gold);
+            background: var(--bg-card-hover);
+        }
+
+        .option-btn.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.2);
+            color: #fff;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.2);
+            color: #fff;
+        }
+
+        .feedback-box {
+            margin-top: 16px;
+            padding: 14px;
+            border-radius: var(--btn-radius);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success-color);
+            color: #d1fae5;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--error-color);
+            color: #fee2e2;
+        }
+
+        /* READING PASSAGE STYLES */
+        .passage-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--accent-gold);
+            padding: 20px;
+            border-radius: 0 var(--btn-radius) var(--btn-radius) 0;
+            margin-bottom: 24px;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .passage-highlight {
+            color: var(--accent-gold-light);
+            font-weight: 600;
+            border-bottom: 1px dashed var(--accent-gold);
+        }
+
+        /* FINAL BOSS STYLES */
+        .boss-container {
+            background: linear-gradient(180deg, rgba(239, 68, 68, 0.05) 0%, rgba(0, 0, 0, 0.4) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: var(--card-radius);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boss-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .boss-title {
+            font-size: 2rem;
+            color: #f87171;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .boss-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* BADGES GRID */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .badge-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--btn-radius);
+            padding: 16px;
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: grayscale(0%);
+            border-color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* VOCABULARY BANK GRID */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .vocab-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--btn-radius);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .vocab-term {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vocab-def {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* PROGRESS BAR */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-gold);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* UTILITIES & ANIMATIONS */
+        .hidden { display: none !important; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: var(--card-radius);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body class="theme-midnight">
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar hidden" id="main-navbar">
+        <div class="nav-brand">
+            <span>🏙️ CITIES & TRANSPORT</span>
+        </div>
+        <div class="nav-stats">
+            <div class="stat-badge">
+                <span>⚡ XP:</span>
+                <span class="stat-value" id="nav-xp">0</span>
+            </div>
+            <div class="stat-badge">
+                <span>🏅 Level:</span>
+                <span class="stat-value" id="nav-level">Beginner</span>
+            </div>
+            <div class="stat-badge" id="nav-user-display" style="cursor: default;">
+                <span>👤</span>
+                <span class="stat-value" id="nav-username">Learner</span>
+            </div>
+        </div>
+        <div class="nav-controls">
+            <select class="theme-select" id="theme-selector" onchange="changeTheme(this.value)">
+                <option value="theme-midnight">🌑 Midnight</option>
+                <option value="theme-platinum">🤍 Platinum</option>
+                <option value="theme-emerald">🌲 Emerald</option>
+                <option value="theme-purple">👑 Purple</option>
+            </select>
+            <button class="btn-secondary" onclick="confirmReset()" style="padding: 6px 12px; font-size: 0.8rem;">Reset</button>
+        </div>
+    </nav>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="container">
+
+        <!-- MAIN LESSON CONTENT -->
+        <div id="lesson-app">
+            
+            <!-- MODULE TABS -->
+            <div class="module-tabs" id="module-tabs-list">
+                <button class="module-tab active" onclick="switchModule('learn')" id="tab-learn">📚 LEARN</button>
+                <button class="module-tab" onclick="switchModule('match')" id="tab-match">🧩 MATCH</button>
+                <button class="module-tab" onclick="switchModule('choose')" id="tab-choose">🎯 CHOOSE</button>
+                <button class="module-tab" onclick="switchModule('read')" id="tab-read">📖 READ & DECIDE</button>
+                <button class="module-tab" onclick="switchModule('boss')" id="tab-boss">👑 FINAL BOSS</button>
+            </div>
+
+            <!-- MODULE 1: LEARN -->
+            <div id="module-learn" class="module-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h2 style="color: var(--accent-gold);">Module 1: Vocabulary Flashcards</h2>
+                    <span id="flashcard-counter" style="color: var(--text-muted); font-size: 0.9rem;">Card 1 / 15</span>
+                </div>
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="flashcard-progress"></div>
+                </div>
+
+                <div class="flashcard-wrapper">
+                    <div class="flashcard" id="flashcard-element" onclick="flipCard()">
+                        <div class="flashcard-face">
+                            <div class="card-term" id="card-front-term">---</div>
+                            <div class="card-hint">👆 Click or tap to reveal definition & example</div>
+                        </div>
+                        <div class="flashcard-face flashcard-back">
+                            <div class="card-detail-item">
+                                <div class="card-label">Target Expression</div>
+                                <div class="card-text" id="card-back-term" style="font-weight: 700; color: var(--accent-gold);">---</div>
+                            </div>
+                            <div class="card-detail-item">
+                                <div class="card-label">Meaning</div>
+                                <div class="card-text" id="card-back-meaning">---</div>
+                            </div>
+                            <div class="card-detail-item">
+                                <div class="card-label">IELTS Speaking Example</div>
+                                <div class="card-text" id="card-back-example" style="font-style: italic;">---</div>
+                            </div>
+                            <div class="card-detail-item">
+                                <div class="card-label">Natural Alternative</div>
+                                <div class="card-text" id="card-back-alt">---</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls">
+                    <button class="btn-secondary" onclick="prevCard()">← Previous</button>
+                    <button class="audio-btn" onclick="speakCurrentCard(event)">🔊 Listen</button>
+                    <button class="btn-secondary" onclick="nextCard()">Next →</button>
+                </div>
+            </div>
+
+            <!-- MODULE 2: MATCH -->
+            <div id="module-match" class="module-section hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h2 style="color: var(--accent-gold);">Module 2: Collocation Match</h2>
+                    <div style="font-size: 0.9rem; color: var(--text-muted);">
+                        Matches: <span id="match-count" style="color: var(--success-color); font-weight: bold;">0</span>/8 | 
+                        Mistakes: <span id="match-mistakes" style="color: var(--error-color); font-weight: bold;">0</span>
+                    </div>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Select an expression on the left, then click its corresponding definition on the right.</p>
+
+                <div class="match-grid">
+                    <div class="match-column" id="match-col-left"></div>
+                    <div class="match-column" id="match-col-right"></div>
+                </div>
+            </div>
+
+            <!-- MODULE 3: CHOOSE -->
+            <div id="module-choose" class="module-section hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h2 style="color: var(--accent-gold);">Module 3: Contextual Multiple Choice</h2>
+                    <span id="mcq-score-display" style="font-size: 0.9rem; color: var(--text-muted);">Question 1 of 8</span>
+                </div>
+                <div id="mcq-container"></div>
+                <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+                    <button class="btn-primary" id="mcq-next-btn" onclick="nextMCQ()" style="width: auto;" disabled>Next Question →</button>
+                </div>
+            </div>
+
+            <!-- MODULE 4: READ & DECIDE -->
+            <div id="module-read" class="module-section hidden">
+                <h2 style="color: var(--accent-gold); margin-bottom: 16px;">Module 4: IELTS Reading & Decision</h2>
+                <div id="reading-container"></div>
+            </div>
+
+            <!-- MODULE 5: FINAL BOSS -->
+            <div id="module-boss" class="module-section hidden">
+                <div class="boss-container">
+                    <div class="boss-header">
+                        <div class="boss-title">👑 FINAL BOSS</div>
+                        <div class="boss-subtitle">You've learned the vocabulary. Now prove you can use it in high-stakes contexts.</div>
+                    </div>
+
+                    <div id="boss-task-1" class="boss-task">
+                        <h3 style="color: var(--accent-gold); margin-bottom: 12px;">TASK 1: Context & Nuance Challenge</h3>
+                        <div id="boss-mcq-container"></div>
+                        <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+                            <button class="btn-primary" id="boss-task1-next" onclick="nextBossTask1()" style="width: auto;" disabled>Next Question →</button>
+                        </div>
+                    </div>
+
+                    <div id="boss-task-2" class="boss-task hidden">
+                        <h3 style="color: var(--accent-gold); margin-bottom: 12px;">TASK 2: Comprehensive Evidence Challenge</h3>
+                        <div id="boss-reading-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESULTS & SPEAKING CHALLENGE SCREEN -->
+            <div id="module-results" class="module-section hidden">
+                <div class="welcome-card" style="max-width: 800px; text-align: left;">
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <h1 style="font-size: 2.2rem; color: var(--accent-gold);">CITIES & TRANSPORT — MASTERED</h1>
+                        <p style="font-size: 1.1rem; color: var(--text-main);" id="results-greeting">Congratulations!</p>
+                    </div>
+
+                    <!-- SCORE BREAKDOWN -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 28px;">
+                        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--btn-radius); border: 1px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">TOTAL XP</div>
+                            <div style="font-size: 1.6rem; font-weight: bold; color: var(--accent-gold);" id="res-xp">0</div>
+                        </div>
+                        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--btn-radius); border: 1px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">MCQ SCORE</div>
+                            <div style="font-size: 1.6rem; font-weight: bold; color: var(--success-color);" id="res-mcq">0/8</div>
+                        </div>
+                        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--btn-radius); border: 1px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">READING SCORE</div>
+                            <div style="font-size: 1.6rem; font-weight: bold; color: var(--success-color);" id="res-reading">0/9</div>
+                        </div>
+                        <div style="background: var(--bg-card); padding: 14px; border-radius: var(--btn-radius); border: 1px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">BOSS SCORE</div>
+                            <div style="font-size: 1.6rem; font-weight: bold; color: var(--accent-gold);" id="res-boss">0/10</div>
+                        </div>
+                    </div>
+
+                    <!-- BADGES -->
+                    <h3 style="color: var(--accent-gold); margin-bottom: 12px;">🏅 EARNED BADGES</h3>
+                    <div class="badges-grid" id="badges-container"></div>
+
+                    <!-- VOCABULARY BANK GRID -->
+                    <h3 style="color: var(--accent-gold); margin-top: 32px; margin-bottom: 12px;">📚 VOCABULARY BANK</h3>
+                    <div class="vocab-grid" id="vocab-bank-container"></div>
+
+                    <!-- FINAL SPEAKING CHALLENGE -->
+                    <div style="background: rgba(212, 175, 55, 0.08); border: 1px solid var(--accent-gold); padding: 24px; border-radius: var(--card-radius); margin-top: 32px;">
+                        <h3 style="color: var(--accent-gold); margin-bottom: 8px;">🎤 FINAL SPEAKING CHALLENGE</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">Answer these authentic IELTS Speaking questions out loud. Aim to naturally incorporate at least 3 target collocations from today's lesson.</p>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.95rem;">
+                            <div style="background: var(--bg-card); padding: 12px; border-radius: 8px;"><strong>Part 1:</strong> Do you live in a city or a town? What do you like most about it?</div>
+                            <div style="background: var(--bg-card); padding: 12px; border-radius: 8px;"><strong>Part 1:</strong> Is it easy to get around your hometown using public transport?</div>
+                            <div style="background: var(--bg-card); padding: 12px; border-radius: 8px;"><strong>Part 2:</strong> Describe a city you would like to live in or visit in the future. (Mention infrastructure, amenities, and quality of life).</div>
+                            <div style="background: var(--bg-card); padding: 12px; border-radius: 8px;"><strong>Part 3:</strong> What are the main problems caused by rapid urbanisation in major metropolis regions?</div>
+                            <div style="background: var(--bg-card); padding: 12px; border-radius: 8px;"><strong>Part 3:</strong> What measures can city authorities take to encourage people to rely on public transport rather than private cars?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION MODAL -->
+    <div id="modal-container" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 style="color: var(--accent-gold); margin-bottom: 12px;" id="modal-title">Reset Progress?</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;" id="modal-body">Are you sure you want to delete all saved XP, scores, and module progress?</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" style="background: var(--error-color); color: #fff;" onclick="executeReset()">Reset Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const __PRACTISE_LESSON_ID = 'cities_transport';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        /* ----------------------------------------------------
+           1. VOCABULARY DATA BANK (15 Core Band 7–8 Expressions)
+           ---------------------------------------------------- */
+        const VOCAB_BANK = [
+            {
+                id: "v1",
+                term: "live in the city centre",
+                meaning: "reside in the central commercial or bustling area of a town or city.",
+                example: "I currently live in the city centre, which makes accessing entertainment and dining options very convenient.",
+                alt: "live downtown / live in the heart of the city"
+            },
+            {
+                id: "v2",
+                term: "live on the outskirts of the city",
+                meaning: "reside in the outer area or fringe of a city, away from the core.",
+                example: "My family prefers to live on the outskirts of the city because it is much quieter and less polluted.",
+                alt: "live in the suburbs / live on the city fringe"
+            },
+            {
+                id: "v3",
+                term: "live in a densely populated area",
+                meaning: "reside in a region where a high number of people live close together.",
+                example: "Living in a densely populated area often means dealing with crowded sidewalks and limited privacy.",
+                alt: "live in a heavily populated neighborhood"
+            },
+            {
+                id: "v4",
+                term: "escape the hustle and bustle",
+                meaning: "get away from noise, crowds, and frantic activity of urban life.",
+                example: "On weekends, I love visiting local parks to escape the hustle and bustle of the metropolis.",
+                alt: "get away from the fast-paced environment"
+            },
+            {
+                id: "v5",
+                term: "have easy access to amenities",
+                meaning: "be conveniently located near essential services like shops, gyms, and transport.",
+                example: "One huge advantage of my apartment is that I have easy access to amenities like supermarkets and medical clinics.",
+                alt: "have convenient local facilities"
+            },
+            {
+                id: "v6",
+                term: "have everything within walking distance",
+                meaning: "be close enough to all necessary places that you can walk to them easily.",
+                example: "In my neighbourhood, I have everything within walking distance, so I rarely need to take a taxi.",
+                alt: "live in a highly convenient area"
+            },
+            {
+                id: "v7",
+                term: "have a high cost of living",
+                meaning: "require a large amount of money to pay for basic expenses like rent, food, and transport.",
+                example: "Major global capitals usually have a high cost of living, making housing quite expensive for young professionals.",
+                alt: "be expensive to live in"
+            },
+            {
+                id: "v8",
+                term: "rely on public transport",
+                meaning: "depend regularly on buses, subways, or trains to move around.",
+                example: "Since I don't own a car, I rely heavily on public transport to commute around the city.",
+                alt: "depend on public transit"
+            },
+            {
+                id: "v9",
+                term: "get around the city",
+                meaning: "travel or travel from place to place within an urban area.",
+                example: "The metro system makes it extraordinarily simple to get around the city during peak hours.",
+                alt: "navigate the city / commute around town"
+            },
+            {
+                id: "v10",
+                term: "get stuck in traffic",
+                meaning: "be delayed in vehicles because roads are completely congested.",
+                example: "If you leave after 8 AM, you will almost certainly get stuck in traffic for at least an hour.",
+                alt: "be held up in traffic jams"
+            },
+            {
+                id: "v11",
+                term: "deal with traffic congestion",
+                meaning: "manage or experience the problem of overloaded roads and slow vehicles.",
+                example: "City planners are trying hard to deal with traffic congestion by introducing congestion charges.",
+                alt: "tackle gridlock / manage traffic jams"
+            },
+            {
+                id: "v12",
+                term: "commute to work",
+                meaning: "travel regularly between your residential home and workplace.",
+                example: "I spend roughly 45 minutes every morning commuting to work by underground train.",
+                alt: "travel to work daily"
+            },
+            {
+                id: "v13",
+                term: "invest in infrastructure",
+                meaning: "spend money on fundamental physical systems like roads, railways, and utilities.",
+                example: "The government needs to invest in infrastructure to modernise the aging public transit system.",
+                alt: "fund public transport and roads"
+            },
+            {
+                id: "v14",
+                term: "walkable neighbourhood",
+                meaning: "an area designed safely and conveniently for pedestrians rather than cars.",
+                example: "Moving to a walkable neighbourhood has significantly improved my physical health and daily exercise.",
+                alt: "pedestrian-friendly district"
+            },
+            {
+                id: "v15",
+                term: "make cities more liveable",
+                meaning: "improve the overall environment and amenities so urban life is pleasant.",
+                example: "Adding urban parks and bicycle lanes is crucial to make modern cities more liveable.",
+                alt: "enhance urban quality of life"
+            }
+        ];
+
+        /* ----------------------------------------------------
+           2. MATCHING EXERCISES DATA
+           ---------------------------------------------------- */
+        const MATCH_PAIRS = [
+            { term: "live on the outskirts of the city", def: "reside in an area near the outer edge or fringe of a city" },
+            { term: "escape the hustle and bustle", def: "get away from the noisy, frantic activity of urban life" },
+            { term: "have easy access to amenities", def: "be conveniently located near shops, medical clinics, and facilities" },
+            { term: "deal with traffic congestion", def: "manage or suffer from overloaded roads and gridlock" },
+            { term: "walkable neighbourhood", def: "an area designed safely and conveniently for pedestrians" },
+            { term: "invest in infrastructure", def: "spend public money building roads, railways, and energy systems" },
+            { term: "rely on public transport", def: "depend regularly on buses or subways rather than private cars" },
+            { term: "make cities more liveable", def: "enhance urban environments so life is pleasant and healthy" }
+        ];
+
+        /* ----------------------------------------------------
+           3. MCQ QUESTIONS DATA (Module 3)
+           ---------------------------------------------------- */
+        const MCQ_QUESTIONS = [
+            {
+                question: "If someone 'commutes to work', they...",
+                options: [
+                    "permanently move closer to their workplace",
+                    "regularly travel between home and work",
+                    "work entirely from home online",
+                    "travel abroad for company business trips"
+                ],
+                correct: 1,
+                explanation: "'Commute to work' specifically refers to the routine journey a person makes between their home and workplace."
+            },
+            {
+                question: "Which verb phrase forms a natural collocation with 'traffic congestion'?",
+                options: [
+                    "make traffic congestion",
+                    "create traffic congestion",
+                    "ease traffic congestion",
+                    "do traffic congestion"
+                ],
+                correct: 2,
+                explanation: "'Ease traffic congestion' is a natural Band 7–8 collocation meaning to reduce or relieve traffic gridlock."
+            },
+            {
+                question: "I live near the city centre, so I have ______ shops, cafés, and gym facilities.",
+                options: [
+                    "easy access to",
+                    "easy entrance for",
+                    "simple access at",
+                    "easy approach with"
+                ],
+                correct: 0,
+                explanation: "'Have easy access to' is the natural collocation used to state that facilities or services are conveniently available."
+            },
+            {
+                question: "Which sentence sounds most natural for describing an efficient transportation network?",
+                options: [
+                    "The city has a well-connected transport system, so it's fairly easy to get around.",
+                    "The city has a strongly connected transport system, so it is easy to move aroundly.",
+                    "The city has a high-connected transport system, so transportation is easy.",
+                    "The city has a connected transport disposition, so people can transit."
+                ],
+                correct: 0,
+                explanation: "'Well-connected transport system' and 'get around' are precise, natural expressions favored in IELTS Speaking."
+            },
+            {
+                question: "Living in a area with a 'high cost of living' implies that...",
+                options: [
+                    "housing, groceries, and services require substantial expenditure",
+                    "the population density is extremely low",
+                    "public transport is subsidised and completely free",
+                    "the air quality is severely degraded"
+                ],
+                correct: 0,
+                explanation: "'High cost of living' refers to expensive daily life essentials like rent, utilities, and foodstuffs."
+            },
+            {
+                question: "What does a 'walkable neighbourhood' prioritize?",
+                options: [
+                    "High-speed multi-lane motorways",
+                    "Pedestrian safety, wide sidewalks, and local convenience",
+                    "Heavy industrial factories and railway yards",
+                    "Suburban high-rise car parks"
+                ],
+                correct: 1,
+                explanation: "A 'walkable neighbourhood' allows residents to reach local shops and transit easily on foot without relying on cars."
+            },
+            {
+                question: "Why do city dwellers often seek to 'escape the hustle and bustle'?",
+                options: [
+                    "To find cheaper wholesale shopping centers",
+                    "To relieve stress from constant noise and rapid urban crowds",
+                    "To shorten their daily public transit commute",
+                    "To apply for new municipal infrastructure projects"
+                ],
+                correct: 1,
+                explanation: "'Hustle and bustle' refers to frantic urban noise and activity; escaping it provides rest and tranquility."
+            },
+            {
+                question: "Governments that 'invest in infrastructure' are primarily spending resources on...",
+                options: [
+                    "social media campaigns for municipal tourism",
+                    "physical systems like roads, railways, bridges, and power networks",
+                    "temporary seasonal outdoor festivals",
+                    "private luxury car dealerships"
+                ],
+                correct: 1,
+                explanation: "'Infrastructure' refers to fundamental physical structures necessary for a city or country to function smoothly."
+            }
+        ];
+
+        /* ----------------------------------------------------
+           4. READING & DECIDE DATA (Module 4)
+           ---------------------------------------------------- */
+        const READING_MODULES = [
+            {
+                title: "TEXT 1 — LIFE IN THE CITY CENTRE",
+                passage: "Many young professionals aspire to <span class='passage-highlight'>live in the city centre</span> primarily because they <span class='passage-highlight'>have easy access to amenities</span> such as cultural venues, fine dining, and fitness centers. In vibrant metropolitan cores, residents often <span class='passage-highlight'>have everything within walking distance</span>, eliminating the need for private car ownership. However, urban core living comes with distinct trade-offs. Most modern capitals <span class='passage-highlight'>have a high cost of living</span>, forcing many to settle for compact accommodation. Furthermore, the persistent noise and dense crowds make it difficult for residents to <span class='passage-highlight'>escape the hustle and bustle</span> without leaving the city altogether.",
+                questions: [
+                    {
+                        q: "Residents in the city centre generally need to own private cars to visit local amenities.",
+                        ans: "FALSE",
+                        exp: "The text states that having everything within walking distance 'eliminates the need for private car ownership'."
+                    },
+                    {
+                        q: "High living costs in central urban areas often compel people to accept smaller housing.",
+                        ans: "TRUE",
+                        exp: "The text notes that a high cost of living forces many to 'settle for compact accommodation'."
+                    },
+                    {
+                        q: "Municipal governments are building new suburban parks to help residents relax.",
+                        ans: "NOT GIVEN",
+                        exp: "The text mentions escaping hustle and bustle, but says nothing about municipal governments building new suburban parks."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 2 — TRAFFIC & PUBLIC TRANSPORT",
+                passage: "In rapidly expanding urban regions, thousands of citizens <span class='passage-highlight'>commute to work</span> daily from surrounding suburbs. Those who travel by private vehicle frequently <span class='passage-highlight'>get stuck in traffic</span> during rush hour, spending hours behind the wheel. To <span class='passage-highlight'>deal with traffic congestion</span>, metropolitan authorities are taking drastic action. By choosing to <span class='passage-highlight'>improve public transport</span> through dedicated bus lanes and expanded underground networks, councils hope to encourage motorists to <span class='passage-highlight'>rely on public transport</span> instead. Modernising transit not only saves commuters time but also significantly reduces metropolitan carbon emissions.",
+                questions: [
+                    {
+                        q: "Rush hour traffic jams cause severe delays for private vehicle commuters.",
+                        ans: "TRUE",
+                        exp: "The text confirms commuters who travel by private vehicle 'frequently get stuck in traffic... spending hours behind the wheel'."
+                    },
+                    {
+                        q: "Metropolitan authorities plan to introduce congestion toll charges for private drivers.",
+                        ans: "NOT GIVEN",
+                        exp: "The text mentions improving bus lanes and underground networks, but does not mention congestion toll charges."
+                    },
+                    {
+                        q: "Improving public transit options helps lower urban carbon emissions.",
+                        ans: "TRUE",
+                        exp: "The text explicitly states that modernising transit 'significantly reduces metropolitan carbon emissions'."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 3 — BUILDING BETTER CITIES",
+                passage: "To build sustainable modern cities, urban planners must <span class='passage-highlight'>invest in infrastructure</span> that promotes active mobility. Developing a <span class='passage-highlight'>walkable neighbourhood</span> with tree-lined pedestrian avenues and creating a comprehensive <span class='passage-highlight'>cycle-friendly city</span> layout can dramatically reduce car dependency. Rather than simply continuing to <span class='passage-highlight'>expand the road network</span> for private cars, progressive councils are reallocating street space for green parks and light rail. These forward-thinking initiatives directly serve to <span class='passage-highlight'>make cities more liveable</span> and healthier for future generations.",
+                questions: [
+                    {
+                        q: "Expanding highways for private automobiles is considered the primary goal of progressive urban councils.",
+                        ans: "FALSE",
+                        exp: "The text states that 'rather than simply continuing to expand the road network', councils are reallocating space for parks and rail."
+                    },
+                    {
+                        q: "Creating cycle-friendly layouts and walkable zones helps decrease reliance on private vehicles.",
+                        ans: "TRUE",
+                        exp: "The text notes that these initiatives can 'dramatically reduce car dependency'."
+                    },
+                    {
+                        q: "Cycling infrastructure in modern cities has reduced bicycle accidents by fifty percent.",
+                        ans: "NOT GIVEN",
+                        exp: "While cycling infrastructure is discussed, specific statistics about accident reductions are not mentioned in the text."
+                    }
+                ]
+            }
+        ];
+
+        /* ----------------------------------------------------
+           5. FINAL BOSS DATA
+           ---------------------------------------------------- */
+        const BOSS_TASK1_QUESTIONS = [
+            {
+                question: "My office is located in the central business district, but during evening rush hour I can easily spend over an hour ______, barely moving a few hundred meters.",
+                options: [
+                    "getting stuck in traffic",
+                    "getting trapped to transport",
+                    "commuting the traffic",
+                    "travelling the congestion"
+                ],
+                correct: 0,
+                explanation: "'Getting stuck in traffic' is the exact idiomatic expression for being delayed in stationary gridlock."
+            },
+            {
+                question: "Rather than building more motorways, eco-conscious urban planners recommend that municipal governments ______ to enhance sustainable transit capacity.",
+                options: [
+                    "invest in infrastructure",
+                    "make entrance to facilities",
+                    "do road extensions",
+                    "accommodate traffic gridlock"
+                ],
+                correct: 0,
+                explanation: "'Invest in infrastructure' natural collocations describe funding core transport networks like railways and metro lines."
+            },
+            {
+                question: "Living in a ______ allows elderly citizens and young children to fulfill daily errands safely without relying on motorized vehicles.",
+                options: [
+                    "walkable neighbourhood",
+                    "runnable suburb",
+                    "densely traffic region",
+                    "street-connected center"
+                ],
+                correct: 0,
+                explanation: "'Walkable neighbourhood' refers to a pedestrian-oriented area designed for easy, safe walking."
+            },
+            {
+                question: "When moving to a capital city, many people are shocked by the ______ and find it challenging to save money on accommodation and food.",
+                options: [
+                    "high cost of living",
+                    "expensive cost of life",
+                    "tall cost for live",
+                    "heavy cost in residency"
+                ],
+                correct: 0,
+                explanation: "'High cost of living' is the correct standard collocation for expensive lifestyle expenses."
+            },
+            {
+                question: "Adding extensive greenery, clean public transit, and quiet pedestrian zones are proven strategies to ______ for residents.",
+                options: [
+                    "make cities more liveable",
+                    "create cities more living",
+                    "do urban places lively",
+                    "make metropolis lifeable"
+                ],
+                correct: 0,
+                explanation: "'Make cities more liveable' is a sophisticated Band 8 phrase describing urban quality of life improvement."
+            }
+        ];
+
+        const BOSS_TASK2_READING = {
+            title: "FINAL BOSS TEXT — FUTURE LIVEABLE CITIES",
+            passage: "As global urban populations swell, traditional city planning centered on automobile ownership is fast becoming obsolete. To prevent urban paralysis, leading metropolises are redesigning streets to prioritize human well-being over vehicular speed. A key pillar of this transformation involves converting car lanes into green corridors, transforming urban centers into truly <span class='passage-highlight'>walkable neighbourhoods</span>. In cities like Copenhagen, comprehensive network investments have turned the environment into a worldwide model for a <span class='passage-highlight'>cycle-friendly city</span>. Furthermore, when municipal authorities heavily <span class='passage-highlight'>invest in infrastructure</span> such as zero-emission electric buses and rapid tram links, citizens are far more inclined to <span class='passage-highlight'>rely on public transport</span> daily. Ultimately, these measures drastically decrease urban noise, curb severe smog, and <span class='passage-highlight'>make cities more liveable</span> for millions of urban residents.",
+            questions: [
+                {
+                    q: "Modern urban planning strategies are moving away from prioritizing personal automobile ownership.",
+                    ans: "TRUE",
+                    exp: "The text explicitly states that 'traditional city planning centered on automobile ownership is fast becoming obsolete'."
+                },
+                {
+                    q: "Copenhagen spent over five billion euros constructing its bicycle network.",
+                    ans: "NOT GIVEN",
+                    exp: "The text mentions Copenhagen as a model cycle-friendly city, but does not state the exact financial sum spent."
+                },
+                {
+                    q: "Investing in rapid tram links and electric buses encourages residents to use public transportation.",
+                    ans: "TRUE",
+                    exp: "The text notes that when authorities invest in these infrastructures, citizens are 'far more inclined to rely on public transport'."
+                },
+                {
+                    q: "Converting road lanes into green corridors generally increases overall air pollution levels.",
+                    ans: "FALSE",
+                    exp: "The text asserts that these green and transit measures 'drastically decrease urban noise and curb severe smog'."
+                },
+                {
+                    q: "Walkable neighborhoods and quiet transit links help make modern cities more liveable.",
+                    ans: "TRUE",
+                    exp: "The text concludes that these measures directly 'make cities more liveable for millions of urban residents'."
+                }
+            ]
+        };
+
+        /* ----------------------------------------------------
+           6. APP STATE & LOCAL STORAGE SYSTEM
+           ---------------------------------------------------- */
+        let state = {
+            userName: "",
+            xp: 0,
+            level: "Beginner",
+            currentTheme: "theme-midnight",
+            completedModules: {
+                learn: false,
+                match: false,
+                choose: false,
+                read: false,
+                boss: false
+            },
+            flashcardIndex: 0,
+            viewedCards: new Set(),
+            matchScore: { matches: 0, mistakes: 0 },
+            mcqIndex: 0,
+            mcqScore: 0,
+            mcqAnswers: [],
+            readingAnswers: {},
+            bossTask1Index: 0,
+            bossTask1Score: 0,
+            bossTask1Answers: {},
+            bossTask1Completed: false,
+            bossTask2Answers: {},
+            bossCompleted: false,
+            badges: {
+                firstStep: false,
+                perfectMatch: false,
+                sharpSpeaker: false,
+                carefulReader: false,
+                bossSlayer: false,
+                master: false
+            }
+        };
+
+        const LOCAL_STORAGE_KEY = __vocabKey("ielts_cities_vocab_state_v1");
+
+        function saveState() {
+            try {
+                const serializable = {
+                    ...state,
+                    viewedCards: Array.from(state.viewedCards)
+                };
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serializable));
+            } catch (e) {
+                console.error("Failed to save state to localStorage", e);
+            }
+        }
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    parsed.viewedCards = new Set(parsed.viewedCards || []);
+                    state = { ...state, ...parsed };
+                    state.bossTask1Answers = state.bossTask1Answers || {};
+                    state.bossTask1Completed = state.bossTask1Completed || false;
+                    state.readingAnswers = state.readingAnswers || {};
+                    state.bossTask2Answers = state.bossTask2Answers || {};
+                    state.mcqAnswers = state.mcqAnswers || [];
+                    state.badges = state.badges || {};
+                    return true;
+                }
+            } catch (e) {
+                console.error("Failed to load state", e);
+            }
+            return false;
+        }
+
+        /* ----------------------------------------------------
+           7. THEME & USER STATE MANAGEMENT
+           ---------------------------------------------------- */
+        function changeTheme(themeName) {
+            state.currentTheme = themeName;
+            document.body.className = themeName;
+            const themeSelect = document.getElementById("theme-selector");
+            if (themeSelect) themeSelect.value = themeName;
+            saveState();
+        }
+
+        function updateNavDisplay() {
+            document.getElementById("nav-xp").textContent = state.xp;
+            document.getElementById("nav-level").textContent = state.level;
+            document.getElementById("nav-username").textContent = state.userName || "Learner";
+        }
+
+        function addXP(amount) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            state.xp += pts;
+            if (state.xp < 200) state.level = "Beginner";
+            else if (state.xp < 400) state.level = "Learner";
+            else if (state.xp < 600) state.level = "Confident Speaker";
+            else state.level = "Vocabulary Master";
+
+            updateNavDisplay();
+            saveState();
+            __notifyPractiseParentXP(pts, state.xp);
+        }
+
+        /* ----------------------------------------------------
+           8. MODULE 1: LEARN (FLASHCARDS) LOGIC
+           ---------------------------------------------------- */
+        function renderFlashcard() {
+            const card = VOCAB_BANK[state.flashcardIndex];
+            if (!card) return;
+
+            document.getElementById("card-front-term").textContent = card.term;
+            document.getElementById("card-back-term").textContent = card.term;
+            document.getElementById("card-back-meaning").textContent = card.meaning;
+            document.getElementById("card-back-example").textContent = `"${card.example}"`;
+            document.getElementById("card-back-alt").textContent = card.alt;
+
+            document.getElementById("flashcard-counter").textContent = `Card ${state.flashcardIndex + 1} / ${VOCAB_BANK.length}`;
+            const pct = ((state.flashcardIndex + 1) / VOCAB_BANK.length) * 100;
+            document.getElementById("flashcard-progress").style.width = `${pct}%`;
+
+            document.getElementById("flashcard-element").classList.remove("flipped");
+
+            state.viewedCards.add(card.id);
+            if (state.viewedCards.size >= VOCAB_BANK.length && !state.completedModules.learn) {
+                state.completedModules.learn = true;
+                document.getElementById("tab-learn").classList.add("completed");
+                addXP(100);
+                checkBadges();
+                triggerConfetti();
+            }
+            saveState();
+        }
+
+        function flipCard() {
+            document.getElementById("flashcard-element").classList.toggle("flipped");
+        }
+
+        function nextCard() {
+            state.flashcardIndex = (state.flashcardIndex + 1) % VOCAB_BANK.length;
+            renderFlashcard();
+        }
+
+        function prevCard() {
+            state.flashcardIndex = (state.flashcardIndex - 1 + VOCAB_BANK.length) % VOCAB_BANK.length;
+            renderFlashcard();
+        }
+
+        function speakCurrentCard(e) {
+            if (e) e.stopPropagation();
+            const card = VOCAB_BANK[state.flashcardIndex];
+            if (card) speakVocab(card.term);
+        }
+
+        function speakVocab(term) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(term);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        /* ----------------------------------------------------
+           9. MODULE 2: MATCHING GAME LOGIC
+           ---------------------------------------------------- */
+        let selectedLeft = null;
+        let selectedRight = null;
+        let shuffledLeft = [];
+        let shuffledRight = [];
+
+        function initMatchingGame() {
+            const colLeft = document.getElementById("match-col-left");
+            const colRight = document.getElementById("match-col-right");
+            if (!colLeft || !colRight) return;
+
+            document.getElementById("match-count").textContent = state.matchScore.matches;
+            document.getElementById("match-mistakes").textContent = state.matchScore.mistakes;
+
+            shuffledLeft = [...MATCH_PAIRS].sort(() => Math.random() - 0.5);
+            shuffledRight = [...MATCH_PAIRS].sort(() => Math.random() - 0.5);
+
+            colLeft.innerHTML = shuffledLeft.map((item, idx) => `
+                <div class="match-card ${state.matchScore.matchedIndicesLeft?.includes(idx) ? 'matched' : ''}" 
+                     id="match-left-${idx}" 
+                     onclick="selectMatchItem('left', ${idx})">
+                    ${item.term}
+                </div>
+            `).join('');
+
+            colRight.innerHTML = shuffledRight.map((item, idx) => `
+                <div class="match-card ${state.matchScore.matchedIndicesRight?.includes(idx) ? 'matched' : ''}" 
+                     id="match-right-${idx}" 
+                     onclick="selectMatchItem('right', ${idx})">
+                    ${item.def}
+                </div>
+            `).join('');
+        }
+
+        function selectMatchItem(type, idx) {
+            if (type === 'left') {
+                if (document.getElementById(`match-left-${idx}`).classList.contains('matched')) return;
+                document.querySelectorAll('#match-col-left .match-card').forEach(el => el.classList.remove('selected'));
+                document.getElementById(`match-left-${idx}`).classList.add('selected');
+                selectedLeft = idx;
+            } else {
+                if (document.getElementById(`match-right-${idx}`).classList.contains('matched')) return;
+                document.querySelectorAll('#match-col-right .match-card').forEach(el => el.classList.remove('selected'));
+                document.getElementById(`match-right-${idx}`).classList.add('selected');
+                selectedRight = idx;
+            }
+
+            if (selectedLeft !== null && selectedRight !== null) {
+                const leftItem = shuffledLeft[selectedLeft];
+                const rightItem = shuffledRight[selectedRight];
+
+                const elLeft = document.getElementById(`match-left-${selectedLeft}`);
+                const elRight = document.getElementById(`match-right-${selectedRight}`);
+
+                if (leftItem.term === rightItem.term) {
+                    elLeft.classList.remove('selected');
+                    elRight.classList.remove('selected');
+                    elLeft.classList.add('matched');
+                    elRight.classList.add('matched');
+
+                    if (!state.matchScore.matchedIndicesLeft) state.matchScore.matchedIndicesLeft = [];
+                    if (!state.matchScore.matchedIndicesRight) state.matchScore.matchedIndicesRight = [];
+                    state.matchScore.matchedIndicesLeft.push(selectedLeft);
+                    state.matchScore.matchedIndicesRight.push(selectedRight);
+
+                    state.matchScore.matches++;
+                    document.getElementById("match-count").textContent = state.matchScore.matches;
+
+                    if (state.matchScore.matches === MATCH_PAIRS.length && !state.completedModules.match) {
+                        state.completedModules.match = true;
+                        document.getElementById("tab-match").classList.add("completed");
+                        addXP(150);
+                        if (state.matchScore.mistakes === 0) {
+                            state.badges.perfectMatch = true;
+                        }
+                        checkBadges();
+                        triggerConfetti();
+                    }
+                } else {
+                    elLeft.classList.add('incorrect');
+                    elRight.classList.add('incorrect');
+                    state.matchScore.mistakes++;
+                    document.getElementById("match-mistakes").textContent = state.matchScore.mistakes;
+
+                    setTimeout(() => {
+                        elLeft.classList.remove('selected', 'incorrect');
+                        elRight.classList.remove('selected', 'incorrect');
+                    }, 600);
+                }
+
+                selectedLeft = null;
+                selectedRight = null;
+                saveState();
+            }
+        }
+
+        /* ----------------------------------------------------
+           10. MODULE 3: CHOOSE (MCQ) LOGIC
+           ---------------------------------------------------- */
+        function renderMCQ() {
+            const q = MCQ_QUESTIONS[state.mcqIndex];
+            const container = document.getElementById("mcq-container");
+            document.getElementById("mcq-score-display").textContent = `Question ${state.mcqIndex + 1} of ${MCQ_QUESTIONS.length}`;
+
+            const savedAns = state.mcqAnswers[state.mcqIndex];
+
+            let html = `
+                <div class="question-card">
+                    <div class="question-header">MULTIPLE CHOICE ${state.mcqIndex + 1}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options-list">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                let extraClass = "";
+                let disabledAttr = "";
+                if (savedAns !== undefined) {
+                    disabledAttr = "disabled";
+                    if (idx === q.correct) extraClass = "correct";
+                    if (savedAns.selectedIdx === idx && !savedAns.isCorrect) extraClass = "incorrect";
+                }
+
+                html += `
+                    <button class="option-btn ${extraClass}" onclick="answerMCQ(${idx})" ${disabledAttr}>
+                        <span>${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    </button>
+                `;
+            });
+
+            let fbClass = "feedback-box";
+            let fbContent = "";
+            let fbStyle = "display: none;";
+            if (savedAns !== undefined) {
+                fbStyle = "display: block;";
+                if (savedAns.isCorrect) {
+                    fbClass += " correct";
+                    fbContent = `<strong>✓ Correct!</strong> ${q.explanation}`;
+                } else {
+                    fbClass += " incorrect";
+                    fbContent = `<strong>✗ Not quite.</strong> ${q.explanation}`;
+                }
+            }
+
+            html += `
+                    </div>
+                    <div class="${fbClass}" id="mcq-fb" style="${fbStyle}">${fbContent}</div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            document.getElementById("mcq-next-btn").disabled = (savedAns === undefined);
+        }
+
+        function answerMCQ(selectedIdx) {
+            if (state.mcqAnswers[state.mcqIndex] !== undefined) return;
+
+            const q = MCQ_QUESTIONS[state.mcqIndex];
+            const isCorrect = selectedIdx === q.correct;
+
+            state.mcqAnswers[state.mcqIndex] = { selectedIdx, isCorrect };
+
+            if (isCorrect) {
+                state.mcqScore++;
+                addXP(20);
+            }
+
+            renderMCQ();
+
+            if (state.mcqIndex === MCQ_QUESTIONS.length - 1) {
+                if (!state.completedModules.choose) {
+                    state.completedModules.choose = true;
+                    document.getElementById("tab-choose").classList.add("completed");
+                    if (state.mcqScore === MCQ_QUESTIONS.length) {
+                        state.badges.sharpSpeaker = true;
+                    }
+                    checkBadges();
+                    triggerConfetti();
+                }
+            }
+            saveState();
+        }
+
+        function nextMCQ() {
+            if (state.mcqIndex < MCQ_QUESTIONS.length - 1) {
+                state.mcqIndex++;
+                renderMCQ();
+            }
+        }
+
+        /* ----------------------------------------------------
+           11. MODULE 4: READ & DECIDE LOGIC
+           ---------------------------------------------------- */
+        function renderReadingModule() {
+            const container = document.getElementById("reading-container");
+            let html = "";
+
+            READING_MODULES.forEach((mod, modIdx) => {
+                html += `
+                    <div class="question-card">
+                        <h3 style="color: var(--accent-gold); margin-bottom: 12px;">${mod.title}</h3>
+                        <div class="passage-box">${mod.passage}</div>
+                        <div style="display: flex; flex-direction: column; gap: 16px;">
+                `;
+
+                mod.questions.forEach((q, qIdx) => {
+                    const qKey = `read_${modIdx}_${qIdx}`;
+                    const answered = state.readingAnswers[qKey];
+
+                    html += `
+                        <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">${qIdx + 1}. ${q.q}</div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button class="btn-secondary ${answered && answered.val === 'TRUE' ? (q.ans === 'TRUE' ? 'correct' : 'incorrect') : ''}" 
+                                        onclick="answerReading(${modIdx}, ${qIdx}, 'TRUE')" 
+                                        ${answered ? 'disabled' : ''}>TRUE</button>
+                                <button class="btn-secondary ${answered && answered.val === 'FALSE' ? (q.ans === 'FALSE' ? 'correct' : 'incorrect') : ''}" 
+                                        onclick="answerReading(${modIdx}, ${qIdx}, 'FALSE')" 
+                                        ${answered ? 'disabled' : ''}>FALSE</button>
+                                <button class="btn-secondary ${answered && answered.val === 'NOT GIVEN' ? (q.ans === 'NOT GIVEN' ? 'correct' : 'incorrect') : ''}" 
+                                        onclick="answerReading(${modIdx}, ${qIdx}, 'NOT GIVEN')" 
+                                        ${answered ? 'disabled' : ''}>NOT GIVEN</button>
+                            </div>
+                            <div class="feedback-box ${answered ? (answered.isCorrect ? 'correct' : 'incorrect') : ''}" style="display: ${answered ? 'block' : 'none'}; margin-top: 10px;">
+                                ${answered ? (answered.isCorrect ? '<strong>✓ Correct!</strong> ' : '<strong>✗ Incorrect.</strong> ') + q.exp : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function answerReading(modIdx, qIdx, selectedVal) {
+            const qKey = `read_${modIdx}_${qIdx}`;
+            if (state.readingAnswers[qKey]) return;
+
+            const q = READING_MODULES[modIdx].questions[qIdx];
+            const isCorrect = selectedVal === q.ans;
+
+            state.readingAnswers[qKey] = { val: selectedVal, isCorrect };
+
+            if (isCorrect) {
+                addXP(30);
+            }
+
+            renderReadingModule();
+
+            let totalReadingQuestions = 0;
+            let answeredCount = 0;
+            let correctCount = 0;
+
+            READING_MODULES.forEach((mod, mIdx) => {
+                mod.questions.forEach((_, qI) => {
+                    totalReadingQuestions++;
+                    const ans = state.readingAnswers[`read_${mIdx}_${qI}`];
+                    if (ans) {
+                        answeredCount++;
+                        if (ans.isCorrect) correctCount++;
+                    }
+                });
+            });
+
+            if (answeredCount === totalReadingQuestions && !state.completedModules.read) {
+                state.completedModules.read = true;
+                document.getElementById("tab-read").classList.add("completed");
+                if (correctCount === totalReadingQuestions) {
+                    state.badges.carefulReader = true;
+                }
+                checkBadges();
+                triggerConfetti();
+            }
+            saveState();
+        }
+
+        /* ----------------------------------------------------
+           12. MODULE 5: FINAL BOSS LOGIC
+           ---------------------------------------------------- */
+        function renderBossTask1() {
+            const q = BOSS_TASK1_QUESTIONS[state.bossTask1Index];
+            const container = document.getElementById("boss-mcq-container");
+            const savedAns = state.bossTask1Answers ? state.bossTask1Answers[state.bossTask1Index] : null;
+
+            let html = `
+                <div class="question-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                    <div class="question-header" style="color: #f87171;">BOSS NUANCE CHALLENGE ${state.bossTask1Index + 1} / ${BOSS_TASK1_QUESTIONS.length}</div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options-list">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                let extraClass = "";
+                let disabledAttr = "";
+                if (savedAns) {
+                    disabledAttr = "disabled";
+                    if (idx === q.correct) extraClass = "correct";
+                    if (savedAns.selectedIdx === idx && !savedAns.isCorrect) extraClass = "incorrect";
+                }
+
+                html += `
+                    <button class="option-btn ${extraClass}" id="boss-opt-${idx}" onclick="answerBossTask1(${idx})" ${disabledAttr}>
+                        <span>${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    </button>
+                `;
+            });
+
+            let fbClass = "feedback-box";
+            let fbContent = "";
+            let fbStyle = "display: none;";
+            if (savedAns) {
+                fbStyle = "display: block;";
+                if (savedAns.isCorrect) {
+                    fbClass += " correct";
+                    fbContent = `<strong>✓ Masterful!</strong> ${q.explanation}`;
+                } else {
+                    fbClass += " incorrect";
+                    fbContent = `<strong>✗ Flawed Choice.</strong> ${q.explanation}`;
+                }
+            }
+
+            html += `
+                    </div>
+                    <div class="${fbClass}" id="boss-task1-fb" style="${fbStyle}">${fbContent}</div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            document.getElementById("boss-task1-next").disabled = savedAns ? false : true;
+        }
+
+        function answerBossTask1(selectedIdx) {
+            if (state.bossTask1Answers && state.bossTask1Answers[state.bossTask1Index] !== undefined) {
+                return;
+            }
+
+            const q = BOSS_TASK1_QUESTIONS[state.bossTask1Index];
+            const fb = document.getElementById("boss-task1-fb");
+            const isCorrect = selectedIdx === q.correct;
+
+            if (!state.bossTask1Answers) state.bossTask1Answers = {};
+            state.bossTask1Answers[state.bossTask1Index] = { selectedIdx, isCorrect };
+
+            document.querySelectorAll("#boss-mcq-container .option-btn").forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.correct) btn.classList.add("correct");
+                if (idx === selectedIdx && !isCorrect) btn.classList.add("incorrect");
+            });
+
+            fb.style.display = "block";
+            if (isCorrect) {
+                fb.className = "feedback-box correct";
+                fb.innerHTML = `<strong>✓ Masterful!</strong> ${q.explanation}`;
+                state.bossTask1Score++;
+                addXP(40);
+            } else {
+                fb.className = "feedback-box incorrect";
+                fb.innerHTML = `<strong>✗ Flawed Choice.</strong> ${q.explanation}`;
+            }
+
+            document.getElementById("boss-task1-next").disabled = false;
+            saveState();
+        }
+
+        function nextBossTask1() {
+            if (state.bossTask1Index < BOSS_TASK1_QUESTIONS.length - 1) {
+                state.bossTask1Index++;
+                renderBossTask1();
+            } else {
+                state.bossTask1Completed = true;
+                document.getElementById("boss-task-1").classList.add("hidden");
+                document.getElementById("boss-task-2").classList.remove("hidden");
+                renderBossTask2();
+            }
+            saveState();
+        }
+
+        function renderBossTask2() {
+            const container = document.getElementById("boss-reading-container");
+            const data = BOSS_TASK2_READING;
+
+            let html = `
+                <div class="question-card" style="border-color: rgba(239, 68, 68, 0.4);">
+                    <h3 style="color: #f87171; margin-bottom: 12px;">${data.title}</h3>
+                    <div class="passage-box" style="border-left-color: #f87171;">${data.passage}</div>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+            `;
+
+            data.questions.forEach((q, qIdx) => {
+                const qKey = `boss_t2_${qIdx}`;
+                const answered = state.bossTask2Answers[qKey];
+
+                html += `
+                    <div style="background: rgba(0,0,0,0.2); padding: 14px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <div style="font-size: 0.95rem; font-weight: 600; margin-bottom: 10px;">${qIdx + 1}. ${q.q}</div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="btn-secondary ${answered && answered.val === 'TRUE' ? (q.ans === 'TRUE' ? 'correct' : 'incorrect') : ''}" 
+                                    onclick="answerBossTask2(${qIdx}, 'TRUE')" 
+                                    ${answered ? 'disabled' : ''}>TRUE</button>
+                            <button class="btn-secondary ${answered && answered.val === 'FALSE' ? (q.ans === 'FALSE' ? 'correct' : 'incorrect') : ''}" 
+                                    onclick="answerBossTask2(${qIdx}, 'FALSE')" 
+                                    ${answered ? 'disabled' : ''}>FALSE</button>
+                            <button class="btn-secondary ${answered && answered.val === 'NOT GIVEN' ? (q.ans === 'NOT GIVEN' ? 'correct' : 'incorrect') : ''}" 
+                                    onclick="answerBossTask2(${qIdx}, 'NOT GIVEN')" 
+                                    ${answered ? 'disabled' : ''}>NOT GIVEN</button>
+                        </div>
+                        <div class="feedback-box ${answered ? (answered.isCorrect ? 'correct' : 'incorrect') : ''}" style="display: ${answered ? 'block' : 'none'}; margin-top: 10px;">
+                            ${answered ? (answered.isCorrect ? '<strong>✓ Masterful!</strong> ' : '<strong>✗ Incorrect.</strong> ') + q.exp : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+            container.innerHTML = html;
+        }
+
+        function answerBossTask2(qIdx, selectedVal) {
+            const qKey = `boss_t2_${qIdx}`;
+            if (state.bossTask2Answers[qKey]) return;
+
+            const q = BOSS_TASK2_READING.questions[qIdx];
+            const isCorrect = selectedVal === q.ans;
+
+            state.bossTask2Answers[qKey] = { val: selectedVal, isCorrect };
+
+            if (isCorrect) {
+                addXP(40);
+            }
+
+            renderBossTask2();
+            checkBossCompletion();
+            saveState();
+        }
+
+        function checkBossCompletion() {
+            const totalT2 = BOSS_TASK2_READING.questions.length;
+            let answeredT2 = 0;
+            Object.keys(state.bossTask2Answers).forEach(k => {
+                if (state.bossTask2Answers[k]) answeredT2++;
+            });
+
+            if (answeredT2 === totalT2 && !state.bossCompleted) {
+                state.bossCompleted = true;
+                state.completedModules.boss = true;
+                document.getElementById("tab-boss").classList.add("completed");
+                addXP(100);
+                state.badges.bossSlayer = true;
+                checkBadges();
+                triggerBossConfetti();
+
+                setTimeout(() => {
+                    switchModule('results');
+                }, 1200);
+            }
+        }
+
+        /* ----------------------------------------------------
+           13. RESULTS & BADGES DISPLAY
+           ---------------------------------------------------- */
+        const BADGE_DEFINITIONS = [
+            { id: 'firstStep', name: 'First Step', icon: '🚀', desc: 'Complete Flashcards' },
+            { id: 'perfectMatch', name: 'Perfect Match', icon: '🎯', desc: 'Matching with zero mistakes' },
+            { id: 'sharpSpeaker', name: 'Sharp Speaker', icon: '⚡', desc: '100% on MCQ Quiz' },
+            { id: 'carefulReader', name: 'Careful Reader', icon: '📖', desc: '100% on Reading Module' },
+            { id: 'bossSlayer', name: 'Boss Slayer', icon: '👑', desc: 'Defeat the Final Boss' },
+            { id: 'master', name: 'Cities Master', icon: '🏙️', desc: 'Complete all 5 modules' }
+        ];
+
+        function checkBadges() {
+            if (state.viewedCards.size >= VOCAB_BANK.length) state.badges.firstStep = true;
+
+            const allModulesDone = state.completedModules.learn &&
+                                   state.completedModules.match &&
+                                   state.completedModules.choose &&
+                                   state.completedModules.read &&
+                                   state.completedModules.boss;
+            if (allModulesDone && !state.badges.master) {
+                state.badges.master = true;
+                triggerFinalConfetti();
+            }
+        }
+
+        function renderResultsScreen() {
+            checkBadges();
+            document.getElementById("results-greeting").textContent = `Congratulations, ${state.userName}! You have mastered Cities & Transport vocabulary.`;
+            document.getElementById("res-xp").textContent = state.xp;
+            document.getElementById("res-mcq").textContent = `${state.mcqScore}/${MCQ_QUESTIONS.length}`;
+
+            let readingCorrect = 0;
+            Object.values(state.readingAnswers).forEach(ans => { if (ans.isCorrect) readingCorrect++; });
+            document.getElementById("res-reading").textContent = `${readingCorrect}/9`;
+
+            let bossCorrect = state.bossTask1Score;
+            Object.values(state.bossTask2Answers).forEach(ans => { if (ans.isCorrect) bossCorrect++; });
+            document.getElementById("res-boss").textContent = `${bossCorrect}/10`;
+
+            const badgesContainer = document.getElementById("badges-container");
+            badgesContainer.innerHTML = BADGE_DEFINITIONS.map(b => `
+                <div class="badge-card ${state.badges[b.id] ? 'unlocked' : ''}">
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-name">${b.name}</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">${b.desc}</div>
+                </div>
+            `).join('');
+
+            const vocabContainer = document.getElementById("vocab-bank-container");
+            vocabContainer.innerHTML = VOCAB_BANK.map(v => `
+                <div class="vocab-item">
+                    <div>
+                        <div class="vocab-term">
+                            <span>${v.term}</span>
+                            <button class="audio-btn" style="padding: 2px 8px; font-size: 0.75rem;" onclick="speakVocab('${v.term.replace(/'/g, "\\'")}')">🔊</button>
+                        </div>
+                        <div class="vocab-def">${v.meaning}</div>
+                    </div>
+                    <div style="font-size: 0.8rem; font-style: italic; color: var(--accent-gold-light); margin-top: 8px;">"${v.example}"</div>
+                </div>
+            `).join('');
+        }
+
+        /* ----------------------------------------------------
+           14. NAVIGATION & USER ACTIONS
+           ---------------------------------------------------- */
+        function startLearning() {
+            state.userName = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.userName || 'Student');
+            saveState();
+
+            document.getElementById("main-navbar").classList.remove("hidden");
+            document.getElementById("lesson-app").classList.remove("hidden");
+
+            updateNavDisplay();
+            renderFlashcard();
+            initMatchingGame();
+            renderMCQ();
+            renderReadingModule();
+            
+            if (state.bossTask1Completed) {
+                document.getElementById("boss-task-1").classList.add("hidden");
+                document.getElementById("boss-task-2").classList.remove("hidden");
+                renderBossTask2();
+            } else {
+                document.getElementById("boss-task-1").classList.remove("hidden");
+                document.getElementById("boss-task-2").classList.add("hidden");
+                renderBossTask1();
+            }
+        }
+
+        function switchModule(modName) {
+            document.querySelectorAll(".module-section").forEach(sec => sec.classList.add("hidden"));
+            document.querySelectorAll(".module-tab").forEach(tab => tab.classList.remove("active"));
+
+            const target = document.getElementById(`module-${modName}`);
+            if (target) target.classList.remove("hidden");
+
+            const tab = document.getElementById(`tab-${modName}`);
+            if (tab) tab.classList.add("active");
+
+            if (modName === 'boss') {
+                if (state.bossTask1Completed) {
+                    document.getElementById("boss-task-1").classList.add("hidden");
+                    document.getElementById("boss-task-2").classList.remove("hidden");
+                    renderBossTask2();
+                } else {
+                    document.getElementById("boss-task-1").classList.remove("hidden");
+                    document.getElementById("boss-task-2").classList.add("hidden");
+                    renderBossTask1();
+                }
+            }
+
+            if (modName === 'results') renderResultsScreen();
+        }
+
+        function closeModal() {
+            document.getElementById("modal-container").classList.add("hidden");
+        }
+
+        function confirmReset() {
+            document.getElementById("modal-container").classList.remove("hidden");
+        }
+
+        function executeReset() {
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
+            location.reload();
+        }
+
+        /* ----------------------------------------------------
+           15. PURE CSS/JS CONFETTI ENGINE
+           ---------------------------------------------------- */
+        const canvas = document.getElementById("confetti-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function createConfettiParticles(count, colorPalette) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: -10 - Math.random() * 20,
+                    size: Math.random() * 8 + 4,
+                    color: colorPalette[Math.floor(Math.random() * colorPalette.length)],
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: Math.random() * 3 + 2,
+                    rotation: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 10
+                });
+            }
+        }
+
+        function updateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.vRot;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.restore();
+
+                if (p.y > canvas.height + 20) particles.splice(i, 1);
+            }
+
+            if (particles.length > 0) {
+                requestAnimationFrame(updateConfetti);
+            }
+        }
+
+        function triggerConfetti() {
+            createConfettiParticles(60, ['#d4af37', '#fef08a', '#ffffff', '#10b981']);
+            updateConfetti();
+        }
+
+        function triggerBossConfetti() {
+            createConfettiParticles(120, ['#ef4444', '#f87171', '#d4af37', '#ffffff']);
+            updateConfetti();
+        }
+
+        function triggerFinalConfetti() {
+            createConfettiParticles(180, ['#d4af37', '#fef08a', '#c084fc', '#34d399', '#ffffff']);
+            updateConfetti();
+        }
+
+        /* ----------------------------------------------------
+           16. ON LOAD INITIALIZATION
+           ---------------------------------------------------- */
+        window.onload = function() {
+            loadState();
+            state.userName = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.userName || 'Student');
+            changeTheme(state.currentTheme || "theme-midnight");
+            startLearning();
+        };
+    </script>
+</body>
+</html>

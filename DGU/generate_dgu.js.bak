@@ -1,0 +1,1061 @@
+const fs = require('fs');
+const path = require('path');
+const {
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  AlignmentType,
+  PageBreak
+} = require('D:/My site/Malika opa/mathscore-admin/node_modules/docx');
+
+function buildMathscoreDguDocument() {
+  const children = [];
+
+  // ==========================================
+  // TITUL VARAG'I (TITLE PAGE)
+  // ==========================================
+  children.push(new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: 240, after: 700 },
+    children: [
+      new TextRun({
+        text: "Deponentlanadigan materiallarning titul varag‘i",
+        bold: true,
+        size: 36, // 18pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { before: 200, after: 120 },
+    children: [
+      new TextRun({
+        text: "EHM uchun dastur (Ma’lumotlar bazasi) nomi:  ",
+        bold: true,
+        size: 28, // 14pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { before: 60, after: 600 },
+    children: [
+      new TextRun({
+        text: "«MathScore» - Matematika fanidan o‘quvchilarni test sinovlaridan o‘tkazish, sun’iy intellekt (Gemini AI) yordamida ochiq javoblarni avtomatlashtirilgan baholash, interaktiv geometrik chizmalar studiyasi va proktoring axborot tizimi",
+        size: 26, // 13pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { before: 160, after: 100 },
+    children: [
+      new TextRun({
+        text: "Huquq ega(lar)si :   ",
+        size: 28, // 14pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { before: 60, after: 500 },
+    children: [
+      new TextRun({
+        text: "Qaxxorov ..., Malika ...",
+        size: 26, // 13pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { before: 160, after: 100 },
+    children: [
+      new TextRun({
+        text: "Muallif(lar): ",
+        size: 28, // 14pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.LEFT,
+    spacing: { before: 60, after: 4200 },
+    children: [
+      new TextRun({
+        text: "Qaxxorov ..., Malika ...",
+        size: 26, // 13pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  children.push(new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: 400, after: 0 },
+    children: [
+      new TextRun({
+        text: "Toshkent – 2026",
+        size: 28, // 14pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  // Titul tugashi va yangi sahifa
+  children.push(new Paragraph({
+    children: [new PageBreak()]
+  }));
+
+  // ==========================================
+  // ASOSIY QISM: IDENTIFIKATSIYA MATERIALLARI
+  // ==========================================
+  children.push(new Paragraph({
+    alignment: AlignmentType.CENTER,
+    spacing: { before: 140, after: 400 },
+    children: [
+      new TextRun({
+        text: "EHM uchun dasturni identifikatsiya qiluvchi materiallar dastlabki matni (Dastur kodi)",
+        bold: true,
+        size: 28, // 14pt
+        font: "Times New Roman"
+      })
+    ]
+  }));
+
+  // Helper funksiyalar
+  function addSection(title, desc, filename, code) {
+    // Sarlavha
+    children.push(new Paragraph({
+      alignment: AlignmentType.LEFT,
+      spacing: { before: 280, after: 100 },
+      children: [
+        new TextRun({
+          text: title,
+          bold: true,
+          size: 26, // 13pt
+          font: "Times New Roman"
+        })
+      ]
+    }));
+
+    // Tavsif
+    if (desc) {
+      children.push(new Paragraph({
+        alignment: AlignmentType.JUSTIFIED,
+        spacing: { line: 276, before: 60, after: 120 },
+        children: [
+          new TextRun({
+            text: desc,
+            size: 24, // 12pt
+            font: "Times New Roman"
+          })
+        ]
+      }));
+    }
+
+    // Fayl nomi
+    if (filename) {
+      children.push(new Paragraph({
+        alignment: AlignmentType.LEFT,
+        spacing: { before: 60, after: 60 },
+        children: [
+          new TextRun({
+            text: filename,
+            bold: true,
+            size: 22, // 11pt
+            font: "Times New Roman",
+            color: "1E3A8A"
+          })
+        ]
+      }));
+    }
+
+    // Kod
+    if (code) {
+      const lines = code.trim().split('\n');
+      lines.forEach(l => {
+        const formatted = l.replace(/\t/g, '    ');
+        children.push(new Paragraph({
+          spacing: { line: 220, before: 0, after: 0 },
+          children: [
+            new TextRun({
+              text: formatted.length === 0 ? " " : formatted,
+              font: "Consolas",
+              size: 19, // 9.5pt
+              color: "111827"
+            })
+          ]
+        }));
+      });
+    }
+  }
+
+  // -------------------------------------------------------------
+  // BO'LIM 1: DASTUR HAQIDA UMUMIY TUSHUNCHA VA ARXITEKTURASI
+  // -------------------------------------------------------------
+  addSection(
+    "1. «MathScore» dasturiy ta’minotining maqsadi, arxitekturasi va vazifalari",
+    "«MathScore» axborot tizimi matematika fani bo‘yicha o‘quvchilarni chuqurlashtirilgan o‘qitish, test sinovlaridan o‘tkazish, yozma va matematik mantiqiy javoblarni Google Gemini sun’iy intellekti yordamida mezonli baholash (semantic grading), imtihon paytida akademik halollikni ta’minlash (proktoring) hamda o‘quv jarayonini boshqarishga mo‘ljallangan kompleks dasturiy ta’minotdir.\n\n" +
+    "Dasturning asosiy komponentlari:\n" +
+    "1) mathscore-backend: RESTful API serveri (Node.js, Express, Prisma ORM, SQLite/PostgreSQL, Gemini AI SDK, JWT, Multer);\n" +
+    "2) mathscore-student: Talabalar uchun interfeys (React 19, KaTeX formulalar renderi, Desmos grafik kalkulyatori, to‘liq ekran va tab-switch nazorati, video player, yozma topshiriqlar paneli);\n" +
+    "3) mathscore-admin: O‘qituvchi va ma’muriyat paneli (kurslar, video darslar, testlar banki, MathDiagramStudio geometrik chizmalar studiyasi, natijalar tahlili, tizim auditi);\n" +
+    "4) mathscore-landing: Platforma haqida ma’lumot, kurslar taqdimoti va ommaviy ro‘yxatdan o‘tish sahifasi.",
+    null,
+    null
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 2: XAVFSIZLIK VA AUDIT JURNALI
+  // -------------------------------------------------------------
+  addSection(
+    "2. Tizim xavfsizligi, kiberxurujlardan himoyalanish (XSS, Brute-force, CORS) va audit jurnali",
+    "Ushbu funksiyalar tizimni ruxsatsiz kirishlardan, Brute-force parollarni tanlash xurujlaridan, DoS/DDoS so‘rovlar oqimidan va XSS inyeksiyalaridan ishonchli himoya qilish hamda har bir shubhali harakatni audit jurnalida qayd etish uchun xizmat qiladi.",
+    "security.js",
+`const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+const db = require('./db');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'mathscore-super-secure-secret-key-2026';
+
+// CORS xavfsizlik konfiguratsiyasi
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://mathscore.uz',
+      'https://api.mathscore.uz',
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175'
+    ];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      db.logSecurityIncident({
+        type: 'CORS_BLOCKED',
+        severity: 'MEDIUM',
+        message: \`Ruxsat etilmagan domendan so'rov bloklandi: \${origin}\`,
+        ip: 'unknown'
+      });
+      callback(new Error('Blocked by CORS policy'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+// Global rate limiting - DDoS va brute-force xurujlariga qarshi
+const globalRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 daqiqa
+  max: 200, // Bitta IP dan ko'pi bilan 200 ta so'rov
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Juda ko\\'p so\\'rov yuborildi. Iltimos keyinroq qayta urinib ko\\'ring.' },
+  handler: (req, res, next, options) => {
+    db.logSecurityIncident({
+      type: 'RATE_LIMIT_EXCEEDED',
+      severity: 'HIGH',
+      message: \`Global rate limit oshirildi: \${req.path}\`,
+      ip: req.ip || req.headers['x-forwarded-for'] || 'unknown'
+    });
+    res.status(429).json(options.message);
+  }
+});
+
+// Autentifikatsiya (Login/Register) uchun qat'iy cheklov
+const authRateLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 daqiqa
+  max: 10, // Ko'pi bilan 10 ta urinish
+  message: { error: 'Kirish urinishlari ko\\'payib ketdi. 10 daqiqa kuting.' },
+  handler: (req, res, next, options) => {
+    db.logSecurityIncident({
+      type: 'BRUTE_FORCE_SUSPICION',
+      severity: 'CRITICAL',
+      message: 'Ketma-ket muvaffaqiyatsiz login urinishlari aniqlandi',
+      ip: req.ip || req.headers['x-forwarded-for'] || 'unknown',
+      details: { email: req.body?.email }
+    });
+    res.status(429).json(options.message);
+  }
+});
+
+// XSS xurujlarini aniqlash va zararsizlantirish
+function sanitizeInput(req, res, next) {
+  const sanitize = (val) => {
+    if (typeof val === 'string') {
+      const xssPattern = /<script\\b[^<]*(?:(?!<\\/script>)<[^<]*)*<\\/script>|javascript:|onerror=|onload=|onclick=/gi;
+      if (xssPattern.test(val)) {
+        db.logSecurityIncident({
+          type: 'XSS_ATTEMPT_DETECTED',
+          severity: 'HIGH',
+          message: \`XSS xuruji aniqlandi va bloklandi: \${val.substring(0, 100)}\`,
+          ip: req.ip || req.headers['x-forwarded-for'] || 'unknown'
+        });
+        throw new Error('Xavfli belgi aniqlandi! Input bloklandi.');
+      }
+      return val.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    return val;
+  };
+  if (req.body) {
+    for (let key in req.body) req.body[key] = sanitize(req.body[key]);
+  }
+  next();
+}`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 3: AUTENTIFIKATSIYA VA ROLLARI BO'YICHA VAKOLAT
+  // -------------------------------------------------------------
+  addSection(
+    "3. Foydalanuvchilarni ro‘yxatdan o‘tkazish, autentifikatsiya va JWT sessiya nazorati",
+    "Ushbu funksiyalar foydalanuvchilarning hisob qaydnomasini ro‘yxatdan o‘tkazish, parollarni xesh-tekshirish (Bcrypt), JWT (JSON Web Token) yaratish, token validatsiyasi va foydalanuvchi roli (admin yoki student) bo‘yicha tizim huquqlarini tekshirishni amalga oshiradi.",
+    "server.js & security.js",
+`// JWT Tokenni tekshirish oraliq dasturi (Middleware)
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'Avtorizatsiya talab qilinadi (Token yo\\'q).' });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ error: 'Yaroqsiz yoki muddati o\\'tgan token.' });
+    req.user = user;
+    next();
+  });
+}
+
+// Foydalanuvchi roliga muvofiqlikni tekshirish
+function requireRole(role) {
+  return (req, res, next) => {
+    if (!req.user || req.user.role !== role) {
+      db.logSecurityIncident({
+        type: 'UNAUTHORIZED_ACCESS_ATTEMPT',
+        severity: 'MEDIUM',
+        message: \`Foydalanuvchi (\${req.user?.email}) ruxsatsiz yo'nalishga (\${req.path}) kirishga urindi.\`,
+        ip: req.ip || 'unknown'
+      });
+      return res.status(403).json({ error: 'Ushbu amalni bajarish uchun sizda yetarli huquq yo\\'q.' });
+    }
+    next();
+  };
+}
+
+// Foydalanuvchini ro'yxatdan o'tkazish funksiyasi
+app.post('/api/auth/register', authRateLimiter, async (req, res) => {
+  const { name, email, password, phone } = req.body;
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: 'Barcha maydonlarni to\\'ldiring.' });
+  }
+
+  const existingUser = await db.getUserByEmail(email);
+  if (existingUser) {
+    return res.status(400).json({ error: 'Ushbu elektron pochta bilan foydalanuvchi mavjud.' });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const newUser = await db.create('users', {
+    name,
+    email,
+    password: hashedPassword,
+    role: 'student',
+    phone: phone || '',
+    status: 'Online',
+    createdAt: new Date().toISOString()
+  });
+
+  const token = jwt.sign(
+    { id: newUser.id, email: newUser.email, role: newUser.role, name: newUser.name },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
+  res.status(201).json({ token, user: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role } });
+});
+
+// Tizimga kirish (Login) funksiyasi
+app.post('/api/auth/login', authRateLimiter, async (req, res) => {
+  const { email, password } = req.body;
+  const user = await db.getUserByEmail(email);
+  if (!user) return res.status(400).json({ error: 'Elektron pochta yoki parol noto\\'g\\'ri.' });
+
+  const validPassword = await bcrypt.compare(password, user.password);
+  if (!validPassword) {
+    return res.status(400).json({ error: 'Elektron pochta yoki parol noto\\'g\\'ri.' });
+  }
+
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role, name: user.name },
+    JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
+  await db.update('users', user.id, { status: 'Online' });
+  res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+});`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 4: KURSLAR VA VIDEO DARSLIKLAR BOSHQARUVI
+  // -------------------------------------------------------------
+  addSection(
+    "4. Matematika kurslari, video darsliklar va o‘quvchi progressini boshqarish moduli",
+    "Ushbu funksiyalar matematika kurslarini shakllantirish, video darsliklarni tartib bilan yuklash hamda talabaning har bir dars bo‘yicha o‘zlashtirishini (CompletedLesson) qayd etishni ta’minlaydi.",
+    "server.js",
+`// Barcha kurslarni olish
+app.get('/api/courses', async (req, res) => {
+  const courses = await db.get('courses');
+  res.json(courses || []);
+});
+
+// Yangi matematika kursi yaratish (Faqat Administrator uchun)
+app.post('/api/courses', authenticateToken, requireRole('admin'), async (req, res) => {
+  const { title, category, instructor, price, image, description, lessons } = req.body;
+  if (!title || !category) {
+    return res.status(400).json({ error: 'Kurs nomi va toifasi kiritilishi shart.' });
+  }
+
+  const newCourse = await db.create('courses', {
+    title,
+    category,
+    instructor: instructor || 'MathScore Mutaxassisi',
+    price: price || 'Bepul',
+    image: image || null,
+    description: description || '',
+    lessons: Array.isArray(lessons) ? lessons : [],
+    createdAt: new Date().toISOString()
+  });
+
+  res.status(201).json(newCourse);
+});
+
+// Talaba tomonidan darsni tugatilgan deb belgilash funksiyasi
+app.post('/api/lessons/:id/complete', authenticateToken, async (req, res) => {
+  const lessonId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const existing = await prisma.completedLesson.findUnique({
+      where: { userId_lessonId: { userId, lessonId } }
+    });
+
+    if (!existing) {
+      await prisma.completedLesson.create({
+        data: { userId, lessonId }
+      });
+    }
+
+    res.json({ success: true, message: 'Dars muvaffaqiyatli yakunlandi!' });
+  } catch (error) {
+    res.status(500).json({ error: 'Dars holatini saqlashda xatolik yuz berdi.' });
+  }
+});`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 5: MATEMATIK TESTLAR VA SAVOLLAR BAZASI
+  // -------------------------------------------------------------
+  addSection(
+    "5. Matematik testlar, savollar banki va formulalarni shakllantirish moduli",
+    "Ushbu modul matematika testlarini yaratish, ularga vaqt chegarasi (daqiqa), o‘tish foizi, qiyinlik darajasi hamda turli formatdagi savollarni (yagona tanlov, ko‘p tanlovli, rost/yolg‘on, qisqa yozma javoblar, matematik KaTeX formulalari) biriktirishni ta’minlaydi.",
+    "server.js",
+`// Yangi matematik test va savollarni saqlash funksiyasi
+app.post('/api/tests', authenticateToken, requireRole('admin'), async (req, res) => {
+  const {
+    title,
+    category,
+    difficulty,
+    questionCount,
+    duration,
+    status,
+    passingPercentage,
+    courseId,
+    questions,
+    startDate,
+    endDate
+  } = req.body;
+
+  if (!title || !duration) {
+    return res.status(400).json({ error: 'Test nomi va davomiyligi ko\\'rsatilishi shart.' });
+  }
+
+  const newTest = await db.create('tests', {
+    title,
+    category: category || 'Matematika',
+    difficulty: difficulty || 'O\\'rta',
+    questionCount: questions ? questions.length : Number(questionCount) || 0,
+    duration: Number(duration),
+    status: status || 'Faol',
+    passingPercentage: Number(passingPercentage) || 70,
+    courseId: courseId || null,
+    startDate: startDate || null,
+    endDate: endDate || null,
+    questions: (questions || []).map((q, idx) => ({
+      id: q.id || \`q_\${Date.now()}_\${idx}\`,
+      type: q.type || 'single', // single, multiple, truefalse, short, math
+      text: q.text,
+      options: q.options || [],
+      correctAnswer: q.correctAnswer,
+      score: Number(q.score) || 1,
+      explanation: q.explanation || '',
+      hint: q.hint || '',
+      imageUrl: q.imageUrl || null,
+      markingScheme: q.markingScheme || null // AI baholash mezoni
+    })),
+    createdAt: new Date().toISOString()
+  });
+
+  res.status(201).json(newTest);
+});`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 6: SUN'IY INTELLEKT (GEMINI AI) YORDAMIDA SEMANTIK BAHOLASH
+  // -------------------------------------------------------------
+  addSection(
+    "6. Sun’iy intellekt (Google Gemini AI) yordamida ochiq matematik javoblarni semantik baholash moduli",
+    "Ushbu modul matematika bo‘yicha talaba tomonidan kiritilgan ochiq yozma javoblar va matematik isbotlarni Google Gemini generativ tili modeli yordamida chuqur semantik tahlil qiladi. Tizim javobni administrator tomonidan belgilangan baholash mezonlari (rubric), qabul qilinadigan muqobil usullar va odatiy adashishlar bilan solishtirib, qisman ball beradi, to‘g‘ri/noto‘g‘ri konseptlarni aniqlaydi va talaba uchun yo‘naltiruvchi tushuntirish hosil qiladi.",
+    "geminiGrader.js",
+`const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+/**
+ * Gemini AI yordamida ochiq matematik savolni baholash funksiyasi
+ */
+async function gradeShortAnswerQuestion({
+  questionId,
+  questionText,
+  maximumMarks = 1,
+  studentAnswer = '',
+  markingScheme = null
+}) {
+  const maxScore = Math.max(1, Math.round(Number(maximumMarks) || 1));
+  const rawStudentText = String(studentAnswer || '').trim();
+
+  // Agar talaba javob yozmagan bo'lsa
+  if (!rawStudentText) {
+    return {
+      question_id: questionId,
+      maximum_marks: maxScore,
+      awarded_marks: 0,
+      criterion_results: [],
+      correct_concepts: [],
+      missing_concepts: ["Javob yozilmadi"],
+      incorrect_concepts: [],
+      student_feedback: "Javob kiritilmadi.",
+      grading_confidence: "high",
+      grading_status: "graded"
+    };
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY;
+  const modelName = process.env.GEMINI_GRADING_MODEL || 'gemini-1.5-flash';
+
+  const systemInstruction = 
+    "Siz matematika fanidan qat'iy va adolatli xalqaro imtihon baholovchi mutaxassissiz. " +
+    "Talabaning yozma javobini mezonlar (rubric), to'g'ri tushunchalar va matematik qadamlar bo'yicha tahlil qiling. " +
+    "Javobni quyidagi JSON formatida qaytaring: " +
+    "{ awarded_marks: number, student_feedback: string, correct_concepts: string[], missing_concepts: string[] }";
+
+  const userPrompt = JSON.stringify({
+    savol_matni: questionText,
+    maksimal_ball: maxScore,
+    talaba_javobi: rawStudentText,
+    namunaviy_javob: markingScheme?.modelAnswer || '',
+    baholash_mezonlari: markingScheme?.criteria || [],
+    qabul_qilinadigan_variantlar: markingScheme?.acceptedAlternatives || []
+  });
+
+  const response = await fetch(\`\${GEMINI_API_URL}/\${modelName}:generateContent?key=\${apiKey}\`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+      systemInstruction: { parts: [{ text: systemInstruction }] },
+      generationConfig: {
+        responseMimeType: 'application/json',
+        temperature: 0.1
+      }
+    })
+  });
+
+  const data = await response.json();
+  const evaluation = JSON.parse(data.candidates[0].content.parts[0].text);
+
+  return {
+    question_id: questionId,
+    maximum_marks: maxScore,
+    awarded_marks: Math.min(maxScore, Math.max(0, evaluation.awarded_marks || 0)),
+    student_feedback: evaluation.student_feedback || '',
+    correct_concepts: evaluation.correct_concepts || [],
+    missing_concepts: evaluation.missing_concepts || [],
+    grading_status: 'graded'
+  };
+}`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 7: TEST TOPSHIRISH VA NATIJALARNI HISOBLASH
+  // -------------------------------------------------------------
+  addSection(
+    "7. Test topshirish, avtomatlashtirilgan ball hisoblash va natijalarni umumlashtirish",
+    "Ushbu funksiya o‘quvchi yuborgan barcha javoblarni (bir nechta variantli, ko‘p tanlovli, rost/yolg‘on va AI baholagan yozma javoblar) tekshiradi, umumiy to‘plangan ballni, to‘g‘ri/noto‘g‘ri javoblar sonini, o‘tish foizini hisoblaydi va natijani tizimga qayd etadi.",
+    "server.js",
+`app.post('/api/submissions', authenticateToken, async (req, res) => {
+  const { testId, answers, tabSwitches, timeSpent } = req.body;
+  const test = await db.getById('tests', testId);
+  if (!test) return res.status(404).json({ error: 'Test topilmadi.' });
+
+  let correctCount = 0;
+  let totalPossibleScore = 0;
+  let earnedScore = 0;
+  const questionResults = [];
+  const questions = test.questions || [];
+
+  for (let idx = 0; idx < questions.length; idx++) {
+    const q = questions[idx];
+    const qScore = Math.max(1, Math.round(Number(q.score) || 1));
+    totalPossibleScore += qScore;
+    const studentAns = answers ? (answers[idx] ?? answers[q.id]) : undefined;
+
+    let isCorrect = false;
+    let awardedMarks = 0;
+    let feedback = '';
+
+    const qType = (q.type || 'single').toLowerCase();
+
+    if (qType === 'single') {
+      // Yagona to'g'ri variantli savol
+      if (studentAns !== undefined && studentAns === q.correctAnswer) {
+        isCorrect = true;
+        awardedMarks = qScore;
+        feedback = "To'g'ri javob!";
+      } else {
+        feedback = studentAns === undefined ? "Javob belgilanmadi." : "Noto'g'ri variant tanlandi.";
+      }
+    } else if (qType === 'multiple') {
+      // Ko'p tanlovli variantlar
+      const correctArr = Array.isArray(q.correctAnswer) ? q.correctAnswer : [];
+      const studentArr = Array.isArray(studentAns) ? studentAns : [];
+      if (correctArr.length === studentArr.length && correctArr.every(val => studentArr.includes(val))) {
+        isCorrect = true;
+        awardedMarks = qScore;
+        feedback = "Barcha to'g'ri variantlar tanlandi!";
+      } else {
+        feedback = "Variantlar to'liq yoki to'g'ri tanlanmadi.";
+      }
+    } else if (qType === 'short') {
+      // Sun'iy intellekt (Gemini AI) orqali semantik baholash
+      const aiResult = await gradeShortAnswerQuestion({
+        questionId: q.id,
+        questionText: q.text,
+        maximumMarks: qScore,
+        studentAnswer: studentAns,
+        markingScheme: q.markingScheme
+      });
+      awardedMarks = aiResult.awarded_marks;
+      isCorrect = awardedMarks === qScore;
+      feedback = aiResult.student_feedback;
+    }
+
+    if (isCorrect) correctCount++;
+    earnedScore += awardedMarks;
+
+    questionResults.push({
+      questionId: q.id,
+      questionText: q.text,
+      studentAnswer: studentAns,
+      correctAnswer: q.correctAnswer,
+      isCorrect,
+      score: awardedMarks,
+      maxScore: qScore,
+      feedback
+    });
+  }
+
+  const finalPercentage = totalPossibleScore > 0 ? Math.round((earnedScore / totalPossibleScore) * 100) : 0;
+  const passed = finalPercentage >= (test.passingPercentage || 70);
+
+  const submission = await db.create('submissions', {
+    userId: req.user.id,
+    userName: req.user.name,
+    userEmail: req.user.email,
+    testId: test.id,
+    testTitle: test.title,
+    score: finalPercentage,
+    earnedScore,
+    totalPossibleScore,
+    correctCount,
+    incorrectCount: questions.length - correctCount,
+    tabSwitches: Number(tabSwitches) || 0,
+    timeSpent: timeSpent || '0:00',
+    passed,
+    details: JSON.stringify(questionResults),
+    submittedAt: new Date().toISOString()
+  });
+
+  res.status(201).json(submission);
+});`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 8: PROKTORING VA ANTI-CHEAT NAZORATI
+  // -------------------------------------------------------------
+  addSection(
+    "8. Imtihon davomida akademik halollikni ta’minlash va proktoring nazorati (Anti-cheating)",
+    "Ushbu funksiyalar talaba test topshirayotganda brauzer oynasini yashirish, boshqa sahifaga (tab-switch) o‘tish yoki to‘liq ekran rejimidan chiqish harakatlarini qayd etadi, ogohlantirish beradi va serverga kiber-insident xabarini yuboradi.",
+    "mathscore-student/src/App.jsx & server.js",
+`// Frontend: Talaba harakatlarini kuzatish (Proctoring Event Listeners)
+useEffect(() => {
+  if (examActive) {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        setTabSwitches(prev => {
+          const updated = prev + 1;
+          // Shubhali harakat haqida serverga xabar berish
+          fetch('/api/system/cheat-report', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': \`Bearer \${token}\`
+            },
+            body: JSON.stringify({
+              testId: currentTest.id,
+              type: 'TAB_SWITCH',
+              timestamp: new Date().toISOString(),
+              switchCount: updated
+            })
+          });
+          alert(\`OGOHLANTIRISH: Siz test sahifasini tark etdingiz! Qoidabuzarliklar soni: \${updated}\`);
+          return updated;
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }
+}, [examActive, currentTest]);
+
+// Backend: Anti-cheat hodisasini qayd etish
+app.post('/api/system/cheat-report', authenticateToken, async (req, res) => {
+  const { testId, type, switchCount } = req.body;
+  await db.logSecurityIncident({
+    type: 'EXAM_CHEAT_ATTEMPT',
+    severity: switchCount > 3 ? 'HIGH' : 'LOW',
+    message: \`Talaba (\${req.user.email}) test (\${testId}) paytida oynani \${switchCount} marta almashtirdi.\`,
+    ip: req.ip || 'unknown'
+  });
+  res.json({ status: 'recorded' });
+});`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 9: INTERAKTIV MATEMATIK DIAGRAMMA STUDIYASI
+  // -------------------------------------------------------------
+  addSection(
+    "9. Interaktiv matematik diagramma va geometrik chizmalar studiyasi moduli",
+    "Ushbu modul orqali o‘qituvchi va administratorlar geometrik masalalar, koordinatalar tekisligi (X-Y), to‘g‘ri burchakli uchburchak, aylana radiusi va burchaklari kabi vektorli (SVG) chizmalarni yaratish, parametrlarini o‘zgartirish va savolga rasm sifatida biriktirish imkoniga ega bo‘ladilar.",
+    "mathscore-admin/src/MathDiagramStudio.jsx",
+`// Sifatli vektorli geometrik va matematik diagrammalar shablonlari
+export const MATH_TEMPLATES = [
+  {
+    id: 'cartesian',
+    name: 'Koordinatalar tekisligi (X-Y)',
+    category: 'Algebra & Funksiyalar',
+    svg: \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" style="background:#ffffff;">
+      <defs>
+        <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
+          <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="400" height="300" fill="url(#grid)" />
+      <line x1="20" y1="150" x2="380" y2="150" stroke="#1e293b" stroke-width="2.5" />
+      <line x1="200" y1="280" x2="200" y2="20" stroke="#1e293b" stroke-width="2.5" />
+      <polygon points="380,150 370,145 370,155" fill="#1e293b" />
+      <polygon points="200,20 195,30 205,30" fill="#1e293b" />
+      <text x="385" y="165" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e293b">x</text>
+      <text x="210" y="25" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e293b">y</text>
+    </svg>\`
+  },
+  {
+    id: 'right_triangle',
+    name: 'To\\x27g\\x27ri burchakli uchburchak (Pifagor)',
+    category: 'Geometriya',
+    svg: \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%" style="background:#ffffff;">
+      <polygon points="60,240 320,240 60,60" fill="#eff6ff" stroke="#2563eb" stroke-width="3" />
+      <rect x="60" y="220" width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" />
+      <text x="180" y="265" font-family="sans-serif" font-size="16" font-weight="bold" fill="#1e293b">a (katet)</text>
+      <text x="25" y="150" font-family="sans-serif" font-size="16" font-weight="bold" fill="#1e293b">b</text>
+      <text x="200" y="140" font-family="sans-serif" font-size="16" font-weight="bold" fill="#2563eb">c (gipotenuza)</text>
+    </svg>\`
+  }
+];`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 10: DESMOS GRAFIK KALKULYATORI INTEGRATSIYASI
+  // -------------------------------------------------------------
+  addSection(
+    "10. O‘quvchilar uchun integratsiyalashgan Desmos grafik kalkulyatori moduli",
+    "Ushbu modul talabalarga murakkab matematik funksiyalar (kvadratik, trigonometrik, ko‘rsatkichli, hosila va integrallar) grafiklarini hisoblash va tahlil qilish imkonini beruvchi Desmos API interfeysidir.",
+    "mathscore-student/src/DesmosCalculator.jsx",
+`export default function DesmosCalculator({ isOpen, onClose, viewMode = 'floating' }) {
+  if (!isOpen) return null;
+
+  // A/AS-Level matematika kursi uchun formulalar to'plami
+  const mathPresets = [
+    { name: 'Kvadratik funksiya', formula: 'y = a*x^2 + b*x + c', desc: 'Parabola va uning simmetriya o\\'qi' },
+    { name: 'Trigonometrik to\\'lqin', formula: 'y = a*sin(b*x - c) + d', desc: 'Amplituda, davr va fazalar' },
+    { name: 'Ko\\'rsatkichli funksiya', formula: 'y = a*e^(k*x)', desc: 'O\\'sish va so\\'nish jarayonlari' },
+    { name: 'Doira tenglamasi', formula: '(x - h)^2 + (y - k)^2 = r^2', desc: 'Markaz (h, k) va radius r' },
+    { name: 'Hosila chizig\\'i', formula: 'f(x) = x^3 - 3x; g(x) = f\\'(x)', desc: 'Ekstremum nuqtalarini topish' }
+  ];
+
+  return (
+    <div className="desmos-calculator-container shadow-2xl rounded-2xl bg-white border border-slate-200">
+      <div className="calc-header flex justify-between items-center p-3 bg-slate-900 text-white rounded-t-2xl">
+        <span className="font-semibold text-sm">Desmos Matematik Grafik Kalkulyatori</span>
+        <button onClick={onClose} className="p-1 hover:bg-slate-700 rounded-lg">✕</button>
+      </div>
+      <iframe
+        src="https://www.desmos.com/calculator"
+        title="Desmos Graphing Calculator"
+        className="w-full h-[500px] border-none"
+      />
+    </div>
+  );
+}`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 11: TOPSHIRIQLAR (UY VAZIFALARI) VA FAYLLAR YUKLASH
+  // -------------------------------------------------------------
+  addSection(
+    "11. Uy vazifalari (topshiriqlar), yozma ishlarni topshirish va qayta tekshirish moduli",
+    "Ushbu modul talabaning mustaqil bajargan yozma ishlari (PDF, DOCX, fotosuratlar)ni yuklash, o‘qituvchi tomonidan tekshirilib baholanishi va zarur bo‘lganda qayta topshirishga ruxsat berish oqimini boshqaradi.",
+    "server.js",
+`// Talaba tomonidan yozma ishni yuklash va topshirish
+app.post('/api/tasks/:id/submit', upload.single('file'), async (req, res) => {
+  const taskId = req.params.id;
+  const { studentNotes } = req.body;
+  const file = req.file;
+
+  const task = await db.getById('tasks', taskId);
+  if (!task) return res.status(404).json({ error: 'Topshiriq topilmadi.' });
+
+  const updatedSubmissions = task.submissions || [];
+  updatedSubmissions.push({
+    userId: req.user.id,
+    userName: req.user.name,
+    fileUrl: file ? \`/uploads/\${file.filename}\` : null,
+    fileName: file ? file.originalname : null,
+    studentNotes: studentNotes || '',
+    status: 'Tekshirilmoqda',
+    submittedAt: new Date().toISOString()
+  });
+
+  await db.update('tasks', taskId, { submissions: updatedSubmissions });
+  res.json({ success: true, message: 'Yozma ish muvaffaqiyatli topshirildi!' });
+});
+
+// O'qituvchi tomonidan baholash
+app.post('/api/tasks/:id/grade', authenticateToken, requireRole('admin'), async (req, res) => {
+  const taskId = req.params.id;
+  const { userId, score, feedback } = req.body;
+
+  const task = await db.getById('tasks', taskId);
+  if (!task) return res.status(404).json({ error: 'Topshiriq topilmadi.' });
+
+  const submissions = (task.submissions || []).map(sub => {
+    if (sub.userId === userId) {
+      return {
+        ...sub,
+        score: Number(score),
+        feedback: feedback || '',
+        status: 'Baholandi',
+        gradedAt: new Date().toISOString()
+      };
+    }
+    return sub;
+  });
+
+  await db.update('tasks', taskId, { submissions });
+  res.json({ success: true, message: 'Topshiriq baholandi!' });
+});
+
+// Qayta topshirishga ruxsat berish
+app.post('/api/tasks/:id/allow-resubmit', authenticateToken, requireRole('admin'), async (req, res) => {
+  const taskId = req.params.id;
+  const { userId } = req.body;
+
+  const task = await db.getById('tasks', taskId);
+  if (!task) return res.status(404).json({ error: 'Topshiriq topilmadi.' });
+
+  const submissions = (task.submissions || []).filter(sub => sub.userId !== userId);
+  await db.update('tasks', taskId, { submissions });
+
+  res.json({ success: true, message: 'O\\'quvchiga qayta topshirish huquqi berildi.' });
+});`
+  );
+
+  // -------------------------------------------------------------
+  // BO'LIM 12: MA'LUMOTLAR BAZASI RELYATSION TUZILMASI
+  // -------------------------------------------------------------
+  addSection(
+    "12. Ma’lumotlar bazasi reliesion modeli va sxemasi (Data Schema)",
+    "Ushbu model «MathScore» tizimidagi barcha obyektlar (foydalanuvchilar, kurslar, video darsliklar, testlar, savollar, yechimlar, proktoring va audit jurnallari) relyatsion munosabatlarini belgilaydi.",
+    "prisma/schema.prisma",
+`datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id              String         @id @default(uuid())
+  name            String
+  email           String         @unique
+  password        String
+  role            String         @default("student")
+  avatar          String?
+  phone           String?
+  status          String?        @default("Online")
+  deadline        DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  submissions     Submission[]
+  userCourses     UserCourse[]
+  notifications   Notification[]
+  completedLessons CompletedLesson[]
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  title       String
+  category    String
+  instructor  String
+  price       String
+  image       String?
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  lessons     Lesson[]
+  tests       Test[]
+  userCourses UserCourse[]
+}
+
+model Lesson {
+  id          String   @id @default(uuid())
+  title       String
+  duration    String
+  videoUrl    String
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  completedBy CompletedLesson[]
+}
+
+model Test {
+  id                 String       @id @default(uuid())
+  title              String
+  category           String
+  difficulty         String
+  questionCount      Int
+  duration           Int          // daqiqalarda
+  status             String
+  passingPercentage  Int?         @default(70)
+  courseId           String?
+  course             Course?      @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  questions          Question[]
+  submissions        Submission[]
+  createdAt          DateTime     @default(now())
+}
+
+model Question {
+  id            String  @id @default(uuid())
+  type          String  // single, multiple, truefalse, short, math
+  text          String
+  options       String  // JSON formatida
+  correctAnswer String  // JSON yoki matn
+  score         Int
+  markingScheme String? // AI baholash mezoni
+  testId        String
+  test          Test    @relation(fields: [testId], references: [id], onDelete: Cascade)
+}
+
+model Submission {
+  id             String   @id @default(uuid())
+  userId         String
+  testId         String
+  score          Int
+  correctCount   Int
+  incorrectCount Int
+  tabSwitches    Int      @default(0)
+  timeSpent      String?  
+  passed         Boolean
+  details        String?  // Savollar tahlili va AI xulosasi
+  submittedAt    DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  test           Test     @relation(fields: [testId], references: [id], onDelete: Cascade)
+}
+
+model SecurityLog {
+  id        String   @id @default(uuid())
+  type      String
+  severity  String
+  message   String
+  ip        String
+  details   String?
+  timestamp DateTime @default(now())
+}`
+  );
+
+  return new Document({
+    sections: [{
+      properties: {
+        page: {
+          margin: {
+            top: 1440,
+            right: 1440,
+            bottom: 1440,
+            left: 1440
+          }
+        }
+      },
+      children: children
+    }]
+  });
+}
+
+// Generate and save
+async function main() {
+  const doc = buildMathscoreDguDocument();
+  const buffer = await Packer.toBuffer(doc);
+  
+  const targetDir1 = 'D:/My site/Malika opa/DGU';
+  const targetDir2 = 'D:/My site/Malika opa';
+  
+  const file1 = path.join(targetDir1, 'DGU_mathscore.docx');
+  const file2 = path.join(targetDir2, 'DGU_mathscore.docx');
+
+  fs.writeFileSync(file1, buffer);
+  fs.writeFileSync(file2, buffer);
+
+  console.log('Successfully generated DGU_mathscore.docx in:');
+  console.log(' - ' + file1 + ' (' + buffer.length + ' bytes)');
+  console.log(' - ' + file2 + ' (' + buffer.length + ' bytes)');
+}
+
+main().catch(err => {
+  console.error('Error generating docx:', err);
+});

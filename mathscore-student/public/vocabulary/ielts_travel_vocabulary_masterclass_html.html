@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Band 8: Travel Vocabulary Masterclass</title>
+    <style>
+        /* ==========================================================================
+           1. CSS VARIABLES & THEMES
+           ========================================================================== */
+        :root {
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        [data-theme="midnight"] {
+            --bg-gradient: linear-gradient(135deg, #0b0f19 0%, #111827 50%, #030712 100%);
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-gold: #fbbf24;
+            --accent-gold-glow: rgba(251, 191, 36, 0.25);
+            --accent-primary: #d97706;
+            --success: #10b981;
+            --error: #ef4444;
+            --nav-bg: rgba(11, 15, 25, 0.85);
+            --boss-glow: rgba(239, 68, 68, 0.3);
+            --card-inner: rgba(31, 41, 55, 0.6);
+        }
+
+        [data-theme="platinum"] {
+            --bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 50%, #d1d5db 100%);
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --accent-gold: #b45309;
+            --accent-gold-glow: rgba(180, 83, 9, 0.15);
+            --accent-primary: #2563eb;
+            --success: #059669;
+            --error: #dc2626;
+            --nav-bg: rgba(243, 244, 246, 0.85);
+            --boss-glow: rgba(220, 38, 38, 0.2);
+            --card-inner: rgba(249, 250, 251, 0.8);
+        }
+
+        [data-theme="emerald"] {
+            --bg-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #021f17 100%);
+            --card-bg: rgba(6, 78, 59, 0.5);
+            --card-border: rgba(52, 211, 153, 0.15);
+            --text-main: #ecfdf5;
+            --text-muted: #a7f3d0;
+            --accent-gold: #f59e0b;
+            --accent-gold-glow: rgba(245, 158, 11, 0.25);
+            --accent-primary: #10b981;
+            --success: #34d399;
+            --error: #f87171;
+            --nav-bg: rgba(2, 44, 34, 0.85);
+            --boss-glow: rgba(239, 68, 68, 0.3);
+            --card-inner: rgba(6, 95, 70, 0.5);
+        }
+
+        [data-theme="purple"] {
+            --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #311042 50%, #0f0d26 100%);
+            --card-bg: rgba(49, 16, 66, 0.5);
+            --card-border: rgba(192, 132, 252, 0.15);
+            --text-main: #faf5ff;
+            --text-muted: #e9d5ff;
+            --accent-gold: #fbbf24;
+            --accent-gold-glow: rgba(251, 191, 36, 0.25);
+            --accent-primary: #a855f7;
+            --success: #10b981;
+            --error: #f43f5e;
+            --nav-bg: rgba(30, 27, 75, 0.85);
+            --boss-glow: rgba(244, 63, 94, 0.3);
+            --card-inner: rgba(58, 28, 77, 0.5);
+        }
+
+        /* ==========================================================================
+           2. RESET & BASE STYLES
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        button, input, select {
+            font-family: inherit;
+            color: inherit;
+        }
+
+        /* ==========================================================================
+           3. LAYOUT & CONTAINER
+           ========================================================================== */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.025em;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .stat-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--card-inner);
+            padding: 0.35rem 0.8rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-value {
+            color: var(--accent-gold);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-icon {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .btn-icon:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem 1rem;
+            flex: 1;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s var(--transition-normal);
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================================================
+           4. COMPONENTS & CARDS
+           ========================================================================== */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-primary));
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 0.85rem 1.75rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px var(--accent-gold-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-gold-glow);
+            filter: brightness(1.05);
+        }
+
+        .btn-secondary {
+            background: var(--card-inner);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            font-weight: 600;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-gold);
+            background: var(--card-bg);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Module Header */
+        .module-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .module-step {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .module-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .module-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-primary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* ==========================================================================
+           5. WELCOME SCREEN
+           ========================================================================== */
+        .welcome-card {
+            text-align: center;
+            padding: 3.5rem 2rem;
+            max-width: 520px;
+            margin: 3rem auto;
+        }
+
+        .welcome-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .input-group {
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition-fast);
+        }
+
+        .text-input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px var(--accent-gold-glow);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* ==========================================================================
+           6. MODULE 1: FLASHCARDS
+           ========================================================================== */
+        .flashcard-container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 550px;
+            height: 340px;
+            margin: 1.5rem auto;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: var(--radius-lg);
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            align-items: flex-start;
+            text-align: left;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+
+        .expression-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .meta-text {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .example-box {
+            background: var(--card-inner);
+            border-left: 3px solid var(--accent-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            font-size: 0.9rem;
+            width: 100%;
+            margin-top: 0.25rem;
+        }
+
+        .flashcard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 550px;
+            margin: 1.5rem auto 0;
+        }
+
+        .audio-btn {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            border-radius: var(--radius-full);
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            margin-left: 0.5rem;
+        }
+
+        .audio-btn:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: scale(1.05);
+        }
+
+        /* ==========================================================================
+           7. MODULE 2: MATCHING GAME
+           ========================================================================== */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .matching-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .match-card {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            user-select: none;
+        }
+
+        .match-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .match-card.selected {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold-glow);
+            box-shadow: 0 0 12px var(--accent-gold-glow);
+        }
+
+        .match-card.matched {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            cursor: default;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .match-card.shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .matching-stats {
+            display: flex;
+            justify-content: space-around;
+            background: var(--card-inner);
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================================================
+           8. MODULE 3 & 5: MULTIPLE CHOICE (CHOOSE)
+           ========================================================================== */
+        .quiz-card {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-question {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.25rem;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent-gold);
+            background: var(--card-bg);
+        }
+
+        .option-indicator {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .option-btn.correct .option-indicator {
+            background: var(--success);
+            color: #000;
+            border-color: var(--success);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .option-btn.wrong .option-indicator {
+            background: var(--error);
+            color: #fff;
+            border-color: var(--error);
+        }
+
+        .explanation-box {
+            margin-top: 1.25rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            background: var(--card-inner);
+            border-left: 4px solid var(--accent-gold);
+            font-size: 0.9rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box.active {
+            display: block;
+        }
+
+        /* ==========================================================================
+           9. MODULE 4: READ & DECIDE
+           ========================================================================== */
+        .reading-passage {
+            background: var(--card-inner);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            font-family: var(--font-serif);
+        }
+
+        .statement-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .statement-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .tfng-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tfng-btn {
+            flex: 1;
+            min-width: 90px;
+            padding: 0.6rem 0.5rem;
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .tfng-btn:hover:not(:disabled) {
+            border-color: var(--accent-gold);
+        }
+
+        /* ==========================================================================
+           10. MODULE 5: FINAL BOSS
+           ========================================================================== */
+        .boss-wrapper {
+            border: 2px solid var(--error);
+            box-shadow: 0 0 30px var(--boss-glow);
+            position: relative;
+        }
+
+        .boss-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--error);
+            color: #fff;
+            padding: 0.2rem 0.8rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        /* ==========================================================================
+           11. FINAL RESULT & BADGES & VOCAB BANK
+           ========================================================================== */
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .badge-card {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 1rem 0.5rem;
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(1);
+            transition: var(--transition-normal);
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            border-color: var(--accent-gold);
+            background: var(--card-bg);
+            box-shadow: 0 4px 12px var(--accent-gold-glow);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .vocab-item {
+            background: var(--card-inner);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+        }
+
+        .vocab-phrase {
+            font-weight: 700;
+            color: var(--accent-gold);
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .vocab-meaning {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .speaking-card {
+            background: var(--card-inner);
+            border: 1px dashed var(--accent-gold);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .speaking-q {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            padding-left: 1rem;
+            border-left: 2px solid var(--accent-gold);
+        }
+
+        /* ==========================================================================
+           12. CONFETTI CANVAS
+           ========================================================================== */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ==========================================================================
+           13. RESPONSIVE MODIFICATIONS
+           ========================================================================== */
+        @media (max-width: 640px) {
+            .app-header {
+                padding: 0.5rem 1rem;
+            }
+            .brand span {
+                display: none;
+            }
+            .user-stats {
+                gap: 0.5rem;
+            }
+            .stat-chip {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            .main-container {
+                padding: 1rem 0.75rem 3rem 0.75rem;
+            }
+            .glass-card {
+                padding: 1.25rem;
+            }
+            .flashcard-container {
+                height: 380px;
+            }
+            .expression-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Top Navigation -->
+    <header class="app-header">
+        <div class="brand">
+            ✈️ <span class="brand-badge">IELTS TRAVEL</span>
+        </div>
+        <div class="user-stats">
+            <div class="stat-chip">
+                <span>⚡</span>
+                <span id="nav-xp" class="stat-value">0 XP</span>
+            </div>
+            <div class="stat-chip">
+                <span>👑</span>
+                <span id="nav-level" class="stat-value">Beginner</span>
+            </div>
+            <div class="stat-chip" id="user-display" style="cursor: default;">
+                <span>👤</span>
+                <span id="nav-username" class="stat-value">Learner</span>
+            </div>
+        </div>
+        <div class="nav-controls">
+            <select id="theme-select" class="btn-icon">
+                <option value="midnight">🌑 Midnight</option>
+                <option value="platinum">🤍 Platinum</option>
+                <option value="emerald">🌲 Emerald</option>
+                <option value="purple">👑 Purple</option>
+            </select>
+            <button id="reset-btn" class="btn-icon" title="Reset Progress">🔄</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-container">
+
+        <!-- MODULE 1: LEARN (FLASHCARDS) -->
+        <section id="screen-module-1" class="screen">
+            <div class="module-header">
+                <div class="module-step">Module 1 of 5</div>
+                <h2 class="module-title">📚 LEARN</h2>
+                <p class="module-desc">Master 15 natural Band 7-8 travel expressions. Click the card to flip it and reveal the details.</p>
+                <div class="progress-bar-container">
+                    <div id="m1-progress" class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <div class="flashcard-container" id="flashcard-box">
+                <div class="flashcard" id="flashcard">
+                    <!-- Front -->
+                    <div class="card-face card-front">
+                        <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-gold); letter-spacing: 0.1em; margin-bottom: 1rem;">EXPRESSION</div>
+                        <div class="expression-title" id="fc-front-title">Expression Title</div>
+                        <div class="card-hint">🔄 Click to reveal details</div>
+                    </div>
+                    <!-- Back -->
+                    <div class="card-face card-back">
+                        <div style="width: 100%;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div class="meta-label">Meaning</div>
+                                <button class="audio-btn" id="audio-btn" title="Listen Pronunciation">🔊</button>
+                            </div>
+                            <div class="meta-text" id="fc-meaning">Meaning text goes here...</div>
+
+                            <div class="meta-label">IELTS Speaking Example</div>
+                            <div class="example-box" id="fc-example">"Example sentence goes here..."</div>
+
+                            <div class="meta-label" style="margin-top: 0.75rem;">Natural Alternative</div>
+                            <div class="meta-text" id="fc-alt" style="font-size: 0.85rem; color: var(--text-muted);">Simpler version</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard-nav">
+                <button id="fc-prev" class="btn-secondary">← Previous</button>
+                <span id="fc-counter" style="font-weight: 700; font-size: 0.9rem;">Card 1 / 15</span>
+                <button id="fc-next" class="btn-primary">Next →</button>
+            </div>
+        </section>
+
+        <!-- MODULE 2: MATCH -->
+        <section id="screen-module-2" class="screen">
+            <div class="module-header">
+                <div class="module-step">Module 2 of 5</div>
+                <h2 class="module-title">🧩 MATCH</h2>
+                <p class="module-desc">Match each collocation with its correct meaning. Click an expression on the left, then its definition on the right.</p>
+            </div>
+
+            <div class="matching-stats">
+                <div>Matches: <span id="match-score" style="color: var(--success);">0</span>/8</div>
+                <div>Mistakes: <span id="match-mistakes" style="color: var(--error);">0</span></div>
+            </div>
+
+            <div class="matching-grid">
+                <div class="matching-column" id="match-col-expressions"></div>
+                <div class="matching-column" id="match-col-meanings"></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="m2-continue" class="btn-primary" style="display: none;">CONTINUE TO MODULE 3 →</button>
+            </div>
+        </section>
+
+        <!-- MODULE 3: CHOOSE -->
+        <section id="screen-module-3" class="screen">
+            <div class="module-header">
+                <div class="module-step">Module 3 of 5</div>
+                <h2 class="module-title">🎯 CHOOSE</h2>
+                <p class="module-desc">Test your understanding of natural collocations, contexts, and Band 7-8 usage.</p>
+            </div>
+
+            <div id="m3-quiz-container"></div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="m3-continue" class="btn-primary" style="display: none;">CONTINUE TO MODULE 4 →</button>
+            </div>
+        </section>
+
+        <!-- MODULE 4: READ & DECIDE -->
+        <section id="screen-module-4" class="screen">
+            <div class="module-header">
+                <div class="module-step">Module 4 of 5</div>
+                <h2 class="module-title">📖 READ & DECIDE</h2>
+                <p class="module-desc">Read the IELTS-style discussion texts and decide whether each statement is TRUE, FALSE, or NOT GIVEN based strictly on the text.</p>
+            </div>
+
+            <div id="m4-texts-container"></div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="m4-continue" class="btn-primary" style="display: none;">FACE THE FINAL BOSS 👑 →</button>
+            </div>
+        </section>
+
+        <!-- MODULE 5: FINAL BOSS -->
+        <section id="screen-module-5" class="screen">
+            <div class="glass-card boss-wrapper">
+                <div class="boss-badge">FINAL CHALLENGE</div>
+                <div class="module-header" style="margin-bottom: 1.5rem;">
+                    <div class="module-step" style="color: var(--error);">Module 5 of 5</div>
+                    <h2 class="module-title" style="font-size: 2.2rem;">👑 FINAL BOSS</h2>
+                    <p class="module-desc">You've learned the vocabulary. Now prove you can apply it under exam conditions.</p>
+                </div>
+
+                <!-- Boss Task 1 -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                        ⚔️ TASK 1: CONTEXT & COLLOCATION CHALLENGE
+                    </h3>
+                    <div id="boss-task1-container"></div>
+                </div>
+
+                <!-- Boss Task 2 -->
+                <div>
+                    <h3 style="color: var(--accent-gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                        📜 TASK 2: ADVANCED EVIDENCE CHALLENGE
+                    </h3>
+                    <div class="reading-passage" id="boss-reading-passage"></div>
+                    <div id="boss-task2-container"></div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button id="m5-complete-btn" class="btn-primary" style="display: none; width: 100%; background: linear-gradient(135deg, var(--error), var(--accent-gold)); color: #fff;">
+                        CLAIM YOUR VICTORY 🏆
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL RESULT SCREEN -->
+        <section id="screen-result" class="screen">
+            <div class="glass-card" style="text-align: center; padding: 3rem 1.5rem;">
+                <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">✈️👑</div>
+                <h1 style="font-size: 2.2rem; font-weight: 800; color: var(--accent-gold);">TRAVEL — MASTERED</h1>
+                <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">Congratulations, <span id="res-name" style="color: var(--accent-primary); font-weight: 700;">Student</span>!</p>
+
+                <!-- Stats summary -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1rem; margin: 2rem 0;">
+                    <div style="background: var(--card-inner); padding: 1rem; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">TOTAL XP</div>
+                        <div id="res-xp" style="font-size: 1.5rem; font-weight: 800; color: var(--accent-gold);">0</div>
+                    </div>
+                    <div style="background: var(--card-inner); padding: 1rem; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">FINAL LEVEL</div>
+                        <div id="res-level" style="font-size: 1.1rem; font-weight: 700;">Master</div>
+                    </div>
+                    <div style="background: var(--card-inner); padding: 1rem; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">MCQ SCORE</div>
+                        <div id="res-mcq" style="font-size: 1.5rem; font-weight: 800;">0/10</div>
+                    </div>
+                    <div style="background: var(--card-inner); padding: 1rem; border-radius: var(--radius-md);">
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">BOSS SCORE</div>
+                        <div id="res-boss" style="font-size: 1.5rem; font-weight: 800;">0/10</div>
+                    </div>
+                </div>
+
+                <!-- Badges unlocked -->
+                <h3 style="text-align: left; margin-top: 2rem; font-size: 1.1rem; font-weight: 700;">🏅 EARNED BADGES</h3>
+                <div class="badge-grid" id="badges-container"></div>
+
+                <!-- Speaking Challenge -->
+                <div class="speaking-card" style="text-align: left;">
+                    <h3 style="color: var(--accent-gold); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🎤 FINAL SPEAKING CHALLENGE
+                    </h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Practice answering these real IELTS Speaking questions out loud. Try to integrate at least 3 expressions you mastered today.
+                    </p>
+                    <div class="speaking-q"><strong>Part 1:</strong> Do you enjoy travelling in your free time? Why or why not?</div>
+                    <div class="speaking-q"><strong>Part 1:</strong> How often do you take a short break from your daily routine?</div>
+                    <div class="speaking-q"><strong>Part 2:</strong> Describe a memorable trip you have taken recently. (Mention where you stayed, what you did, and why it was special).</div>
+                    <div class="speaking-q"><strong>Part 3:</strong> Why do some travellers prefer to travel off the beaten track rather than visiting famous tourist attractions?</div>
+                    <div class="speaking-q"><strong>Part 3:</strong> In what ways can international tourism put pressure on local infrastructure and communities?</div>
+                </div>
+
+                <!-- Vocabulary Bank -->
+                <h3 style="text-align: left; margin-top: 2.5rem; font-size: 1.1rem; font-weight: 700;">📚 YOUR TRAVEL VOCABULARY BANK</h3>
+                <div class="vocab-grid" id="vocab-bank-container"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==========================================================================
+       JAVASCRIPT LOGIC
+       ========================================================================== -->
+    <script>
+        const __PRACTISE_LESSON_ID = 'travel';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        /* ==========================================================================
+           1. DATA STRUCTURES (BAND 7-8 TRAVEL VOCABULARY)
+           ========================================================================== */
+        const VOCAB_DATA = [
+            {
+                id: "v1",
+                phrase: "get away from it all",
+                meaning: "escape routine, stress, and everyday life to relax completely",
+                example: "I usually book a mountain cabin once a year just to get away from it all and recharge.",
+                alternative: "take a relaxing break / escape everyday life"
+            },
+            {
+                id: "v2",
+                phrase: "have a change of scenery",
+                meaning: "move to a different environment to feel refreshed",
+                example: "After working from home for months, I really needed to have a change of scenery.",
+                alternative: "experience a new environment"
+            },
+            {
+                id: "v3",
+                phrase: "explore a new destination",
+                meaning: "travel to and discover an unfamiliar place",
+                example: "Instead of returning to the same resort, we decided to explore a new destination in South America.",
+                alternative: "visit a new place"
+            },
+            {
+                id: "v4",
+                phrase: "broaden my horizons",
+                meaning: "gain new experiences and expand understanding of the world",
+                example: "Travelling abroad has really helped broaden my horizons and made me more open-minded.",
+                alternative: "expand my perspectives"
+            },
+            {
+                id: "v5",
+                phrase: "immerse myself in the local culture",
+                meaning: "fully involve oneself in the customs, lifestyle, and traditions of a place",
+                example: "When I visit a foreign country, I try to stay with local families so I can immerse myself in the local culture.",
+                alternative: "experience the culture deeply"
+            },
+            {
+                id: "v6",
+                phrase: "experience local cuisine",
+                meaning: "try traditional food and dishes specific to the region",
+                example: "One of the best parts of travelling in Italy is getting to experience authentic local cuisine.",
+                alternative: "try regional food"
+            },
+            {
+                id: "v7",
+                phrase: "plan an itinerary",
+                meaning: "organize a detailed list or schedule of travel activities and places to visit",
+                example: "My sister meticulously planned an itinerary so we didn't waste any time during our trip.",
+                alternative: "make a travel plan"
+            },
+            {
+                id: "v8",
+                phrase: "travel light",
+                meaning: "pack very few belongings or luggage when travelling",
+                example: "I always prefer to travel light with just a small backpack so I can move around easily.",
+                alternative: "pack minimally"
+            },
+            {
+                id: "v9",
+                phrase: "travel on a budget",
+                meaning: "travel while carefully limiting expenses and spending minimal money",
+                example: "When I was a university student, I had to travel on a budget and stay in cheap hostels.",
+                alternative: "travel cheaply / economically"
+            },
+            {
+                id: "v10",
+                phrase: "avoid tourist traps",
+                meaning: "steer clear of overcrowded, overpriced places designed primarily to make money from tourists",
+                example: "We asked local residents for restaurant recommendations to avoid obvious tourist traps.",
+                alternative: "stay away from overpriced tourist spots"
+            },
+            {
+                id: "v11",
+                phrase: "travel off the beaten track",
+                meaning: "visit quiet, secluded, or remote places that tourist crowds usually do not visit",
+                example: "I prefer to travel off the beaten track because you discover more genuine cultural spots.",
+                alternative: "visit non-touristy areas"
+            },
+            {
+                id: "v12",
+                phrase: "deal with travel disruptions",
+                meaning: "handle unexpected problems like flight delays, cancellations, or lost baggage",
+                example: "Flight cancellations can be frustrating, but learning how to deal with travel disruptions calm is essential.",
+                alternative: "manage travel delays/issues"
+            },
+            {
+                id: "v13",
+                phrase: "contribute to the local economy",
+                meaning: "spend money directly at independent local businesses to benefit the resident community",
+                example: "Buying handmade souvenirs directly from local artisans helps contribute to the local economy.",
+                alternative: "support small local businesses"
+            },
+            {
+                id: "v14",
+                phrase: "put pressure on local infrastructure",
+                meaning: "overburden public transportation, roads, waste management, and local resources due to heavy tourism",
+                example: "During peak season, mass tourism can put heavy pressure on local infrastructure and water supplies.",
+                alternative: "strain local public facilities"
+            },
+            {
+                id: "v15",
+                phrase: "preserve local traditions",
+                meaning: "keep historic customs, crafts, and cultural practices alive despite modern influences",
+                example: "Sustainable tourism plays a key role in helping indigenous communities preserve local traditions.",
+                alternative: "protect cultural heritage"
+            }
+        ];
+
+        // Module 3: MCQ Quiz Questions
+        const MODULE_3_QUESTIONS = [
+            {
+                question: "If someone expresses a strong desire to 'get away from it all', what do they most likely want to do?",
+                options: [
+                    "Visit a bustling, commercial street in a capital city",
+                    "Escape their stressful daily routine to a quiet environment",
+                    "Book a packed travel schedule with back-to-back excursions",
+                    "Stay in an airport hotel during a short business layover"
+                ],
+                answer: 1,
+                explanation: "'Get away from it all' means escaping routine, work pressure, and stress to rest and recharge completely."
+            },
+            {
+                question: "Which of the following represents the most natural Band 7-8 collocation?",
+                options: [
+                    "Enlarge my horizons up",
+                    "Widen my perspectives bigger",
+                    "Broaden my horizons",
+                    "Extend my cultural reach out"
+                ],
+                answer: 2,
+                explanation: "'Broaden my horizons' is a natural, highly idiomatic collocation frequently rewarded in IELTS Speaking criterion for Lexical Resource."
+            },
+            {
+                question: "I rarely stay in five-star luxury resorts because I usually prefer to ______.",
+                options: [
+                    "travel on a budget",
+                    "travel on an economy",
+                    "travel with cheapness",
+                    "travel by mini-price"
+                ],
+                answer: 0,
+                explanation: "'Travel on a budget' is the standard, natural expression for spending money carefully while travelling."
+            },
+            {
+                question: "To experience genuine culture and avoid paying exorbitant prices, smart travellers usually try to ______.",
+                options: [
+                    "seek out tourist traps",
+                    "avoid tourist traps",
+                    "run into tourist traps",
+                    "build tourist traps"
+                ],
+                answer: 1,
+                explanation: "'Tourist traps' are overpriced places targeted at tourists. Good travellers seek to 'avoid' them."
+            },
+            {
+                question: "Which sentence sounds most natural in an IELTS Speaking Part 2 description of a memorable trip?",
+                options: [
+                    "We decided to travel off the beaten track to explore hidden coastal villages.",
+                    "We travelled off the beaten pathing to see unseen locations.",
+                    "We made travel outside the beaten road to get away from crowd.",
+                    "We went off the beaten highway for experiencing nature."
+                ],
+                answer: 0,
+                explanation: "'Travel off the beaten track' is the correct fixed idiom."
+            },
+            {
+                question: "Mass tourism during summer holiday months can severely ______ in historic coastal towns.",
+                options: [
+                    "put pressure on local infrastructure",
+                    "press heavy on local buildings",
+                    "make pressure with local transport",
+                    "push local infrastructure down"
+                ],
+                answer: 0,
+                explanation: "'Put pressure on local infrastructure' is an advanced, flexible phrase ideal for IELTS Speaking Part 3 discussion."
+            },
+            {
+                question: "If you carry only a tiny backpack for a two-week vacation, you prefer to ______.",
+                options: [
+                    "travel lightweightly",
+                    "travel light",
+                    "travel with easy luggage",
+                    "pack lightly baggage"
+                ],
+                answer: 1,
+                explanation: "'Travel light' is a common and natural idiomatic expression meaning to travel with minimal luggage."
+            },
+            {
+                question: "Instead of choosing chain restaurants, eating at local family eateries helps ______.",
+                options: [
+                    "contribute to the local economy",
+                    "donate money into local finances",
+                    "add economy to local shops",
+                    "make profit for regional budget"
+                ],
+                answer: 0,
+                explanation: "'Contribute to the local economy' is a accurate Band 8 formal/semi-formal collocation."
+            }
+        ];
+
+        // Module 4: Reading Passages & T/F/NG
+        const MODULE_4_DATA = [
+            {
+                title: "TEXT 1 — TRAVELLING FOR A CHANGE OF SCENERY",
+                passage: "In today's fast-paced world, many professionals find themselves trapped in rigid daily routines. Consequently, taking time off to get away from it all has become essential for mental well-being. Even a short break over a weekend allows individuals to have a change of scenery and clear their minds. When people explore a new destination, they are exposed to fresh perspectives that can broaden their horizons. Furthermore, these brief escapes provide opportunities to create unforgettable memories with family and friends that last long after returning to work.",
+                questions: [
+                    {
+                        statement: "Taking short weekend breaks can help clear a person's mind.",
+                        answer: "TRUE",
+                        explanation: "The text explicitly states: 'Even a short break over a weekend allows individuals to have a change of scenery and clear their minds.'"
+                    },
+                    {
+                        statement: "Exploring new destinations guarantees career promotion upon returning.",
+                        answer: "FALSE",
+                        explanation: "The text mentions broadening horizons and mental well-being, but contradicts any claim about career promotion."
+                    },
+                    {
+                        statement: "Most professionals prefer beach resorts over mountain retreats for weekend trips.",
+                        answer: "NOT GIVEN",
+                        explanation: "The text mentions taking breaks and exploring new destinations, but never compares beach resorts to mountain retreats."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 2 — BUDGET & INDEPENDENT TRAVEL",
+                passage: "Travelling does not necessarily require a fortune. Millions of young adults choose to travel on a budget by carefully planning an itinerary in advance. To keep costs low, experienced travellers prefer to travel light, avoiding extra airline fees for heavy baggage. When arriving in a new city, relying on public transport rather than expensive taxis is an efficient way to get around the city while keeping expenses manageable. Staying in budget-friendly hostels also enables travellers to stretch their funds over longer journeys.",
+                questions: [
+                    {
+                        statement: "Planning an itinerary in advance can help travellers manage expenses.",
+                        answer: "TRUE",
+                        explanation: "The passage notes millions choose to travel on a budget by 'carefully planning an itinerary in advance.'"
+                    },
+                    {
+                        statement: "Public transport is described as an expensive option for getting around cities.",
+                        answer: "FALSE",
+                        explanation: "The passage directly contradicts this, describing public transport as an efficient way to keep expenses manageable compared to taxis."
+                    },
+                    {
+                        statement: "All hostels offer free breakfast to travellers who book early.",
+                        answer: "NOT GIVEN",
+                        explanation: "Hostels are mentioned as budget-friendly, but breakfast policies are not mentioned."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 3 — SUSTAINABLE TOURISM & COMMUNITIES",
+                passage: "While tourism brings valuable income to regional destinations, irresponsible travel habits can damage local ecosystems. Responsible travellers consciously avoid tourist traps that exploit local resources for profit. Instead, they choose to travel off the beaten track to support local businesses in lesser-known communities. By spending money at family-run markets and restaurants, tourists contribute to the local economy directly. Furthermore, respectful interaction with residents helps preserve local traditions and fosters cultural exchange.",
+                questions: [
+                    {
+                        statement: "Buying from family-run markets directly benefits the economy of local communities.",
+                        answer: "TRUE",
+                        explanation: "The text states that spending at family-run markets allows tourists to 'contribute to the local economy directly.'"
+                    },
+                    {
+                        statement: "Visiting famous tourist traps is recommended as the best way to preserve traditions.",
+                        answer: "FALSE",
+                        explanation: "The text advises travellers to 'avoid tourist traps' and states that respectful interaction in lesser-known spots preserves traditions."
+                    },
+                    {
+                        statement: "Governments should pass strict laws to limit the total number of foreign tourists.",
+                        answer: "NOT GIVEN",
+                        explanation: "Government legislation and tourist quotas are not discussed in the text."
+                    }
+                ]
+            }
+        ];
+
+        // Module 5: Boss Questions
+        const BOSS_TASK1_QUESTIONS = [
+            {
+                question: "During peak holiday seasons, historic European cities frequently experience overtourism, which can severely ______.",
+                options: [
+                    "put pressure on local infrastructure",
+                    "broaden local horizons out",
+                    "travel light for residents",
+                    "deal with flight disruptions"
+                ],
+                answer: 0,
+                explanation: "Overtourism overwhelms roads, public transport, and utilities, which is accurately described as putting pressure on local infrastructure."
+            },
+            {
+                question: "Instead of dining in crowded restaurants right next to famous monuments, we chose to ______ to find authentic, family-run eateries.",
+                options: [
+                    "travel off the beaten track",
+                    "plan an itinerary up",
+                    "take a travel trap",
+                    "get stuck in traffic light"
+                ],
+                answer: 0,
+                explanation: "'Travel off the beaten track' means venturing away from crowded tourist areas into authentic spots."
+            },
+            {
+                question: "When our flight was unexpectedly cancelled due to stormy weather, the airline staff helped us ______ as smoothly as possible.",
+                options: [
+                    "deal with travel disruptions",
+                    "immerse in infrastructure",
+                    "avoid budget transport",
+                    "preserve local cuisine"
+                ],
+                answer: 0,
+                explanation: "'Deal with travel disruptions' is the standard high-level phrase for handling flight delays or cancellations."
+            },
+            {
+                question: "Homestays give travellers a rare opportunity to ______ and experience daily life alongside local families.",
+                options: [
+                    "immerse themselves in the local culture",
+                    "get away from the local traditions",
+                    "put pressure on local businesses",
+                    "travel on an economy trip"
+                ],
+                answer: 0,
+                explanation: "'Immerse oneself in the local culture' means deep cultural integration."
+            },
+            {
+                question: "Which response demonstrates the most natural lexical flow for IELTS Speaking Part 3?",
+                options: [
+                    "International travel allows people to broaden their horizons and gain fresh perspectives.",
+                    "International travel makes people enlarge their world horizons vastly and bigly.",
+                    "International travel extends horizon borders for all human perspectives.",
+                    "International travel grows geography mind in simple horizons."
+                ],
+                answer: 0,
+                explanation: "Option A uses natural collocations ('broaden their horizons', 'gain fresh perspectives') flawlessly."
+            }
+        ];
+
+        const BOSS_READING_TEXT = "The modern travel landscape has undergone a dramatic transformation due to social media and digital platforms. Previously, tourists relied on standardized travel agencies and group tours. Today, an increasing number of independent travellers prefer to plan an itinerary online, tailoring every detail to their personal interests. While this freedom allows individuals to travel off the beaten track and discover quiet villages, social media geotagging has paradoxically created new 'viral' tourist traps. Once a tranquil spot is shared widely online, thousands of visitors flood the area, which can put immense pressure on local infrastructure and disturb local residents. On the positive side, conscious travellers who spend money at independent guesthouses and local markets contribute directly to the local economy, ensuring that tourism revenue benefits small communities rather than multi-national corporations. Furthermore, authentic cultural exchanges encourage younger generations to preserve local traditions that might otherwise fade away.";
+
+        const BOSS_TASK2_QUESTIONS = [
+            {
+                statement: "Social media has completely eliminated overpriced tourist traps across the globe.",
+                answer: "FALSE",
+                explanation: "The text explicitly states that social media geotagging has 'paradoxically created new viral tourist traps.'"
+            },
+            {
+                statement: "Modern independent travellers can customize their trips using digital tools.",
+                answer: "TRUE",
+                explanation: "The passage notes that travellers 'plan an itinerary online, tailoring every detail to their personal interests.'"
+            },
+            {
+                statement: "Spending money at local guesthouses ensures profits go to multinational hotel chains.",
+                answer: "FALSE",
+                explanation: "The text states local spending benefits small communities 'rather than multi-national corporations.'"
+            },
+            {
+                statement: "Disturbed residents in viral locations have started petitioning governments to ban social media.",
+                answer: "NOT GIVEN",
+                explanation: "While the text mentions residents are disturbed, government petitions or social media bans are never mentioned."
+            },
+            {
+                statement: "Authentic cultural exchanges can motivate younger generations to maintain historic traditions.",
+                answer: "TRUE",
+                explanation: "The text concludes that authentic exchanges 'encourage younger generations to preserve local traditions.'"
+            }
+        ];
+
+        const BADGES_LIST = [
+            { id: "b1", icon: "🐾", name: "First Step", desc: "Completed Vocabulary Flashcards" },
+            { id: "b2", icon: "🏅", name: "Perfect Match", desc: "Matched vocabulary with zero errors" },
+            { id: "b3", icon: "🎯", name: "Sharp Speaker", desc: "Scored 100% in MCQ Quiz" },
+            { id: "b4", icon: "📖", name: "Careful Reader", desc: "Scored 100% in Reading Modules" },
+            { id: "b5", icon: "⚔️", name: "Boss Slayer", desc: "Defeated the Final Boss Challenge" },
+            { id: "b6", icon: "👑", name: "Travel Master", desc: "Mastered the entire Travel Masterclass" }
+        ];
+
+        /* ==========================================================================
+           2. APP STATE & LOCALSTORAGE
+           ========================================================================== */
+        let state = {
+            username: "",
+            theme: "midnight",
+            xp: 0,
+            level: "Beginner",
+            currentFlashcardIdx: 0,
+            flashcardsRevealed: new Set(),
+            flashcardsCompleted: false,
+            matchScore: 0,
+            matchMistakes: 0,
+            matchCompleted: false,
+            m3Scores: {},
+            m3Completed: false,
+            m4Scores: {},
+            m4Completed: false,
+            bossTask1Scores: {},
+            bossTask2Scores: {},
+            bossCompleted: false,
+            badges: [],
+            overallCompleted: false
+        };
+
+        function loadState() {
+            const saved = localStorage.getItem(__vocabKey("ielts_travel_app_state"));
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = { ...state, ...parsed };
+                    if (parsed.flashcardsRevealed) {
+                        state.flashcardsRevealed = new Set(parsed.flashcardsRevealed);
+                    }
+                } catch(e) {
+                    console.error("Failed to load saved state", e);
+                }
+            }
+        }
+
+        function saveState() {
+            const toSave = {
+                ...state,
+                flashcardsRevealed: Array.from(state.flashcardsRevealed)
+            };
+            localStorage.setItem(__vocabKey("ielts_travel_app_state"), JSON.stringify(toSave));
+            updateUIHeader();
+        }
+
+        /* ==========================================================================
+           3. XP & LEVEL LOGIC
+           ========================================================================== */
+        function addXP(amount) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            state.xp += pts;
+            calculateLevel();
+            saveState();
+            __notifyPractiseParentXP(pts, state.xp);
+        }
+
+        function calculateLevel() {
+            const xp = state.xp;
+            let oldLevel = state.level;
+            if (xp < 200) state.level = "Beginner";
+            else if (xp < 400) state.level = "Learner";
+            else if (xp < 600) state.level = "Confident Speaker";
+            else state.level = "Vocabulary Master";
+
+            if (oldLevel !== state.level) {
+                // Celebration trigger for level up
+                triggerConfetti(30);
+            }
+        }
+
+        function unlockBadge(badgeId) {
+            if (!state.badges.includes(badgeId)) {
+                state.badges.push(badgeId);
+                saveState();
+                triggerConfetti(25);
+            }
+        }
+
+        function updateUIHeader() {
+            document.getElementById("nav-xp").textContent = `${state.xp} XP`;
+            document.getElementById("nav-level").textContent = state.level;
+            document.getElementById("nav-username").textContent = state.username || "Guest";
+            document.documentElement.setAttribute("data-theme", state.theme);
+            document.getElementById("theme-select").value = state.theme;
+        }
+
+        /* ==========================================================================
+           4. SCREEN NAVIGATION
+           ========================================================================== */
+        function showScreen(screenId) {
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add("active");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+
+        /* ==========================================================================
+           5. CONFETTI SYSTEM (PURE JS + CSS CANVAS)
+           ========================================================================== */
+        const canvas = document.getElementById("confetti-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+        let animId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        function triggerConfetti(count = 50) {
+            createParticles(count);
+        }
+
+        function triggerBossConfetti() {
+            createParticles(120, true);
+        }
+
+        function triggerFinalConfetti() {
+            createParticles(200, true);
+        }
+
+        function createParticles(count, heavy = false) {
+            const colors = ["#fbbf24", "#d97706", "#10b981", "#3b82f6", "#ec4899", "#ffffff"];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: -20 - Math.random() * 50,
+                    r: Math.random() * 6 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: Math.random() * 4 + (heavy ? 3 : 2),
+                    tilt: Math.random() * 10,
+                    tiltAngle: Math.random() * 0.1,
+                    tiltAngleInc: Math.random() * 0.07 + 0.05,
+                    opacity: 1
+                });
+            }
+            if (!animId) renderConfetti();
+        }
+
+        function renderConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.tiltAngle += p.tiltAngleInc;
+                p.y += p.vy;
+                p.x += p.vx;
+                p.tilt = Math.sin(p.tiltAngle) * 15;
+
+                if (p.y > canvas.height) p.opacity -= 0.02;
+
+                ctx.beginPath();
+                ctx.lineWidth = p.r;
+                ctx.strokeStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.opacity);
+                ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                ctx.stroke();
+
+                if (p.opacity <= 0 || p.y > canvas.height + 50) {
+                    particles.splice(index, 1);
+                }
+            });
+
+            if (particles.length > 0) {
+                animId = requestAnimationFrame(renderConfetti);
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                animId = null;
+            }
+        }
+
+        /* ==========================================================================
+           6. MODULE 1 LOGIC (LEARN / FLASHCARDS)
+           ========================================================================== */
+        function initModule1() {
+            const card = document.getElementById("flashcard");
+            card.classList.remove("flipped");
+
+            updateFlashcardUI();
+
+            document.getElementById("flashcard-box").onclick = () => {
+                card.classList.toggle("flipped");
+                const currentVocab = VOCAB_DATA[state.currentFlashcardIdx];
+                state.flashcardsRevealed.add(currentVocab.id);
+                
+                if (state.flashcardsRevealed.size === VOCAB_DATA.length && !state.flashcardsCompleted) {
+                    state.flashcardsCompleted = true;
+                    addXP(100);
+                    unlockBadge("b1");
+                    triggerConfetti(60);
+                }
+                saveState();
+            };
+
+            document.getElementById("fc-next").onclick = (e) => {
+                e.stopPropagation();
+                card.classList.remove("flipped");
+                setTimeout(() => {
+                    if (state.currentFlashcardIdx < VOCAB_DATA.length - 1) {
+                        state.currentFlashcardIdx++;
+                        updateFlashcardUI();
+                    } else {
+                        // Module 1 Complete -> Navigate to Module 2
+                        showScreen("screen-module-2");
+                        initModule2();
+                    }
+                }, 150);
+            };
+
+            document.getElementById("fc-prev").onclick = (e) => {
+                e.stopPropagation();
+                card.classList.remove("flipped");
+                setTimeout(() => {
+                    if (state.currentFlashcardIdx > 0) {
+                        state.currentFlashcardIdx--;
+                        updateFlashcardUI();
+                    }
+                }, 150);
+            };
+
+            document.getElementById("audio-btn").onclick = (e) => {
+                e.stopPropagation();
+                speakWord(VOCAB_DATA[state.currentFlashcardIdx].phrase);
+            };
+        }
+
+        function updateFlashcardUI() {
+            const item = VOCAB_DATA[state.currentFlashcardIdx];
+            document.getElementById("fc-front-title").textContent = item.phrase;
+            document.getElementById("fc-meaning").textContent = item.meaning;
+            document.getElementById("fc-example").textContent = `"${item.example}"`;
+            document.getElementById("fc-alt").textContent = item.alternative;
+
+            document.getElementById("fc-counter").textContent = `Card ${state.currentFlashcardIdx + 1} / ${VOCAB_DATA.length}`;
+            document.getElementById("fc-prev").disabled = state.currentFlashcardIdx === 0;
+
+            const progressPct = ((state.currentFlashcardIdx + 1) / VOCAB_DATA.length) * 100;
+            document.getElementById("m1-progress").style.width = `${progressPct}%`;
+        }
+
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(text);
+                msg.rate = 0.9;
+                msg.lang = 'en-US';
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        /* ==========================================================================
+           7. MODULE 2 LOGIC (MATCHING)
+           ========================================================================== */
+        let matchSelectedExpr = null;
+        let matchSelectedMean = null;
+        let matchedPairsCount = 0;
+
+        function initModule2() {
+            const exprCol = document.getElementById("match-col-expressions");
+            const meanCol = document.getElementById("match-col-meanings");
+            exprCol.innerHTML = "";
+            meanCol.innerHTML = "";
+
+            // Pick 8 expressions for matching game
+            const selectedItems = VOCAB_DATA.slice(0, 8);
+            matchedPairsCount = 0;
+            state.matchMistakes = 0;
+            document.getElementById("match-score").textContent = "0";
+            document.getElementById("match-mistakes").textContent = "0";
+            document.getElementById("m2-continue").style.display = "none";
+
+            // Shuffle meanings
+            const shuffledMeanings = [...selectedItems].sort(() => Math.random() - 0.5);
+
+            selectedItems.forEach(item => {
+                const btn = document.createElement("div");
+                btn.className = "match-card";
+                btn.dataset.id = item.id;
+                btn.textContent = item.phrase;
+                btn.onclick = () => selectExprCard(btn);
+                exprCol.appendChild(btn);
+            });
+
+            shuffledMeanings.forEach(item => {
+                const btn = document.createElement("div");
+                btn.className = "match-card";
+                btn.dataset.id = item.id;
+                btn.textContent = item.meaning;
+                btn.onclick = () => selectMeanCard(btn);
+                meanCol.appendChild(btn);
+            });
+        }
+
+        function selectExprCard(card) {
+            if (card.classList.contains("matched")) return;
+            document.querySelectorAll("#match-col-expressions .match-card").forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            matchSelectedExpr = card;
+            checkMatch();
+        }
+
+        function selectMeanCard(card) {
+            if (card.classList.contains("matched")) return;
+            document.querySelectorAll("#match-col-meanings .match-card").forEach(c => c.classList.remove("selected"));
+            card.classList.add("selected");
+            matchSelectedMean = card;
+            checkMatch();
+        }
+
+        function checkMatch() {
+            if (matchSelectedExpr && matchSelectedMean) {
+                const id1 = matchSelectedExpr.dataset.id;
+                const id2 = matchSelectedMean.dataset.id;
+
+                if (id1 === id2) {
+                    // Correct Match
+                    matchSelectedExpr.classList.remove("selected");
+                    matchSelectedMean.classList.remove("selected");
+                    matchSelectedExpr.classList.add("matched");
+                    matchSelectedMean.classList.add("matched");
+                    matchedPairsCount++;
+
+                    document.getElementById("match-score").textContent = matchedPairsCount;
+                    matchSelectedExpr = null;
+                    matchSelectedMean = null;
+
+                    if (matchedPairsCount === 8) {
+                        // Complete Module 2
+                        if (!state.matchCompleted) {
+                            state.matchCompleted = true;
+                            addXP(150);
+                            if (state.matchMistakes === 0) {
+                                unlockBadge("b2");
+                            }
+                            triggerConfetti(50);
+                        }
+                        document.getElementById("m2-continue").style.display = "inline-flex";
+                    }
+                } else {
+                    // Wrong match
+                    state.matchMistakes++;
+                    document.getElementById("match-mistakes").textContent = state.matchMistakes;
+
+                    const c1 = matchSelectedExpr;
+                    const c2 = matchSelectedMean;
+                    c1.classList.add("shake");
+                    c2.classList.add("shake");
+
+                    setTimeout(() => {
+                        c1.classList.remove("shake", "selected");
+                        c2.classList.remove("shake", "selected");
+                    }, 400);
+
+                    matchSelectedExpr = null;
+                    matchSelectedMean = null;
+                }
+            }
+        }
+
+        document.getElementById("m2-continue").onclick = () => {
+            showScreen("screen-module-3");
+            initModule3();
+        };
+
+        /* ==========================================================================
+           8. MODULE 3 LOGIC (CHOOSE MCQ)
+           ========================================================================== */
+        function initModule3() {
+            const container = document.getElementById("m3-quiz-container");
+            container.innerHTML = "";
+
+            MODULE_3_QUESTIONS.forEach((q, qIdx) => {
+                const card = document.createElement("div");
+                card.className = "glass-card quiz-card";
+
+                let optionsHTML = q.options.map((opt, oIdx) => `
+                    <button class="option-btn" data-q="${qIdx}" data-o="${oIdx}">
+                        <div class="option-indicator">${String.fromCharCode(65 + oIdx)}</div>
+                        <div>${opt}</div>
+                    </button>
+                `).join("");
+
+                card.innerHTML = `
+                    <div class="quiz-question">${qIdx + 1}. ${q.question}</div>
+                    <div class="options-list">${optionsHTML}</div>
+                    <div class="explanation-box" id="m3-exp-${qIdx}">
+                        <strong>${q.explanation}</strong>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Event Listeners for MCQ options
+            container.querySelectorAll(".option-btn").forEach(btn => {
+                btn.onclick = () => {
+                    const qIdx = parseInt(btn.dataset.q);
+                    const oIdx = parseInt(btn.dataset.o);
+                    handleM3Answer(qIdx, oIdx);
+                };
+            });
+
+            checkM3Completion();
+        }
+
+        function handleM3Answer(qIdx, selectedIdx) {
+            if (state.m3Scores[qIdx] !== undefined) return; // already answered
+
+            const qData = MODULE_3_QUESTIONS[qIdx];
+            const isCorrect = selectedIdx === qData.answer;
+            state.m3Scores[qIdx] = isCorrect;
+
+            const qCards = document.querySelectorAll("#m3-quiz-container .quiz-card")[qIdx];
+            const buttons = qCards.querySelectorAll(".option-btn");
+
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === qData.answer) {
+                    btn.classList.add("correct");
+                } else if (idx === selectedIdx) {
+                    btn.classList.add("wrong");
+                }
+            });
+
+            const expBox = document.getElementById(`m3-exp-${qIdx}`);
+            expBox.classList.add("active");
+
+            if (isCorrect) {
+                addXP(20);
+            }
+
+            saveState();
+            checkM3Completion();
+        }
+
+        function checkM3Completion() {
+            const total = MODULE_3_QUESTIONS.length;
+            const answered = Object.keys(state.m3Scores).length;
+
+            if (answered === total) {
+                if (!state.m3Completed) {
+                    state.m3Completed = true;
+                    const correctCount = Object.values(state.m3Scores).filter(Boolean).length;
+                    if (correctCount === total) {
+                        unlockBadge("b3");
+                    }
+                    triggerConfetti(40);
+                }
+                document.getElementById("m3-continue").style.display = "inline-flex";
+            }
+        }
+
+        document.getElementById("m3-continue").onclick = () => {
+            showScreen("screen-module-4");
+            initModule4();
+        };
+
+        /* ==========================================================================
+           9. MODULE 4 LOGIC (READ & DECIDE)
+           ========================================================================== */
+        function initModule4() {
+            const container = document.getElementById("m4-texts-container");
+            container.innerHTML = "";
+
+            let globalQIndex = 0;
+
+            MODULE_4_DATA.forEach((textBlock, tIdx) => {
+                const card = document.createElement("div");
+                card.className = "glass-card";
+
+                let questionsHTML = textBlock.questions.map((q) => {
+                    const currentQIdx = globalQIndex++;
+                    return `
+                        <div class="statement-card">
+                            <div class="statement-text">Q${currentQIdx + 1}: ${q.statement}</div>
+                            <div class="tfng-buttons" data-q="${currentQIdx}" data-ans="${q.answer}" data-exp="${encodeURIComponent(q.explanation)}">
+                                <button class="tfng-btn" data-val="TRUE">TRUE</button>
+                                <button class="tfng-btn" data-val="FALSE">FALSE</button>
+                                <button class="tfng-btn" data-val="NOT GIVEN">NOT GIVEN</button>
+                            </div>
+                            <div class="explanation-box" id="m4-exp-${currentQIdx}"></div>
+                        </div>
+                    `;
+                }).join("");
+
+                card.innerHTML = `
+                    <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">${textBlock.title}</h3>
+                    <div class="reading-passage">${textBlock.passage}</div>
+                    <div>${questionsHTML}</div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Add Event Listeners
+            container.querySelectorAll(".tfng-buttons").forEach(group => {
+                const qIdx = parseInt(group.dataset.q);
+                const correctAns = group.dataset.ans;
+                const explanation = decodeURIComponent(group.dataset.exp);
+
+                group.querySelectorAll(".tfng-btn").forEach(btn => {
+                    btn.onclick = () => {
+                        const val = btn.dataset.val;
+                        handleM4Answer(qIdx, val, correctAns, explanation, group);
+                    };
+                });
+            });
+
+            checkM4Completion();
+        }
+
+        function handleM4Answer(qIdx, userAns, correctAns, explanation, groupElem) {
+            if (state.m4Scores[qIdx] !== undefined) return;
+
+            const isCorrect = userAns === correctAns;
+            state.m4Scores[qIdx] = isCorrect;
+
+            groupElem.querySelectorAll(".tfng-btn").forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.val === correctAns) {
+                    btn.style.background = "var(--success)";
+                    btn.style.color = "#000";
+                    btn.style.borderColor = "var(--success)";
+                } else if (btn.dataset.val === userAns) {
+                    btn.style.background = "var(--error)";
+                    btn.style.color = "#fff";
+                    btn.style.borderColor = "var(--error)";
+                }
+            });
+
+            const expBox = document.getElementById(`m4-exp-${qIdx}`);
+            expBox.innerHTML = `<strong>${isCorrect ? '✓ Correct!' : '✗ Incorrect!'}</strong> ${explanation}`;
+            expBox.classList.add("active");
+
+            if (isCorrect) {
+                addXP(30);
+            }
+
+            saveState();
+            checkM4Completion();
+        }
+
+        function checkM4Completion() {
+            const totalQ = MODULE_4_DATA.reduce((acc, t) => acc + t.questions.length, 0);
+            const answered = Object.keys(state.m4Scores).length;
+
+            if (answered === totalQ) {
+                if (!state.m4Completed) {
+                    state.m4Completed = true;
+                    const correctCount = Object.values(state.m4Scores).filter(Boolean).length;
+                    if (correctCount === totalQ) {
+                        unlockBadge("b4");
+                    }
+                    triggerConfetti(50);
+                }
+                document.getElementById("m4-continue").style.display = "inline-flex";
+            }
+        }
+
+        document.getElementById("m4-continue").onclick = () => {
+            showScreen("screen-module-5");
+            initModule5();
+        };
+
+        /* ==========================================================================
+           10. MODULE 5 LOGIC (FINAL BOSS)
+           ========================================================================== */
+        function initModule5() {
+            // Task 1: Context Questions
+            const t1Container = document.getElementById("boss-task1-container");
+            t1Container.innerHTML = "";
+
+            BOSS_TASK1_QUESTIONS.forEach((q, qIdx) => {
+                const card = document.createElement("div");
+                card.className = "quiz-card";
+
+                let optionsHTML = q.options.map((opt, oIdx) => `
+                    <button class="option-btn" data-q="${qIdx}" data-o="${oIdx}">
+                        <div class="option-indicator">${String.fromCharCode(65 + oIdx)}</div>
+                        <div>${opt}</div>
+                    </button>
+                `).join("");
+
+                card.innerHTML = `
+                    <div class="quiz-question">${qIdx + 1}. ${q.question}</div>
+                    <div class="options-list">${optionsHTML}</div>
+                    <div class="explanation-box" id="boss-t1-exp-${qIdx}">
+                        <strong>${q.explanation}</strong>
+                    </div>
+                `;
+                t1Container.appendChild(card);
+            });
+
+            t1Container.querySelectorAll(".option-btn").forEach(btn => {
+                btn.onclick = () => {
+                    const qIdx = parseInt(btn.dataset.q);
+                    const oIdx = parseInt(btn.dataset.o);
+                    handleBossTask1Answer(qIdx, oIdx);
+                };
+            });
+
+            // Task 2: Reading
+            document.getElementById("boss-reading-passage").textContent = BOSS_READING_TEXT;
+
+            const t2Container = document.getElementById("boss-task2-container");
+            t2Container.innerHTML = "";
+
+            BOSS_TASK2_QUESTIONS.forEach((q, qIdx) => {
+                const card = document.createElement("div");
+                card.className = "statement-card";
+                card.innerHTML = `
+                    <div class="statement-text">Q${qIdx + 1}: ${q.statement}</div>
+                    <div class="tfng-buttons" data-q="${qIdx}" data-ans="${q.answer}" data-exp="${encodeURIComponent(q.explanation)}">
+                        <button class="tfng-btn" data-val="TRUE">TRUE</button>
+                        <button class="tfng-btn" data-val="FALSE">FALSE</button>
+                        <button class="tfng-btn" data-val="NOT GIVEN">NOT GIVEN</button>
+                    </div>
+                    <div class="explanation-box" id="boss-t2-exp-${qIdx}"></div>
+                `;
+                t2Container.appendChild(card);
+            });
+
+            t2Container.querySelectorAll(".tfng-buttons").forEach(group => {
+                const qIdx = parseInt(group.dataset.q);
+                const correctAns = group.dataset.ans;
+                const explanation = decodeURIComponent(group.dataset.exp);
+
+                group.querySelectorAll(".tfng-btn").forEach(btn => {
+                    btn.onclick = () => {
+                        const val = btn.dataset.val;
+                        handleBossTask2Answer(qIdx, val, correctAns, explanation, group);
+                    };
+                });
+            });
+
+            checkBossCompletion();
+        }
+
+        function handleBossTask1Answer(qIdx, selectedIdx) {
+            if (state.bossTask1Scores[qIdx] !== undefined) return;
+
+            const qData = BOSS_TASK1_QUESTIONS[qIdx];
+            const isCorrect = selectedIdx === qData.answer;
+            state.bossTask1Scores[qIdx] = isCorrect;
+
+            const qCard = document.querySelectorAll("#boss-task1-container .quiz-card")[qIdx];
+            qCard.querySelectorAll(".option-btn").forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === qData.answer) btn.classList.add("correct");
+                else if (idx === selectedIdx) btn.classList.add("wrong");
+            });
+
+            document.getElementById(`boss-t1-exp-${qIdx}`).classList.add("active");
+
+            if (isCorrect) addXP(40);
+            saveState();
+            checkBossCompletion();
+        }
+
+        function handleBossTask2Answer(qIdx, userAns, correctAns, explanation, groupElem) {
+            if (state.bossTask2Scores[qIdx] !== undefined) return;
+
+            const isCorrect = userAns === correctAns;
+            state.bossTask2Scores[qIdx] = isCorrect;
+
+            groupElem.querySelectorAll(".tfng-btn").forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.val === correctAns) {
+                    btn.style.background = "var(--success)";
+                    btn.style.color = "#000";
+                } else if (btn.dataset.val === userAns) {
+                    btn.style.background = "var(--error)";
+                    btn.style.color = "#fff";
+                }
+            });
+
+            const expBox = document.getElementById(`boss-t2-exp-${qIdx}`);
+            expBox.innerHTML = `<strong>${isCorrect ? '✓ Correct!' : '✗ Incorrect!'}</strong> ${explanation}`;
+            expBox.classList.add("active");
+
+            if (isCorrect) addXP(40);
+            saveState();
+            checkBossCompletion();
+        }
+
+        function checkBossCompletion() {
+            const t1Answered = Object.keys(state.bossTask1Scores).length;
+            const t2Answered = Object.keys(state.bossTask2Scores).length;
+
+            if (t1Answered === BOSS_TASK1_QUESTIONS.length && t2Answered === BOSS_TASK2_QUESTIONS.length) {
+                if (!state.bossCompleted) {
+                    state.bossCompleted = true;
+                    addXP(100);
+                    unlockBadge("b5");
+                    unlockBadge("b6");
+                    triggerBossConfetti();
+                }
+                document.getElementById("m5-complete-btn").style.display = "inline-flex";
+            }
+        }
+
+        document.getElementById("m5-complete-btn").onclick = () => {
+            renderFinalResults();
+            showScreen("screen-result");
+            triggerFinalConfetti();
+        };
+
+        /* ==========================================================================
+           11. FINAL RESULTS & VOCAB BANK
+           ========================================================================== */
+        function renderFinalResults() {
+            document.getElementById("res-name").textContent = state.username || "Student";
+            document.getElementById("res-xp").textContent = state.xp;
+            document.getElementById("res-level").textContent = state.level;
+
+            const mcqScore = Object.values(state.m3Scores).filter(Boolean).length;
+            document.getElementById("res-mcq").textContent = `${mcqScore}/${MODULE_3_QUESTIONS.length}`;
+
+            const bossScore = Object.values(state.bossTask1Scores).filter(Boolean).length +
+                             Object.values(state.bossTask2Scores).filter(Boolean).length;
+            const bossTotal = BOSS_TASK1_QUESTIONS.length + BOSS_TASK2_QUESTIONS.length;
+            document.getElementById("res-boss").textContent = `${bossScore}/${bossTotal}`;
+
+            // Render Badges
+            const badgeBox = document.getElementById("badges-container");
+            badgeBox.innerHTML = "";
+            BADGES_LIST.forEach(b => {
+                const isUnlocked = state.badges.includes(b.id);
+                const el = document.createElement("div");
+                el.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
+                el.innerHTML = `
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-name">${b.name}</div>
+                    <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem;">${b.desc}</div>
+                `;
+                badgeBox.appendChild(el);
+            });
+
+            // Render Vocabulary Bank
+            const vocabBank = document.getElementById("vocab-bank-container");
+            vocabBank.innerHTML = "";
+            VOCAB_DATA.forEach(item => {
+                const el = document.createElement("div");
+                el.className = "vocab-item";
+                el.innerHTML = `
+                    <div class="vocab-phrase">
+                        <span>${item.phrase}</span>
+                        <button class="audio-btn" style="width:28px; height:28px; font-size:0.75rem;" onclick="speakWord('${item.phrase}')">🔊</button>
+                    </div>
+                    <div class="vocab-meaning">${item.meaning}</div>
+                `;
+                vocabBank.appendChild(el);
+            });
+        }
+
+        /* ==========================================================================
+           12. SETUP EVENT LISTENERS & INITIALIZATION
+           ========================================================================== */
+        function initApp() {
+            loadState();
+            state.username = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.username || 'Student');
+            saveState();
+            updateUIHeader();
+
+            // Theme selector listener
+            document.getElementById("theme-select").onchange = (e) => {
+                state.theme = e.target.value;
+                saveState();
+                updateUIHeader();
+            };
+
+            // Reset listener
+            document.getElementById("reset-btn").onclick = () => {
+                if (confirm("Are you sure you want to reset all progress?")) {
+                    localStorage.removeItem(__vocabKey("ielts_travel_app_state"));
+                    location.reload();
+                }
+            };
+
+            // Auto resume or start Module 1 directly without name prompt
+            if (state.bossCompleted) {
+                renderFinalResults();
+                showScreen("screen-result");
+            } else if (state.m4Completed) {
+                showScreen("screen-module-5");
+                initModule5();
+            } else if (state.m3Completed) {
+                showScreen("screen-module-4");
+                initModule4();
+            } else if (state.matchCompleted) {
+                showScreen("screen-module-3");
+                initModule3();
+            } else if (state.flashcardsCompleted) {
+                showScreen("screen-module-2");
+                initModule2();
+            } else {
+                showScreen("screen-module-1");
+                initModule1();
+            }
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flame_outer" x1="16" y1="2" x2="16" y2="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF9D00"/>
+      <stop offset="50%" stop-color="#FF6B00"/>
+      <stop offset="100%" stop-color="#FF3815"/>
+    </linearGradient>
+    <linearGradient id="flame_inner" x1="16" y1="14" x2="16" y2="26" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFF37A"/>
+      <stop offset="100%" stop-color="#FFB300"/>
+    </linearGradient>
+    <filter id="flame_glow" x="0" y="0" width="32" height="32" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#FF4B00" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <g filter="url(#flame_glow)">
+    <!-- Outer flame -->
+    <path d="M16 2.5C16 2.5 21 8 21 12.8C21 14.5 20.2 15.8 19.1 16.7C22.6 16.3 25.5 19.2 25.5 22.8C25.5 26.8 21.8 30 16 30C10.2 30 6.5 26.8 6.5 22.8C6.5 17.5 10.8 12.8 12.2 11C12.5 10.6 13.1 11.1 13.1 11.6C13.1 14 15 16 17.2 16C17.8 16 18.2 15.5 18 14.9C17.1 12.5 16 7.5 16 2.5Z" fill="url(#flame_outer)"/>
+    <!-- Inner bright flame -->
+    <path d="M16 16C17.8 16 19.5 18.2 19.5 21.2C19.5 24.2 17.8 26.5 16 26.5C14.2 26.5 12.5 24.2 12.5 21.2C12.5 18.8 14.2 16 16 16Z" fill="url(#flame_inner)"/>
+  </g>
+</svg>

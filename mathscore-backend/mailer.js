@@ -1,0 +1,230 @@
+const fs = require('fs');
+const path = require('path');
+const nodemailer = require('nodemailer');
+
+const BANNER_02_PATH = path.resolve(__dirname, '..', 'image', 'banner_02.png');
+const BANNER_CID = 'practise-banner-02@practise.uz';
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER || 'mathscore.uzbekistan@gmail.com',
+    pass: process.env.EMAIL_PASS || 'password_here'
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 45000
+});
+
+function buildBannerEmail(bodyHtml) {
+  const hasBanner = fs.existsSync(BANNER_02_PATH);
+  const attachments = hasBanner
+    ? [
+        {
+          filename: 'banner_02.png',
+          path: BANNER_02_PATH,
+          cid: BANNER_CID
+        }
+      ]
+    : [];
+
+  const html = `
+    <div style="background-color: #f8fafc; padding: 20px 12px; font-family: 'Segoe UI', Arial, sans-serif;">
+      <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06); color: #0f172a;">
+        ${hasBanner ? `
+        <div style="width: 100%; background: #0f172a; line-height: 0;">
+          <img src="cid:${BANNER_CID}" alt="Practise Platform Banner" style="display: block; width: 100%; max-width: 600px; height: auto; border: 0;" />
+        </div>
+        ` : ''}
+        <div style="padding: 26px 24px 22px;">
+          <div style="font-size: 18px; font-weight: 800; color: #4f46e5; letter-spacing: -0.02em; margin-bottom: 14px;">Practise</div>
+          ${bodyHtml}
+          <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0 14px;" />
+          <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+            Qo'shimcha savollaringiz bo'lsa: <a href="https://t.me/azizbekbro" style="color: #4f46e5; font-weight: 600; text-decoration: underline;">https://t.me/azizbekbro</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return { html, attachments };
+}
+
+const sendStudentCredentials = async (email, name, oneTimePassword, loginUrl = 'http://localhost:5173/student', options = {}) => {
+  const safeLoginUrl = String(loginUrl || 'http://localhost:5173/student').trim();
+  const cleanTariff = String(options?.tariff || 'VIP').trim().toUpperCase() === 'FREE' ? 'FREE' : 'VIP';
+  const cleanCourse = options?.course ? String(options.course).trim() : '';
+  const tariffBadgeBg = cleanTariff === 'FREE' ? '#f1f5f9' : '#fef3c7';
+  const tariffBadgeColor = cleanTariff === 'FREE' ? '#334155' : '#92400e';
+  const { html, attachments } = buildBannerEmail(`
+    <h2 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Assalomu alaykum, ${name}!</h2>
+    <p style="margin: 0 0 12px; font-size: 14px; line-height: 1.6; color: #334155;">
+      Siz <strong>Practise</strong> platformasiga muvaffaqiyatli qo'shildingiz! Quyida student panelingizga kirish havolasi va <strong>kirish parolingiz (bir martalik parol)</strong> keltirilgan:
+    </p>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 16px 0;">
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Tarif:</strong>
+        <span style="display: inline-block; background: ${tariffBadgeBg}; color: ${tariffBadgeColor}; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 800;">${cleanTariff}</span>
+      </p>
+      ${cleanCourse ? `
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Kurs:</strong> <span style="color: #0f172a; font-weight: 600;">${cleanCourse}</span>
+      </p>` : ''}
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Login (Email):</strong> <span style="color: #0f172a;">${email}</span>
+      </p>
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Kirish paroli (Bir martalik parol):</strong>
+        <span style="display: inline-block; background: #eef2ff; color: #3730a3; padding: 3px 10px; border-radius: 6px; font-family: monospace; font-size: 15px; font-weight: 800; letter-spacing: 0.5px;">${oneTimePassword}</span>
+      </p>
+      <p style="margin: 0; font-size: 13px; color: #475569; word-break: break-all;">
+        <strong>Student panelga kirish havolasi:</strong><br/>
+        <a href="${safeLoginUrl}" style="color: #4f46e5; font-weight: 600;">${safeLoginUrl}</a>
+      </p>
+    </div>
+    <p style="margin: 0 0 18px; font-size: 13px; color: #475569; line-height: 1.55;">
+      Ushbu parol birinchi marta tizimga kirish uchun mo'ljallangan. Panelga kirganingizdan so'ng o'zingizga qulay doimiy parolni o'rnatishingiz mumkin.
+    </p>
+    <div style="margin: 20px 0 6px;">
+      <a href="${safeLoginUrl}" style="display: inline-block; padding: 12px 24px; background: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">Student Panelga Kirish</a>
+    </div>
+  `);
+
+  const mailOptions = {
+    from: `"Practise" <${process.env.EMAIL_USER || 'no-reply@practise.uz'}>`,
+    to: email,
+    subject: `Practise (${cleanTariff}) — Student panelga kirish paroli va havola`,
+    html,
+    attachments
+  };
+
+  try {
+    console.log(`[MAILER] Yangi student qo'shildi (Practise - ${cleanTariff}):\n  Email: ${email}\n  Bir martalik parol: ${oneTimePassword}\n  Havola: ${safeLoginUrl}\n  Banner: ${attachments.length > 0 ? 'banner_02.png attached' : 'none'}`);
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await transporter.sendMail(mailOptions);
+      console.log(`[MAILER] Xat muvaffaqiyatli yuborildi (${cleanTariff}): ${email}`);
+      return { sent: true, tariff: cleanTariff, bannerAttached: attachments.length > 0 };
+    }
+    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER .env faylida ko\'rsatilmagan.');
+    return { sent: false, tariff: cleanTariff, error: 'EMAIL_USER/EMAIL_PASS sozlanmagan', bannerAttached: attachments.length > 0 };
+  } catch (error) {
+    console.error('[MAILER] Email yuborishda xatolik:', error);
+    return { sent: false, tariff: cleanTariff, error: error.message, bannerAttached: attachments.length > 0 };
+  }
+};
+
+const sendPasswordReset = async (email, name, resetLink, newLoginPassword = '', loginUrl = 'http://localhost:5173/student') => {
+  const safeLoginUrl = String(loginUrl || 'http://localhost:5173/student').trim();
+  const hasNewPassword = Boolean(String(newLoginPassword || '').trim());
+  const { html, attachments } = buildBannerEmail(`
+    <h2 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Assalomu alaykum, ${name}!</h2>
+    <p style="margin: 0 0 12px; font-size: 14px; line-height: 1.6; color: #334155;">
+      Siz <strong>Practise</strong> platformasidagi student hisobingiz parolini tiklash (<em>Unutdingizmi?</em>) bo'yicha so'rov yubordingiz.
+    </p>
+    ${hasNewPassword ? `
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 16px 0;">
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Login (Email):</strong> <span style="color: #0f172a;">${email}</span>
+      </p>
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Kirish uchun yangi parolingiz:</strong>
+        <span style="display: inline-block; background: #eef2ff; color: #3730a3; padding: 4px 12px; border-radius: 6px; font-family: monospace; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">${newLoginPassword}</span>
+      </p>
+      <p style="margin: 0; font-size: 13px; color: #475569; word-break: break-all;">
+        <strong>Student panelga kirish havolasi:</strong><br/>
+        <a href="${safeLoginUrl}" style="color: #4f46e5; font-weight: 600;">${safeLoginUrl}</a>
+      </p>
+    </div>
+    <p style="margin: 0 0 16px; font-size: 13px; color: #334155; line-height: 1.55;">
+      Yuqoridagi yangi parol bilan hoziroq Student paneliga kirishingiz mumkin.
+    </p>
+    <div style="margin: 18px 0;">
+      <a href="${safeLoginUrl}" style="display: inline-block; padding: 12px 24px; background: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">Student Panelga Kirish</a>
+    </div>
+    ${resetLink ? `
+    <p style="font-size: 12px; color: #64748b; line-height: 1.55; margin: 14px 0 0;">
+      Agar o'zingiz xohlagan boshqa parol o'rnatmoqchi bo'lsangiz, quyidagi havoladan foydalanishingiz mumkin (24 soat amal qiladi):<br/>
+      <a href="${resetLink}" style="color: #4f46e5; word-break: break-all;">${resetLink}</a>
+    </p>` : ''}
+    ` : `
+    <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: #334155;">
+      O'zingiz xohlagan yangi parolni o'rnatish uchun quyidagi tugmani bosing:
+    </p>
+    <div style="margin: 20px 0;">
+      <a href="${resetLink}" style="display: inline-block; padding: 12px 24px; background: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">Parolni Tiklash</a>
+    </div>
+    <p style="font-size: 12px; color: #64748b; word-break: break-all; line-height: 1.5;">
+      Agar tugma ishlamasa, quyidagi havolani brauzeringizga nusxalab oching:<br/>
+      <a href="${resetLink}" style="color: #4f46e5;">${resetLink}</a>
+    </p>
+    `}
+    <p style="font-size: 13px; color: #475569; margin: 12px 0 0;">Agar bu so'rovni siz yubormagan bo'lsangiz, darhol ma'muriyatga xabar bering.</p>
+  `);
+
+  const mailOptions = {
+    from: `"Practise" <${process.env.EMAIL_USER || 'no-reply@practise.uz'}>`,
+    to: email,
+    subject: hasNewPassword ? 'Practise — Kirish uchun yangi parol' : 'Practise — Parolni tiklash',
+    html,
+    attachments
+  };
+
+  try {
+    console.log(`[MAILER] Parol tiklash so'rovi (Practise):\n  Email: ${email}\n  Yangi parol: ${hasNewPassword ? '***' : 'link-only'}\n  Login: ${safeLoginUrl}`);
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await transporter.sendMail(mailOptions);
+      console.log(`[MAILER] Tiklash xati muvaffaqiyatli yuborildi: ${email}`);
+      return { sent: true, bannerAttached: attachments.length > 0 };
+    }
+    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER .env faylida ko\'rsatilmagan.');
+    return { sent: false, error: 'EMAIL_USER/EMAIL_PASS sozlanmagan', bannerAttached: attachments.length > 0 };
+  } catch (error) {
+    console.error('[MAILER] Email yuborishda xatolik:', error);
+    return { sent: false, error: error.message, bannerAttached: attachments.length > 0 };
+  }
+};
+
+const sendPasswordChangeNotification = async (email, name, newPassword, loginUrl = 'http://localhost:5173/student') => {
+  const safeLoginUrl = String(loginUrl || 'http://localhost:5173/student').trim();
+  const { html, attachments } = buildBannerEmail(`
+    <h2 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Assalomu alaykum, ${name}!</h2>
+    <p style="margin: 0 0 10px; font-size: 14px; line-height: 1.6; color: #334155;">
+      Sizning <strong>Practise</strong> platformasidagi akkauntingiz paroli muvaffaqiyatli o'zgartirildi.
+    </p>
+    <p style="margin: 0 0 14px; font-size: 14px; color: #0f172a;">
+      <strong>Yangi parolingiz:</strong>
+      <span style="display: inline-block; background: #eef2ff; color: #3730a3; padding: 2px 10px; border-radius: 6px; font-family: monospace; font-weight: 700;">${newPassword}</span>
+    </p>
+    <p style="margin: 0 0 18px; font-size: 13px; color: #475569; line-height: 1.55;">
+      Agar bu harakatni siz amalga oshirmagan bo'lsangiz, zudlik bilan platformaga kirib parolingizni tiklang yoki ma'muriyatga murojaat qiling.
+    </p>
+    <div style="margin: 18px 0 6px;">
+      <a href="${safeLoginUrl}" style="display: inline-block; padding: 12px 24px; background: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">Platformaga Kirish</a>
+    </div>
+  `);
+
+  const mailOptions = {
+    from: `"Practise" <${process.env.EMAIL_USER || 'no-reply@practise.uz'}>`,
+    to: email,
+    subject: 'Practise - Parolingiz o\'zgartirildi',
+    html,
+    attachments
+  };
+
+  try {
+    console.log(`[MAILER] Parol o'zgarishi yuborildi: ${email}`);
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await transporter.sendMail(mailOptions);
+      console.log(`[MAILER] Xat muvaffaqiyatli yuborildi: ${email}`);
+      return { sent: true, bannerAttached: attachments.length > 0 };
+    }
+    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER kiritilmagan.');
+    return { sent: false, bannerAttached: attachments.length > 0 };
+  } catch (error) {
+    console.error('[MAILER] Email yuborishda xatolik:', error);
+    return { sent: false, error: error.message, bannerAttached: attachments.length > 0 };
+  }
+};
+
+module.exports = { sendStudentCredentials, sendPasswordReset, sendPasswordChangeNotification, buildBannerEmail, BANNER_02_PATH };

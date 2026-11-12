@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family & Relationships - IELTS Speaking Vocabulary Masterclass</title>
+    <style>
+        :root {
+            --bg-primary: #0b132b;
+            --bg-secondary: #1c2541;
+            --bg-card: rgba(28, 37, 65, 0.7);
+            --bg-card-hover: rgba(42, 54, 91, 0.85);
+            --border-color: rgba(245, 158, 11, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-gold: #f59e0b;
+            --accent-gold-light: #fef3c7;
+            --accent-glow: rgba(245, 158, 11, 0.35);
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --error: #ef4444;
+            --error-bg: rgba(239, 68, 68, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --transition-speed: 0.3s;
+        }
+
+        /* Theme: Platinum Minimal */
+        [data-theme="platinum"] {
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card-hover: #ffffff;
+            --border-color: rgba(217, 119, 6, 0.3);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #d97706;
+            --accent-gold-light: #fef3c7;
+            --accent-glow: rgba(217, 119, 6, 0.2);
+            --shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+        }
+
+        /* Theme: Emerald Executive */
+        [data-theme="emerald"] {
+            --bg-primary: #022c22;
+            --bg-secondary: #064e3b;
+            --bg-card: rgba(6, 78, 59, 0.75);
+            --bg-card-hover: rgba(10, 97, 74, 0.9);
+            --border-color: rgba(234, 179, 8, 0.3);
+            --text-main: #f0fdf4;
+            --text-muted: #a7f3d0;
+            --accent-gold: #eab308;
+            --accent-gold-light: #fef9c3;
+            --accent-glow: rgba(234, 179, 8, 0.3);
+        }
+
+        /* Theme: Royal Purple */
+        [data-theme="royal"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #2e1065;
+            --bg-card: rgba(46, 16, 101, 0.65);
+            --bg-card-hover: rgba(67, 24, 145, 0.85);
+            --border-color: rgba(245, 158, 11, 0.35);
+            --text-main: #faf5ff;
+            --text-muted: #c084fc;
+            --accent-gold: #fbbf24;
+            --accent-gold-light: #fef3c7;
+            --accent-glow: rgba(251, 191, 36, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-family);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            color: var(--text-main);
+        }
+
+        .nav-brand span {
+            color: var(--accent-gold);
+        }
+
+        .nav-stats {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .stat-badge span.value {
+            color: var(--accent-gold);
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-sm);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent-gold);
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .user-pill:hover {
+            background: rgba(245, 158, 11, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .theme-select {
+            background: var(--bg-primary);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.25rem;
+            width: 100%;
+            flex: 1;
+        }
+
+        .overlay-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .welcome-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            backdrop-filter: blur(16px);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .welcome-card h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .welcome-card p.subtitle {
+            color: var(--accent-gold);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.2);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .error-text {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 0.4rem;
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000000;
+            font-weight: 700;
+            padding: 0.85rem 1.5rem;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.15);
+            box-shadow: none;
+        }
+
+        /* Navigation Tab Steps */
+        .module-nav {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+            scrollbar-width: thin;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1.1rem;
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+        }
+
+        .tab-btn.completed {
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .tab-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .module-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .module-section.active {
+            display: block;
+        }
+
+        .module-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .module-header h2 {
+            font-size: 1.75rem;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+        }
+
+        .module-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .flashcard-wrapper {
+            perspective: 1000px;
+            max-width: 580px;
+            margin: 0 auto;
+            min-height: 320px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 320px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            align-items: flex-start;
+            text-align: left;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+
+        .card-phrase {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .card-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-meaning {
+            font-size: 1.05rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-main);
+        }
+
+        .card-example {
+            background: rgba(0,0,0,0.2);
+            border-left: 3px solid var(--accent-gold);
+            padding: 0.75rem 1rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-style: italic;
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            width: 100%;
+        }
+
+        .card-alt {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .card-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 580px;
+            margin: 1.5rem auto 0;
+            gap: 1rem;
+        }
+
+        .audio-btn {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            max-width: 580px;
+            margin: 1rem auto 0;
+            background: rgba(255,255,255,0.1);
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent-gold);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .match-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+        }
+
+        .match-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .match-card.selected {
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .match-card.matched {
+            border-color: var(--success);
+            background: var(--success-bg);
+            color: var(--success);
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .match-card.shake {
+            animation: shake 0.4s ease;
+            border-color: var(--error);
+            background: var(--error-bg);
+        }
+
+        .quiz-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            color: var(--text-main);
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1.2rem;
+            text-align: left;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .option-btn.correct {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .option-btn.incorrect {
+            background: var(--error-bg) !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+        }
+
+        .feedback-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .feedback-box.correct {
+            background: var(--success-bg);
+            border: 1px solid var(--success);
+            color: #d1fae5;
+        }
+
+        .feedback-box.incorrect {
+            background: var(--error-bg);
+            border: 1px solid var(--error);
+            color: #fee2e2;
+        }
+
+        .reading-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .reading-text {
+            background: rgba(0,0,0,0.25);
+            padding: 1.25rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--accent-gold);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .boss-header {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(245, 158, 11, 0.2));
+            border: 2px solid var(--accent-gold);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+
+        .boss-header h2 {
+            font-size: 2rem;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .boss-badge-tag {
+            display: inline-block;
+            background: #ef4444;
+            color: #fff;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .badge-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(1);
+            transition: all 0.3s;
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.08);
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .badge-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .vocab-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .speaking-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .speaking-item {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent-gold);
+            padding: 1rem 1.25rem;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        .speaking-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        /* Canvas Overlay for Confetti */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .navbar { padding: 0.6rem 1rem; }
+            .nav-brand span { display: none; }
+            .matching-grid { grid-template-columns: 1fr; }
+            .flashcard { height: 350px; }
+            .card-controls { flex-wrap: wrap; }
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+    <canvas id="confetti-canvas"></canvas>
+
+    <header class="navbar">
+        <div class="nav-brand">
+            👨‍👩‍👧‍👦 <span>FAMILY & RELATIONSHIPS</span>
+        </div>
+        <div class="nav-stats">
+            <div class="stat-badge">⭐ <span id="xp-val" class="value">0</span> XP</div>
+            <div class="stat-badge">🎖️ <span id="level-val" class="value">Beginner</span></div>
+            <div class="user-pill" id="user-display" style="cursor: default;">
+                👤 <span id="user-name-span">Learner</span>
+            </div>
+            <select id="theme-select" class="theme-select">
+                <option value="midnight">🌑 Midnight</option>
+                <option value="platinum">🤍 Platinum</option>
+                <option value="emerald">🌲 Emerald</option>
+                <option value="royal">👑 Royal</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Module Navigation Tabs -->
+        <nav class="module-nav" id="module-tabs">
+            <button class="tab-btn active" data-mod="1">📚 1. Learn</button>
+            <button class="tab-btn" data-mod="2" id="tab-2">🧩 2. Match</button>
+            <button class="tab-btn" data-mod="3" id="tab-3">🎯 3. Choose</button>
+            <button class="tab-btn" data-mod="4" id="tab-4">📖 4. Read</button>
+            <button class="tab-btn" data-mod="5" id="tab-5">👑 5. Final Boss</button>
+            <button class="tab-btn" data-mod="6" id="tab-6">🏆 Results</button>
+        </nav>
+
+        <section id="mod-1" class="module-section active">
+            <div class="module-header">
+                <h2>Module 1: Core Vocabulary</h2>
+                <p>Click cards to reveal IELTS definitions & spoken examples.</p>
+            </div>
+            
+            <div class="flashcard-wrapper">
+                <div class="flashcard" id="flashcard">
+                    <div class="card-face card-front">
+                        <div class="card-phrase" id="fc-phrase">---</div>
+                        <div class="card-hint">👆 Click to reveal meaning</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div>
+                            <div class="card-meaning" id="fc-meaning">---</div>
+                            <div class="card-example" id="fc-example">---</div>
+                            <div class="card-alt" id="fc-alt">---</div>
+                        </div>
+                        <button class="audio-btn" id="fc-audio" title="Listen Pronunciation">🔊</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="fc-progress"></div>
+            </div>
+
+            <div class="card-controls">
+                <button class="btn btn-secondary" id="fc-prev" style="width: auto;">← Previous</button>
+                <span id="fc-counter" style="font-weight: 600; font-size: 0.9rem;">Card 1 / 15</span>
+                <button class="btn btn-secondary" id="fc-next" style="width: auto;">Next →</button>
+            </div>
+        </section>
+
+        <section id="mod-2" class="module-section">
+            <div class="module-header">
+                <h2>Module 2: Collocation Match</h2>
+                <p>Connect each high-level expression with its precise meaning.</p>
+                <div style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    Matches: <strong id="match-score">0</strong>/8 | Mistakes: <strong id="match-mistakes" style="color: var(--error);">0</strong>
+                </div>
+            </div>
+
+            <div class="matching-grid">
+                <div class="matching-column" id="match-terms"></div>
+                <div class="matching-column" id="match-defs"></div>
+            </div>
+        </section>
+
+        <section id="mod-3" class="module-section">
+            <div class="module-header">
+                <h2>Module 3: Natural Usage & Context</h2>
+                <p>Select the most natural collocation or IELTS-style response.</p>
+            </div>
+            <div id="quiz-container"></div>
+        </section>
+
+        <section id="mod-4" class="module-section">
+            <div class="module-header">
+                <h2>Module 4: Read & Decide</h2>
+                <p>Analyze context-rich passages and evaluate T/F/NG statements.</p>
+            </div>
+            <div id="reading-container"></div>
+        </section>
+
+        <section id="mod-5" class="module-section">
+            <div class="boss-header">
+                <span class="boss-badge-tag">CHALLENGE</span>
+                <h2>👑 FINAL BOSS BATTLE</h2>
+                <p>Prove your vocabulary mastery across advanced context & evidence challenges.</p>
+            </div>
+            <div id="boss-container"></div>
+        </section>
+
+        <section id="mod-6" class="module-section">
+            <div class="module-header">
+                <h2>FAMILY & RELATIONSHIPS — MASTERED</h2>
+                <p id="results-greeting">Congratulations!</p>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 1.5rem; text-align: center; margin-bottom: 2rem;">
+                <h3>Your Achievements</h3>
+                <div class="badge-grid" id="badge-grid"></div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <h3>🎤 Final Speaking Challenge</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Answer these IELTS questions using at least 3 target expressions learned today.</p>
+                <div class="speaking-list">
+                    <div class="speaking-item">
+                        <div class="speaking-tag">Part 1 - Family</div>
+                        <div>Do you have a large family or a small family?</div>
+                    </div>
+                    <div class="speaking-item">
+                        <div class="speaking-tag">Part 1 - Closeness</div>
+                        <div>Who are you closest to in your family?</div>
+                    </div>
+                    <div class="speaking-item">
+                        <div class="speaking-tag">Part 2 - Cue Card</div>
+                        <div>Describe a family member or friend you really look up to. You should say who they are, what they are like, and explain why you admire them.</div>
+                    </div>
+                    <div class="speaking-item">
+                        <div class="speaking-tag">Part 3 - Friendships</div>
+                        <div>Why do some people gradually drift apart from their childhood friends as they grow older?</div>
+                    </div>
+                    <div class="speaking-item">
+                        <div class="speaking-tag">Part 3 - Generations</div>
+                        <div>Do you think technological changes make it harder to bridge the generation gap?</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3>📚 Your Vocabulary Bank</h3>
+                <div class="vocab-grid" id="vocab-bank-grid"></div>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <button class="btn btn-secondary" id="reset-btn" style="width: auto; margin: 0 auto;">🔄 Reset Progress</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const __PRACTISE_LESSON_ID = 'family';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        /* -------------------------------------------------------------
+           1. DATA STRUCTURES (Vocabulary, Quizzes, Texts)
+        ------------------------------------------------------------- */
+        const VOCAB_DATA = [
+            {
+                id: 1,
+                phrase: "have a strong bond with",
+                meaning: "have a very close, deep emotional connection with someone.",
+                example: "I'm particularly close to my sister because we've always had a strong bond.",
+                alt: "Natural alt: be extremely close to someone",
+                category: "closeness"
+            },
+            {
+                id: 2,
+                phrase: "maintain a close relationship",
+                meaning: "keep a friendship or family connection strong over time.",
+                example: "Despite living in different cities, my parents make sure to maintain a close relationship.",
+                alt: "Natural alt: stay very close",
+                category: "closeness"
+            },
+            {
+                id: 3,
+                phrase: "keep in touch with",
+                meaning: "communicate regularly with someone.",
+                example: "I still keep in touch with most of my old high school friends via chat groups.",
+                alt: "Natural alt: stay in contact with",
+                category: "communication"
+            },
+            {
+                id: 4,
+                phrase: "make an effort to stay in touch",
+                meaning: "try hard to preserve contact even when busy or far away.",
+                example: "When you start working, you have to make an effort to stay in touch with relatives.",
+                alt: "Natural alt: actively prioritize communication",
+                category: "communication"
+            },
+            {
+                id: 5,
+                phrase: "spend quality time together",
+                meaning: "dedicate meaningful, undivided attention to family or friends.",
+                example: "We try to spend quality time together over dinner every Sunday evening.",
+                alt: "Natural alt: enjoy meaningful time together",
+                category: "family"
+            },
+            {
+                id: 6,
+                phrase: "be there for someone",
+                meaning: "be available to offer help, comfort, or listening in difficult times.",
+                example: "A true friend is always ready to be there for you when things go wrong.",
+                alt: "Natural alt: offer loyal emotional support",
+                category: "support"
+            },
+            {
+                id: 7,
+                phrase: "rely on someone for support",
+                meaning: "depend on someone when you need advice or assistance.",
+                example: "During stressful exam periods, I heavily rely on my family for emotional support.",
+                alt: "Natural alt: turn to someone for guidance",
+                category: "support"
+            },
+            {
+                id: 8,
+                phrase: "have a lot in common",
+                meaning: "share similar interests, values, hobbies, or beliefs.",
+                example: "My roommate and I got along instantly because we have a lot in common.",
+                alt: "Natural alt: share many similar passions",
+                category: "friendship"
+            },
+            {
+                id: 9,
+                phrase: "get along well with",
+                meaning: "enjoy a peaceful, friendly, and pleasant relationship.",
+                example: "I get along really well with my colleagues, which makes work enjoyable.",
+                alt: "Natural alt: hit it off with",
+                category: "friendship"
+            },
+            {
+                id: 10,
+                phrase: "see eye to eye",
+                meaning: "agree completely with someone on an issue or viewpoint.",
+                example: "My dad and I don't always see eye to eye on career choices, but we respect each other.",
+                alt: "Natural alt: share the same opinion",
+                category: "friendship"
+            },
+            {
+                id: 11,
+                phrase: "drift apart",
+                meaning: "gradually become less close or friendly over time.",
+                example: "As our career paths changed, my university roommate and I started to drift apart.",
+                alt: "Natural alt: slowly grow distant",
+                category: "conflict"
+            },
+            {
+                id: 12,
+                phrase: "settle a disagreement",
+                meaning: "resolve an argument or conflict calmly and constructively.",
+                example: "It's healthy for siblings to learn how to settle a disagreement without holding grudges.",
+                alt: "Natural alt: sort out an argument",
+                category: "conflict"
+            },
+            {
+                id: 13,
+                phrase: "look up to someone",
+                meaning: "admire, respect, and view someone as an inspirational role model.",
+                example: "I really look up to my aunt because she managed to build a career while raising three children.",
+                alt: "Natural alt: admire someone deeply",
+                category: "respect"
+            },
+            {
+                id: 14,
+                phrase: "have a generation gap",
+                meaning: "experience a difference in opinions or values between younger and older people.",
+                example: "There can sometimes be a generation gap between grandparents and teenagers regarding social media.",
+                alt: "Natural alt: differ in generational outlooks",
+                category: "generations"
+            },
+            {
+                id: 15,
+                phrase: "bridge the generation gap",
+                meaning: "reduce or connect the understanding gap between different age groups.",
+                example: "Shared family hobbies like camping can really help bridge the generation gap.",
+                alt: "Natural alt: bring age groups closer together",
+                category: "generations"
+            }
+        ];
+
+        const MATCH_PAIRS = [
+            { term: "drift apart", def: "gradually become less close over time" },
+            { term: "see eye to eye", def: "agree completely on an opinion or issue" },
+            { term: "look up to someone", def: "admire and respect someone as a role model" },
+            { term: "settle a disagreement", def: "resolve a conflict or argument calmly" },
+            { term: "bridge the generation gap", def: "connect understanding between age groups" },
+            { term: "be there for someone", def: "offer emotional support during tough times" },
+            { term: "have a lot in common", def: "share similar interests, hobbies, or values" },
+            { term: "spend quality time", def: "dedicate undivided attention to loved ones" }
+        ];
+
+        const MCQ_QUESTIONS = [
+            {
+                q: "If two childhood friends 'drift apart', they...",
+                options: [
+                    "A. become much closer overnight",
+                    "B. gradually become less close over time",
+                    "C. move into the same house",
+                    "D. start arguing loudly in public"
+                ],
+                correct: 1,
+                explanation: "'Drift apart' describes a gradual, natural process where people become less close over time."
+            },
+            {
+                q: "Which collocation sounds most natural in IELTS Speaking?",
+                options: [
+                    "A. make quality time together",
+                    "B. spend quality time together",
+                    "C. do quality time together",
+                    "D. take quality time together"
+                ],
+                correct: 1,
+                explanation: "We always use the verb 'spend' with time expressions like 'quality time'."
+            },
+            {
+                q: "Even though my brother and I have different hobbies, we ______ and rarely argue.",
+                options: [
+                    "A. get along well",
+                    "B. get along good",
+                    "C. get through well",
+                    "D. get across fine"
+                ],
+                correct: 0,
+                explanation: "'Get along well' is the correct natural phrasal verb expression."
+            },
+            {
+                q: "Which sentence sounds most natural when explaining why you admire a relative?",
+                options: [
+                    "A. I really look up to my grandfather because he is hardworking.",
+                    "B. I look above my grandfather because he is hardworking.",
+                    "C. I see my grandfather upwards because he is hardworking.",
+                    "D. I look highly at my grandfather because he is hardworking."
+                ],
+                correct: 0,
+                explanation: "'Look up to someone' is the natural phrasal verb meaning to admire or respect."
+            },
+            {
+                q: "When families experience misunderstandings due to age differences, we say there is a...",
+                options: [
+                    "A. generation split",
+                    "B. generation gap",
+                    "C. generation distance",
+                    "D. generation hole"
+                ],
+                correct: 1,
+                explanation: "'Generation gap' is the established noun phrase for cultural differences between age groups."
+            },
+            {
+                q: "To 'see eye to eye' with someone means to...",
+                options: [
+                    "A. stare at them in anger",
+                    "B. agree with them completely",
+                    "C. look directly into their eyes",
+                    "D. resemble them physically"
+                ],
+                correct: 1,
+                explanation: "'See eye to eye' is an idiom that means sharing the exact same view or opinion."
+            },
+            {
+                q: "When you can rely on a friend in difficult times, they are someone who...",
+                options: [
+                    "A. is there for you",
+                    "B. is here with you",
+                    "C. is around at you",
+                    "D. stays by your eye"
+                ],
+                correct: 0,
+                explanation: "'Be there for someone' means providing dependable support when needed."
+            },
+            {
+                q: "If siblings resolve an argument peacefully, they successfully...",
+                options: [
+                    "A. broke a disagreement",
+                    "B. settled a disagreement",
+                    "C. made a disagreement",
+                    "D. stopped a disagreement"
+                ],
+                correct: 1,
+                explanation: "The standard collocation verb for resolving conflicts is 'settle'."
+            }
+        ];
+
+        const READING_MODULES = [
+            {
+                title: "TEXT 1 — FAMILY BONDS IN MODERN LIFE",
+                text: "In fast-paced modern societies, maintaining a close relationship with extended family members can be challenging. However, research consistently shows that individuals who make an effort to stay in touch with relatives experience lower stress levels. Families that regularly spend quality time together—whether through weekend meals or joint holidays—build resilience. When unexpected hardships happen, having family members you can rely on for support provides a essential safety net.",
+                questions: [
+                    {
+                        statement: "Modern lifestyles make it easier than ever to maintain close family connections.",
+                        answer: "FALSE",
+                        explanation: "The text states that maintaining close relationships in fast-paced modern societies 'can be challenging', contradicting 'easier than ever'."
+                    },
+                    {
+                        statement: "Spending quality time together helps families handle unexpected life difficulties better.",
+                        answer: "TRUE",
+                        explanation: "The text explicitly mentions that spending quality time builds resilience when unexpected hardships happen."
+                    },
+                    {
+                        statement: "Financial support from relatives is the primary reason people stay in touch.",
+                        answer: "NOT GIVEN",
+                        explanation: "The text mentions emotional support and safety nets, but does not state that financial support is the primary reason."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 2 — EVOLVING FRIENDSHIPS",
+                text: "During childhood and adolescence, friendships are usually formed effortlessly based on proximity and shared school routines. Friends often have a lot in common during these early years. However, as people transition into university or demanding careers, their interests and priorities often evolve. Without intentional effort to communicate, even once-inseparable friends can gradually drift apart. It is a natural process that does not necessarily imply bad feelings.",
+                questions: [
+                    {
+                        statement: "Childhood friendships are typically based on shared environments and routines.",
+                        answer: "TRUE",
+                        explanation: "The text notes that childhood friendships are formed based on proximity and shared school routines."
+                    },
+                    {
+                        statement: "Drifting apart from old friends always results from serious personal arguments.",
+                        answer: "FALSE",
+                        explanation: "The text states drifting apart is a natural process due to changing priorities and 'does not necessarily imply bad feelings'."
+                    },
+                    {
+                        statement: "People who attend university are more likely to stay in touch with high school friends.",
+                        answer: "NOT GIVEN",
+                        explanation: "The text mentions university transition causes change, but does not compare university students to non-students."
+                    }
+                ]
+            },
+            {
+                title: "TEXT 3 — BRIDGING GENERATIONAL DIVIDES",
+                text: "It is quite common for parents and teenagers to experience a generation gap regarding technology, lifestyle choices, and career values. These differences can sometimes lead to tension when parents and children do not see eye to eye. However, constructive communication allows families to settle a disagreement without damaging their relationship. By taking time to listen actively, both generations can bridge the generation gap and cultivate mutual respect.",
+                questions: [
+                    {
+                        statement: "Generational differences regarding technology frequently lead to complete family breakdowns.",
+                        answer: "FALSE",
+                        explanation: "The text says differences lead to 'tension', but can be settled constructively, not that they 'frequently lead to complete breakdowns'."
+                    },
+                    {
+                        statement: "Active listening helps connect the understanding gap between older and younger family members.",
+                        answer: "TRUE",
+                        explanation: "The passage notes that by listening actively, both generations can 'bridge the generation gap'."
+                    }
+                ]
+            }
+        ];
+
+        const BOSS_CONTEXT_QUESTIONS = [
+            {
+                q: "Despite living on opposite sides of the globe for ten years, Sarah and Maya managed to ______ through weekly video calls.",
+                options: [
+                    "A. drift apart",
+                    "B. maintain a close relationship",
+                    "C. settle a disagreement",
+                    "D. have a generation gap"
+                ],
+                correct: 1,
+                explanation: "Weekly calls show active effort to maintain closeness across distance."
+            },
+            {
+                q: "When my business partner and I couldn't agree on the budget, we sat down privately to ______ before making a final decision.",
+                options: [
+                    "A. sort out the problem",
+                    "B. look up to someone",
+                    "C. drift apart",
+                    "D. have a lot in common"
+                ],
+                correct: 0,
+                explanation: "'Sort out the problem' means resolving a conflict or difficulty through discussion."
+            },
+            {
+                q: "Although my grandfather didn't attend high school, I deeply ______ his wisdom and life experience.",
+                options: [
+                    "A. see eye to eye",
+                    "B. look up to",
+                    "C. spend quality time",
+                    "D. drift apart"
+                ],
+                correct: 1,
+                explanation: "'Look up to' is used when admiring someone's character or wisdom."
+            },
+            {
+                q: "Younger workers and senior directors often held different perspectives, but corporate retreats helped to ______.",
+                options: [
+                    "A. bridge the generation gap",
+                    "B. make a falling-out",
+                    "C. drift apart quickly",
+                    "D. get along bad"
+                ],
+                correct: 0,
+                explanation: "Retreats foster mutual understanding across age groups."
+            },
+            {
+                q: "When choosing a life partner, many people feel it's essential to ______ regarding long-term financial goals.",
+                options: [
+                    "A. see eye to eye",
+                    "B. grow apart",
+                    "C. bridge a gap",
+                    "D. look upwards"
+                ],
+                correct: 0,
+                explanation: "'See eye to eye' means agreeing on vital perspectives."
+            }
+        ];
+
+        const BOSS_READING = {
+            title: "📜 FINAL BOSS — EVIDENCE CHALLENGE: MODERN INTERPERSONAL DYNAMICS",
+            text: "In the contemporary digital era, the traditional structure of personal relationships is undergoing significant transformation. Geographic mobility means that young adults frequently relocate away from their hometowns for higher education or remote employment. Consequently, reliance on traditional family support systems has shifted toward non-related social networks, often termed 'chosen families'. While digital applications make it easy to send instant messages, psychologists argue that digital contact alone is insufficient to sustain emotional depth. Without face-to-face interaction and quality time, long-distance bonds are susceptible to fading. Furthermore, in workplace environments, multi-generational teams frequently encounter contrasting communication styles. While younger employees often prefer asynchronous messaging, older employees may favor direct conversation. Organizations that actively foster collaborative workshops successfully bridge these generational divides, creating workplaces where individuals get along well regardless of age.",
+            questions: [
+                {
+                    statement: "Geographic relocations have led many young adults to depend more on friends and social networks for support.",
+                    answer: "TRUE",
+                    explanation: "The text highlights that reliance has shifted from traditional family to 'chosen families' (non-related networks)."
+                },
+                {
+                    statement: "Instant messaging apps provide equal emotional closeness compared to in-person interactions.",
+                    answer: "FALSE",
+                    explanation: "The text states psychologists argue digital contact 'alone is insufficient to sustain emotional depth'."
+                },
+                {
+                    statement: "Older employees refuse to adapt to modern workplace technology.",
+                    answer: "NOT GIVEN",
+                    explanation: "The text states older workers 'may favor direct conversation', but does not say they 'refuse to adapt'."
+                },
+                {
+                    statement: "Collaborative workshops are an effective way to resolve communication differences in multi-generational workplaces.",
+                    answer: "TRUE",
+                    explanation: "The text confirms organizations using workshops 'successfully bridge these generational divides'."
+                },
+                {
+                    statement: "Long-distance friendships never recover once individuals start drifting apart.",
+                    answer: "NOT GIVEN",
+                    explanation: "The text states long-distance bonds are 'susceptible to fading', but does not mention if they can ever recover."
+                }
+            ]
+        };
+
+        let state = {
+            name: "",
+            theme: "midnight",
+            xp: 0,
+            level: "Beginner",
+            currentMod: 1,
+            completedMods: [],
+            badges: [],
+            fcIndex: 0,
+            fcViewed: new Set(),
+            matchSelectedTerm: null,
+            matchScore: 0,
+            matchMistakes: 0,
+            mcqAnswers: {},
+            readingAnswers: {},
+            bossContextAnswers: {},
+            bossReadingAnswers: {}
+        };
+
+        const BADGES_DEF = [
+            { id: "first_step", title: "First Step", icon: "🚀", desc: "Complete Module 1 Flashcards" },
+            { id: "perfect_match", title: "Perfect Match", icon: "🏅", desc: "Match terms with zero mistakes" },
+            { id: "sharp_speaker", title: "Sharp Speaker", icon: "🎯", desc: "100% score in Context Quiz" },
+            { id: "careful_reader", title: "Careful Reader", icon: "📖", desc: "100% score in Reading" },
+            { id: "boss_slayer", title: "Boss Slayer", icon: "👑", desc: "Defeat the Final Boss" },
+            { id: "vocab_master", title: "Master", icon: "🏆", desc: "Complete the entire lesson" }
+        ];
+
+        /* -------------------------------------------------------------
+           2. LOCAL STORAGE & INITIALIZATION
+        ------------------------------------------------------------- */
+        function saveState() {
+            const dataToSave = {
+                ...state,
+                fcViewed: Array.from(state.fcViewed)
+            };
+            localStorage.setItem(__vocabKey('ielts_family_vocab_state'), JSON.stringify(dataToSave));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem(__vocabKey('ielts_family_vocab_state'));
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = {
+                        ...state,
+                        ...parsed,
+                        fcViewed: new Set(parsed.fcViewed || [])
+                    };
+                } catch(e) {
+                    console.error("Failed to parse saved state", e);
+                }
+            }
+        }
+
+        function updateHeaderUI() {
+            document.getElementById('xp-val').textContent = state.xp;
+            
+            // Calculate Level
+            if (state.xp >= 600) state.level = "Vocabulary Master";
+            else if (state.xp >= 400) state.level = "Confident Speaker";
+            else if (state.xp >= 200) state.level = "Learner";
+            else state.level = "Beginner";
+            
+            document.getElementById('level-val').textContent = state.level;
+            document.getElementById('user-name-span').textContent = state.name || "Learner";
+            document.getElementById('theme-select').value = state.theme;
+            document.documentElement.setAttribute('data-theme', state.theme);
+
+            // Update Tab Lock States
+            for (let i = 1; i <= 6; i++) {
+                const btn = document.querySelector(`.tab-btn[data-mod="${i}"]`);
+                if (btn) {
+                    if (state.completedMods.includes(i - 1) || i === 1 || state.completedMods.includes(i)) {
+                        btn.disabled = false;
+                    } else {
+                        btn.disabled = true;
+                    }
+                    if (state.completedMods.includes(i)) {
+                        btn.classList.add('completed');
+                    }
+                }
+            }
+        }
+
+        function addXP(amount) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            state.xp += pts;
+            __notifyPractiseParentXP(pts, state.xp);
+        }
+
+        function checkBadgeUnlock(badgeId) {
+            if (!state.badges.includes(badgeId)) {
+                state.badges.push(badgeId);
+                saveState();
+            }
+        }
+
+        function speakPhrase(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function launchConfetti(particleCount = 50, duration = 3000) {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#f59e0b', '#fbbf24', '#10b981', '#3b82f6', '#ec4899', '#ffffff'];
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speedY: Math.random() * 3 + 2,
+                    speedX: (Math.random() - 0.5) * 2,
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 5
+                });
+            }
+
+            let startTime = performance.now();
+
+            function render(now) {
+                const elapsed = now - startTime;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.rotSpeed;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                });
+
+                if (elapsed < duration) {
+                    requestAnimationFrame(render);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+
+            requestAnimationFrame(render);
+        }
+
+        function triggerConfetti() { launchConfetti(60, 2500); }
+        function triggerBossConfetti() { launchConfetti(120, 4000); }
+        function triggerFinalConfetti() { launchConfetti(180, 5000); }
+
+        /* -------------------------------------------------------------
+           3. MODULE 1: FLASHCARDS
+        ------------------------------------------------------------- */
+        function renderFlashcard() {
+            const item = VOCAB_DATA[state.fcIndex];
+            const card = document.getElementById('flashcard');
+            card.classList.remove('flipped');
+
+            setTimeout(() => {
+                document.getElementById('fc-phrase').textContent = item.phrase;
+                document.getElementById('fc-meaning').textContent = item.meaning;
+                document.getElementById('fc-example').textContent = `"${item.example}"`;
+                document.getElementById('fc-alt').textContent = item.alt;
+                document.getElementById('fc-counter').textContent = `Card ${state.fcIndex + 1} / ${VOCAB_DATA.length}`;
+                
+                const pct = ((state.fcIndex + 1) / VOCAB_DATA.length) * 100;
+                document.getElementById('fc-progress').style.width = `${pct}%`;
+            }, 150);
+
+            state.fcViewed.add(state.fcIndex);
+            
+            if (state.fcViewed.size === VOCAB_DATA.length && !state.completedMods.includes(1)) {
+                state.completedMods.push(1);
+                addXP(100);
+                checkBadgeUnlock("first_step");
+                saveState();
+                updateHeaderUI();
+                triggerConfetti();
+            }
+        }
+
+        function initMatchingModule() {
+            const termsContainer = document.getElementById('match-terms');
+            const defsContainer = document.getElementById('match-defs');
+
+            termsContainer.innerHTML = '';
+            defsContainer.innerHTML = '';
+
+            // Shuffle Terms and Defs
+            const shuffledTerms = [...MATCH_PAIRS].sort(() => Math.random() - 0.5);
+            const shuffledDefs = [...MATCH_PAIRS].sort(() => Math.random() - 0.5);
+
+            shuffledTerms.forEach((pair) => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.textContent = pair.term;
+                card.dataset.term = pair.term;
+                card.onclick = () => handleMatchSelectTerm(card);
+                termsContainer.appendChild(card);
+            });
+
+            shuffledDefs.forEach((pair) => {
+                const card = document.createElement('div');
+                card.className = 'match-card';
+                card.textContent = pair.def;
+                card.dataset.term = pair.term;
+                card.onclick = () => handleMatchSelectDef(card);
+                defsContainer.appendChild(card);
+            });
+        }
+
+        function handleMatchSelectTerm(card) {
+            if (card.classList.contains('matched')) return;
+            document.querySelectorAll('#match-terms .match-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            state.matchSelectedTerm = card;
+        }
+
+        function handleMatchSelectDef(card) {
+            if (!state.matchSelectedTerm || card.classList.contains('matched')) return;
+
+            const selectedTerm = state.matchSelectedTerm.dataset.term;
+            const targetTerm = card.dataset.term;
+
+            if (selectedTerm === targetTerm) {
+                // Correct Match
+                state.matchSelectedTerm.classList.remove('selected');
+                state.matchSelectedTerm.classList.add('matched');
+                card.classList.add('matched');
+                state.matchSelectedTerm = null;
+
+                state.matchScore += 1;
+                document.getElementById('match-score').textContent = state.matchScore;
+
+                if (state.matchScore === MATCH_PAIRS.length) {
+                    if (!state.completedMods.includes(2)) {
+                        state.completedMods.push(2);
+                        addXP(150);
+                        if (state.matchMistakes === 0) {
+                            checkBadgeUnlock('perfect_match');
+                        }
+                        saveState();
+                        updateHeaderUI();
+                        triggerConfetti();
+                    }
+                }
+            } else {
+                // Incorrect Match
+                state.matchMistakes += 1;
+                document.getElementById('match-mistakes').textContent = state.matchMistakes;
+
+                card.classList.add('shake');
+                state.matchSelectedTerm.classList.add('shake');
+
+                setTimeout(() => {
+                    card.classList.remove('shake');
+                    if (state.matchSelectedTerm) {
+                        state.matchSelectedTerm.classList.remove('shake', 'selected');
+                        state.matchSelectedTerm = null;
+                    }
+                }, 500);
+            }
+        }
+
+        function initQuizModule() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            MCQ_QUESTIONS.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+
+                let optionsHTML = '';
+                q.options.forEach((opt, optIdx) => {
+                    const isAnswered = state.mcqAnswers[idx] !== undefined;
+                    const isSelected = state.mcqAnswers[idx] === optIdx;
+                    const isCorrect = optIdx === q.correct;
+
+                    let extraClass = '';
+                    if (isAnswered) {
+                        if (isCorrect) extraClass = 'correct';
+                        else if (isSelected) extraClass = 'incorrect';
+                    }
+
+                    optionsHTML += `
+                        <button class="option-btn ${extraClass}" 
+                                ${isAnswered ? 'disabled' : ''} 
+                                onclick="handleMCQSelect(${idx}, ${optIdx})">
+                            ${opt}
+                        </button>
+                    `;
+                });
+
+                const isAnswered = state.mcqAnswers[idx] !== undefined;
+                const feedbackClass = isAnswered ? (state.mcqAnswers[idx] === q.correct ? 'correct' : 'incorrect') : '';
+                const feedbackText = isAnswered ? (state.mcqAnswers[idx] === q.correct ? '✓ Correct! ' : '✕ Incorrect. ') + q.explanation : '';
+
+                card.innerHTML = `
+                    <div class="question-title">${idx + 1}. ${q.q}</div>
+                    <div class="options-list">${optionsHTML}</div>
+                    <div class="feedback-box ${feedbackClass}" style="display: ${isAnswered ? 'block' : 'none'};">
+                        ${feedbackText}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function handleMCQSelect(qIdx, optIdx) {
+            if (state.mcqAnswers[qIdx] !== undefined) return;
+
+            state.mcqAnswers[qIdx] = optIdx;
+            const q = MCQ_QUESTIONS[qIdx];
+
+            if (optIdx === q.correct) {
+                addXP(20);
+            }
+
+            // Check module completion
+            if (Object.keys(state.mcqAnswers).length === MCQ_QUESTIONS.length && !state.completedMods.includes(3)) {
+                state.completedMods.push(3);
+                const allCorrect = MCQ_QUESTIONS.every((q, i) => state.mcqAnswers[i] === q.correct);
+                if (allCorrect) {
+                    checkBadgeUnlock('sharp_speaker');
+                }
+                triggerConfetti();
+            }
+
+            saveState();
+            updateHeaderUI();
+            initQuizModule();
+        }
+
+        function initReadingModule() {
+            const container = document.getElementById('reading-container');
+            container.innerHTML = '';
+
+            READING_MODULES.forEach((mod, mIdx) => {
+                const block = document.createElement('div');
+                block.className = 'reading-block';
+
+                let questionsHTML = '';
+                mod.questions.forEach((q, qIdx) => {
+                    const key = `${mIdx}_${qIdx}`;
+                    const isAnswered = state.readingAnswers[key] !== undefined;
+                    const userAns = state.readingAnswers[key];
+
+                    const options = ['TRUE', 'FALSE', 'NOT GIVEN'];
+                    let btns = '';
+
+                    options.forEach(opt => {
+                        let extraClass = '';
+                        if (isAnswered) {
+                            if (opt === q.answer) extraClass = 'correct';
+                            else if (userAns === opt) extraClass = 'incorrect';
+                        }
+                        btns += `
+                            <button class="option-btn ${extraClass}" 
+                                    style="padding: 0.5rem 1rem; width: auto;"
+                                    ${isAnswered ? 'disabled' : ''} 
+                                    onclick="handleReadingSelect(${mIdx}, ${qIdx}, '${opt}')">
+                                ${opt}
+                            </button>
+                        `;
+                    });
+
+                    const feedbackClass = isAnswered ? (userAns === q.answer ? 'correct' : 'incorrect') : '';
+                    const feedbackText = isAnswered ? (userAns === q.answer ? '✓ Correct! ' : '✕ Incorrect. ') + q.explanation : '';
+
+                    questionsHTML += `
+                        <div style="margin-top: 1.25rem;">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.95rem;">
+                                ${mIdx + 1}.${qIdx + 1} "${q.statement}"
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">${btns}</div>
+                            <div class="feedback-box ${feedbackClass}" style="display: ${isAnswered ? 'block' : 'none'};">
+                                ${feedbackText}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                block.innerHTML = `
+                    <h3 style="color: var(--accent-gold); margin-bottom: 0.75rem;">${mod.title}</h3>
+                    <div class="reading-text">${mod.text}</div>
+                    ${questionsHTML}
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        function handleReadingSelect(mIdx, qIdx, opt) {
+            const key = `${mIdx}_${qIdx}`;
+            if (state.readingAnswers[key] !== undefined) return;
+
+            state.readingAnswers[key] = opt;
+            const q = READING_MODULES[mIdx].questions[qIdx];
+
+            if (opt === q.answer) {
+                addXP(30);
+            }
+
+            // Total reading questions check
+            let totalQ = 0;
+            READING_MODULES.forEach(m => totalQ += m.questions.length);
+
+            if (Object.keys(state.readingAnswers).length === totalQ && !state.completedMods.includes(4)) {
+                state.completedMods.push(4);
+                let allCorrect = true;
+                READING_MODULES.forEach((m, mi) => {
+                    m.questions.forEach((rq, qi) => {
+                        if (state.readingAnswers[`${mi}_${qi}`] !== rq.answer) allCorrect = false;
+                    });
+                });
+                if (allCorrect) {
+                    checkBadgeUnlock('careful_reader');
+                }
+                triggerConfetti();
+            }
+
+            saveState();
+            updateHeaderUI();
+            initReadingModule();
+        }
+
+        function initBossModule() {
+            const container = document.getElementById('boss-container');
+            container.innerHTML = '';
+
+            // Task 1: Context Questions
+            const task1Card = document.createElement('div');
+            task1Card.className = 'quiz-card';
+            task1Card.innerHTML = `<h3 style="color: var(--accent-gold); margin-bottom: 1rem;">⚔️ TASK 1: CONTEXT CHALLENGE</h3>`;
+
+            BOSS_CONTEXT_QUESTIONS.forEach((q, idx) => {
+                let optionsHTML = '';
+                q.options.forEach((opt, optIdx) => {
+                    const isAnswered = state.bossContextAnswers[idx] !== undefined;
+                    const isSelected = state.bossContextAnswers[idx] === optIdx;
+                    const isCorrect = optIdx === q.correct;
+
+                    let extraClass = '';
+                    if (isAnswered) {
+                        if (isCorrect) extraClass = 'correct';
+                        else if (isSelected) extraClass = 'incorrect';
+                    }
+
+                    optionsHTML += `
+                        <button class="option-btn ${extraClass}" 
+                                ${isAnswered ? 'disabled' : ''} 
+                                onclick="handleBossContextSelect(${idx}, ${optIdx})">
+                            ${opt}
+                        </button>
+                    `;
+                });
+
+                const isAnswered = state.bossContextAnswers[idx] !== undefined;
+                const feedbackClass = isAnswered ? (state.bossContextAnswers[idx] === q.correct ? 'correct' : 'incorrect') : '';
+                const feedbackText = isAnswered ? (state.bossContextAnswers[idx] === q.correct ? '✓ Correct! ' : '✕ Incorrect. ') + q.explanation : '';
+
+                task1Card.innerHTML += `
+                    <div style="margin-bottom: 1.5rem;">
+                        <div class="question-title">${idx + 1}. ${q.q}</div>
+                        <div class="options-list">${optionsHTML}</div>
+                        <div class="feedback-box ${feedbackClass}" style="display: ${isAnswered ? 'block' : 'none'};">
+                            ${feedbackText}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.appendChild(task1Card);
+
+            // Task 2: Reading Evidence Challenge
+            const task2Card = document.createElement('div');
+            task2Card.className = 'reading-block';
+
+            let readingQuestionsHTML = '';
+            BOSS_READING.questions.forEach((q, qIdx) => {
+                const isAnswered = state.bossReadingAnswers[qIdx] !== undefined;
+                const userAns = state.bossReadingAnswers[qIdx];
+
+                const options = ['TRUE', 'FALSE', 'NOT GIVEN'];
+                let btns = '';
+
+                options.forEach(opt => {
+                    let extraClass = '';
+                    if (isAnswered) {
+                        if (opt === q.answer) extraClass = 'correct';
+                        else if (userAns === opt) extraClass = 'incorrect';
+                    }
+                    btns += `
+                        <button class="option-btn ${extraClass}" 
+                                style="padding: 0.5rem 1rem; width: auto;"
+                                ${isAnswered ? 'disabled' : ''} 
+                                onclick="handleBossReadingSelect(${qIdx}, '${opt}')">
+                            ${opt}
+                        </button>
+                    `;
+                });
+
+                const feedbackClass = isAnswered ? (userAns === q.answer ? 'correct' : 'incorrect') : '';
+                const feedbackText = isAnswered ? (userAns === q.answer ? '✓ Correct! ' : '✕ Incorrect. ') + q.explanation : '';
+
+                readingQuestionsHTML += `
+                    <div style="margin-top: 1.25rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem; font-size: 0.95rem;">
+                            2.${qIdx + 1} "${q.statement}"
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">${btns}</div>
+                        <div class="feedback-box ${feedbackClass}" style="display: ${isAnswered ? 'block' : 'none'};">
+                            ${feedbackText}
+                        </div>
+                    </div>
+                `;
+            });
+
+            task2Card.innerHTML = `
+                <h3 style="color: var(--accent-gold); margin-bottom: 0.75rem;">⚔️ TASK 2: EVIDENCE CHALLENGE</h3>
+                <div class="reading-text">${BOSS_READING.text}</div>
+                ${readingQuestionsHTML}
+            `;
+
+            container.appendChild(task2Card);
+        }
+
+        function handleBossContextSelect(qIdx, optIdx) {
+            if (state.bossContextAnswers[qIdx] !== undefined) return;
+            state.bossContextAnswers[qIdx] = optIdx;
+
+            if (optIdx === BOSS_CONTEXT_QUESTIONS[qIdx].correct) {
+                addXP(40);
+            }
+
+            checkBossCompletion();
+            saveState();
+            updateHeaderUI();
+            initBossModule();
+        }
+
+        function handleBossReadingSelect(qIdx, opt) {
+            if (state.bossReadingAnswers[qIdx] !== undefined) return;
+            state.bossReadingAnswers[qIdx] = opt;
+
+            if (opt === BOSS_READING.questions[qIdx].answer) {
+                addXP(40);
+            }
+
+            checkBossCompletion();
+            saveState();
+            updateHeaderUI();
+            initBossModule();
+        }
+
+        function checkBossCompletion() {
+            const contextDone = Object.keys(state.bossContextAnswers).length === BOSS_CONTEXT_QUESTIONS.length;
+            const readingDone = Object.keys(state.bossReadingAnswers).length === BOSS_READING.questions.length;
+
+            if (contextDone && readingDone && !state.completedMods.includes(5)) {
+                state.completedMods.push(5);
+                state.completedMods.push(6); // Final completion
+                addXP(100);
+                checkBadgeUnlock('boss_slayer');
+                checkBadgeUnlock('vocab_master');
+                triggerBossConfetti();
+            }
+        }
+
+        function initResultsModule() {
+            document.getElementById('results-greeting').textContent = `Congratulations, ${state.name || 'Learner'}! You've mastered the Family & Relationships vocabulary challenge.`;
+
+            // Render Badges
+            const badgeGrid = document.getElementById('badge-grid');
+            badgeGrid.innerHTML = '';
+
+            BADGES_DEF.forEach(b => {
+                const unlocked = state.badges.includes(b.id);
+                const card = document.createElement('div');
+                card.className = `badge-card ${unlocked ? 'unlocked' : ''}`;
+                card.innerHTML = `
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-title">${b.title}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem;">${b.desc}</div>
+                `;
+                badgeGrid.appendChild(card);
+            });
+
+            // Render Vocabulary Bank
+            const vocabGrid = document.getElementById('vocab-bank-grid');
+            vocabGrid.innerHTML = '';
+
+            VOCAB_DATA.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'vocab-card';
+                card.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700; color: var(--accent-gold); margin-bottom: 0.3rem;">${v.phrase}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 0.5rem;">${v.meaning}</div>
+                    </div>
+                    <button class="audio-btn" onclick="speakPhrase('${v.phrase}')" style="align-self: flex-end; width: 32px; height: 32px; font-size: 0.8rem;">🔊</button>
+                `;
+                vocabGrid.appendChild(card);
+            });
+        }
+
+        function switchTab(modId) {
+            state.currentMod = modId;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.mod) === modId);
+            });
+            document.querySelectorAll('.module-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(`mod-${modId}`).classList.add('active');
+
+            if (modId === 2) initMatchingModule();
+            if (modId === 3) initQuizModule();
+            if (modId === 4) initReadingModule();
+            if (modId === 5) initBossModule();
+            if (modId === 6) {
+                initResultsModule();
+                triggerFinalConfetti();
+            }
+        }
+
+        // Global Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            state.name = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.name || 'Student');
+            saveState();
+            updateHeaderUI();
+
+            document.getElementById('theme-select').onchange = (e) => {
+                state.theme = e.target.value;
+                saveState();
+                updateHeaderUI();
+            };
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.onclick = () => {
+                    const mod = parseInt(btn.dataset.mod);
+                    if (!btn.disabled) switchTab(mod);
+                };
+            });
+
+            // Flashcard Controls
+            const card = document.getElementById('flashcard');
+            card.onclick = () => card.classList.toggle('flipped');
+
+            document.getElementById('fc-next').onclick = (e) => {
+                e.stopPropagation();
+                state.fcIndex = (state.fcIndex + 1) % VOCAB_DATA.length;
+                renderFlashcard();
+            };
+
+            document.getElementById('fc-prev').onclick = (e) => {
+                e.stopPropagation();
+                state.fcIndex = (state.fcIndex - 1 + VOCAB_DATA.length) % VOCAB_DATA.length;
+                renderFlashcard();
+            };
+
+            document.getElementById('fc-audio').onclick = (e) => {
+                e.stopPropagation();
+                speakPhrase(VOCAB_DATA[state.fcIndex].phrase);
+            };
+
+            document.getElementById('reset-btn').onclick = () => {
+                if (confirm("Are you sure you want to reset all your progress?")) {
+                    localStorage.removeItem(__vocabKey('ielts_family_vocab_state'));
+                    location.reload();
+                }
+            };
+
+            // Init first module view
+            renderFlashcard();
+        });
+    </script>
+</body>
+</html>

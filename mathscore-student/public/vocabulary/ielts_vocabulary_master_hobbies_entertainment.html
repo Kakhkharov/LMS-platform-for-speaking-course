@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Masterclass: Hobbies & Entertainment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+        }
+
+        /* THEME 1: MIDNIGHT LUXURY (Default) */
+        [data-theme="midnight"] {
+            --bg-page: #0b0f19;
+            --bg-card: #151c2e;
+            --bg-card-hover: #1e2842;
+            --bg-glass: rgba(21, 28, 46, 0.75);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(245, 158, 11, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-gold: #f59e0b;
+            --accent-gold-glow: rgba(245, 158, 11, 0.25);
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow-subtle: 0 10px 30px -10px rgba(0,0,0,0.5);
+            --shadow-card: 0 8px 24px rgba(0,0,0,0.3);
+            --boss-gradient: linear-gradient(135deg, #4c1d95 0%, #1e1b4b 50%, #0f172a 100%);
+        }
+
+        /* THEME 2: PLATINUM MINIMAL */
+        [data-theme="platinum"] {
+            --bg-page: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f8fafc;
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --border-highlight: rgba(217, 119, 6, 0.5);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-gold: #d97706;
+            --accent-gold-glow: rgba(217, 119, 6, 0.15);
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --success: #059669;
+            --error: #dc2626;
+            --shadow-subtle: 0 10px 30px -10px rgba(0,0,0,0.08);
+            --shadow-card: 0 4px 16px rgba(0,0,0,0.06);
+            --boss-gradient: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        /* THEME 3: EMERALD EXECUTIVE */
+        [data-theme="emerald"] {
+            --bg-page: #042f2e;
+            --bg-card: #064e3b;
+            --bg-card-hover: #047857;
+            --bg-glass: rgba(6, 78, 59, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-highlight: rgba(251, 191, 36, 0.5);
+            --text-main: #ecfdf5;
+            --text-muted: #a7f3d0;
+            --accent-gold: #fbbf24;
+            --accent-gold-glow: rgba(251, 191, 36, 0.25);
+            --primary: #10b981;
+            --primary-light: #34d399;
+            --success: #059669;
+            --error: #f87171;
+            --shadow-subtle: 0 10px 30px -10px rgba(0,0,0,0.6);
+            --shadow-card: 0 8px 24px rgba(0,0,0,0.4);
+            --boss-gradient: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+        }
+
+        /* THEME 4: ROYAL PURPLE */
+        [data-theme="purple"] {
+            --bg-page: #2e1065;
+            --bg-card: #3b0764;
+            --bg-card-hover: #581c87;
+            --bg-glass: rgba(59, 7, 100, 0.8);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --border-highlight: rgba(245, 158, 11, 0.5);
+            --text-main: #faf5ff;
+            --text-muted: #e9d5ff;
+            --accent-gold: #f59e0b;
+            --accent-gold-glow: rgba(245, 158, 11, 0.3);
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --success: #10b981;
+            --error: #f43f5e;
+            --shadow-subtle: 0 10px 30px -10px rgba(0,0,0,0.6);
+            --shadow-card: 0 8px 24px rgba(0,0,0,0.4);
+            --boss-gradient: linear-gradient(135deg, #581c87 0%, #312e81 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-sans);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-page); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        /* Typography */
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Confetti Canvas */
+        #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Sticky Navigation Bar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent-gold), var(--primary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #fff;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px var(--accent-gold-glow);
+        }
+
+        .nav-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .nav-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .stat-badge .icon { color: var(--accent-gold); }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 12px 4px 6px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .user-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .btn-text-sm {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .btn-text-sm:hover { color: var(--accent-gold); }
+
+        /* Theme Selector */
+        .theme-select-wrapper {
+            position: relative;
+        }
+
+        .theme-select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px 16px;
+            flex: 1;
+        }
+
+        /* Stepper Navigation */
+        .module-stepper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            gap: 8px;
+        }
+
+        .step-item {
+            flex: 1;
+            min-width: 110px;
+            text-align: center;
+            padding: 10px 8px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            opacity: 0.6;
+            border: 1px solid transparent;
+        }
+
+        .step-item.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--border-highlight);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .step-item.completed {
+            opacity: 0.9;
+        }
+
+        .step-num {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* UI Cards & Containers */
+        .app-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 24px;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .badge-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent-gold-glow);
+            color: var(--accent-gold);
+            border: 1px solid var(--border-highlight);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #d97706);
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px var(--accent-gold-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-gold-glow);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: var(--text-muted);
+        }
+
+        .btn-audio {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--border-color);
+            color: var(--accent-gold);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-audio:hover {
+            background: var(--accent-gold-glow);
+            transform: scale(1.1);
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent-gold));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* FLASHCARD COMPONENT */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            min-height: 280px;
+            margin: 24px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-card);
+        }
+
+        .card-face-back {
+            transform: rotateY(180deg);
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+        }
+
+        .card-front-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+            gap: 16px;
+        }
+
+        .expression-title {
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            font-weight: 800;
+        }
+
+        .flip-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* MATCHING GAME */
+        .matching-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .match-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 70px;
+        }
+
+        .match-card:hover {
+            border-color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .match-card.selected {
+            border-color: var(--accent-gold);
+            background: var(--accent-gold-glow);
+            transform: scale(1.02);
+        }
+
+        .match-card.matched {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .match-card.shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* MCQ OPTIONS */
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--text-muted);
+        }
+
+        .option-prefix {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .option-btn.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+        }
+        .option-btn.correct .option-prefix { background: var(--success); color: #fff; }
+
+        .option-btn.incorrect {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+        }
+        .option-btn.incorrect .option-prefix { background: var(--error); color: #fff; }
+
+        /* READING PASSAGE & T/F/NG */
+        .reading-passage {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--accent-gold);
+            padding: 20px 24px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            line-height: 1.7;
+            color: var(--text-main);
+            margin-bottom: 24px;
+            font-size: 1rem;
+        }
+
+        .tfng-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tfng-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .tfng-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tfng-btn.active-true { background: rgba(16, 185, 129, 0.3); border-color: var(--success); }
+        .tfng-btn.active-false { background: rgba(239, 68, 68, 0.3); border-color: var(--error); }
+        .tfng-btn.active-ng { background: rgba(245, 158, 11, 0.3); border-color: var(--accent-gold); }
+
+        .explanation-box {
+            margin-top: 12px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* FINAL BOSS THEME */
+        .boss-card {
+            background: var(--boss-gradient);
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+        }
+
+        .boss-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .boss-title {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff, var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        /* MODAL DIALOGS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-highlight);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            max-width: 480px;
+            width: 100%;
+            box-shadow: var(--shadow-card);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--accent-gold);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 1rem;
+            margin: 16px 0;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-gold);
+        }
+
+        /* BADGES GRID */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .badge-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            opacity: 0.4;
+            filter: grayscale(1);
+            transition: var(--transition-smooth);
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            border-color: var(--border-highlight);
+            background: var(--accent-gold-glow);
+        }
+
+        .badge-icon {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* VOCABULARY BANK TABLE */
+        .vocab-bank {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .vocab-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-color);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        /* RESPONSIVE DESIGN ADJUSTMENTS */
+        @media (max-width: 768px) {
+            .navbar { padding: 10px 14px; }
+            .nav-subtitle { display: none; }
+            .matching-grid { grid-template-columns: 1fr; }
+            .app-card { padding: 20px; }
+            .expression-title { font-size: 1.4rem; }
+            .boss-title { font-size: 1.7rem; }
+            .module-stepper { padding: 6px; }
+            .step-item { min-width: 80px; padding: 6px 4px; }
+            .step-label { font-size: 0.75rem; }
+        }
+    </style>
+    <script src="./practise-vocab-theme.js"></script>
+</head>
+<body>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="nav-logo">IE</div>
+            <div>
+                <div class="nav-title">Hobbies & Entertainment</div>
+                <div class="nav-subtitle">IELTS Speaking C1 Masterclass</div>
+            </div>
+        </div>
+
+        <div class="nav-stats">
+            <div class="stat-badge">
+                <span class="icon">⚡</span>
+                <span id="navXpDisplay">0 XP</span>
+            </div>
+            <div class="stat-badge">
+                <span class="icon">🏆</span>
+                <span id="navLevelDisplay">Beginner</span>
+            </div>
+            <div class="user-pill">
+                <div class="avatar" id="userAvatar">S</div>
+                <span class="user-name" id="userNameDisplay">Student</span>
+            </div>
+            <div class="theme-select-wrapper">
+                <select class="theme-select" id="themeSelector" onchange="changeTheme(this.value)">
+                    <option value="midnight">Midnight Luxury</option>
+                    <option value="platinum">Platinum Minimal</option>
+                    <option value="emerald">Emerald Executive</option>
+                    <option value="purple">Royal Purple</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="container">
+        
+        <!-- MODULE STEPPER -->
+        <div class="module-stepper">
+            <div class="step-item active" id="step-0" onclick="switchModule(0)">
+                <span class="step-num">Mod 1</span>
+                <span class="step-label">Learn</span>
+            </div>
+            <div class="step-item" id="step-1" onclick="switchModule(1)">
+                <span class="step-num">Mod 2</span>
+                <span class="step-label">Match</span>
+            </div>
+            <div class="step-item" id="step-2" onclick="switchModule(2)">
+                <span class="step-num">Mod 3</span>
+                <span class="step-label">Choose</span>
+            </div>
+            <div class="step-item" id="step-3" onclick="switchModule(3)">
+                <span class="step-num">Mod 4</span>
+                <span class="step-label">Read</span>
+            </div>
+            <div class="step-item" id="step-4" onclick="switchModule(4)">
+                <span class="step-num">Mod 5</span>
+                <span class="step-label">Final Boss</span>
+            </div>
+            <div class="step-item" id="step-5" onclick="switchModule(5)">
+                <span class="step-num">Mod 6</span>
+                <span class="step-label">Mastery</span>
+            </div>
+        </div>
+
+        <!-- MODULE 1: LEARN (FLASHCARDS) -->
+        <div class="module-section" id="module-0">
+            <div class="app-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="badge-tag">Exposure & Recognition</span>
+                    <span id="flashcardCounter" style="font-weight:700; color:var(--accent-gold);">Card 1 / 16</span>
+                </div>
+                
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="flashcardProgress"></div>
+                </div>
+
+                <div class="flashcard-wrapper" onclick="flipCurrentCard()">
+                    <div class="flashcard" id="activeFlashcard">
+                        <!-- Front Face -->
+                        <div class="card-face card-face-front">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span class="badge-tag">IELTS SPEAKING</span>
+                                <button class="btn-audio" onclick="event.stopPropagation(); speakCurrentWord();" title="Listen Pronunciation">🔊</button>
+                            </div>
+                            <div class="card-front-content">
+                                <div class="expression-title" id="cardFrontText">take up a new activity</div>
+                                <div class="flip-hint">💡 Click or tap to reveal meaning and example</div>
+                            </div>
+                            <div style="text-align:center; font-size:0.8rem; color:var(--text-muted);">Card 1 of 16</div>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="card-face card-face-back">
+                            <div>
+                                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase; margin-bottom:6px;">MEANING</div>
+                                <div style="font-size:1.05rem; font-weight:600; line-height:1.5; margin-bottom:16px;" id="cardBackMeaning">To start doing an activity regularly, especially as a hobby or creative outlet.</div>
+                                
+                                <div style="font-size:0.8rem; font-weight:700; color:var(--accent-gold); text-transform:uppercase; margin-bottom:6px;">NATURAL IELTS EXAMPLE</div>
+                                <div style="font-size:0.95rem; font-style:italic; line-height:1.5; color:var(--text-main); background:rgba(255,255,255,0.05); padding:12px; border-radius:8px;" id="cardBackExample">"I actually took up oil painting last year because I needed a creative outlet to unwind after work."</div>
+                            </div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+                                <div style="font-size:0.85rem; color:var(--text-muted);">
+                                    <strong style="color:var(--primary-light);">Alternative:</strong> <span id="cardBackAlt">start a new hobby</span>
+                                </div>
+                                <span class="flip-hint">🔄 Tap to flip back</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <button class="btn-secondary" onclick="prevCard()">← Previous</button>
+                    <button class="btn-secondary" onclick="flipCurrentCard()">Flip Card</button>
+                    <button class="btn-primary" onclick="nextCard()">Next Card →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 2: MATCHING GAME -->
+        <div class="module-section" id="module-1" style="display:none;">
+            <div class="app-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div>
+                        <span class="badge-tag">Controlled Practice</span>
+                        <h2 style="margin-top:8px;">Match Expression to Meaning</h2>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:0.85rem; color:var(--text-muted);">Mistakes: <span id="matchMistakes" style="color:var(--error); font-weight:700;">0</span></div>
+                        <div style="font-size:0.85rem; color:var(--text-muted);">Matched: <span id="matchProgress" style="color:var(--success); font-weight:700;">0 / 8</span></div>
+                    </div>
+                </div>
+
+                <p style="color:var(--text-muted); font-size:0.9rem;">Select an expression on the left, then select its corresponding meaning on the right.</p>
+
+                <div class="matching-grid">
+                    <div id="expressionsCol" style="display:flex; flex-direction:column; gap:12px;"></div>
+                    <div id="meaningsCol" style="display:flex; flex-direction:column; gap:12px;"></div>
+                </div>
+                
+                <div style="margin-top:24px; text-align:right;">
+                    <button class="btn-secondary" onclick="resetMatchingModule()">Reset Grid</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 3: CHOOSE (MCQ) -->
+        <div class="module-section" id="module-2" style="display:none;">
+            <div class="app-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <span class="badge-tag">Context & Collocation</span>
+                    <span id="mcqCounter" style="font-weight:700; color:var(--accent-gold);">Question 1 / 8</span>
+                </div>
+
+                <h3 style="font-size:1.2rem; line-height:1.5; margin-bottom:20px;" id="mcqQuestionText">Question loading...</h3>
+
+                <div class="mcq-options" id="mcqOptionsContainer">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div class="explanation-box" id="mcqExplanation" style="display:none;"></div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+                    <button class="btn-primary" id="mcqNextBtn" onclick="nextMcqQuestion()" style="display:none;">Next Question →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 4: READ & DECIDE (T/F/NG) -->
+        <div class="module-section" id="module-3" style="display:none;">
+            <div class="app-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <span class="badge-tag">Comprehension & Analysis</span>
+                    <span id="readingPassageTitle" style="font-weight:700; color:var(--accent-gold);">Text 1 of 3</span>
+                </div>
+
+                <h2 id="readingTextHeading" style="margin-bottom:12px;">Why People Have Hobbies</h2>
+                <div class="reading-passage" id="readingPassageBody">Loading passage...</div>
+
+                <div id="readingQuestionsContainer">
+                    <!-- Questions injected dynamically -->
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
+                    <button class="btn-secondary" id="readPrevBtn" onclick="prevReadingText()">← Previous Text</button>
+                    <button class="btn-primary" id="readNextBtn" onclick="nextReadingText()">Next Text →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 5: FINAL BOSS -->
+        <div class="module-section" id="module-4" style="display:none;">
+            <div class="app-card boss-card">
+                <div class="boss-header">
+                    <span class="badge-tag" style="background:rgba(245,158,11,0.2); color:#fbbf24; border-color:#fbbf24;">HIGH STAKES CHALLENGE</span>
+                    <h1 class="boss-title">👑 FINAL BOSS</h1>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">You've learned the vocabulary. Now prove you can apply it under exam pressure.</p>
+                </div>
+
+                <!-- BOSS STEP 1: CONTEXT CHALLENGE -->
+                <div id="bossTask1">
+                    <h3 style="color:var(--accent-gold); margin-bottom:16px; display:flex; align-items:center; gap:8px;">
+                        <span>🎯 Task 1: Context & Collocation Challenge</span>
+                    </h3>
+                    <div id="bossMcqContainer"></div>
+                </div>
+
+                <!-- BOSS STEP 2: EVIDENCE CHALLENGE -->
+                <div id="bossTask2" style="display:none;">
+                    <h3 style="color:var(--accent-gold); margin-bottom:16px;">📖 Task 2: Advanced Evidence Analysis</h3>
+                    <div class="reading-passage" style="border-left-color:var(--primary-light);">
+                        <h4 style="margin-bottom:8px; color:var(--text-main);">How Entertainment and Leisure Are Changing in the Digital Age</h4>
+                        <p id="bossReadingBody" style="font-size:0.95rem; line-height:1.7;"></p>
+                    </div>
+                    <div id="bossTfngContainer"></div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+                    <button class="btn-primary" id="bossNextBtn" onclick="advanceBossTask()">Proceed to Evidence Challenge →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE 6: MASTERY & SPEAKING CHALLENGE -->
+        <div class="module-section" id="module-5" style="display:none;">
+            <div class="app-card" style="text-align:center;">
+                <span class="badge-tag">LESSON COMPLETE</span>
+                <h1 style="font-size:2.2rem; margin:16px 0 8px 0; color:var(--accent-gold);">HOBBIES & ENTERTAINMENT — MASTERED</h1>
+                <p style="color:var(--text-muted); font-size:1.05rem;" id="finalGreeting">Congratulations!</p>
+
+                <!-- STATS SUMMARY -->
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:16px; margin:28px 0;">
+                    <div style="background:rgba(255,255,255,0.04); padding:16px; border-radius:14px; border:1px solid var(--border-color);">
+                        <div style="font-size:0.8rem; color:var(--text-muted);">TOTAL XP</div>
+                        <div style="font-size:1.6rem; font-weight:800; color:var(--accent-gold);" id="finalXp">0</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04); padding:16px; border-radius:14px; border:1px solid var(--border-color);">
+                        <div style="font-size:0.8rem; color:var(--text-muted);">FINAL LEVEL</div>
+                        <div style="font-size:1.2rem; font-weight:700; color:var(--primary-light);" id="finalLevel">Master</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04); padding:16px; border-radius:14px; border:1px solid var(--border-color);">
+                        <div style="font-size:0.8rem; color:var(--text-muted);">MCQ SCORE</div>
+                        <div style="font-size:1.6rem; font-weight:800; color:var(--success);" id="finalMcqScore">0%</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04); padding:16px; border-radius:14px; border:1px solid var(--border-color);">
+                        <div style="font-size:0.8rem; color:var(--text-muted);">READING SCORE</div>
+                        <div style="font-size:1.6rem; font-weight:800; color:var(--success);" id="finalReadingScore">0%</div>
+                    </div>
+                </div>
+
+                <!-- BADGES SECTION -->
+                <h3 style="text-align:left; margin-bottom:8px;">🏆 Earned Badges</h3>
+                <div class="badges-grid" id="badgesDisplayGrid"></div>
+            </div>
+
+            <!-- VOCABULARY BANK -->
+            <div class="app-card">
+                <h2>📚 Complete Vocabulary Bank</h2>
+                <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;">Reference table of all 16 expressions taught in this lesson.</p>
+                <div class="vocab-bank" id="vocabBankContainer"></div>
+            </div>
+
+            <!-- SPEAKING PRACTICE SECTION -->
+            <div class="app-card" style="border-color:var(--border-highlight);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h2>🎤 Final Speaking Challenge</h2>
+                    <span class="badge-tag">IELTS Speaking Parts 1, 2 & 3</span>
+                </div>
+                <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:20px;">
+                    Practice answering these authentic IELTS questions aloud. Aim to incorporate at least <strong>3 target expressions</strong> in each response!
+                </p>
+
+                <div style="display:flex; flex-direction:column; gap:16px;" id="speakingQuestionsContainer">
+                    <!-- Speaking questions dynamically added -->
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:32px;">
+                <button class="btn-secondary" onclick="confirmResetProgress()" style="color:var(--error); border-color:rgba(239,68,68,0.3);">
+                    ⚠️ Reset Progress & Restart Lesson
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CONFIRMATION MODAL (Replaces prohibited native confirm dialog) -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Reset Progress?</h3>
+            <p style="color:var(--text-muted); margin-bottom:20px;">This will reset all your XP, completed modules, scores, and badges. Are you sure?</p>
+            <div style="display:flex; gap:12px; justify-content:flex-end;">
+                <button class="btn-secondary" onclick="closeModal('confirmModal')">Cancel</button>
+                <button class="btn-primary" style="background:var(--error); color:#fff;" onclick="executeResetProgress()">Reset Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const __PRACTISE_LESSON_ID = 'hobbies_entertainment';
+        const __PRACTISE_PARAMS = (() => {
+            try { return new URLSearchParams(window.location.search); } catch (e) { return new URLSearchParams(); }
+        })();
+        const __PRACTISE_STUDENT_NAME = (__PRACTISE_PARAMS.get('studentName') || '').trim() || 'Student';
+        const __PRACTISE_UID = (__PRACTISE_PARAMS.get('uid') || '').trim();
+        function __vocabKey(baseKey) {
+            return __PRACTISE_UID ? `${baseKey}_${__PRACTISE_UID}` : baseKey;
+        }
+        function __notifyPractiseParentXP(amount, totalLessonXp) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    const targetOrigin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : '*';
+                    window.parent.postMessage({
+                        type: 'PRACTISE_VOCAB_XP',
+                        lessonId: __PRACTISE_LESSON_ID,
+                        amount: pts,
+                        totalLessonXp: Number(totalLessonXp) || pts
+                    }, targetOrigin);
+                }
+            } catch (e) {}
+        }
+
+        // 1. DATA DEFINITIONS (16 TOP-TIER EXPRESSIONS)
+        const VOCABULARY_DATA = [
+            {
+                id: 1,
+                expression: "take up a new activity",
+                meaning: "To start doing a new activity or hobby regularly in your leisure time.",
+                example: "I decided to take up oil painting last winter because I needed a creative outlet to unwind after intense study sessions.",
+                alternative: "start a hobby"
+            },
+            {
+                id: 2,
+                expression: "unwind after a hectic day",
+                meaning: "To relax and release physical or mental tension after a busy and exhausting day.",
+                example: "For me, listening to classical acoustic guitar is the ultimate way to unwind after a hectic day at work.",
+                alternative: "de-stress / chill out"
+            },
+            {
+                id: 3,
+                expression: "switch off from work",
+                meaning: "To completely stop thinking about work duties, emails, or daily responsibilities.",
+                example: "It can be extremely challenging to switch off from work when you work remotely, but going for a evening run helps me set boundaries.",
+                alternative: "disconnect mentally"
+            },
+            {
+                id: 4,
+                expression: "be heavily into something",
+                meaning: "To be extremely enthusiastic, interested in, or passionate about a specific activity.",
+                example: "My younger brother is heavily into competitive online gaming; he even participates in regional weekend tournaments.",
+                alternative: "be passionate about"
+            },
+            {
+                id: 5,
+                expression: "get hooked on a series",
+                meaning: "To become captivated or addicted to watching a television show or digital series.",
+                example: "I got completely hooked on a crime documentary series on Netflix and ended up watching four episodes in a single evening.",
+                alternative: "become addicted to a show"
+            },
+            {
+                id: 6,
+                expression: "binge-watch content",
+                meaning: "To watch multiple episodes of a show or videos continuously in one sitting.",
+                example: "On rainy Sundays, there is nothing I enjoy more than binge-watching historical drama series with a warm cup of tea.",
+                alternative: "marathon-watch"
+            },
+            {
+                id: 7,
+                expression: "immerse oneself in a book",
+                meaning: "To give your full attention and become deeply absorbed in reading a literary work.",
+                example: "When I immerse myself in a good fantasy novel, I completely lose track of time and forget about daily worries.",
+                alternative: "get lost in a book"
+            },
+            {
+                id: 8,
+                expression: "broaden one's horizons",
+                meaning: "To expand your knowledge, cultural understanding, or range of life experiences.",
+                example: "Traveling to international film festivals allows cinema enthusiasts to broaden their horizons and appreciate global storytelling.",
+                alternative: "expand your perspective"
+            },
+            {
+                id: 9,
+                expression: "pursue a creative outlet",
+                meaning: "To engage in artistic, musical, or creative endeavors to channel personal expression.",
+                example: "Everyone needs to pursue a creative outlet—whether it's cooking, photography, or creative writing—to express themselves.",
+                alternative: "express creativity"
+            },
+            {
+                id: 10,
+                expression: "pick up a valuable skill",
+                meaning: "To learn a useful ability informally or gradually through practice and interest.",
+                example: "By editing short video clips for my personal travel blog, I managed to pick up a valuable video editing skill.",
+                alternative: "acquire an ability"
+            },
+            {
+                id: 11,
+                expression: "step outside one's comfort zone",
+                meaning: "To willingly engage in new, unfamiliar, or challenging activities despite feeling nervous.",
+                example: "Joining a local public speaking club was scary, but it forced me to step outside my comfort zone and gain confidence.",
+                alternative: "push personal boundaries"
+            },
+            {
+                id: 12,
+                expression: "strike a healthy work-leisure balance",
+                meaning: "To achieve an equal and sustainable balance between employment/study obligations and personal free time.",
+                example: "Maintaining personal hobbies is essential if you want to strike a healthy work-leisure balance and prevent burnout.",
+                alternative: "balance work and play"
+            },
+            {
+                id: 13,
+                expression: "cater to diverse tastes",
+                meaning: "To offer options, activities, or entertainment that appeal to a wide variety of preferences.",
+                example: "Modern streaming platforms succeed primarily because their extensive catalog caters to diverse tastes across all age groups.",
+                alternative: "appeal to wide audiences"
+            },
+            {
+                id: 14,
+                expression: "have a soft spot for something",
+                meaning: "To feel a natural affection, fondness, or strong preference for a particular genre or activity.",
+                example: "Although I usually enjoy non-fiction books, I have a real soft spot for classic sci-fi novels from the 1980s.",
+                alternative: "have a fondness for"
+            },
+            {
+                id: 15,
+                expression: "soak up the atmosphere",
+                meaning: "To absorb, enjoy, and feel the energy or excitement of a live venue or public event.",
+                example: "Watching matches on TV is convenient, but nothing compares to sitting in a stadium and soaking up the atmosphere with thousands of fans.",
+                alternative: "enjoy the ambient energy"
+            },
+            {
+                id: 16,
+                expression: "have a positive impact on well-being",
+                meaning: "To meaningfully improve a person's physical health, mental wellness, or overall happiness.",
+                example: "Regular outdoor activities like hiking have been proven to have a remarkably positive impact on mental well-being.",
+                alternative: "benefit health and happiness"
+            }
+        ];
+
+        // 2. STATE MANAGEMENT
+        let state = {
+            studentName: "",
+            theme: "midnight",
+            xp: 0,
+            level: "Beginner",
+            currentModule: 0,
+            flashcards: {
+                currentIndex: 0,
+                viewedCards: new Set()
+            },
+            matching: {
+                matchedPairs: 0,
+                mistakes: 0,
+                completed: false
+            },
+            mcq: {
+                currentIndex: 0,
+                score: 0,
+                completed: false
+            },
+            reading: {
+                currentTextIndex: 0,
+                answers: {},
+                score: 0,
+                completed: false
+            },
+            boss: {
+                task: 1, // 1 = Context, 2 = Evidence
+                mcqAnswers: {},
+                tfngAnswers: {},
+                score: 0,
+                completed: false
+            },
+            badges: {
+                firstStep: false,
+                perfectMatch: false,
+                sharpSpeaker: false,
+                carefulReader: false,
+                bossSlayer: false,
+                master: false
+            }
+        };
+
+        // 3. INITIALIZATION ON WINDOW LOAD
+        window.onload = function() {
+            loadSavedState();
+            setupTheme();
+            checkUserGreeting();
+            renderModuleStepper();
+            initFlashcardsModule();
+            initMatchingModule();
+            initMcqModule();
+            initReadingModule();
+            initBossModule();
+            renderVocabBank();
+            renderSpeakingQuestions();
+            updateStatsUI();
+        };
+
+        function loadSavedState() {
+            const saved = localStorage.getItem(__vocabKey("ielts_vocab_hobbies_state"));
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Merge saved with default state
+                    state = { ...state, ...parsed };
+                    if (parsed.flashcards && parsed.flashcards.viewedCards) {
+                        state.flashcards.viewedCards = new Set(parsed.flashcards.viewedCards);
+                    }
+                } catch(e) {
+                    console.error("Failed to parse saved state", e);
+                }
+            }
+        }
+
+        function saveState() {
+            const copy = {
+                ...state,
+                flashcards: {
+                    ...state.flashcards,
+                    viewedCards: Array.from(state.flashcards.viewedCards)
+                }
+            };
+            localStorage.setItem(__vocabKey("ielts_vocab_hobbies_state"), JSON.stringify(copy));
+        }
+
+        // 4. THEME & USER NAME MANAGEMENT
+        function setupTheme() {
+            document.documentElement.setAttribute("data-theme", state.theme);
+            document.getElementById("themeSelector").value = state.theme;
+        }
+
+        function changeTheme(newTheme) {
+            state.theme = newTheme;
+            document.documentElement.setAttribute("data-theme", newTheme);
+            saveState();
+        }
+
+        function checkUserGreeting() {
+            state.studentName = __PRACTISE_STUDENT_NAME !== 'Student' ? __PRACTISE_STUDENT_NAME : (state.studentName || 'Student');
+            saveState();
+            updateUserNameUI();
+        }
+
+        function updateUserNameUI() {
+            const nm = (state.studentName || 'Student').trim() || 'Student';
+            document.getElementById("userNameDisplay").textContent = nm;
+            document.getElementById("userAvatar").textContent = nm.charAt(0).toUpperCase();
+            document.getElementById("finalGreeting").textContent = `Outstanding effort, ${nm}! Here is your performance overview:`;
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add("active");
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove("active");
+        }
+
+        // 5. XP & LEVEL ENGINE
+        function addXP(amount) {
+            const pts = Math.round(Number(amount) || 0);
+            if (pts <= 0) return;
+            state.xp += pts;
+            updateLevel();
+            updateStatsUI();
+            saveState();
+            __notifyPractiseParentXP(pts, state.xp);
+        }
+
+        function updateLevel() {
+            if (state.xp < 200) state.level = "Beginner";
+            else if (state.xp < 400) state.level = "Learner";
+            else if (state.xp < 600) state.level = "Confident Speaker";
+            else state.level = "Vocabulary Master";
+        }
+
+        function updateStatsUI() {
+            document.getElementById("navXpDisplay").textContent = `${state.xp} XP`;
+            document.getElementById("navLevelDisplay").textContent = state.level;
+            
+            // Render Badges in final section
+            renderBadges();
+        }
+
+        // 6. MODULE SWITCHING
+        function switchModule(moduleIndex) {
+            state.currentModule = moduleIndex;
+            
+            // Hide all modules
+            for(let i=0; i<=5; i++) {
+                const el = document.getElementById(`module-${i}`);
+                if (el) el.style.display = (i === moduleIndex) ? "block" : "none";
+                
+                const stepEl = document.getElementById(`step-${i}`);
+                if (stepEl) {
+                    stepEl.classList.toggle("active", i === moduleIndex);
+                }
+            }
+            
+            saveState();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderModuleStepper() {
+            for(let i=0; i<=5; i++) {
+                const stepEl = document.getElementById(`step-${i}`);
+                if (stepEl) {
+                    stepEl.classList.toggle("active", i === state.currentModule);
+                }
+            }
+        }
+
+        // 7. SPEECH SYNTHESIS (PRONUNCIATION)
+        function speakCurrentWord() {
+            const item = VOCABULARY_DATA[state.flashcards.currentIndex];
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop ongoing speech
+                const utterance = new SpeechSynthesisUtterance(item.expression);
+                utterance.lang = 'en-GB'; // British English accent preference
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // 8. MODULE 1: FLASHCARDS LOGIC
+        function initFlashcardsModule() {
+            renderFlashcard();
+        }
+
+        function renderFlashcard() {
+            const idx = state.flashcards.currentIndex;
+            const card = VOCABULARY_DATA[idx];
+            
+            document.getElementById("cardFrontText").textContent = card.expression;
+            document.getElementById("cardBackMeaning").textContent = card.meaning;
+            document.getElementById("cardBackExample").textContent = `"${card.example}"`;
+            document.getElementById("cardBackAlt").textContent = card.alternative;
+            
+            document.getElementById("flashcardCounter").textContent = `Card ${idx + 1} / ${VOCABULARY_DATA.length}`;
+            
+            // Update progress bar
+            const pct = ((idx + 1) / VOCABULARY_DATA.length) * 100;
+            document.getElementById("flashcardProgress").style.width = `${pct}%`;
+
+            // Reset card rotation
+            document.getElementById("activeFlashcard").classList.remove("flipped");
+
+            // Track viewed card
+            state.flashcards.viewedCards.add(idx);
+            
+            // Check module 1 completion badge
+            if (state.flashcards.viewedCards.size === VOCABULARY_DATA.length && !state.badges.firstStep) {
+                state.badges.firstStep = true;
+                addXP(100);
+                triggerConfetti();
+                saveState();
+            }
+        }
+
+        function flipCurrentCard() {
+            document.getElementById("activeFlashcard").classList.toggle("flipped");
+        }
+
+        function nextCard() {
+            if (state.flashcards.currentIndex < VOCABULARY_DATA.length - 1) {
+                state.flashcards.currentIndex++;
+                renderFlashcard();
+            } else {
+                // Completed all cards
+                switchModule(1);
+            }
+        }
+
+        function prevCard() {
+            if (state.flashcards.currentIndex > 0) {
+                state.flashcards.currentIndex--;
+                renderFlashcard();
+            }
+        }
+
+        // 9. MODULE 2: MATCHING GAME LOGIC
+        const MATCHING_ITEMS = VOCABULARY_DATA.slice(0, 8); // Select 8 expressions for matching
+        let selectedExprIndex = null;
+        let selectedMeaningIndex = null;
+
+        function initMatchingModule() {
+            renderMatchingGrid();
+        }
+
+        function renderMatchingGrid() {
+            const exprCol = document.getElementById("expressionsCol");
+            const meanCol = document.getElementById("meaningsCol");
+            
+            exprCol.innerHTML = "";
+            meanCol.innerHTML = "";
+
+            // Create shuffled copies
+            const exprs = MATCHING_ITEMS.map((item, idx) => ({ id: idx, text: item.expression }));
+            const meanings = MATCHING_ITEMS.map((item, idx) => ({ id: idx, text: item.meaning }));
+
+            // Deterministic shuffle based on initial state
+            const shuffledMeanings = [...meanings].sort((a, b) => (a.id * 7 % 13) - (b.id * 7 % 13));
+
+            exprs.forEach(item => {
+                const card = document.createElement("div");
+                card.className = `match-card ${state.matching[`matched_e_${item.id}`] ? 'matched' : ''}`;
+                card.id = `match-expr-${item.id}`;
+                card.innerHTML = `<span>${item.text}</span>`;
+                card.onclick = () => selectExpr(item.id);
+                exprCol.appendChild(card);
+            });
+
+            shuffledMeanings.forEach(item => {
+                const card = document.createElement("div");
+                card.className = `match-card ${state.matching[`matched_m_${item.id}`] ? 'matched' : ''}`;
+                card.id = `match-mean-${item.id}`;
+                card.innerHTML = `<span>${item.text}</span>`;
+                card.onclick = () => selectMeaning(item.id);
+                meanCol.appendChild(card);
+            });
+
+            updateMatchingStats();
+        }
+
+        function selectExpr(id) {
+            if (state.matching[`matched_e_${id}`]) return;
+            
+            // Clear prior selections
+            document.querySelectorAll("#expressionsCol .match-card").forEach(c => c.classList.remove("selected"));
+            
+            selectedExprIndex = id;
+            document.getElementById(`match-expr-${id}`).classList.add("selected");
+            
+            checkPairMatch();
+        }
+
+        function selectMeaning(id) {
+            if (state.matching[`matched_m_${id}`]) return;
+            
+            document.querySelectorAll("#meaningsCol .match-card").forEach(c => c.classList.remove("selected"));
+            
+            selectedMeaningIndex = id;
+            document.getElementById(`match-mean-${id}`).classList.add("selected");
+            
+            checkPairMatch();
+        }
+
+        function checkPairMatch() {
+            if (selectedExprIndex !== null && selectedMeaningIndex !== null) {
+                const exprCard = document.getElementById(`match-expr-${selectedExprIndex}`);
+                const meanCard = document.getElementById(`match-mean-${selectedMeaningIndex}`);
+
+                if (selectedExprIndex === selectedMeaningIndex) {
+                    // Correct Match
+                    exprCard.classList.remove("selected");
+                    meanCard.classList.remove("selected");
+                    exprCard.classList.add("matched");
+                    meanCard.classList.add("matched");
+
+                    state.matching[`matched_e_${selectedExprIndex}`] = true;
+                    state.matching[`matched_m_${selectedMeaningIndex}`] = true;
+                    state.matching.matchedPairs++;
+
+                    selectedExprIndex = null;
+                    selectedMeaningIndex = null;
+
+                    updateMatchingStats();
+
+                    if (state.matching.matchedPairs === MATCHING_ITEMS.length) {
+                        // Module Complete!
+                        if (!state.matching.completed) {
+                            state.matching.completed = true;
+                            addXP(150);
+                            if (state.matching.mistakes === 0) {
+                                state.badges.perfectMatch = true;
+                            }
+                            triggerConfetti();
+                            saveState();
+                        }
+                    }
+                } else {
+                    // Incorrect Answer: Shake cards, increment mistakes, allow retry (do NOT reveal correct answer immediately)
+                    state.matching.mistakes++;
+                    exprCard.classList.add("shake");
+                    meanCard.classList.add("shake");
+
+                    setTimeout(() => {
+                        exprCard.classList.remove("shake", "selected");
+                        meanCard.classList.remove("shake", "selected");
+                        selectedExprIndex = null;
+                        selectedMeaningIndex = null;
+                        updateMatchingStats();
+                    }, 600);
+                }
+            }
+        }
+
+        function updateMatchingStats() {
+            document.getElementById("matchMistakes").textContent = state.matching.mistakes;
+            document.getElementById("matchProgress").textContent = `${state.matching.matchedPairs} / ${MATCHING_ITEMS.length}`;
+        }
+
+        function resetMatchingModule() {
+            state.matching.matchedPairs = 0;
+            state.matching.mistakes = 0;
+            state.matching.completed = false;
+            MATCHING_ITEMS.forEach((_, idx) => {
+                delete state.matching[`matched_e_${idx}`];
+                delete state.matching[`matched_m_${idx}`];
+            });
+            selectedExprIndex = null;
+            selectedMeaningIndex = null;
+            renderMatchingGrid();
+        }
+
+        // 10. MODULE 3: CHOOSE (MCQ) DATA & LOGIC
+        const MCQ_QUESTIONS = [
+            {
+                question: "I spent six hours on the computer today, so tonight I just want to ______ and listen to classical acoustic music.",
+                options: [
+                    "step outside my comfort zone",
+                    "unwind after a hectic day",
+                    "cater to diverse tastes",
+                    "binge-watch content"
+                ],
+                correct: 1,
+                explanation: "'Unwind after a hectic day' naturally fits the context of relaxing and reducing stress after a long, tiring day of computer work."
+            },
+            {
+                question: "To prevent burnout while preparing for exams, candidates should aim to ______.",
+                options: [
+                    "strike a healthy work-leisure balance",
+                    "get hooked on a series",
+                    "soak up the atmosphere",
+                    "pick up a valuable skill"
+                ],
+                correct: 0,
+                explanation: "'Strike a healthy work-leisure balance' means managing obligations and free time productively to maintain well-being."
+            },
+            {
+                question: "I wasn't planning on watching the entire season, but the cliffhanger at the end of episode one caused me to ______.",
+                options: [
+                    "switch off from work",
+                    "broaden my horizons",
+                    "get hooked on the series",
+                    "pursue a creative outlet"
+                ],
+                correct: 2,
+                explanation: "'Get hooked on a series' describes becoming captivated or addicted to watching a show after a compelling beginning."
+            },
+            {
+                question: "Joining a public speaking drama workshop forced me to ______ because I used to be quite shy around strangers.",
+                options: [
+                    "cater to diverse tastes",
+                    "step outside my comfort zone",
+                    "soak up the atmosphere",
+                    "binge-watch content"
+                ],
+                correct: 1,
+                explanation: "'Step outside one's comfort zone' means attempting something new and challenging despite feeling nervous."
+            },
+            {
+                question: "Streaming platforms like Netflix and Spotify are popular because their diverse libraries ______.",
+                options: [
+                    "cater to diverse tastes",
+                    "immerse oneself in a book",
+                    "switch off from work",
+                    "take up a new activity"
+                ],
+                correct: 0,
+                explanation: "'Cater to diverse tastes' means offering choices that satisfy different personal preferences across various audiences."
+            },
+            {
+                question: "Although I usually prefer non-fiction history books, I have a real ______ for romantic comedies.",
+                options: [
+                    "creative outlet",
+                    "soft spot",
+                    "hectic day",
+                    "valuable skill"
+                ],
+                correct: 1,
+                explanation: "'Have a soft spot for something' is an idiomatic expression for having a natural fondness or affection for a specific genre."
+            },
+            {
+                question: "Attending a live football match in a stadium allows fans to ______ in a way that watching on television simply cannot replicate.",
+                options: [
+                    "soak up the atmosphere",
+                    "binge-watch content",
+                    "switch off from work",
+                    "broaden their horizons"
+                ],
+                correct: 0,
+                explanation: "'Soak up the atmosphere' refers to absorbing and feeling the collective excitement of a live venue or public crowd."
+            },
+            {
+                question: "Taking up regular physical exercise like swimming can have a remarkably ______.",
+                options: [
+                    "heavily into something",
+                    "positive impact on mental well-being",
+                    "soft spot for leisure",
+                    "hectic day at work"
+                ],
+                correct: 1,
+                explanation: "'Have a positive impact on well-being' accurately describes how healthy activities benefit physical and psychological health."
+            }
+        ];
+
+        function initMcqModule() {
+            renderMcqQuestion();
+        }
+
+        function renderMcqQuestion() {
+            const idx = state.mcq.currentIndex;
+            const item = MCQ_QUESTIONS[idx];
+
+            document.getElementById("mcqCounter").textContent = `Question ${idx + 1} / ${MCQ_QUESTIONS.length}`;
+            document.getElementById("mcqQuestionText").textContent = item.question;
+            
+            const container = document.getElementById("mcqOptionsContainer");
+            container.innerHTML = "";
+
+            document.getElementById("mcqExplanation").style.display = "none";
+            document.getElementById("mcqNextBtn").style.display = "none";
+
+            const letters = ["A", "B", "C", "D"];
+            item.options.forEach((optText, optIdx) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerHTML = `
+                    <span class="option-prefix">${letters[optIdx]}</span>
+                    <span>${optText}</span>
+                `;
+                btn.onclick = () => selectMcqOption(optIdx);
+                container.appendChild(btn);
+            });
+        }
+
+        function selectMcqOption(selectedIdx) {
+            const idx = state.mcq.currentIndex;
+            const item = MCQ_QUESTIONS[idx];
+            const buttons = document.querySelectorAll("#mcqOptionsContainer .option-btn");
+
+            // Disable further selection
+            buttons.forEach(b => b.disabled = true);
+
+            if (selectedIdx === item.correct) {
+                buttons[selectedIdx].classList.add("correct");
+                addXP(20);
+                state.mcq.score++;
+            } else {
+                buttons[selectedIdx].classList.add("incorrect");
+                buttons[item.correct].classList.add("correct");
+            }
+
+            // Show explanation
+            const expl = document.getElementById("mcqExplanation");
+            expl.innerHTML = `<strong>Explanation:</strong> ${item.explanation}`;
+            expl.style.display = "block";
+
+            // Show Next button
+            document.getElementById("mcqNextBtn").style.display = "inline-flex";
+        }
+
+        function nextMcqQuestion() {
+            if (state.mcq.currentIndex < MCQ_QUESTIONS.length - 1) {
+                state.mcq.currentIndex++;
+                renderMcqQuestion();
+            } else {
+                // Completed MCQ module
+                if (!state.mcq.completed) {
+                    state.mcq.completed = true;
+                    if (state.mcq.score === MCQ_QUESTIONS.length) {
+                        state.badges.sharpSpeaker = true;
+                        triggerConfetti();
+                    }
+                    saveState();
+                }
+                switchModule(3);
+            }
+        }
+
+        // 11. MODULE 4: READ & DECIDE (T/F/NG) LOGIC & DATA
+        const READING_DATA = [
+            {
+                title: "Why People Have Hobbies",
+                passage: "In modern fast-paced society, an increasing number of individuals choose to take up new activities outside of their professional commitments. Research indicates that engaging in creative or physical hobbies serves as a crucial psychological boundary, enabling workers to switch off from work and alleviate chronic anxiety. Furthermore, pursuing a creative outlet such as photography, woodworking, or music production provides personal fulfillment that routine corporate jobs often lack. By engaging in hobbies, individuals can strike a healthy work-leisure balance and pick up valuable skills that enhance their self-confidence.",
+                questions: [
+                    {
+                        statement: "Engaging in personal hobbies helps individuals mentally disconnect from job-related stress.",
+                        answer: "TRUE",
+                        explanation: "TRUE: The text explicitly states that hobbies enable workers to 'switch off from work and alleviate chronic anxiety.'"
+                    },
+                    {
+                        statement: "Corporate companies frequently mandate that employees pursue creative hobbies during weekends.",
+                        answer: "NOT GIVEN",
+                        explanation: "NOT GIVEN: The text mentions corporate jobs lacking fulfillment, but never states that companies mandate weekend hobbies."
+                    },
+                    {
+                        statement: "Hobbies only provide physical benefits and rarely contribute to personal skill acquisition.",
+                        answer: "FALSE",
+                        explanation: "FALSE: The text contradicts this by stating that individuals 'pick up valuable skills that enhance self-confidence.'"
+                    }
+                ]
+            },
+            {
+                title: "The Changing Entertainment Industry",
+                passage: "The rapid evolution of digital media has fundamentally transformed global consumption of entertainment. Today, subscription streaming services cater to diverse tastes by offering vast libraries of movies, documentaries, and international series available on-demand. Consequently, viewing habits have shifted dramatically; rather than waiting a week for new episodes, audiences frequently choose to binge-watch entire seasons over a single weekend. While critics argue that screen reliance reduces physical socialization, supporters contend that high-quality digital content allows viewers to broaden their horizons by discovering non-mainstream cultures.",
+                questions: [
+                    {
+                        statement: "Modern streaming platforms cater to a narrow demographic with limited genre selections.",
+                        answer: "FALSE",
+                        explanation: "FALSE: The text states that streaming services 'cater to diverse tastes by offering vast libraries of movies, documentaries, and international series.'"
+                    },
+                    {
+                        statement: "Binge-watching content has largely replaced traditional weekly television broadcasts for many viewers.",
+                        answer: "TRUE",
+                        explanation: "TRUE: The text explains that rather than waiting a week, audiences 'frequently choose to binge-watch entire seasons over a single weekend.'"
+                    },
+                    {
+                        statement: "Subscriptions to digital streaming platforms have become more expensive than traditional cinema tickets.",
+                        answer: "NOT GIVEN",
+                        explanation: "NOT GIVEN: Subscription pricing compared to cinema tickets is not discussed in the text."
+                    }
+                ]
+            },
+            {
+                title: "Socialising & Live Entertainment",
+                passage: "Despite the unparalleled convenience of digital entertainment at home, live public events continue to draw massive global audiences. Whether attending a stadium music concert, a theatrical performance, or a live sporting event, attendees prioritize the sensory excitement of sitting in a crowd and soaking up the atmosphere. Human beings possess an innate desire for shared social experiences that cannot be mirrored through a smartphone screen. Attending live events fosters a strong sense of community and creates lasting memories that significantly boost psychological well-being.",
+                questions: [
+                    {
+                        statement: "Digital home entertainment has completely eliminated the public demand for live stadium events.",
+                        answer: "FALSE",
+                        explanation: "FALSE: The passage explicitly states that 'live public events continue to draw massive global audiences.'"
+                    },
+                    {
+                        statement: "The shared collective atmosphere of live venues offers an experience that smartphone screens cannot replicate.",
+                        answer: "TRUE",
+                        explanation: "TRUE: The text confirms that the desire for shared social experiences 'cannot be mirrored through a smartphone screen.'"
+                    },
+                    {
+                        statement: "Live concert tickets are primarily purchased by younger demographics under thirty years old.",
+                        answer: "NOT GIVEN",
+                        explanation: "NOT GIVEN: The age demographic of live event attendees is not mentioned anywhere in the passage."
+                    }
+                ]
+            }
+        ];
+
+        function initReadingModule() {
+            renderReadingPassage();
+        }
+
+        function renderReadingPassage() {
+            const idx = state.reading.currentTextIndex;
+            const currentText = READING_DATA[idx];
+
+            document.getElementById("readingPassageTitle").textContent = `Text ${idx + 1} of ${READING_DATA.length}`;
+            document.getElementById("readingTextHeading").textContent = currentText.title;
+            document.getElementById("readingPassageBody").textContent = currentText.passage;
+
+            const container = document.getElementById("readingQuestionsContainer");
+            container.innerHTML = "";
+
+            currentText.questions.forEach((q, qIdx) => {
+                const qKey = `t${idx}_q${qIdx}`;
+                const savedAns = state.reading.answers[qKey];
+
+                const qBox = document.createElement("div");
+                qBox.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:16px; border-radius:12px; margin-top:16px;";
+                
+                qBox.innerHTML = `
+                    <div style="font-size:0.95rem; font-weight:600; margin-bottom:12px;">Statement ${qIdx + 1}: "${q.statement}"</div>
+                    <div class="tfng-btn-group">
+                        <button class="tfng-btn ${savedAns === 'TRUE' ? (q.answer === 'TRUE' ? 'active-true' : 'active-false') : ''}" 
+                            onclick="answerTfng('${qKey}', 'TRUE', '${q.answer}', ${qIdx})" ${savedAns ? 'disabled' : ''}>TRUE</button>
+                        <button class="tfng-btn ${savedAns === 'FALSE' ? (q.answer === 'FALSE' ? 'active-true' : 'active-false') : ''}" 
+                            onclick="answerTfng('${qKey}', 'FALSE', '${q.answer}', ${qIdx})" ${savedAns ? 'disabled' : ''}>FALSE</button>
+                        <button class="tfng-btn ${savedAns === 'NOT GIVEN' ? (q.answer === 'NOT GIVEN' ? 'active-true' : 'active-false') : ''}" 
+                            onclick="answerTfng('${qKey}', 'NOT GIVEN', '${q.answer}', ${qIdx})" ${savedAns ? 'disabled' : ''}>NOT GIVEN</button>
+                    </div>
+                    <div id="expl-${qKey}" class="explanation-box" style="display:${savedAns ? 'block' : 'none'}; margin-top:12px;">
+                        ${q.explanation}
+                    </div>
+                `;
+                container.appendChild(qBox);
+            });
+
+            // Button visibility
+            document.getElementById("readPrevBtn").style.visibility = (idx === 0) ? "hidden" : "visible";
+            document.getElementById("readNextBtn").textContent = (idx === READING_DATA.length - 1) ? "Proceed to Final Boss →" : "Next Text →";
+        }
+
+        function answerTfng(qKey, userSelection, correctAnswer, qIdx) {
+            if (state.reading.answers[qKey]) return; // Already answered
+
+            state.reading.answers[qKey] = userSelection;
+            if (userSelection === correctAnswer) {
+                addXP(30);
+                state.reading.score++;
+            }
+
+            renderReadingPassage();
+            saveState();
+        }
+
+        function nextReadingText() {
+            if (state.reading.currentTextIndex < READING_DATA.length - 1) {
+                state.reading.currentTextIndex++;
+                renderReadingPassage();
+            } else {
+                // Completed reading module
+                if (!state.reading.completed) {
+                    state.reading.completed = true;
+                    if (state.reading.score === 9) {
+                        state.badges.carefulReader = true;
+                        triggerConfetti();
+                    }
+                    saveState();
+                }
+                switchModule(4);
+            }
+        }
+
+        function prevReadingText() {
+            if (state.reading.currentTextIndex > 0) {
+                state.reading.currentTextIndex--;
+                renderReadingPassage();
+            }
+        }
+
+        // 12. MODULE 5: FINAL BOSS CHALLENGE DATA & LOGIC
+        const BOSS_MCQS = [
+            {
+                question: "Which expression best describes a person who systematically spends their weekends pursuing watercolor landscapes to express personal artistic energy?",
+                options: [
+                    "Binge-watching content",
+                    "Pursuing a creative outlet",
+                    "Catering to diverse tastes",
+                    "Soaking up the atmosphere"
+                ],
+                correct: 1,
+                explanation: "'Pursuing a creative outlet' specifically focuses on engaging in artistic activities to channel personal expression."
+            },
+            {
+                question: "Choose the most natural IELTS Speaking response: 'What do you do when you feel overwhelmed by university assignments?'",
+                options: [
+                    "'I usually cater to diverse tastes in my living room.'",
+                    "'I prefer to soak up the atmosphere of my exam paper.'",
+                    "'I take a walk in the park to switch off from work and reset my mind.'",
+                    "'I step outside my comfort zone to binge-watch homework.'"
+                ],
+                correct: 2,
+                explanation: "'Switch off from work' accurately conveys mentally disconnecting from academic obligations to reduce pressure."
+            },
+            {
+                question: "Complete the sentence: 'Traveling internationally and experiencing different cultures is a wonderful way to ______.'",
+                options: [
+                    "broaden one's horizons",
+                    "get hooked on a series",
+                    "unwind after a hectic day",
+                    "strike a balance"
+                ],
+                correct: 0,
+                explanation: "'Broaden one's horizons' naturally collocates with travel and cultural exposure."
+            },
+            {
+                question: "Identify the expression that carries a positive connotation for personal health & mental wellbeing:",
+                options: [
+                    "Having a soft spot for screens",
+                    "Having a positive impact on well-being",
+                    "Killing time on social media",
+                    "Relying on digital entertainment"
+                ],
+                correct: 1,
+                explanation: "This expression directly describes activities that improve overall wellness and mental health."
+            },
+            {
+                question: "What is the key difference between 'binge-watching' and simply 'watching TV'?",
+                options: [
+                    "Binge-watching involves reading books simultaneously.",
+                    "Binge-watching implies consuming many episodes continuously in one sitting.",
+                    "Watching TV requires going to a live concert stadium.",
+                    "There is no difference in meaning or natural usage."
+                ],
+                correct: 1,
+                explanation: "Binge-watching specifically highlights continuous, sequential consumption of multiple episodes."
+            }
+        ];
+
+        const BOSS_READING_PASSAGE = "The digital era has revolutionized how contemporary society spends free time, blurring traditional boundaries between physical relaxation and digital consumption. Algorithms engineered by social media platforms and on-demand streaming services are explicitly designed to keep users engaged, making it increasingly easy for people to get hooked on short-form content. Consequently, critics warn that passive screen consumption is replacing active physical hobbies. However, defender groups argue that digital tools democratize education, enabling self-motivated learners to pick up valuable skills like coding, video editing, or foreign languages from the comfort of home. Ultimately, thriving in the modern digital age requires individuals to step outside their comfort zone and consciously strike a healthy work-leisure balance.";
+
+        const BOSS_TFNG_QUESTIONS = [
+            {
+                statement: "Algorithms on digital media platforms are crafted to maximize user engagement time.",
+                answer: "TRUE",
+                explanation: "TRUE: The text confirms algorithms are 'explicitly designed to keep users engaged.'"
+            },
+            {
+                statement: "Critics assert that screen consumption encourages people to engage in more active physical exercise.",
+                answer: "FALSE",
+                explanation: "FALSE: Critics warn that screen consumption 'is replacing active physical hobbies' (contradiction)."
+            },
+            {
+                statement: "Digital tools make it possible for learners to pick up useful skills independently at home.",
+                answer: "TRUE",
+                explanation: "TRUE: The passage notes that digital tools enable self-motivated learners to 'pick up valuable skills... from home.'"
+            },
+            {
+                statement: "Most universities have banned students from using streaming platforms during term time.",
+                answer: "NOT GIVEN",
+                explanation: "NOT GIVEN: University bans are never mentioned in the text."
+            },
+            {
+                statement: "Maintaining personal well-being in the digital age requires conscious effort to strike a work-leisure balance.",
+                answer: "TRUE",
+                explanation: "TRUE: The text states thriving requires individuals to 'consciously strike a healthy work-leisure balance.'"
+            }
+        ];
+
+        function initBossModule() {
+            renderBossTask1();
+        }
+
+        function renderBossTask1() {
+            document.getElementById("bossTask1").style.display = "block";
+            document.getElementById("bossTask2").style.display = "none";
+            document.getElementById("bossNextBtn").textContent = "Proceed to Task 2 (Evidence Challenge) →";
+
+            const container = document.getElementById("bossMcqContainer");
+            container.innerHTML = "";
+
+            BOSS_MCQS.forEach((item, qIdx) => {
+                const qKey = `boss_mcq_${qIdx}`;
+                const savedAns = state.boss.mcqAnswers[qKey];
+
+                const qCard = document.createElement("div");
+                qCard.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:18px; border-radius:14px; margin-bottom:16px;";
+                
+                let optionsHtml = "";
+                const letters = ["A", "B", "C", "D"];
+                item.options.forEach((opt, optIdx) => {
+                    let btnClass = "option-btn";
+                    if (savedAns !== undefined) {
+                        if (optIdx === item.correct) btnClass += " correct";
+                        else if (optIdx === savedAns) btnClass += " incorrect";
+                    }
+                    optionsHtml += `
+                        <button class="${btnClass}" onclick="answerBossMcq(${qIdx}, ${optIdx})" ${savedAns !== undefined ? 'disabled' : ''}>
+                            <span class="option-prefix">${letters[optIdx]}</span>
+                            <span>${opt}</span>
+                        </button>
+                    `;
+                });
+
+                qCard.innerHTML = `
+                    <div style="font-weight:700; font-size:1rem; margin-bottom:14px; color:var(--text-main);">
+                        Q${qIdx + 1}: ${item.question}
+                    </div>
+                    <div class="mcq-options">${optionsHtml}</div>
+                    <div class="explanation-box" style="display:${savedAns !== undefined ? 'block' : 'none'}; margin-top:12px;">
+                        ${item.explanation}
+                    </div>
+                `;
+                container.appendChild(qCard);
+            });
+        }
+
+        function answerBossMcq(qIdx, selectedOpt) {
+            const qKey = `boss_mcq_${qIdx}`;
+            if (state.boss.mcqAnswers[qKey] !== undefined) return;
+
+            state.boss.mcqAnswers[qKey] = selectedOpt;
+            if (selectedOpt === BOSS_MCQS[qIdx].correct) {
+                addXP(40);
+                state.boss.score++;
+            }
+
+            renderBossTask1();
+            saveState();
+        }
+
+        function renderBossTask2() {
+            document.getElementById("bossTask1").style.display = "none";
+            document.getElementById("bossTask2").style.display = "block";
+            document.getElementById("bossReadingBody").textContent = BOSS_READING_PASSAGE;
+            document.getElementById("bossNextBtn").textContent = "Complete Final Boss 👑";
+
+            const container = document.getElementById("bossTfngContainer");
+            container.innerHTML = "";
+
+            BOSS_TFNG_QUESTIONS.forEach((q, qIdx) => {
+                const qKey = `boss_tfng_${qIdx}`;
+                const savedAns = state.boss.tfngAnswers[qKey];
+
+                const qBox = document.createElement("div");
+                qBox.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:16px; border-radius:12px; margin-top:16px;";
+                
+                qBox.innerHTML = `
+                    <div style="font-size:0.95rem; font-weight:600; margin-bottom:12px;">Statement ${qIdx + 1}: "${q.statement}"</div>
+                    <div class="tfng-btn-group">
+                        <button class="tfng-btn ${savedAns === 'TRUE' ? (q.answer === 'TRUE' ? 'active-true' : 'active-false') : ''}" 
+                            onclick="answerBossTfng('${qKey}', 'TRUE', '${q.answer}', ${qIdx})" ${savedAns ? 'disabled' : ''}>TRUE</button>
+                        <button class="tfng-btn ${savedAns === 'FALSE' ? (q.answer === 'FALSE' ? 'active-true' : 'active-false') : ''}" 
+                            onclick="answerBossTfng('${qKey}', 'FALSE', '${q.answer}', ${qIdx})" ${savedAns ? 'disabled' : ''}>FALSE</button>
+                        <button class="tfng-btn ${savedAns === 'NOT GIVEN' ? (q.answer === 'NOT GIVEN' ? 'active-true' : 'active-false') : ''}" 
+                            onclick="answerBossTfng('${qKey}', 'NOT GIVEN', '${q.answer}', ${qIdx})" ${savedAns ? 'disabled' : ''}>NOT GIVEN</button>
+                    </div>
+                    <div class="explanation-box" style="display:${savedAns ? 'block' : 'none'}; margin-top:12px;">
+                        ${q.explanation}
+                    </div>
+                `;
+                container.appendChild(qBox);
+            });
+        }
+
+        function answerBossTfng(qKey, userSelection, correctAnswer, qIdx) {
+            if (state.boss.tfngAnswers[qKey]) return;
+
+            state.boss.tfngAnswers[qKey] = userSelection;
+            if (userSelection === correctAnswer) {
+                addXP(40);
+                state.boss.score++;
+            }
+
+            renderBossTask2();
+            saveState();
+        }
+
+        function advanceBossTask() {
+            if (state.boss.task === 1) {
+                state.boss.task = 2;
+                renderBossTask2();
+            } else {
+                // Complete Final Boss!
+                if (!state.boss.completed) {
+                    state.boss.completed = true;
+                    addXP(100);
+                    state.badges.bossSlayer = true;
+                    state.badges.master = true;
+                    triggerBossConfetti();
+                    saveState();
+                }
+                switchModule(5);
+            }
+        }
+
+        // 13. VOCABULARY BANK & SPEAKING QUESTIONS
+        function renderVocabBank() {
+            const container = document.getElementById("vocabBankContainer");
+            container.innerHTML = "";
+
+            VOCABULARY_DATA.forEach(item => {
+                const el = document.createElement("div");
+                el.className = "vocab-item";
+                el.innerHTML = `
+                    <div>
+                        <div style="font-weight:700; color:var(--accent-gold); font-size:1.05rem;">${item.expression}</div>
+                        <div style="font-size:0.875rem; color:var(--text-muted); margin-top:2px;">${item.meaning}</div>
+                    </div>
+                    <button class="btn-audio" onclick="speakWord('${item.expression.replace(/'/g, "\\'")}')" title="Listen Pronunciation">🔊</button>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function renderSpeakingQuestions() {
+            const questions = [
+                { part: "PART 1", text: "What do you usually do in your free time after work or study?" },
+                { part: "PART 1", text: "Do you prefer relaxing at home or going out with friends on weekends?" },
+                { part: "PART 2", text: "Describe a hobby or activity you enjoy doing in your free time. You should say: what it is, when you started it, how often you do it, and explain why it is important to you." },
+                { part: "PART 3", text: "Why do you think it is vital for working adults to have hobbies?" },
+                { part: "PART 3", text: "How has modern technology changed the way people spend their leisure time compared to past generations?" }
+            ];
+
+            const container = document.getElementById("speakingQuestionsContainer");
+            container.innerHTML = "";
+
+            questions.forEach((q, idx) => {
+                const card = document.createElement("div");
+                card.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:16px 20px; border-radius:12px;";
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="font-size:0.75rem; font-weight:800; color:var(--accent-gold);">${q.part}</span>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">Target: 3+ Expressions</span>
+                    </div>
+                    <div style="font-size:1rem; font-weight:600; line-height:1.5;">${q.text}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderBadges() {
+            const badgesList = [
+                { id: 'firstStep', name: 'First Step', icon: '🏆', desc: 'Complete Flashcards' },
+                { id: 'perfectMatch', name: 'Perfect Match', icon: '🎯', desc: 'Match with 0 mistakes' },
+                { id: 'sharpSpeaker', name: 'Sharp Speaker', icon: '⚡', desc: '100% on MCQ Module' },
+                { id: 'carefulReader', name: 'Careful Reader', icon: '📖', desc: '100% on Reading Module' },
+                { id: 'bossSlayer', name: 'Boss Slayer', icon: '👑', desc: 'Defeat the Final Boss' },
+                { id: 'master', name: 'Vocab Master', icon: '🎓', desc: 'Master Entire Lesson' }
+            ];
+
+            const container = document.getElementById("badgesDisplayGrid");
+            if (!container) return;
+            container.innerHTML = "";
+
+            badgesList.forEach(b => {
+                const isUnlocked = state.badges[b.id];
+                const card = document.createElement("div");
+                card.className = `badge-card ${isUnlocked ? 'unlocked' : ''}`;
+                card.innerHTML = `
+                    <div class="badge-icon">${b.icon}</div>
+                    <div class="badge-name">${b.name}</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:4px;">${b.desc}</div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Update stats summary text
+            document.getElementById("finalXp").textContent = state.xp;
+            document.getElementById("finalLevel").textContent = state.level;
+            
+            const mcqPct = Math.round((state.mcq.score / MCQ_QUESTIONS.length) * 100);
+            document.getElementById("finalMcqScore").textContent = `${mcqPct}%`;
+            
+            const readPct = Math.round((state.reading.score / 9) * 100);
+            document.getElementById("finalReadingScore").textContent = `${readPct}%`;
+        }
+
+        // 14. RESET PROGRESS DIALOG
+        function confirmResetProgress() {
+            openModal("confirmModal");
+        }
+
+        function executeResetProgress() {
+            localStorage.removeItem(__vocabKey("ielts_vocab_hobbies_state"));
+            location.reload();
+        }
+
+        // 15. VANILLA JS CANVAS CONFETTI ENGINE
+        function triggerConfetti() {
+            runConfettiAnimation(3);
+        }
+
+        function triggerBossConfetti() {
+            runConfettiAnimation(5);
+        }
+
+        function runConfettiAnimation(durationSeconds) {
+            const canvas = document.getElementById("confettiCanvas");
+            const ctx = canvas.getContext("2d");
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#f59e0b', '#6366f1', '#10b981', '#ec4899', '#3b82f6', '#ffffff'];
+
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vy: Math.random() * 3 + 2,
+                    vx: Math.random() * 2 - 1,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 6 - 3
+                });
+            }
+
+            let startTime = performance.now();
+
+            function animate(now) {
+                const elapsed = (now - startTime) / 1000;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+                    p.rotation += p.rotationSpeed;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                });
+
+                if (elapsed < durationSeconds) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>
