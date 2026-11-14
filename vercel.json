@@ -1,7 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "cd mathscore-backend && npx prisma generate && cd ../mathscore-frontend && npm install && VITE_API_URL=https://marvelous-nourishment-production-c87958d0.up.railway.app npm run build",
+  "buildCommand": "cd mathscore-frontend && npm install && npm run build",
   "outputDirectory": "mathscore-frontend/dist",
+  "build": {
+    "env": {
+      "VITE_API_URL": "https://marvelous-nourishment-production-c87958d0.up.railway.app"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/:path*",
