@@ -30,8 +30,8 @@
     {
       "name": "Musulmon",
       "email": "musurmonqahharov747@gmail.com",
-      "password": "$2a$10$ftH7vSsycSKW5P/5/xmocOukgBtllfnsncA38OJgvTIsv4CTtVnNa",
-      "role": "student",
+      "password": "$2a$10$FV6uW3AePmvub/dEQ7i8S.u1qK/iOfsTAOGuoJbdeTeevYLDQcKyu",
+      "role": "admin",
       "course": "SAT Mathematics Intensive",
       "status": "Online",
       "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuAHofU2xpni0FdmxZ_nFQwe6fvpixYJ5_9kulirz--v4ToK-ksN4yQUoAoHgOIoJg3hHJoryfYxDZUXq8q1IqRjI6g5s3JR9Q6avgDad93EvPZdhshOgE9QYMFHTGP0shkYn1TszlEg0qxiOiguH939fmnOCByxl6CX0cBo2Pq09r2UuG4A0F9g17fzXgv5BPPZjSSPg8NL8Xk7kWw-skgeAaxwv8tqqrvW6Yh7aMILGhmLq2sK6AmcNxVQNxC0fI0hc64us21zC4Xf",
@@ -48,6 +48,14 @@
       "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuAHofU2xpni0FdmxZ_nFQwe6fvpixYJ5_9kulirz--v4ToK-ksN4yQUoAoHgOIoJg3hHJoryfYxDZUXq8q1IqRjI6g5s3JR9Q6avgDad93EvPZdhshOgE9QYMFHTGP0shkYn1TszlEg0qxiOiguH939fmnOCByxl6CX0cBo2Pq09r2UuG4A0F9g17fzXgv5BPPZjSSPg8NL8Xk7kWw-skgeAaxwv8tqqrvW6Yh7aMILGhmLq2sK6AmcNxVQNxC0fI0hc64us21zC4Xf",
       "id": "use-1779361157219-vibqw",
       "createdAt": "2026-05-21T10:59:17.219Z"
+    },
+    {
+      "id": "usr-turgunboev",
+      "name": "Azizbek Turg'unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "password": "$2a$10$Nik3jI0GvsC3wzYdVi53zuku3.R/6pO1hcXfPOFxTi53FTfQ80E0.",
+      "role": "admin",
+      "status": "Online"
     }
   ],
   "courses": [

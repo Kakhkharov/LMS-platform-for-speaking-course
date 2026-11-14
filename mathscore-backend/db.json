@@ -475,6 +475,87 @@
   },
   "battles": [
     {
+      "id": "battle_1794643300337_kzv8d",
+      "status": "pending",
+      "coinPerCorrect": 10,
+      "xpPerCorrect": 10,
+      "challengerId": "a74a014c-3129-4435-8628-5ee6ac844d25",
+      "challengerName": "Muborakxon Keldiyeva",
+      "challengerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop",
+      "challengerXp": 10,
+      "opponentId": "850b552f-9064-4be2-bb65-09c781094c32",
+      "opponentName": "O'quvchi (Demo)",
+      "opponentAvatar": "",
+      "opponentXp": 10,
+      "questions": [
+        {
+          "id": "bq8",
+          "q": "\"Hit the nail on the head\" qachon ishlatiladi?",
+          "options": [
+            "Xato javob berganda",
+            "Aynan to'g'ri fikrni topib aytganda",
+            "Mix qoqqanda",
+            "Charchaganda"
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq3",
+          "q": "Suhbatdosh fikriga muloyim tarzda qo'shilmaslik uchun qaysi ibora ishlatiladi?",
+          "options": [
+            "You are totally wrong!",
+            "I see your point, however I tend to think differently.",
+            "Never say that!",
+            "I don't care."
+          ],
+          "correct": 1
+        },
+        {
+          "id": "bq9",
+          "q": "\"Piece of cake\" iborasining to'g'ri ma'nosi qaysi?",
+          "options": [
+            "Juda qiyin masala",
+            "Shirinlik pishirish",
+            "Juda oson ish",
+            "Qimmat sovg'a"
+          ],
+          "correct": 2
+        },
+        {
+          "id": "bq2",
+          "q": "\"I haven't seen him in ages\" iborasi nimani anglatadi?",
+          "options": [
+            "Men uni ancha yillardan beri ko'rmadim",
+            "U juda qari odam",
+            "Men uni kecha ko'rdim",
+            "Men uni tanimayman"
+          ],
+          "correct": 0
+        },
+        {
+          "id": "bq6",
+          "q": "\"Once in a blue moon\" iborasi qanday ma'noda qo'llanadi?",
+          "options": [
+            "Har kuni muntazam",
+            "Juda kamdan-kam hollarda",
+            "Kecha tunda",
+            "Oy yorug'ida"
+          ],
+          "correct": 1
+        }
+      ],
+      "challengerAnswers": [],
+      "opponentAnswers": [],
+      "challengerScore": 0,
+      "opponentScore": 0,
+      "challengerCoinsEarned": 0,
+      "opponentCoinsEarned": 0,
+      "winnerId": null,
+      "createdAt": "2026-11-14T08:01:40.337Z",
+      "acceptedAt": null,
+      "completedAt": null
+    },
+    {
       "id": "battle_1794429042227_au1u2",
       "status": "active",
       "coinPerCorrect": 10,
@@ -916,6 +997,30 @@
   "supportAdmins": {},
   "adminActivityLogs": [
     {
+      "id": "act_1794643215030_w3lxt",
+      "action": "login",
+      "label": "Kirish",
+      "userId": "c0431906-8504-437d-9293-bfcc8e0021a5",
+      "name": "Azizbek Turg'unboyev",
+      "email": "turgunboevsss@gmail.com",
+      "adminType": "primary",
+      "roleLabel": "Asosiy Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-14T08:00:15.030Z"
+    },
+    {
+      "id": "act_1794643210354_ujdar",
+      "action": "logout",
+      "label": "Chiqish",
+      "userId": "65cc421c-bd27-4494-8393-eb1d6ca5d765",
+      "name": "Malika Toxirova",
+      "email": "malikatoxirova31@gmail.com",
+      "adminType": "support",
+      "roleLabel": "Yordamchi Admin",
+      "ip": "::1",
+      "timestamp": "2026-11-14T08:00:10.354Z"
+    },
+    {
       "id": "act_1794643023958_3qadz",
       "action": "login",
       "label": "Kirish",
@@ -1220,10 +1325,30 @@
           "createdAt": "2026-11-12T09:46:49.796Z"
         }
       ]
+    },
+    "a74a014c-3129-4435-8628-5ee6ac844d25": {
+      "studentId": "a74a014c-3129-4435-8628-5ee6ac844d25",
+      "unreadByAdmin": 0,
+      "unreadByStudent": 0,
+      "updatedAt": "2026-11-14T07:59:15.463Z",
+      "messages": [
+        {
+          "id": "greet_a74a014c-3129-4435-8628-5ee6ac844d25",
+          "senderRole": "admin",
+          "senderId": "c0431906-8504-437d-9293-bfcc8e0021a5",
+          "senderName": "Azizbek",
+          "senderAvatar": "",
+          "type": "text",
+          "text": "Hello! I am Azizbek. How can I help you?",
+          "audioUrl": null,
+          "duration": null,
+          "createdAt": "2026-11-14T07:59:15.463Z"
+        }
+      ]
     }
   },
   "challengeProgressOverrides": {},
-  "gamificationResetDate": "2026-11-12",
-  "gamificationResetAt": "2026-11-11T21:25:24.831Z",
+  "gamificationResetDate": "2026-11-14",
+  "gamificationResetAt": "2026-11-14T08:02:50.988Z",
   "gamificationResetBy": "turgunboevsss@gmail.com"
 }

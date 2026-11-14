@@ -5,6 +5,9 @@ const bcrypt = require('bcryptjs');
 if (process.env.DATABASE_URL && process.env.DATABASE_URL.includes(':+M@s?rjHHxStxv7@')) {
   process.env.DATABASE_URL = process.env.DATABASE_URL.replace(':+M@s?rjHHxStxv7@', ':%2BM%40s%3FrjHHxStxv7@');
 }
+if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('connect_timeout=')) {
+  process.env.DATABASE_URL += (process.env.DATABASE_URL.includes('?') ? '&' : '?') + 'connect_timeout=25';
+}
 
 const prisma = new PrismaClient();
 
@@ -400,7 +403,7 @@ const db = {
   prisma
 };
 
-// Initialize SQLite WAL & pragmas on startup (no legacy default admin seeding)
+// Initialize SQLite WAL & pragmas and ensure primary admins on startup
 async function initDb() {
   try {
     await prisma.$queryRawUnsafe('PRAGMA journal_mode = WAL;').catch(() => {});
@@ -408,6 +411,45 @@ async function initDb() {
     await prisma.$queryRawUnsafe('PRAGMA synchronous = NORMAL;').catch(() => {});
   } catch (error) {
     console.error("[DB] Init Error:", error);
+  }
+
+  try {
+    const adminDefaults = [
+      {
+        email: 'turgunboevsss@gmail.com',
+        name: "Azizbek Turg'unboyev",
+        passwordHash: bcrypt.hashSync('Azizbek2026$', 10)
+      },
+      {
+        email: 'musurmonqahharov747@gmail.com',
+        name: 'Musurmon Qahharov',
+        passwordHash: bcrypt.hashSync('Musulmon2026$', 10)
+      }
+    ];
+
+    for (const adm of adminDefaults) {
+      const existing = await prisma.user.findUnique({ where: { email: adm.email } });
+      if (!existing) {
+        await prisma.user.create({
+          data: {
+            name: adm.name,
+            email: adm.email,
+            password: adm.passwordHash,
+            role: 'admin',
+            status: 'Online'
+          }
+        });
+        console.log(`[DB] Created primary admin: ${adm.email}`);
+      } else if (existing.role !== 'admin') {
+        await prisma.user.update({
+          where: { email: adm.email },
+          data: { role: 'admin' }
+        });
+        console.log(`[DB] Ensured primary admin role: ${adm.email}`);
+      }
+    }
+  } catch (admErr) {
+    // Non-blocking
   }
 }
 initDb();

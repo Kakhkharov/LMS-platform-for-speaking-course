@@ -2,6 +2,9 @@ require('dotenv').config();
 if (process.env.DATABASE_URL && process.env.DATABASE_URL.includes(':+M@s?rjHHxStxv7@')) {
   process.env.DATABASE_URL = process.env.DATABASE_URL.replace(':+M@s?rjHHxStxv7@', ':%2BM%40s%3FrjHHxStxv7@');
 }
+if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('connect_timeout=')) {
+  process.env.DATABASE_URL += (process.env.DATABASE_URL.includes('?') ? '&' : '?') + 'connect_timeout=25';
+}
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
