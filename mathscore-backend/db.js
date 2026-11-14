@@ -1,3 +1,17 @@
+const path = require('path');
+try { require('dotenv').config({ path: path.join(__dirname, '.env') }); } catch (e) {}
+try { require('dotenv').config(); } catch (e) {}
+
+const DEFAULT_DATABASE_URL = "postgresql://postgres.oluicgncdqvuwboptnon:%2BM%40s%3FrjHHxStxv7@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true&connect_timeout=25";
+const DEFAULT_DIRECT_URL = "postgresql://postgres.oluicgncdqvuwboptnon:%2BM%40s%3FrjHHxStxv7@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres";
+
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = DEFAULT_DATABASE_URL;
+}
+if (!process.env.DIRECT_URL) {
+  process.env.DIRECT_URL = DEFAULT_DIRECT_URL;
+}
+
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 

@@ -1,4 +1,21 @@
-require('dotenv').config();
+const path = require('path');
+try { require('dotenv').config({ path: path.join(__dirname, '.env') }); } catch (e) {}
+try { require('dotenv').config(); } catch (e) {}
+
+const DEFAULT_DATABASE_URL = "postgresql://postgres.oluicgncdqvuwboptnon:%2BM%40s%3FrjHHxStxv7@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true&connect_timeout=25";
+const DEFAULT_DIRECT_URL = "postgresql://postgres.oluicgncdqvuwboptnon:%2BM%40s%3FrjHHxStxv7@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres";
+const DEFAULT_JWT_SECRET = "mathscore-production-super-secret-99890";
+
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = DEFAULT_DATABASE_URL;
+}
+if (!process.env.DIRECT_URL) {
+  process.env.DIRECT_URL = DEFAULT_DIRECT_URL;
+}
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = DEFAULT_JWT_SECRET;
+}
+
 if (process.env.DATABASE_URL && process.env.DATABASE_URL.includes(':+M@s?rjHHxStxv7@')) {
   process.env.DATABASE_URL = process.env.DATABASE_URL.replace(':+M@s?rjHHxStxv7@', ':%2BM%40s%3FrjHHxStxv7@');
 }
@@ -11,7 +28,6 @@ const helmet = require('helmet');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const os = require('os');
-const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 const multer = require('multer');
@@ -33,6 +49,14 @@ const {
 const app = express();
 app.set('trust proxy', 1);
 
+// Normalize URL for Vercel Serverless Function rewrites
+app.use((req, res, next) => {
+  if (req.url && !req.url.startsWith('/api') && !req.url.startsWith('/uploads')) {
+    req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
+  }
+  next();
+});
+
 function getPublicOrigin(req) {
   const originHeader = req?.get?.('origin');
   if (originHeader) return originHeader.replace(/\/+$/, '');
@@ -43,7 +67,7 @@ function getPublicOrigin(req) {
   }
   if (process.env.PUBLIC_URL) return String(process.env.PUBLIC_URL).replace(/\/+$/, '');
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:5173';
+  return 'https://practise.uz';
 }
 
 // Automatically catch all async errors in route handlers to prevent process crashes
@@ -153,6 +177,9 @@ const upload = multer({
   storage,
   limits: { fileSize: 500 * 1024 * 1024 } // 500MB limit for videos
 });
+
+app.get('/api', (req, res) => res.json({ status: 'ok', service: 'Practise LMS API' }));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
 app.get('/api/system/stream', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');

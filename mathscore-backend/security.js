@@ -13,7 +13,11 @@ const corsOptions = {
       .filter(Boolean);
     const allowedOrigins = [
       'https://mathscore.uz',
+      'https://www.mathscore.uz',
       'https://api.mathscore.uz',
+      'https://practise.uz',
+      'https://www.practise.uz',
+      'https://api.practise.uz',
       'http://localhost:3000',
       'http://127.0.0.1:3000',
       'http://localhost:5173',
@@ -24,9 +28,13 @@ const corsOptions = {
       'http://127.0.0.1:5175',
       ...extraOrigins
     ];
-    const isVercelApp = origin && /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
+    const isDomainAllowed = origin && (
+      /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin) ||
+      /^https:\/\/(www\.)?practise\.uz$/i.test(origin) ||
+      /^https:\/\/(www\.)?mathscore\.uz$/i.test(origin)
+    );
     // Allow requests with no origin (same-origin, mobile apps, or curl requests)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1 || isVercelApp) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1 || isDomainAllowed) {
       callback(null, true);
     } else {
       // Log CORS blocking as security incident

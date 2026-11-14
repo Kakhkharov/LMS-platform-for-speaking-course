@@ -5,7 +5,24 @@
   "scripts": {
     "dev": "powershell -ExecutionPolicy Bypass -File ./run_all.ps1",
     "sync": "powershell -ExecutionPolicy Bypass -File ./sync.ps1",
-    "build": "cd mathscore-frontend && npm run build",
+    "postinstall": "cd mathscore-backend && npx prisma generate",
+    "build": "cd mathscore-backend && npx prisma generate && cd ../mathscore-frontend && npm install && npm run build",
     "deploy": "powershell -ExecutionPolicy Bypass -File ./deploy.ps1"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.1.1",
+    "nodemailer": "^8.0.7",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "prisma": "^5.22.0"
   }
 }
