@@ -5,7 +5,7 @@ const API_BASE =
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
         ['5173', '5174', '5175'].includes(window.location.port))
         ? 'http://localhost:5000'
-        : '');
+        : 'https://marvelous-nourishment-production-c87958d0.up.railway.app');
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Cropper from 'react-easy-crop';
 import { getCroppedImg } from './cropImage';
@@ -2027,14 +2027,16 @@ function App() {
 
   const handleDeleteCourse = async (courseId) => {
     try {
+      setCourses(prev => prev.filter(c => String(c.id) !== String(courseId)));
       const response = await fetchWithAuth(`/api/courses/${courseId}`, {
         method: 'DELETE'
       });
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'O\'chirishda xatolik.');
+        const data = await response.json().catch(() => ({}));
+        syncData();
+        throw new Error(data.error || 'O\'chirishda xatolik yuz berdi.');
       }
-      alert("Kurs öçirildi!");
+      alert("Kurs muvaffaqiyatli o'chirildi!");
       setDeleteCourseTarget(null);
       setDeleteCourseInput('');
       syncData();
@@ -6007,29 +6009,16 @@ function App() {
                   <button onClick={() => { setDeleteCourseTarget(null); setDeleteCourseInput(''); }} className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all"><span className="material-symbols-outlined text-[18px]">close</span></button>
                 </div>
                 <div className="p-6 space-y-4 text-slate-900 dark:text-white">
-                  <p className="text-sm">Mazkur kursni kurs nomini yozib öçirişni xohlaysizmi? <br />Haqiqatdan ham <strong>{(deleteCourseTarget.title || '').trim()}</strong> kursini öçirişni xohlaysizmi?</p>
-                  <p className="text-sm font-bold text-rose-500">Tasdiqlash uçun quyidagi yozuvni kiriting: <br />"{(deleteCourseTarget.title || '').trim()}"</p>
-                  <input
-                    type="text"
-                    value={deleteCourseInput}
-                    onChange={(e) => setDeleteCourseInput(e.target.value)}
-                    placeholder="Kurs nomini kiriting..."
-                    className="w-full p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-sm focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 outline-none text-slate-900 dark:text-white"
-                  />
+                  <p className="text-sm">Haqiqatdan ham ushbu kursni platformadan o'chirmoqchimisiz?</p>
+                  <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl font-bold text-sm text-indigo-600 dark:text-indigo-400">
+                    {(deleteCourseTarget.title || '').trim()}
+                  </div>
                   <div className="flex justify-end gap-3 pt-4">
-                    <button onClick={() => { setDeleteCourseTarget(null); setDeleteCourseInput(''); }} className="px-5 py-2.5 rounded-xl font-bold text-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">Yöq</button>
-                    {(() => {
-                      const targetClean = (deleteCourseTarget.title || '').trim().toLowerCase();
-                      const inputClean = deleteCourseInput.trim().toLowerCase();
-                      const isMatched = inputClean === targetClean && targetClean.length > 0;
-                      return (
-                        <button
-                          onClick={() => handleDeleteCourse(deleteCourseTarget.id)}
-                          disabled={!isMatched}
-                          className={`px-5 py-2.5 rounded-xl font-bold text-sm text-white transition-all ${isMatched ? 'bg-rose-500 hover:bg-rose-600 shadow-lg shadow-rose-500/30 cursor-pointer' : 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed'}`}
-                        >Ha</button>
-                      );
-                    })()}
+                    <button onClick={() => { setDeleteCourseTarget(null); setDeleteCourseInput(''); }} className="px-5 py-2.5 rounded-xl font-bold text-sm border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all cursor-pointer">Bekor qilish</button>
+                    <button
+                      onClick={() => handleDeleteCourse(deleteCourseTarget.id)}
+                      className="px-5 py-2.5 rounded-xl font-bold text-sm text-white bg-rose-500 hover:bg-rose-600 shadow-lg shadow-rose-500/30 cursor-pointer transition-all active:scale-95"
+                    >Ha, o'chirilsin</button>
                   </div>
                 </div>
               </div>

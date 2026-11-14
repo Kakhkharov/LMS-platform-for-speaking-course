@@ -2331,6 +2331,7 @@ app.put('/api/courses/:id', authenticateToken, requireRole('admin'), async (req,
 app.delete('/api/courses/:id', authenticateToken, requireRole('admin'), async (req, res) => {
   const success = await db.delete('courses', req.params.id);
   if (!success) return res.status(404).json({ error: 'Kurs topilmadi yoki xatolik yuz berdi.' });
+  broadcastToDashboard('course_deleted', { id: req.params.id });
   res.json({ message: 'Kurs o\'chirildi.' });
 });
 
@@ -2988,31 +2989,32 @@ const defaultLandingData = {
 };
 
 function readLandingDB() {
-  if (fs.existsSync(TMP_LANDING_DB_FILE)) {
-    return JSON.parse(fs.readFileSync(TMP_LANDING_DB_FILE, 'utf8'));
-  }
-  if (!fs.existsSync(LANDING_DB_FILE)) {
+  if (fs.existsSync(LANDING_DB_FILE)) {
     try {
-      fs.writeFileSync(LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2));
-    } catch (e) {
-      fs.writeFileSync(TMP_LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2));
-    }
-    return defaultLandingData;
+      return JSON.parse(fs.readFileSync(LANDING_DB_FILE, 'utf8'));
+    } catch (e) {}
   }
-  return JSON.parse(fs.readFileSync(LANDING_DB_FILE, 'utf8'));
+  if (fs.existsSync(TMP_LANDING_DB_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(TMP_LANDING_DB_FILE, 'utf8'));
+    } catch (e) {}
+  }
+  try {
+    fs.writeFileSync(LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2));
+  } catch (e) {
+    try { fs.writeFileSync(TMP_LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2)); } catch (_) {}
+  }
+  return defaultLandingData;
 }
 
 function writeLandingDB(data) {
   const json = JSON.stringify(data, null, 2);
   try {
     fs.writeFileSync(LANDING_DB_FILE, json);
-  } catch (err) {
-    if (err?.code === 'EROFS' || err?.code === 'EACCES' || err?.code === 'EPERM') {
-      fs.writeFileSync(TMP_LANDING_DB_FILE, json);
-    } else {
-      throw err;
-    }
-  }
+  } catch (err) {}
+  try {
+    fs.writeFileSync(TMP_LANDING_DB_FILE, json);
+  } catch (err) {}
 }
 
 
@@ -3610,9 +3612,12 @@ app.get('/api/live-classes', (req, res) => {
     });
   }
   const dbData = readLandingDB();
-  if (!dbData.liveClasses || dbData.liveClasses.length === 0) {
+  if (!Array.isArray(dbData.liveClasses) && !dbData.liveClassesInitialized) {
     dbData.liveClasses = DEFAULT_LIVE_CLASSES;
+    dbData.liveClassesInitialized = true;
     writeLandingDB(dbData);
+  } else if (!Array.isArray(dbData.liveClasses)) {
+    dbData.liveClasses = [];
   }
   res.json(dbData.liveClasses);
 });
@@ -3620,7 +3625,7 @@ app.get('/api/live-classes', (req, res) => {
 app.post('/api/live-classes', async (req, res) => {
   try {
     const dbData = readLandingDB();
-    if (!dbData.liveClasses) dbData.liveClasses = [];
+    if (!Array.isArray(dbData.liveClasses)) dbData.liveClasses = [];
 
     const { title, platform, url, date, time, description } = req.body;
     if (!title || !url || !date || !time) {
@@ -3638,8 +3643,11 @@ app.post('/api/live-classes', async (req, res) => {
       createdAt: new Date().toISOString()
     };
 
+    dbData.liveClassesInitialized = true;
     dbData.liveClasses.unshift(newClass);
     writeLandingDB(dbData);
+    broadcastToDashboard('live_class_created', newClass);
+    broadcastToDashboard('live_classes_update', dbData.liveClasses);
 
     // Barcha talabalarga jonli dars haqida bildirishnoma
     try {
@@ -3663,11 +3671,14 @@ app.post('/api/live-classes', async (req, res) => {
 app.delete('/api/live-classes/:id', (req, res) => {
   try {
     const dbData = readLandingDB();
-    if (!dbData.liveClasses) dbData.liveClasses = [];
+    if (!Array.isArray(dbData.liveClasses)) dbData.liveClasses = [];
     const idStr = String(req.params.id);
     dbData.liveClasses = dbData.liveClasses.filter(c => String(c.id) !== idStr);
+    dbData.liveClassesInitialized = true;
     writeLandingDB(dbData);
-    res.json({ success: true });
+    broadcastToDashboard('live_class_deleted', { id: idStr });
+    broadcastToDashboard('live_classes_update', dbData.liveClasses);
+    res.json({ success: true, count: dbData.liveClasses.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -3698,9 +3709,12 @@ app.get('/api/library', (req, res) => {
     });
   }
   const dbData = readLandingDB();
-  if (!dbData.library || dbData.library.length === 0) {
+  if (!Array.isArray(dbData.library) && !dbData.libraryInitialized) {
     dbData.library = DEFAULT_BOOKS;
+    dbData.libraryInitialized = true;
     writeLandingDB(dbData);
+  } else if (!Array.isArray(dbData.library)) {
+    dbData.library = [];
   }
   res.json(dbData.library);
 });
@@ -3708,7 +3722,7 @@ app.get('/api/library', (req, res) => {
 app.post('/api/library', upload.fields([{ name: 'cover', maxCount: 1 }, { name: 'pdf', maxCount: 1 }]), async (req, res) => {
   try {
     const dbData = readLandingDB();
-    if (!dbData.library) dbData.library = [];
+    if (!Array.isArray(dbData.library)) dbData.library = [];
 
     const { title, author, publishedDate } = req.body;
     if (!title || !author) {
@@ -3741,8 +3755,10 @@ app.post('/api/library', upload.fields([{ name: 'cover', maxCount: 1 }, { name: 
       createdAt: new Date().toISOString()
     };
 
+    dbData.libraryInitialized = true;
     dbData.library.push(newBook);
     writeLandingDB(dbData);
+    broadcastToDashboard('library_created', newBook);
 
     // Bildirishnoma yuborish
     try {
@@ -3762,11 +3778,13 @@ app.post('/api/library', upload.fields([{ name: 'cover', maxCount: 1 }, { name: 
 app.delete('/api/library/:id', (req, res) => {
   try {
     const dbData = readLandingDB();
-    if (!dbData.library) dbData.library = [];
+    if (!Array.isArray(dbData.library)) dbData.library = [];
     const idStr = String(req.params.id);
     dbData.library = dbData.library.filter(b => String(b.id) !== idStr);
+    dbData.libraryInitialized = true;
     writeLandingDB(dbData);
-    res.json({ success: true });
+    broadcastToDashboard('library_deleted', { id: idStr });
+    res.json({ success: true, count: dbData.library.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

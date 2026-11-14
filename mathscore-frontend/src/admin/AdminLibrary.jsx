@@ -7,7 +7,7 @@ const API_BASE =
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
         ['5173', '5174', '5175'].includes(window.location.port))
         ? 'http://localhost:5000'
-        : '');
+        : 'https://marvelous-nourishment-production-c87958d0.up.railway.app');
 
 export default function AdminLibrary() {
   const [books, setBooks] = useState([]);
@@ -108,7 +108,10 @@ export default function AdminLibrary() {
     try {
       const res = await fetch(`${API_BASE}/api/library/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        setBooks(prev => prev.filter(b => b.id !== id));
+        setBooks(prev => prev.filter(b => String(b.id) !== String(id)));
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        alert("O'chirishda xatolik: " + (errData.error || res.statusText));
       }
     } catch (e) {
       alert("O'chirishda xatolik: " + e.message);

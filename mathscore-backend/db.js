@@ -353,10 +353,11 @@ const db = {
       switch (table) {
         case 'users': await prisma.user.delete({ where: { id } }); break;
         case 'courses': {
-          await prisma.lesson.deleteMany({ where: { courseId: id } }).catch(() => {});
-          await prisma.userCourse.deleteMany({ where: { courseId: id } }).catch(() => {});
-          await prisma.test.updateMany({ where: { courseId: id }, data: { courseId: null } }).catch(() => {});
-          await prisma.course.delete({ where: { id } });
+          const cleanId = String(id);
+          await prisma.lesson.deleteMany({ where: { courseId: cleanId } }).catch(() => {});
+          await prisma.userCourse.deleteMany({ where: { courseId: cleanId } }).catch(() => {});
+          await prisma.test.updateMany({ where: { courseId: cleanId }, data: { courseId: null } }).catch(() => {});
+          await prisma.course.delete({ where: { id: cleanId } });
           break;
         }
         case 'tests': await prisma.test.delete({ where: { id } }); break;
@@ -514,16 +515,29 @@ async function initDb() {
       }
     ];
 
-    for (const c of courseDefaults) {
-      const existingCourse = await prisma.course.findFirst({
-        where: {
-          title: { equals: c.title, mode: 'insensitive' }
-        }
-      });
-      if (!existingCourse) {
+    const totalCourses = await prisma.course.count();
+    let alreadySeeded = false;
+    const dbJsonPath = path.join(__dirname, 'db.json');
+    try {
+      if (fs.existsSync(dbJsonPath)) {
+        const j = JSON.parse(fs.readFileSync(dbJsonPath, 'utf8'));
+        if (j.defaultCoursesSeeded) alreadySeeded = true;
+      }
+    } catch (_) {}
+
+    if (totalCourses === 0 && !alreadySeeded) {
+      for (const c of courseDefaults) {
         await prisma.course.create({ data: c });
         console.log(`[DB] Created default course: ${c.title}`);
       }
+      try {
+        let j = {};
+        if (fs.existsSync(dbJsonPath)) {
+          j = JSON.parse(fs.readFileSync(dbJsonPath, 'utf8'));
+        }
+        j.defaultCoursesSeeded = true;
+        fs.writeFileSync(dbJsonPath, JSON.stringify(j, null, 2));
+      } catch (_) {}
     }
   } catch (admErr) {
     // Non-blocking

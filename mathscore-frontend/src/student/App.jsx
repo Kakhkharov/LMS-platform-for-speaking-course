@@ -5,7 +5,7 @@ const API_BASE =
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
         ['5173', '5174', '5175'].includes(window.location.port))
         ? 'http://localhost:5000'
-        : '');
+        : 'https://marvelous-nourishment-production-c87958d0.up.railway.app');
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -1465,6 +1465,24 @@ export default function App() {
             parsed.type === 'battle_update'
           ) {
             checkStudentNotifs();
+          } else if (parsed.type === 'live_class_deleted') {
+            const delId = parsed.data?.id;
+            if (delId) {
+              setLiveClasses(prev => prev.filter(c => String(c.id) !== String(delId)));
+            }
+          } else if (parsed.type === 'live_class_created') {
+            if (parsed.data) {
+              setLiveClasses(prev => [parsed.data, ...prev.filter(c => String(c.id) !== String(parsed.data.id))]);
+            }
+          } else if (parsed.type === 'live_classes_update') {
+            if (Array.isArray(parsed.data)) {
+              setLiveClasses(parsed.data);
+            }
+          } else if (parsed.type === 'course_deleted') {
+            const delCourseId = parsed.data?.id;
+            if (delCourseId) {
+              setCourses(prev => prev.filter(c => String(c.id) !== String(delCourseId)));
+            }
           } else if (parsed.type === 'notification') {
             if (!profile?.id || !parsed.data?.userId || parsed.data.userId === profile.id) {
               checkStudentNotifs();

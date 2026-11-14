@@ -1374,5 +1374,8 @@
   "challengeProgressOverrides": {},
   "gamificationResetDate": "2026-11-14",
   "gamificationResetAt": "2026-11-14T08:02:50.988Z",
-  "gamificationResetBy": "turgunboevsss@gmail.com"
+  "gamificationResetBy": "turgunboevsss@gmail.com",
+  "liveClassesInitialized": true,
+  "libraryInitialized": true,
+  "defaultCoursesSeeded": true
 }

@@ -8,7 +8,7 @@ const API_BASE =
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
         ['5173', '5174', '5175'].includes(window.location.port))
         ? 'http://localhost:5000'
-        : '');
+        : 'https://marvelous-nourishment-production-c87958d0.up.railway.app');
 
 // Sanani dd-mm-yyyy va yyyy-mm-dd o'rtasida o'girish yordamchilari (Kalendar uchun)
 const toIsoDate = (dmy) => {
@@ -107,7 +107,10 @@ export default function AdminLiveClasses() {
     try {
       const res = await fetch(`${API_BASE}/api/live-classes/${id}`, { method: 'DELETE' });
       if (res.ok) {
-        setClasses(prev => prev.filter(c => c.id !== id));
+        setClasses(prev => prev.filter(c => String(c.id) !== String(id)));
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        alert("O'chirishda xatolik: " + (errData.error || res.statusText));
       }
     } catch (e) {
       alert("O'chirishda xatolik: " + e.message);
