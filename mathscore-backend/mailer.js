@@ -51,7 +51,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function deliverMail(mailOptions) {
-  // 1. If GMAIL_WEBAPP_URL is configured, send directly via Google Apps Script HTTPS Web App
+  // 1. If GMAIL_WEBAPP_URL is configured, send directly via Google Apps Script HTTPS Web App (bypasses cloud SMTP firewall blocks)
   if (process.env.GMAIL_WEBAPP_URL) {
     try {
       const gRes = await fetch(process.env.GMAIL_WEBAPP_URL, {
@@ -64,41 +64,17 @@ async function deliverMail(mailOptions) {
         })
       });
       if (gRes.ok) {
-        console.log(`[MAILER] Xat Google Apps Script Web App orqali yuborildi: ${mailOptions.to}`);
+        console.log(`[MAILER] Xat Google Apps Script Web App orqali muvaffaqiyatli yuborildi: ${mailOptions.to}`);
         return { sent: true };
+      } else {
+        console.warn(`[MAILER] Google Apps Script javob statusi: ${gRes.status}`);
       }
     } catch (gErr) {
       console.warn('[MAILER] Google Apps Script uzatish xatosi:', gErr.message);
     }
   }
 
-  // 2. Try HTTPS proxy on Vercel (bypasses Railway SMTP firewall block)
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 9000);
-    const httpsRes = await fetch('https://practise.uz/api/send-mail', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: mailOptions.to,
-        subject: mailOptions.subject,
-        html: mailOptions.html
-      }),
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    if (httpsRes.ok) {
-      const data = await httpsRes.json();
-      if (data.sent) {
-        console.log(`[MAILER] Xat Vercel HTTPS orqali yuborildi: ${mailOptions.to}`);
-        return { sent: true };
-      }
-    }
-  } catch (httpsErr) {
-    console.warn('[MAILER] Vercel HTTPS uzatish o\'tmadi, to\'g\'ridan-to\'g\'ri SMTP sinab ko\'rilmoqda:', httpsErr.message);
-  }
-
-  // 3. Direct SMTP fallback (works on localhost or open cloud SMTP)
+  // 2. Direct SMTP fallback (works on localhost or open cloud SMTP)
   if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
     await transporter.sendMail(mailOptions);
     console.log(`[MAILER] Xat to'g'ridan-to'g'ri SMTP orqali yuborildi: ${mailOptions.to}`);
