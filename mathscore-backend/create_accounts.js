@@ -3,64 +3,65 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  const studentPass = bcrypt.hashSync('12345678', 10);
-  const adminPass = bcrypt.hashSync('admin123', 10);
-  const defaultPass = bcrypt.hashSync('12345678', 10);
+  // Passwords
+  const passTurgunboev = bcrypt.hashSync('49Sac98U7J#Uuc', 10);
+  const passMusurmon = bcrypt.hashSync('Ee6KtmD5WLvC8v', 10);
+  const passStudent = bcrypt.hashSync('uzb1234', 10);
 
-  // 1. Admin accounts
+  // 1. Asosiy Admin: turgunboevsss@gmail.com
   await prisma.user.upsert({
-    where: { email: 'malikatoxirova31@gmail.com' },
-    update: { password: defaultPass, role: 'admin' },
+    where: { email: 'turgunboevsss@gmail.com' },
+    update: { 
+      password: passTurgunboev, 
+      role: 'admin',
+      status: 'Online' 
+    },
     create: {
-      name: 'Malika Toxirova',
-      email: 'malikatoxirova31@gmail.com',
-      password: defaultPass,
+      name: "Azizbek Turg'unboyev",
+      email: 'turgunboevsss@gmail.com',
+      password: passTurgunboev,
       role: 'admin',
       status: 'Online'
     }
   });
-  console.log('Admin created/updated: malikatoxirova31@gmail.com (parol: 12345678)');
+  console.log("Asosiy Admin yaratildi/yangilandi: turgunboevsss@gmail.com (parol: 49Sac98U7J#Uuc)");
 
-  await prisma.user.upsert({
-    where: { email: 'admin@mathscore.uz' },
-    update: { password: adminPass, role: 'admin' },
-    create: {
-      name: 'Asosiy Admin',
-      email: 'admin@mathscore.uz',
-      password: adminPass,
-      role: 'admin',
-      status: 'Online'
-    }
-  });
-  console.log('Admin created/updated: admin@mathscore.uz (parol: admin123)');
-
+  // 2. Asosiy Admin: musurmonqahharov747@gmail.com
   await prisma.user.upsert({
     where: { email: 'musurmonqahharov747@gmail.com' },
-    update: { password: defaultPass, role: 'admin' },
+    update: { 
+      password: passMusurmon, 
+      role: 'admin',
+      status: 'Online' 
+    },
     create: {
       name: 'Musurmon Qahharov',
       email: 'musurmonqahharov747@gmail.com',
-      password: defaultPass,
+      password: passMusurmon,
       role: 'admin',
       status: 'Online'
     }
   });
-  console.log('Admin created/updated: musurmonqahharov747@gmail.com (parol: 12345678)');
+  console.log("Asosiy Admin yaratildi/yangilandi: musurmonqahharov747@gmail.com (parol: Ee6KtmD5WLvC8v)");
 
-  // 2. Student account
+  // 3. Student: muborakkhonkeldieva@gmail.com
   await prisma.user.upsert({
-    where: { email: 'student@mathscore.uz' },
-    update: { password: studentPass, role: 'student' },
+    where: { email: 'muborakkhonkeldieva@gmail.com' },
+    update: { 
+      password: passStudent, 
+      role: 'student',
+      status: 'Online' 
+    },
     create: {
-      name: "O'quvchi (Demo)",
-      email: 'student@mathscore.uz',
-      password: studentPass,
+      name: 'Muborakxon Keldiyeva',
+      email: 'muborakkhonkeldieva@gmail.com',
+      password: passStudent,
       role: 'student',
       course: 'IELTS Speaking Masterclass',
       status: 'Online'
     }
   });
-  console.log('Student created/updated: student@mathscore.uz (parol: 12345678)');
+  console.log("Student yaratildi/yangilandi: muborakkhonkeldieva@gmail.com (parol: uzb1234)");
 }
 
 main()
