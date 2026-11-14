@@ -45,9 +45,9 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER || DEFAULT_EMAIL_USER,
     pass: process.env.EMAIL_PASS || DEFAULT_EMAIL_PASS
   },
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 15000
+  connectionTimeout: 4000,
+  greetingTimeout: 4000,
+  socketTimeout: 6000
 });
 
 async function deliverMail(mailOptions) {
