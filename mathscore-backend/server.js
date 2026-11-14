@@ -1284,7 +1284,7 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
           category: 'Speaking Course',
           instructor: 'Musurmon Qahharov',
           price: '1200000',
-          image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=250&fit=crop',
+          image: 'https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/course_default_cover.jpg',
           description: `${course} bo'yicha to'liq ta'lim dasturi.`
         }
       });
@@ -1402,7 +1402,7 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
           category: 'Speaking Course',
           instructor: 'Musurmon Qahharov',
           price: '1200000',
-          image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=250&fit=crop',
+          image: 'https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/course_default_cover.jpg',
           description: `${course} bo'yicha to'liq ta'lim dasturi.`
         }
       });

@@ -469,7 +469,7 @@ async function initDb() {
         category: 'IELTS Speaking',
         instructor: 'Musurmon Qahharov',
         price: '1200000',
-        image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=250&fit=crop',
+        image: 'https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/course_default_cover.jpg',
         description: "IELTS Speaking bo'yicha Band 8.0+ darajaga chiqish uchun intensiv amaliyot va strategiyalar kursi."
       },
       {

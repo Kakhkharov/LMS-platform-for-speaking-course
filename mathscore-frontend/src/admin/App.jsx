@@ -28,6 +28,23 @@ import SupportAdminsView from './SupportAdminsView';
 import AdminChatsView from './AdminChatsView';
 import AdminProgress from './AdminProgress';
 
+const DEFAULT_COURSE_COVER = 'https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/course_default_cover.jpg';
+
+const cleanDisplayText = (str) =>
+  String(str || '')
+    .replace(/&#x27;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
+
+const defaultSpeakingCategories = [
+  { id: 1, title: 'IELTS Speaking', count: 0, students: 0, icon: 'auto_stories', color: 'from-blue-500/20 to-indigo-500/20 border-indigo-500/30' },
+  { id: 2, title: 'General English', count: 0, students: 0, icon: 'psychology', color: 'from-purple-500/20 to-pink-500/20 border-purple-500/30' },
+  { id: 3, title: 'CEFR Speaking', count: 0, students: 0, icon: 'trophy', color: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30' },
+  { id: 4, title: 'Spoken English', count: 0, students: 0, icon: 'analytics', color: 'from-amber-500/20 to-orange-500/20 border-amber-500/30' }
+];
+
 // Global active input tracker for Uzbek Alphabet Toolbar
 let lastFocusedAdminInput = null;
 if (typeof window !== 'undefined') {
@@ -186,7 +203,7 @@ function App() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [newCourse, setNewCourse] = useState({
-    title: '', category: 'SAT Prep', price: '', instructor: 'Azizbek', image: '', lessonsCount: '', curriculum: [], promoVideoUrl: '', promoVideoFile: ''
+    title: '', category: 'IELTS Speaking', price: '', instructor: "Azizbek Turg'unboyev", image: '', lessonsCount: '', curriculum: [], promoVideoUrl: '', promoVideoFile: ''
   });
   const [tempLesson, setTempLesson] = useState({ title: '', duration: '', videoUrl: '', videoFile: '' });
 
@@ -1939,7 +1956,7 @@ function App() {
         price: Number(newCourse.price),
         lessons: newCourse.curriculum,
         lessonsCount: newCourse.lessonsCount ? Number(newCourse.lessonsCount) : newCourse.curriculum.length,
-        image: newCourse.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuDml4tLNvySCO_8Sk5xl-mjsjhz_Ej0cqH5cHeg56Ubt-Sm8Pb7RaEXyE_QJfIlAxjKq4MaZGzrY3eO141r3AhrdP1OuulE35nT1PKttbDY_Rv7phjufab0qv_R9MDZ5vEOYjS2L6SUM9t4_zUqnW2zBjCJ75A8tEwyE8BonYWKIwircoAZ54nUSrDMuwcFkz0t59CYPzNojT7fvfsKCGrudiTQcaImh7ACT_kRWUBGhRrBhdBf3L4qePh5wotnQNm497SH1cpiDVKY"
+        image: newCourse.image || DEFAULT_COURSE_COVER
       };
 
       let response;
@@ -2255,12 +2272,12 @@ function App() {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.some(c => c.title === 'SAT Prep' || c.title === 'A-Level Mathematics')) {
           localStorage.removeItem('mathscore_admin_categories');
-          return [];
+          return defaultSpeakingCategories;
         }
-        return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
     } catch (e) {}
-    return [];
+    return defaultSpeakingCategories;
   });
 
   const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
@@ -3269,7 +3286,7 @@ function App() {
                         <h2 className="text-2xl font-black text-slate-900 dark:text-white">Kurslar Röyxati</h2>
                         <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Platformadagi barça faol ta'lim yönalişlari.</p>
                       </div>
-                      <button onClick={() => { setIsEditing(false); setNewCourse({ title: '', category: 'SAT Prep', price: '', instructor: adminProfile.name || 'Azizbek', image: '', lessonsCount: '', curriculum: [], promoVideoUrl: '', promoVideoFile: '' }); setCurrentPage('course-management'); }} className="bg-indigo-500 text-white font-bold px-5 py-3 rounded-xl shadow-lg shadow-indigo-500/30 flex items-center gap-2 hover:opacity-90 transition-all">
+                      <button onClick={() => { setIsEditing(false); setNewCourse({ title: '', category: (categories && categories[0]?.title) || 'IELTS Speaking', price: '', instructor: adminProfile.name || "Azizbek Turg'unboyev", image: '', lessonsCount: '', curriculum: [], promoVideoUrl: '', promoVideoFile: '' }); setCurrentPage('course-management'); }} className="bg-indigo-500 text-white font-bold px-5 py-3 rounded-xl shadow-lg shadow-indigo-500/30 flex items-center gap-2 hover:opacity-90 transition-all">
                         <span className="material-symbols-outlined">add</span> Yangi Kurs
                       </button>
                     </div>
@@ -3278,13 +3295,13 @@ function App() {
                       {filteredCourses.map(course => (
                         <div key={course.id} className="modern-card modern-card-hover overflow-hidden flex flex-col group">
                           <div className="h-48 relative overflow-hidden">
-                            <img src={course.image} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                            <span className="absolute top-4 right-4 bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{course.category}</span>
+                            <img src={course.image || DEFAULT_COURSE_COVER} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = DEFAULT_COURSE_COVER; }} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <span className="absolute top-4 right-4 bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">{cleanDisplayText(course.category)}</span>
                           </div>
                           <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                             <div>
-                              <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{course.title}</h3>
-                              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">{course.instructor}</p>
+                              <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-tight">{cleanDisplayText(course.title)}</h3>
+                              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">{cleanDisplayText(course.instructor)}</p>
                             </div>
                             <div className="flex justify-between items-center text-xs font-bold text-slate-500 dark:text-slate-400 py-3 border-y border-slate-200 dark:border-slate-700">
                               <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[16px]">group</span> {course.studentsCount || 0}</span>
@@ -3322,7 +3339,18 @@ function App() {
                           <div className="space-y-2">
                             <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Kategoriya</label>
                             <select value={newCourse.category} onChange={e => setNewCourse({ ...newCourse, category: e.target.value })} className="w-full p-3 bg-white/50 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-700 rounded-xl font-bold text-sm focus:border-indigo-500 outline-none text-slate-900 dark:text-white">
-                              <option>SAT Prep</option><option>A-Level</option><option>Foundation</option>
+                              {categories && categories.length > 0 ? (
+                                categories.map(cat => (
+                                  <option key={cat.id || cat.title} value={cat.title}>{cleanDisplayText(cat.title)}</option>
+                                ))
+                              ) : (
+                                <>
+                                  <option value="IELTS Speaking">IELTS Speaking</option>
+                                  <option value="General English">General English</option>
+                                  <option value="CEFR Speaking">CEFR Speaking</option>
+                                  <option value="Spoken English">Spoken English</option>
+                                </>
+                              )}
                             </select>
                           </div>
                           <div className="space-y-2">
@@ -3678,44 +3706,6 @@ function App() {
                         </div>
                       ))}
                     </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                      <div className="modern-card p-6 lg:col-span-2 space-y-4">
-                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">Tezkor E'lonlar va Topşiriqlar</h3>
-                        <div className="space-y-3">
-                          {[
-                            { title: "SAT Math yangi standart test versiyasi", desc: "Talabalar örtasida katta sinov testi rejalashtirildi.", date: "22-May, 14:00" },
-                            { title: "A-Level darslarining integratsiya tahlili", desc: "Integrallash bölimidagi yangi savollar yuklandi.", date: "Hozirgina" }
-                          ].map((ann, i) => (
-                            <div key={i} className="p-4 bg-white/30 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 rounded-xl space-y-1">
-                              <div className="flex justify-between items-center">
-                                <span className="text-xs font-bold text-indigo-500">{ann.date}</span>
-                                <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-500 rounded text-[9px] font-bold uppercase">Muhim</span>
-                              </div>
-                              <h4 className="font-bold text-slate-800 dark:text-white text-sm">{ann.title}</h4>
-                              <p className="text-xs text-slate-500 dark:text-slate-400">{ann.desc}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="modern-card p-6 space-y-4">
-                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-wider">Öqituvçi Ma'lumotlari</h3>
-                        <div className="flex flex-col items-center text-center p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-xl space-y-3">
-                          <img
-                            className="w-20 h-20 rounded-full object-cover ring-4 ring-indigo-500/30"
-                            src={getAuthMediaUrl(adminProfile.avatar) || getInitialsAvatar(adminProfile.name)}
-                            alt={adminProfile.name}
-                            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = getInitialsAvatar(adminProfile.name); }}
-                          />
-                          <div>
-                            <h4 className="font-black text-slate-900 dark:text-white">{adminProfile.name}</h4>
-                            <p className="text-xs text-indigo-500 font-bold uppercase mt-1">Loyiha Asoschisi & Boş Ustoz</p>
-                          </div>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Algebra, Geometriya, SAT va A-Level Matematikasi böyiça 8 yillik xalqaro tajriba.</p>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 )}
 
@@ -3725,7 +3715,7 @@ function App() {
                     <div className="modern-card p-6 flex justify-between items-center">
                       <div>
                         <h2 className="text-2xl font-black text-slate-900 dark:text-white">Kurs Kategoriyalari</h2>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Platformada o'tiladigan matematik yönalişlar.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Platformadagi barcha faol ta'lim va kurs yo'nalishlari.</p>
                       </div>
                       <button onClick={() => setShowAddCategoryModal(true)} className="bg-indigo-500 text-white font-bold px-5 py-3 rounded-xl shadow-lg shadow-indigo-500/30 flex items-center gap-2 hover:opacity-90">
                         <span className="material-symbols-outlined">add_circle</span> Yangi Kategoriya
