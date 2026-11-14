@@ -11,12 +11,16 @@ try { require('dotenv').config(); } catch (e) {}
 
 const DEFAULT_EMAIL_USER = "musurmonqahharov747@gmail.com";
 const DEFAULT_EMAIL_PASS = "qiircoevannrafbr";
+const DEFAULT_GMAIL_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzsTDwDHMgAKAJeX5VGdjBgFaQCrRVXWwbGdrRfXJtGlkc14UNlCPat5JgsXhabBo36/exec";
 
 if (!process.env.EMAIL_USER) {
   process.env.EMAIL_USER = DEFAULT_EMAIL_USER;
 }
 if (!process.env.EMAIL_PASS) {
   process.env.EMAIL_PASS = DEFAULT_EMAIL_PASS;
+}
+if (!process.env.GMAIL_WEBAPP_URL) {
+  process.env.GMAIL_WEBAPP_URL = DEFAULT_GMAIL_WEBAPP_URL;
 }
 
 function resolveBannerPath() {
@@ -61,9 +65,10 @@ async function deliverMail(mailOptions) {
           to: mailOptions.to,
           subject: mailOptions.subject,
           html: mailOptions.html
-        })
+        }),
+        redirect: 'follow'
       });
-      if (gRes.ok) {
+      if (gRes.ok || gRes.status === 302) {
         console.log(`[MAILER] Xat Google Apps Script Web App orqali muvaffaqiyatli yuborildi: ${mailOptions.to}`);
         return { sent: true };
       } else {
