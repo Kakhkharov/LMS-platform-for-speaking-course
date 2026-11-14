@@ -39,6 +39,7 @@ function resolveBannerPath() {
 
 const BANNER_02_PATH = resolveBannerPath() || path.resolve(__dirname, '..', 'image', 'banner_02.png');
 const BANNER_CID = 'practise-banner-02@practise.uz';
+const BANNER_PUBLIC_URL = process.env.BANNER_URL || 'https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/banner_02.png';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -107,7 +108,7 @@ function buildBannerEmail(bodyHtml) {
       <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06); color: #0f172a;">
         ${hasBanner ? `
         <div style="width: 100%; background: #0f172a; line-height: 0;">
-          <img src="cid:${BANNER_CID}" alt="Practise Platform Banner" style="display: block; width: 100%; max-width: 600px; height: auto; border: 0;" />
+          <img src="${BANNER_PUBLIC_URL}" alt="Practise Platform Banner" style="display: block; width: 100%; max-width: 600px; height: auto; border: 0;" />
         </div>
         ` : ''}
         <div style="padding: 26px 24px 22px;">
