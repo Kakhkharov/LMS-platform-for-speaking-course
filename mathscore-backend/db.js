@@ -462,10 +462,74 @@ async function initDb() {
         console.log(`[DB] Ensured primary admin role: ${adm.email}`);
       }
     }
+
+    const courseDefaults = [
+      {
+        title: 'IELTS Speaking Masterclass (Band 8.0+)',
+        category: 'IELTS Speaking',
+        instructor: 'Musurmon Qahharov',
+        price: '1200000',
+        image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=250&fit=crop',
+        description: "IELTS Speaking bo'yicha Band 8.0+ darajaga chiqish uchun intensiv amaliyot va strategiyalar kursi."
+      },
+      {
+        title: 'IELTS Speaking Masterclass',
+        category: 'IELTS Speaking',
+        instructor: 'Musurmon Qahharov',
+        price: '1200000',
+        image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop',
+        description: "IELTS Speaking imtihoni uchun to'liq tayyorgarlik kursi: Part 1, Part 2 va Part 3."
+      },
+      {
+        title: 'General English Speaking & Fluency',
+        category: 'Spoken English',
+        instructor: 'Musurmon Qahharov',
+        price: '850000',
+        image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&h=250&fit=crop',
+        description: "Ingliz tilida ravon so'zlashuv va so'z boyligini kengaytirish uchun mo'ljallangan darslar."
+      },
+      {
+        title: 'Pronunciation & American Accent Training',
+        category: 'Pronunciation',
+        instructor: 'Musurmon Qahharov',
+        price: '700000',
+        image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop',
+        description: "Amerika talaffuzi, urg'u va intonatsiya bo'yicha professional mahorat darsi."
+      },
+      {
+        title: 'Everyday English Conversations & Idioms',
+        category: 'Conversational',
+        instructor: 'Musurmon Qahharov',
+        price: '600000',
+        image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop',
+        description: "Kundalik suhbatlar, frazeologik birikmalar va idiomalar yordamida erkin muloqot."
+      },
+      {
+        title: 'Business English Spoken Communication',
+        category: 'Business English',
+        instructor: 'Musurmon Qahharov',
+        price: '950000',
+        image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=250&fit=crop',
+        description: "Biznes uchrashuvlar, taqdimotlar va muzokaralar uchun professional ingliz tili."
+      }
+    ];
+
+    for (const c of courseDefaults) {
+      const existingCourse = await prisma.course.findFirst({
+        where: {
+          title: { equals: c.title, mode: 'insensitive' }
+        }
+      });
+      if (!existingCourse) {
+        await prisma.course.create({ data: c });
+        console.log(`[DB] Created default course: ${c.title}`);
+      }
+    }
   } catch (admErr) {
     // Non-blocking
   }
 }
 initDb();
 
+db.initDb = initDb;
 module.exports = db;

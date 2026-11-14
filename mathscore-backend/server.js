@@ -32,7 +32,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
-const { sendStudentCredentials, sendPasswordReset, sendPasswordChangeNotification } = require('./mailer');
+const { sendStudentCredentials, sendCourseAssignedNotification, sendPasswordReset, sendPasswordChangeNotification } = require('./mailer');
 
 const db = require('./db');
 const { gradeShortAnswerQuestion } = require('./geminiGrader');
@@ -1267,14 +1267,29 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
       return res.status(400).json({ error: 'Bu email admin akkauntiga tegishli.' });
     }
 
-    // Find the course by title
-    const targetCourse = await db.prisma.course.findFirst({ where: { title: course } });
-    if (!targetCourse) {
-      return res.status(400).json({ error: `"${course}" nomli kurs topilmadi. Avval kursni yarating.` });
+    // Find the course by title (case-insensitive) or auto-create to avoid blocking
+    let targetCourse = await db.prisma.course.findFirst({
+      where: {
+        title: { equals: course, mode: 'insensitive' }
+      }
+    });
+    if (!targetCourse && course) {
+      targetCourse = await db.prisma.course.create({
+        data: {
+          title: course,
+          category: 'Speaking Course',
+          instructor: 'Musurmon Qahharov',
+          price: '1200000',
+          image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=250&fit=crop',
+          description: `${course} bo'yicha to'liq ta'lim dasturi.`
+        }
+      });
     }
 
+    const courseTitle = targetCourse ? targetCourse.title : (course || 'Yangi kurs');
+
     // Check if already enrolled in this course
-    const alreadyEnrolled = existing.userCourses.some(uc => uc.course.id === targetCourse.id);
+    const alreadyEnrolled = targetCourse && existing.userCourses.some(uc => uc.course.id === targetCourse.id);
     
     if (alreadyEnrolled) {
       if (deadline || existing.status === 'Chetlashtirilgan' || tariff) {
@@ -1290,21 +1305,24 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
           updatedTariff = setStudentTariff(existing.id, tariff);
           broadcastToDashboard('student_tariff_update', { userId: existing.id, tariff: updatedTariff });
         }
-        return res.status(200).json({ newCourseAdded: true, tariff: updatedTariff, message: `${existing.name} ning "${course}" kursi uchun muddati, tarifi va holati yangilandi (Aktivlashtirildi).` });
+        return res.status(200).json({ newCourseAdded: true, tariff: updatedTariff, message: `${existing.name} ning "${courseTitle}" kursi uchun muddati, tarifi va holati yangilandi (Aktivlashtirildi).` });
       } else {
-        return res.status(400).json({ error: `${existing.name} allaqachon "${course}" kursiga yozilgan.` });
+        return res.status(400).json({ error: `${existing.name} allaqachon "${courseTitle}" kursiga yozilgan.` });
       }
     }
 
     // Grant new course access
-    await db.prisma.userCourse.create({
-      data: { userId: existing.id, courseId: targetCourse.id }
-    });
+    if (targetCourse) {
+      await db.prisma.userCourse.create({
+        data: { userId: existing.id, courseId: targetCourse.id }
+      });
+    }
 
     await db.prisma.user.update({
       where: { id: existing.id },
       data: { 
         status: 'Online', 
+        course: courseTitle,
         ...(deadline && { deadline: new Date(deadline) }) 
       }
     });
@@ -1315,19 +1333,29 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
       data: {
         userId: existing.id,
         title: "Yangi kursga qo'shildingiz",
-        message: `Siz ${addedDateStr} sanasida "${course}" kursiga muvaffaqiyatli qo'shildingiz.`
+        message: `Siz ${addedDateStr} sanasida "${courseTitle}" kursiga muvaffaqiyatli qo'shildingiz.`
       }
     });
 
-    db.logSecurityIncident({ type: 'COURSE_ACCESS_GRANTED', severity: 'LOW', message: `${email} ga "${course}" kursi tayinlandi`, ip: req.ip });
-    broadcastToDashboard('sec_log', { type: 'COURSE_ACCESS_GRANTED', severity: 'LOW', message: `${existing.name} → ${course}`, ip: req.ip });
+    db.logSecurityIncident({ type: 'COURSE_ACCESS_GRANTED', severity: 'LOW', message: `${email} ga "${courseTitle}" kursi tayinlandi`, ip: req.ip });
+    broadcastToDashboard('sec_log', { type: 'COURSE_ACCESS_GRANTED', severity: 'LOW', message: `${existing.name} → ${courseTitle}`, ip: req.ip });
 
     let updatedTariff = getStudentTariff(existing.id);
     if (tariff) {
       updatedTariff = setStudentTariff(existing.id, tariff);
       broadcastToDashboard('student_tariff_update', { userId: existing.id, tariff: updatedTariff });
     }
-    broadcastToDashboard('progress_update', { source: 'student_course_granted', userId: existing.id, course });
+    broadcastToDashboard('progress_update', { source: 'student_course_granted', userId: existing.id, course: courseTitle });
+
+    // Send course assigned email notification to student
+    let courseMailRes = null;
+    try {
+      courseMailRes = await sendCourseAssignedNotification(cleanEmail, existing.name, courseTitle, studentLoginUrl, {
+        tariff: updatedTariff
+      });
+    } catch (mailErr) {
+      console.error('[STUDENT] Kurs biriktirilganligi haqida xat yuborishda xatolik:', mailErr);
+    }
 
     // Fetch updated user with courses
     const updatedUser = await db.prisma.user.findUnique({
@@ -1344,8 +1372,9 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
         status: updatedUser.status, avatar: updatedUser.avatar, deadline: updatedUser.deadline
       },
       newCourseAdded: true,
-      addedCourse: course,
-      message: `${existing.name} ga "${course}" kursi muvaffaqiyatli tayinlandi!`
+      addedCourse: courseTitle,
+      emailSent: Boolean(courseMailRes?.sent),
+      message: `${existing.name} ga "${courseTitle}" kursi muvaffaqiyatli tayinlandi va pochtasiga xabar yuborildi!`
     });
   }
 
@@ -1354,13 +1383,37 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(oneTimePassword, salt);
 
+  // Auto-find or create target course in DB
+  let targetCourse = null;
+  if (course) {
+    targetCourse = await db.prisma.course.findFirst({
+      where: {
+        title: { equals: course, mode: 'insensitive' }
+      }
+    });
+    if (!targetCourse) {
+      targetCourse = await db.prisma.course.create({
+        data: {
+          title: course,
+          category: 'Speaking Course',
+          instructor: 'Musurmon Qahharov',
+          price: '1200000',
+          image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&h=250&fit=crop',
+          description: `${course} bo'yicha to'liq ta'lim dasturi.`
+        }
+      });
+    }
+  }
+
+  const assignedCourseTitle = targetCourse ? targetCourse.title : (course || 'Kurs tayinlanmagan');
+
   const saved = await db.prisma.user.create({
     data: {
       name: cleanName,
       email: cleanEmail,
       password: hashedPassword,
       role: 'student',
-      course: course || 'Kurs tayinlanmagan',
+      course: assignedCourseTitle,
       status: 'Online',
       avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop',
       deadline: deadline ? new Date(deadline) : null
@@ -1370,7 +1423,6 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
   const resolvedTariff = setStudentTariff(saved.id, tariff || 'VIP');
 
   // Auto-assign course via UserCourse table
-  const targetCourse = course ? await db.prisma.course.findFirst({ where: { title: course } }) : null;
   if (targetCourse) {
     await db.prisma.userCourse.create({
       data: { userId: saved.id, courseId: targetCourse.id }
@@ -1381,7 +1433,7 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
       data: {
         userId: saved.id,
         title: "Platformaga xush kelibsiz",
-        message: `Siz ${addedDateStr} sanasida "${course}" kursiga muvaffaqiyatli qo'shildingiz.`
+        message: `Siz ${addedDateStr} sanasida "${targetCourse.title}" kursiga muvaffaqiyatli qo'shildingiz.`
       }
     });
   }
@@ -1403,10 +1455,15 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
   }
 
   // Send Gmail email with banner_02.png at top + login link + tariff + one-time password
-  const mailRes = await sendStudentCredentials(cleanEmail, cleanName, oneTimePassword, studentLoginUrl, {
-    tariff: resolvedTariff,
-    course: saved.course
-  });
+  let mailRes = null;
+  try {
+    mailRes = await sendStudentCredentials(cleanEmail, cleanName, oneTimePassword, studentLoginUrl, {
+      tariff: resolvedTariff,
+      course: assignedCourseTitle
+    });
+  } catch (mErr) {
+    console.error('[STUDENT] Email yuborishda xatolik:', mErr);
+  }
 
   db.logSecurityIncident({ type: 'STUDENT_CREATED_BY_ADMIN', severity: 'LOW', message: `Admin qo'shdi (${resolvedTariff}): ${cleanEmail}`, ip: req.ip });
   broadcastToDashboard('sec_log', { type: 'STUDENT_CREATED', severity: 'LOW', message: `Yangi o'quvchi (${resolvedTariff}): ${cleanEmail}`, ip: req.ip });

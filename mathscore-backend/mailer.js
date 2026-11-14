@@ -15,27 +15,44 @@ if (!process.env.EMAIL_PASS) {
   process.env.EMAIL_PASS = DEFAULT_EMAIL_PASS;
 }
 
-const BANNER_02_PATH = path.resolve(__dirname, '..', 'image', 'banner_02.png');
+function resolveBannerPath() {
+  const candidates = [
+    path.resolve(__dirname, 'image', 'banner_02.png'),
+    path.resolve(__dirname, '..', 'image', 'banner_02.png'),
+    path.resolve(process.cwd(), 'image', 'banner_02.png'),
+    path.resolve(process.cwd(), 'mathscore-backend', 'image', 'banner_02.png'),
+    path.resolve(__dirname, 'banner_02.png')
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) return c;
+  }
+  return null;
+}
+
+const BANNER_02_PATH = resolveBannerPath() || path.resolve(__dirname, '..', 'image', 'banner_02.png');
 const BANNER_CID = 'practise-banner-02@practise.uz';
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.EMAIL_USER || DEFAULT_EMAIL_USER,
+    pass: process.env.EMAIL_PASS || DEFAULT_EMAIL_PASS
   },
-  connectionTimeout: 20000,
-  greetingTimeout: 20000,
-  socketTimeout: 45000
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 30000
 });
 
 function buildBannerEmail(bodyHtml) {
-  const hasBanner = fs.existsSync(BANNER_02_PATH);
+  const activeBannerPath = resolveBannerPath();
+  const hasBanner = Boolean(activeBannerPath && fs.existsSync(activeBannerPath));
   const attachments = hasBanner
     ? [
         {
           filename: 'banner_02.png',
-          path: BANNER_02_PATH,
+          path: activeBannerPath,
           cid: BANNER_CID
         }
       ]
@@ -250,4 +267,61 @@ const sendPasswordChangeNotification = async (email, name, newPassword, loginUrl
   }
 };
 
-module.exports = { sendStudentCredentials, sendPasswordReset, sendPasswordChangeNotification, buildBannerEmail, BANNER_02_PATH };
+const sendCourseAssignedNotification = async (email, name, courseTitle, loginUrl = getDefaultStudentLoginUrl(), options = {}) => {
+  const safeLoginUrl = String(loginUrl || getDefaultStudentLoginUrl()).trim();
+  const cleanTariff = String(options?.tariff || 'VIP').trim().toUpperCase() === 'FREE' ? 'FREE' : 'VIP';
+  const tariffBadgeBg = cleanTariff === 'FREE' ? '#f1f5f9' : '#fef3c7';
+  const tariffBadgeColor = cleanTariff === 'FREE' ? '#334155' : '#92400e';
+  const { html, attachments } = buildBannerEmail(`
+    <h2 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Assalomu alaykum, ${name}!</h2>
+    <p style="margin: 0 0 12px; font-size: 14px; line-height: 1.6; color: #334155;">
+      Sizga <strong>Practise</strong> platformasida yangi kurs biriktirildi!
+    </p>
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 16px 0;">
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Yangi Kurs:</strong> <span style="color: #0f172a; font-weight: 700; font-size: 15px;">${courseTitle}</span>
+      </p>
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Tarif:</strong>
+        <span style="display: inline-block; background: ${tariffBadgeBg}; color: ${tariffBadgeColor}; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 800;">${cleanTariff}</span>
+      </p>
+      <p style="margin: 0 0 8px; font-size: 13px; color: #475569;">
+        <strong>Login (Email):</strong> <span style="color: #0f172a;">${email}</span>
+      </p>
+      <p style="margin: 0; font-size: 13px; color: #475569; word-break: break-all;">
+        <strong>Student panelga kirish havolasi:</strong><br/>
+        <a href="${safeLoginUrl}" style="color: #4f46e5; font-weight: 600;">${safeLoginUrl}</a>
+      </p>
+    </div>
+    <p style="margin: 0 0 18px; font-size: 13px; color: #475569; line-height: 1.55;">
+      Siz o'z shaxsiy hisobingizga mavjud parolingiz bilan kirib, yangi kurs darslarini boshlashingiz mumkin.
+    </p>
+    <div style="margin: 20px 0 6px;">
+      <a href="${safeLoginUrl}" style="display: inline-block; padding: 12px 24px; background: #4f46e5; color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px;">Student Panelga Kirish</a>
+    </div>
+  `);
+
+  const mailOptions = {
+    from: `"Practise" <${process.env.EMAIL_USER || DEFAULT_EMAIL_USER}>`,
+    to: email,
+    subject: `Practise — Sizga yangi kurs qo'shildi: ${courseTitle}`,
+    html,
+    attachments
+  };
+
+  try {
+    console.log(`[MAILER] Talabaga yangi kurs biriktirildi: ${email} -> ${courseTitle}`);
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      await transporter.sendMail(mailOptions);
+      console.log(`[MAILER] Xat muvaffaqiyatli yuborildi: ${email}`);
+      return { sent: true, tariff: cleanTariff, bannerAttached: attachments.length > 0 };
+    }
+    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER kiritilmagan.');
+    return { sent: false, bannerAttached: attachments.length > 0 };
+  } catch (error) {
+    console.error('[MAILER] Email yuborishda xatolik:', error);
+    return { sent: false, error: error.message, bannerAttached: attachments.length > 0 };
+  }
+};
+
+module.exports = { sendStudentCredentials, sendCourseAssignedNotification, sendPasswordReset, sendPasswordChangeNotification, buildBannerEmail, BANNER_02_PATH };
