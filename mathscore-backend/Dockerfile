@@ -1,21 +1,18 @@
-FROM node:18-alpine
+FROM node:18-bookworm-slim
 
-# Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends openssl ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY package*.json ./
 RUN npm install
 
-# Copy Prisma schema and code
 COPY prisma ./prisma/
 COPY . .
 
-# Generate Prisma Client
 RUN npx prisma generate
 
-# Expose port
 EXPOSE 5000
-
-# Start server
-CMD [ "npm", "start" ]
+CMD ["npm", "start"]
