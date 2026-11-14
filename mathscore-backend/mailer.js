@@ -1,5 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const dns = require('dns');
+if (dns.setDefaultResultOrder) {
+  try { dns.setDefaultResultOrder('ipv4first'); } catch (e) {}
+}
 const nodemailer = require('nodemailer');
 
 try { require('dotenv').config({ path: path.join(__dirname, '.env') }); } catch (e) {}
@@ -36,13 +40,14 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
+  family: 4,
   auth: {
     user: process.env.EMAIL_USER || DEFAULT_EMAIL_USER,
     pass: process.env.EMAIL_PASS || DEFAULT_EMAIL_PASS
   },
-  connectionTimeout: 15000,
-  greetingTimeout: 15000,
-  socketTimeout: 30000
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000
 });
 
 function buildBannerEmail(bodyHtml) {
@@ -324,4 +329,4 @@ const sendCourseAssignedNotification = async (email, name, courseTitle, loginUrl
   }
 };
 
-module.exports = { sendStudentCredentials, sendCourseAssignedNotification, sendPasswordReset, sendPasswordChangeNotification, buildBannerEmail, BANNER_02_PATH };
+module.exports = { transporter, sendStudentCredentials, sendCourseAssignedNotification, sendPasswordReset, sendPasswordChangeNotification, buildBannerEmail, BANNER_02_PATH };

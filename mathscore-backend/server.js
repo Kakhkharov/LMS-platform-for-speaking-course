@@ -1,4 +1,8 @@
 const path = require('path');
+const dns = require('dns');
+if (dns.setDefaultResultOrder) {
+  try { dns.setDefaultResultOrder('ipv4first'); } catch (e) {}
+}
 try { require('dotenv').config({ path: path.join(__dirname, '.env') }); } catch (e) {}
 try { require('dotenv').config(); } catch (e) {}
 
@@ -32,7 +36,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
-const { sendStudentCredentials, sendCourseAssignedNotification, sendPasswordReset, sendPasswordChangeNotification } = require('./mailer');
+const { transporter, sendStudentCredentials, sendCourseAssignedNotification, sendPasswordReset, sendPasswordChangeNotification } = require('./mailer');
 
 const db = require('./db');
 const { gradeShortAnswerQuestion } = require('./geminiGrader');
@@ -1486,6 +1490,30 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
     bannerAttached: Boolean(mailRes?.bannerAttached),
     mailError: mailRes?.error || null
   });
+});
+
+app.get('/api/debug/smtp-check', async (req, res) => {
+  const net = require('net');
+  const results = { timestamp: new Date().toISOString() };
+  
+  const testTcp = (host, port, family = 4) => new Promise(resolve => {
+    const s = net.createConnection({ host, port, family, timeout: 3500 });
+    s.on('connect', () => { s.destroy(); resolve({ open: true }); });
+    s.on('timeout', () => { s.destroy(); resolve({ open: false, error: 'TIMEOUT' }); });
+    s.on('error', (e) => { resolve({ open: false, error: e.message }); });
+  });
+
+  results['smtp_gmail_465_ipv4'] = await testTcp('smtp.gmail.com', 465, 4);
+  results['smtp_gmail_587_ipv4'] = await testTcp('smtp.gmail.com', 587, 4);
+
+  try {
+    await transporter.verify();
+    results['transporter_verify'] = { ok: true };
+  } catch (ve) {
+    results['transporter_verify'] = { ok: false, error: ve.message };
+  }
+
+  res.json(results);
 });
 
 app.post('/api/auth/forgot-password', authRateLimiter, async (req, res) => {
