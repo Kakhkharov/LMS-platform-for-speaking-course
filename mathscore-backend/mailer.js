@@ -2,14 +2,27 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
+try { require('dotenv').config({ path: path.join(__dirname, '.env') }); } catch (e) {}
+try { require('dotenv').config(); } catch (e) {}
+
+const DEFAULT_EMAIL_USER = "musurmonqahharov747@gmail.com";
+const DEFAULT_EMAIL_PASS = "qiircoevannrafbr";
+
+if (!process.env.EMAIL_USER) {
+  process.env.EMAIL_USER = DEFAULT_EMAIL_USER;
+}
+if (!process.env.EMAIL_PASS) {
+  process.env.EMAIL_PASS = DEFAULT_EMAIL_PASS;
+}
+
 const BANNER_02_PATH = path.resolve(__dirname, '..', 'image', 'banner_02.png');
 const BANNER_CID = 'practise-banner-02@practise.uz';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'mathscore.uzbekistan@gmail.com',
-    pass: process.env.EMAIL_PASS || 'password_here'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   },
   connectionTimeout: 20000,
   greetingTimeout: 20000,
