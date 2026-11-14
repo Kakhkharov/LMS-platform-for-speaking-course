@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
+const DEFAULT_API_BASE =
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : ((typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+        ['5173', '5174', '5175'].includes(window.location.port))
+        ? 'http://localhost:5000'
+        : '');
+
 // 8 ta tayyor sifatli vektorli geometrik va matematik diagrammalar shablonlari
 export const MATH_TEMPLATES = [
   {
@@ -324,7 +333,7 @@ export function SketchDrawerModal({ onClose, onSave }) {
 export default function MathDiagramStudio({
   imageUrl,
   onImageChange,
-  apiBase = 'http://localhost:5000',
+  apiBase = DEFAULT_API_BASE,
   getAuthMediaUrl = (url) => url,
   questionNumber = 1,
   isActiveTab = true

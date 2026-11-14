@@ -1,4 +1,7 @@
 require('dotenv').config();
+if (process.env.DATABASE_URL && process.env.DATABASE_URL.includes(':+M@s?rjHHxStxv7@')) {
+  process.env.DATABASE_URL = process.env.DATABASE_URL.replace(':+M@s?rjHHxStxv7@', ':%2BM%40s%3FrjHHxStxv7@');
+}
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -25,6 +28,20 @@ const {
 } = require('./security');
 
 const app = express();
+app.set('trust proxy', 1);
+
+function getPublicOrigin(req) {
+  const originHeader = req?.get?.('origin');
+  if (originHeader) return originHeader.replace(/\/+$/, '');
+  const forwardedHost = req?.headers?.['x-forwarded-host'] || req?.get?.('host');
+  if (forwardedHost) {
+    const protoHeader = String(req?.headers?.['x-forwarded-proto'] || req?.protocol || 'https').split(',')[0].trim();
+    return `${protoHeader}://${forwardedHost}`.replace(/\/+$/, '');
+  }
+  if (process.env.PUBLIC_URL) return String(process.env.PUBLIC_URL).replace(/\/+$/, '');
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:5173';
+}
 
 // Automatically catch all async errors in route handlers to prevent process crashes
 const originalMethods = ['get', 'post', 'put', 'patch', 'delete'];
@@ -63,7 +80,33 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(sanitizeInput);
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Ensure uploads directory exists (use /tmp/uploads on read-only Vercel serverless filesystem)
+const localUploadDir = path.join(__dirname, 'uploads');
+const tmpUploadDir = path.join(os.tmpdir(), 'mathscore-uploads');
+let uploadDir = localUploadDir;
+try {
+  if (!fs.existsSync(localUploadDir)) {
+    fs.mkdirSync(localUploadDir, { recursive: true });
+  }
+  fs.accessSync(localUploadDir, fs.constants.W_OK);
+} catch (e) {
+  uploadDir = tmpUploadDir;
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+}
+
 // Secure Video Streaming / Uploads Access
+const serveStaticUpload = (req, res, next) => {
+  express.static(uploadDir)(req, res, (err) => {
+    if (err) return next(err);
+    if (uploadDir !== localUploadDir) {
+      return express.static(localUploadDir)(req, res, next);
+    }
+    next();
+  });
+};
+
 app.use('/uploads', (req, res, next) => {
   const ext = path.extname(req.path).toLowerCase();
   const publicExtensions = [
@@ -84,18 +127,12 @@ app.use('/uploads', (req, res, next) => {
     if (err) return res.status(403).json({ error: 'Ruxsat etilmagan token.' });
     next();
   });
-}, express.static(path.join(__dirname, 'uploads')));
-
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+}, serveStaticUpload);
 
 // Multer Storage Configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, 'uploads'));
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     let ext = path.extname(file.originalname || '');
@@ -836,8 +873,7 @@ app.put('/api/auth/profile', authenticateToken, async (req, res) => {
         writeLandingDB(dbData);
       }
     } catch (e) {}
-    const originHeader = req.get('origin') || '';
-    const loginUrl = originHeader ? `${originHeader}/student` : 'http://localhost:5173/student';
+    const loginUrl = `${getPublicOrigin(req)}/student`;
     sendPasswordChangeNotification(updatedUser.email, updatedUser.name, cleanPass, loginUrl).catch(() => {});
   }
   
@@ -877,8 +913,7 @@ app.post('/api/auth/set-initial-password', authenticateToken, async (req, res) =
     });
     clearUserOneTimePassword(req.user.id);
 
-    const originHeader = req.get('origin') || '';
-    const loginUrl = req.body?.loginUrl || (originHeader ? `${originHeader}/student` : 'http://localhost:5173/student');
+    const loginUrl = req.body?.loginUrl || `${getPublicOrigin(req)}/student`;
     sendPasswordChangeNotification(existingUser.email, existingUser.name, rawPassword, loginUrl).catch(() => {});
 
     try {
@@ -1169,10 +1204,8 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
   if (!studentLoginUrl) {
     if (originHeader && originHeader.includes(':5175')) {
       studentLoginUrl = originHeader.replace(':5175', ':5174');
-    } else if (originHeader) {
-      studentLoginUrl = `${originHeader}/student`;
     } else {
-      studentLoginUrl = 'http://localhost:5173/student';
+      studentLoginUrl = `${getPublicOrigin(req)}/student`;
     }
   }
   
@@ -1444,11 +1477,11 @@ app.post('/api/auth/forgot-password', authRateLimiter, async (req, res) => {
   let studentLoginUrl = (loginUrl && String(loginUrl).trim()) ? String(loginUrl).trim() : '';
   if (!studentLoginUrl) {
     if (resetUrl && String(resetUrl).trim()) {
-      studentLoginUrl = String(resetUrl).trim().replace(/\/reset-password.*$/i, '') || 'http://localhost:5173/student';
-    } else if (originHeader) {
-      studentLoginUrl = originHeader.includes(':5174') ? originHeader : `${originHeader}/student`;
+      studentLoginUrl = String(resetUrl).trim().replace(/\/reset-password.*$/i, '') || `${getPublicOrigin(req)}/student`;
+    } else if (originHeader && originHeader.includes(':5174')) {
+      studentLoginUrl = originHeader;
     } else {
-      studentLoginUrl = 'http://localhost:5173/student';
+      studentLoginUrl = `${getPublicOrigin(req)}/student`;
     }
   }
 
@@ -2802,6 +2835,7 @@ app.post('/api/notifications', authenticateToken, requireRole('admin'), async (r
 // LANDING PAGE API
 // ==========================================
 const LANDING_DB_FILE = path.join(__dirname, 'db.json');
+const TMP_LANDING_DB_FILE = path.join(os.tmpdir(), 'mathscore-db.json');
 const defaultLandingData = {
   settings: {
     heroTitle: "SAT Matematikani zamonaviy metodlar yordamida, ingliz tilida tez va samarali o'rganing",
@@ -2824,15 +2858,31 @@ const defaultLandingData = {
 };
 
 function readLandingDB() {
+  if (fs.existsSync(TMP_LANDING_DB_FILE)) {
+    return JSON.parse(fs.readFileSync(TMP_LANDING_DB_FILE, 'utf8'));
+  }
   if (!fs.existsSync(LANDING_DB_FILE)) {
-    fs.writeFileSync(LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2));
+    try {
+      fs.writeFileSync(LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2));
+    } catch (e) {
+      fs.writeFileSync(TMP_LANDING_DB_FILE, JSON.stringify(defaultLandingData, null, 2));
+    }
     return defaultLandingData;
   }
   return JSON.parse(fs.readFileSync(LANDING_DB_FILE, 'utf8'));
 }
 
 function writeLandingDB(data) {
-  fs.writeFileSync(LANDING_DB_FILE, JSON.stringify(data, null, 2));
+  const json = JSON.stringify(data, null, 2);
+  try {
+    fs.writeFileSync(LANDING_DB_FILE, json);
+  } catch (err) {
+    if (err?.code === 'EROFS' || err?.code === 'EACCES' || err?.code === 'EPERM') {
+      fs.writeFileSync(TMP_LANDING_DB_FILE, json);
+    } else {
+      throw err;
+    }
+  }
 }
 
 
@@ -6014,13 +6064,17 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`==================================================`);
-  console.log(`🔒 MathScore SECURE BACKEND RUNNING ON PORT: ${PORT}`);
-  console.log(`🖥️  LIVE CONTROL PANEL: http://localhost:${PORT}`);
-  console.log(`==================================================`);
-  processDueScheduledPushes().catch(() => {});
-  setInterval(() => {
+if (!process.env.VERCEL && require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`==================================================`);
+    console.log(`🔒 MathScore SECURE BACKEND RUNNING ON PORT: ${PORT}`);
+    console.log(`🖥️  LIVE CONTROL PANEL: http://localhost:${PORT}`);
+    console.log(`==================================================`);
     processDueScheduledPushes().catch(() => {});
-  }, 3000);
-});
+    setInterval(() => {
+      processDueScheduledPushes().catch(() => {});
+    }, 3000);
+  });
+}
+
+module.exports = app;

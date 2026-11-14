@@ -4,18 +4,29 @@ const db = require('./db');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'mathscore-super-secure-secret-key-2026';
 
-// CORS configuration configuration options
+// CORS configuration options
 const corsOptions = {
   origin: function (origin, callback) {
+    const extraOrigins = String(process.env.CORS_ORIGINS || '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
     const allowedOrigins = [
       'https://mathscore.uz',
       'https://api.mathscore.uz',
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
       'http://localhost:5173',
+      'http://127.0.0.1:5173',
       'http://localhost:5174',
-      'http://localhost:5175'
+      'http://127.0.0.1:5174',
+      'http://localhost:5175',
+      'http://127.0.0.1:5175',
+      ...extraOrigins
     ];
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    const isVercelApp = origin && /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
+    // Allow requests with no origin (same-origin, mobile apps, or curl requests)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1 || isVercelApp) {
       callback(null, true);
     } else {
       // Log CORS blocking as security incident

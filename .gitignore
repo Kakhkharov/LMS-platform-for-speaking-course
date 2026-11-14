@@ -1,7 +1,14 @@
+.agents/
 node_modules/
 .env
+.env.*
+!.env.example
 .DS_Store
 dist/
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
 dev.db
 dev.db-journal
 uploads/
@@ -9,3 +16,6 @@ uploads/
 .vscode/
 build/
 coverage/
+*.log
+mathscore-backend/prisma/migrations_sqlite/
+

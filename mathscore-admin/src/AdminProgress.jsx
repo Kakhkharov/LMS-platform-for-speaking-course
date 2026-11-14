@@ -2,10 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import * as XLSX from 'xlsx';
 
 const API_BASE =
-  typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:5000'
-    : 'https://api.mathscore.uz';
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : ((typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+        ['5173', '5174', '5175'].includes(window.location.port))
+        ? 'http://localhost:5000'
+        : '');
 
 const COLOR_OPTIONS = [
   { id: 'all', label: 'Barchasi', dotClass: 'bg-slate-400' },

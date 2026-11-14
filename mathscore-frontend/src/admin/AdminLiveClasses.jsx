@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-const API_BASE = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) ? 'http://localhost:5000' : 'https://api.mathscore.uz';
+const API_BASE =
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : ((typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+        ['5173', '5174', '5175'].includes(window.location.port))
+        ? 'http://localhost:5000'
+        : '');
 
 // Sanani dd-mm-yyyy va yyyy-mm-dd o'rtasida o'girish yordamchilari (Kalendar uchun)
 const toIsoDate = (dmy) => {

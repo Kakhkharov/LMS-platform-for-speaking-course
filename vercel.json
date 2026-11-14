@@ -1,10 +1,29 @@
 {
-  "buildCommand": "cd mathscore-frontend && npm install && npm run build",
-  "outputDirectory": "mathscore-frontend/dist",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "mathscore-backend": {
+      "root": "mathscore-backend",
+      "framework": "express",
+      "entrypoint": "server.js",
+      "buildCommand": "npx prisma generate"
+    },
+    "mathscore-frontend": {
+      "root": "mathscore-frontend",
+      "framework": "vite"
+    }
+  },
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": { "service": "mathscore-backend" }
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": { "service": "mathscore-backend" }
+    },
+    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": { "service": "mathscore-frontend" }
     }
   ]
 }

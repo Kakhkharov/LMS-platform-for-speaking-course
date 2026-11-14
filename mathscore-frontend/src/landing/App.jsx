@@ -1,5 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+const API_BASE =
+  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL)
+    ? import.meta.env.VITE_API_URL
+    : ((typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
+        ['5173', '5174', '5175'].includes(window.location.port))
+        ? 'http://localhost:5000'
+        : '');
+
 // Helper function to decode HTML entities and convert to reformed Uzbek Latin alphabet
 function toNewUzbek(text) {
   if (!text || typeof text !== 'string') return text || '';
@@ -110,7 +119,7 @@ function App() {
   const displayResults = results.slice(0, 10);
 
   useEffect(() => {
-    fetch('https://api.mathscore.uz/api/settings', { cache: 'no-store' })
+    fetch(`${API_BASE}/api/settings`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (data) {
@@ -125,14 +134,14 @@ function App() {
       })
       .catch(console.error);
 
-    fetch('https://api.mathscore.uz/api/results', { cache: 'no-store' })
+    fetch(`${API_BASE}/api/results`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) setResults(data);
       })
       .catch(console.error);
 
-    fetch('https://api.mathscore.uz/api/pricing', { cache: 'no-store' })
+    fetch(`${API_BASE}/api/pricing`, { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) setPricing(data);

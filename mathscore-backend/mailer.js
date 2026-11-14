@@ -51,8 +51,18 @@ function buildBannerEmail(bodyHtml) {
   return { html, attachments };
 }
 
-const sendStudentCredentials = async (email, name, oneTimePassword, loginUrl = 'http://localhost:5173/student', options = {}) => {
-  const safeLoginUrl = String(loginUrl || 'http://localhost:5173/student').trim();
+function getDefaultStudentLoginUrl() {
+  if (process.env.PUBLIC_URL) {
+    return `${String(process.env.PUBLIC_URL).replace(/\/+$/, '')}/student`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/student`;
+  }
+  return 'http://localhost:5173/student';
+}
+
+const sendStudentCredentials = async (email, name, oneTimePassword, loginUrl = getDefaultStudentLoginUrl(), options = {}) => {
+  const safeLoginUrl = String(loginUrl || getDefaultStudentLoginUrl()).trim();
   const cleanTariff = String(options?.tariff || 'VIP').trim().toUpperCase() === 'FREE' ? 'FREE' : 'VIP';
   const cleanCourse = options?.course ? String(options.course).trim() : '';
   const tariffBadgeBg = cleanTariff === 'FREE' ? '#f1f5f9' : '#fef3c7';
@@ -114,8 +124,8 @@ const sendStudentCredentials = async (email, name, oneTimePassword, loginUrl = '
   }
 };
 
-const sendPasswordReset = async (email, name, resetLink, newLoginPassword = '', loginUrl = 'http://localhost:5173/student') => {
-  const safeLoginUrl = String(loginUrl || 'http://localhost:5173/student').trim();
+const sendPasswordReset = async (email, name, resetLink, newLoginPassword = '', loginUrl = getDefaultStudentLoginUrl()) => {
+  const safeLoginUrl = String(loginUrl || getDefaultStudentLoginUrl()).trim();
   const hasNewPassword = Boolean(String(newLoginPassword || '').trim());
   const { html, attachments } = buildBannerEmail(`
     <h2 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Assalomu alaykum, ${name}!</h2>
@@ -185,8 +195,8 @@ const sendPasswordReset = async (email, name, resetLink, newLoginPassword = '', 
   }
 };
 
-const sendPasswordChangeNotification = async (email, name, newPassword, loginUrl = 'http://localhost:5173/student') => {
-  const safeLoginUrl = String(loginUrl || 'http://localhost:5173/student').trim();
+const sendPasswordChangeNotification = async (email, name, newPassword, loginUrl = getDefaultStudentLoginUrl()) => {
+  const safeLoginUrl = String(loginUrl || getDefaultStudentLoginUrl()).trim();
   const { html, attachments } = buildBannerEmail(`
     <h2 style="margin: 0 0 12px; color: #0f172a; font-size: 20px;">Assalomu alaykum, ${name}!</h2>
     <p style="margin: 0 0 10px; font-size: 14px; line-height: 1.6; color: #334155;">
