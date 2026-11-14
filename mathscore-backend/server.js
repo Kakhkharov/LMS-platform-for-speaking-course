@@ -1492,6 +1492,21 @@ app.post('/api/students', authenticateToken, requireRole('admin'), async (req, r
   });
 });
 
+app.post('/api/students/resend-mail', authenticateToken, requireRole('admin'), async (req, res) => {
+  const { email, name, tariff, password, loginUrl } = req.body || {};
+  const cleanEmail = String(email || '').trim().toLowerCase();
+  if (!cleanEmail) return res.status(400).json({ error: 'Email manzil talab qilinadi.' });
+
+  const mailRes = await sendStudentCredentials(cleanEmail, name || 'Talaba', password || 'PR-000000', loginUrl, {
+    tariff: tariff || 'VIP'
+  });
+
+  res.json({
+    sent: Boolean(mailRes?.sent),
+    error: mailRes?.error || null
+  });
+});
+
 app.get('/api/debug/smtp-check', async (req, res) => {
   const net = require('net');
   const results = { timestamp: new Date().toISOString() };

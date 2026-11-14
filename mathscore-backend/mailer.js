@@ -50,6 +50,43 @@ const transporter = nodemailer.createTransport({
   socketTimeout: 15000
 });
 
+async function deliverMail(mailOptions) {
+  // 1. First try HTTPS proxy on Vercel (bypasses Railway SMTP firewall block completely)
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
+    const httpsRes = await fetch('https://practise.uz/api/send-mail', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: mailOptions.to,
+        subject: mailOptions.subject,
+        html: mailOptions.html
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    if (httpsRes.ok) {
+      const data = await httpsRes.json();
+      if (data.sent) {
+        console.log(`[MAILER] Xat Vercel HTTPS orqali yuborildi: ${mailOptions.to}`);
+        return { sent: true };
+      }
+    }
+  } catch (httpsErr) {
+    console.warn('[MAILER] Vercel HTTPS uzatish o\'tmadi, to\'g\'ridan-to\'g\'ri SMTP sinab ko\'rilmoqda:', httpsErr.message);
+  }
+
+  // 2. Direct SMTP fallback (works on localhost or open cloud SMTP)
+  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    await transporter.sendMail(mailOptions);
+    console.log(`[MAILER] Xat to'g'ridan-to'g'ri SMTP orqali yuborildi: ${mailOptions.to}`);
+    return { sent: true };
+  }
+
+  throw new Error("EMAIL_USER / EMAIL_PASS sozlanmagan");
+}
+
 function buildBannerEmail(bodyHtml) {
   const activeBannerPath = resolveBannerPath();
   const hasBanner = Boolean(activeBannerPath && fs.existsSync(activeBannerPath));
@@ -146,13 +183,8 @@ const sendStudentCredentials = async (email, name, oneTimePassword, loginUrl = g
 
   try {
     console.log(`[MAILER] Yangi student qo'shildi (Practise - ${cleanTariff}):\n  Email: ${email}\n  Bir martalik parol: ${oneTimePassword}\n  Havola: ${safeLoginUrl}\n  Banner: ${attachments.length > 0 ? 'banner_02.png attached' : 'none'}`);
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      await transporter.sendMail(mailOptions);
-      console.log(`[MAILER] Xat muvaffaqiyatli yuborildi (${cleanTariff}): ${email}`);
-      return { sent: true, tariff: cleanTariff, bannerAttached: attachments.length > 0 };
-    }
-    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER .env faylida ko\'rsatilmagan.');
-    return { sent: false, tariff: cleanTariff, error: 'EMAIL_USER/EMAIL_PASS sozlanmagan', bannerAttached: attachments.length > 0 };
+    const res = await deliverMail(mailOptions);
+    return { sent: Boolean(res?.sent), tariff: cleanTariff, bannerAttached: attachments.length > 0 };
   } catch (error) {
     console.error('[MAILER] Email yuborishda xatolik:', error);
     return { sent: false, tariff: cleanTariff, error: error.message, bannerAttached: attachments.length > 0 };
@@ -217,13 +249,8 @@ const sendPasswordReset = async (email, name, resetLink, newLoginPassword = '', 
 
   try {
     console.log(`[MAILER] Parol tiklash so'rovi (Practise):\n  Email: ${email}\n  Yangi parol: ${hasNewPassword ? '***' : 'link-only'}\n  Login: ${safeLoginUrl}`);
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      await transporter.sendMail(mailOptions);
-      console.log(`[MAILER] Tiklash xati muvaffaqiyatli yuborildi: ${email}`);
-      return { sent: true, bannerAttached: attachments.length > 0 };
-    }
-    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER .env faylida ko\'rsatilmagan.');
-    return { sent: false, error: 'EMAIL_USER/EMAIL_PASS sozlanmagan', bannerAttached: attachments.length > 0 };
+    const res = await deliverMail(mailOptions);
+    return { sent: Boolean(res?.sent), bannerAttached: attachments.length > 0 };
   } catch (error) {
     console.error('[MAILER] Email yuborishda xatolik:', error);
     return { sent: false, error: error.message, bannerAttached: attachments.length > 0 };
@@ -259,13 +286,8 @@ const sendPasswordChangeNotification = async (email, name, newPassword, loginUrl
 
   try {
     console.log(`[MAILER] Parol o'zgarishi yuborildi: ${email}`);
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      await transporter.sendMail(mailOptions);
-      console.log(`[MAILER] Xat muvaffaqiyatli yuborildi: ${email}`);
-      return { sent: true, bannerAttached: attachments.length > 0 };
-    }
-    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER kiritilmagan.');
-    return { sent: false, bannerAttached: attachments.length > 0 };
+    const res = await deliverMail(mailOptions);
+    return { sent: Boolean(res?.sent), bannerAttached: attachments.length > 0 };
   } catch (error) {
     console.error('[MAILER] Email yuborishda xatolik:', error);
     return { sent: false, error: error.message, bannerAttached: attachments.length > 0 };
@@ -316,13 +338,8 @@ const sendCourseAssignedNotification = async (email, name, courseTitle, loginUrl
 
   try {
     console.log(`[MAILER] Talabaga yangi kurs biriktirildi: ${email} -> ${courseTitle}`);
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      await transporter.sendMail(mailOptions);
-      console.log(`[MAILER] Xat muvaffaqiyatli yuborildi: ${email}`);
-      return { sent: true, tariff: cleanTariff, bannerAttached: attachments.length > 0 };
-    }
-    console.log('[MAILER] Email jo\'natilmadi: EMAIL_USER kiritilmagan.');
-    return { sent: false, bannerAttached: attachments.length > 0 };
+    const res = await deliverMail(mailOptions);
+    return { sent: Boolean(res?.sent), tariff: cleanTariff, bannerAttached: attachments.length > 0 };
   } catch (error) {
     console.error('[MAILER] Email yuborishda xatolik:', error);
     return { sent: false, error: error.message, bannerAttached: attachments.length > 0 };

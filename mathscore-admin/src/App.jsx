@@ -270,6 +270,7 @@ function App() {
 
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
   const [isAddingStudent, setIsAddingStudent] = useState(false);
+  const [isResendingMail, setIsResendingMail] = useState(false);
   const [newStudent, setNewStudent] = useState({
     name: '', email: '', course: '', status: 'Online', deadline: '', tariff: 'VIP'
   });
@@ -5909,6 +5910,48 @@ function App() {
                     </div>
                   </div>
                 </div>
+                {!createdStudentCredentials.emailSent && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        setIsResendingMail(true);
+                        const res = await fetchWithAuth('/api/students/resend-mail', {
+                          method: 'POST',
+                          body: JSON.stringify({
+                            email: createdStudentCredentials.email,
+                            name: createdStudentCredentials.name,
+                            tariff: createdStudentCredentials.tariff,
+                            password: createdStudentCredentials.password,
+                            loginUrl: createdStudentCredentials.loginUrl
+                          })
+                        });
+                        const data = await res.json();
+                        if (data.sent) {
+                          alert("✅ Xat talaba emailiga muvaffaqiyatli yetkazildi!");
+                          setCreatedStudentCredentials(prev => ({ ...prev, emailSent: true, mailError: null }));
+                        } else {
+                          alert(`⚠️ Xatolik: ${data.error || 'Yuborilmadi'}`);
+                        }
+                      } catch (err) {
+                        alert(err.message);
+                      } finally {
+                        setIsResendingMail(false);
+                      }
+                    }}
+                    disabled={isResendingMail}
+                    className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-black rounded-xl shadow-lg shadow-amber-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    {isResendingMail ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin inline-block" />
+                        <span>Email yuborilmoqda...</span>
+                      </>
+                    ) : (
+                      <span>✉️ Emailga qaytadan yuborish</span>
+                    )}
+                  </button>
+                )}
                 <button
                   type="button"
                   data-testid="created-student-done"
