@@ -1497,14 +1497,135 @@ app.post('/api/students/resend-mail', authenticateToken, requireRole('admin'), a
   const cleanEmail = String(email || '').trim().toLowerCase();
   if (!cleanEmail) return res.status(400).json({ error: 'Email manzil talab qilinadi.' });
 
-  const mailRes = await sendStudentCredentials(cleanEmail, name || 'Talaba', password || 'PR-000000', loginUrl, {
-    tariff: tariff || 'VIP'
+  const effectivePassword = password ? String(password).trim() : `PR-${crypto.randomInt(100000, 999999)}`;
+  const studentLoginUrl = (loginUrl && String(loginUrl).trim()) ? String(loginUrl).trim() : `${getPublicOrigin(req)}/student`;
+
+  // Always find student in DB and synchronize password in DB
+  const user = await db.prisma.user.findFirst({
+    where: {
+      email: { equals: cleanEmail, mode: 'insensitive' }
+    },
+    include: {
+      userCourses: { include: { course: true } }
+    }
+  });
+
+  if (user) {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(effectivePassword, salt);
+    await db.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        status: 'Online'
+      }
+    });
+
+    try {
+      const dbDataOtp = readLandingDB();
+      if (!dbDataOtp.oneTimePasswordUsers) dbDataOtp.oneTimePasswordUsers = {};
+      dbDataOtp.oneTimePasswordUsers[user.id] = {
+        active: true,
+        issuedAt: new Date().toISOString(),
+        loginUrl: studentLoginUrl
+      };
+      writeLandingDB(dbDataOtp);
+    } catch (_) {}
+  }
+
+  const assignedCourse = user?.userCourses?.[0]?.course?.title || user?.course || 'IELTS Speaking Masterclass';
+  const resolvedTariff = tariff || (user ? getStudentTariff(user.id) : 'VIP');
+
+  const mailRes = await sendStudentCredentials(cleanEmail, (user ? user.name : name) || 'Talaba', effectivePassword, studentLoginUrl, {
+    tariff: resolvedTariff,
+    course: assignedCourse
   });
 
   res.json({
     sent: Boolean(mailRes?.sent),
+    password: effectivePassword,
+    userUpdated: Boolean(user),
     error: mailRes?.error || null
   });
+});
+
+app.post('/api/students/bulk-resend-passwords', authenticateToken, requireRole('admin'), async (req, res) => {
+  try {
+    const { emails = [], filterCourse = 'IELTS Speaking Masterclass', tariff = 'VIP' } = req.body;
+    let queryWhere = { role: 'student' };
+    if (Array.isArray(emails) && emails.length > 0) {
+      const cleanList = emails.map(e => String(e).trim().toLowerCase());
+      queryWhere.email = { in: cleanList };
+    }
+
+    const students = await db.prisma.user.findMany({
+      where: queryWhere,
+      include: { userCourses: { include: { course: true } } }
+    });
+
+    const results = [];
+    const studentLoginUrl = `${getPublicOrigin(req)}/student`;
+
+    const dbDataOtp = readLandingDB();
+    if (!dbDataOtp.oneTimePasswordUsers) dbDataOtp.oneTimePasswordUsers = {};
+
+    for (const std of students) {
+      const cleanEmail = std.email.replace(/\.archived\.\d+/, '');
+      const oneTimePassword = `PR-${crypto.randomInt(100000, 999999)}`;
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(oneTimePassword, salt);
+
+      await db.prisma.user.update({
+        where: { id: std.id },
+        data: {
+          password: hashedPassword,
+          status: 'Online'
+        }
+      });
+
+      dbDataOtp.oneTimePasswordUsers[std.id] = {
+        active: true,
+        issuedAt: new Date().toISOString(),
+        loginUrl: studentLoginUrl
+      };
+
+      const courseTitle = std.userCourses?.[0]?.course?.title || std.course || filterCourse;
+      const studentTariff = tariff || getStudentTariff(std.id) || 'VIP';
+
+      let mailRes = { sent: false };
+      try {
+        mailRes = await sendStudentCredentials(cleanEmail, std.name, oneTimePassword, studentLoginUrl, {
+          tariff: studentTariff,
+          course: courseTitle
+        });
+      } catch (err) {
+        mailRes = { sent: false, error: err.message };
+      }
+
+      results.push({
+        id: std.id,
+        name: std.name,
+        email: cleanEmail,
+        password: oneTimePassword,
+        emailSent: Boolean(mailRes?.sent),
+        error: mailRes?.error || null
+      });
+
+      await new Promise(r => setTimeout(r, 600));
+    }
+
+    writeLandingDB(dbDataOtp);
+
+    res.json({
+      success: true,
+      total: results.length,
+      sentCount: results.filter(r => r.emailSent).length,
+      results
+    });
+  } catch (err) {
+    console.error('bulk-resend-passwords error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/api/debug/smtp-check', async (req, res) => {
