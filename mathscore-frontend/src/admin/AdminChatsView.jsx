@@ -83,6 +83,22 @@ export default function AdminChatsView({
     }
   };
 
+  const formatChatMessageText = (raw) => {
+    if (!raw || typeof raw !== 'string') return '';
+    let str = raw;
+    for (let i = 0; i < 2; i++) {
+      const prev = str;
+      str = str
+        .replace(/&quot;/g, '"')
+        .replace(/&#x27;|&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+      if (prev === str) break;
+    }
+    return str;
+  };
+
   const markAsRead = async (studentId) => {
     try {
       const token = localStorage.getItem('admin_token');
@@ -359,7 +375,7 @@ export default function AdminChatsView({
             <button
               type="button"
               onClick={() => toggleMinimizeCard(chat.studentId)}
-              title={isMinimized ? "Ochish (Restore)" : "Yig'ish (Minimize)"}
+              title={isMinimized ? "Ochish" : "Yig'ish"}
               aria-label={isMinimized ? "Ochish" : "Yig'ish"}
               data-testid={`chat-minimize-${chat.studentId}`}
               className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-colors cursor-pointer"
@@ -372,7 +388,7 @@ export default function AdminChatsView({
             <button
               type="button"
               onClick={() => toggleMaximizeCard(chat.studentId)}
-              title={isMaximizedHere ? "Odatiy o'lchamga qaytarish" : "Kattalashtirish (Maximize)"}
+              title={isMaximizedHere ? "Odatiy o'lchamga qaytarish" : "Kattalashtirish"}
               aria-label={isMaximizedHere ? "Kichraytirish" : "Kattalashtirish"}
               data-testid={`chat-maximize-${chat.studentId}`}
               className={`w-8 h-8 rounded-xl flex items-center justify-center transition-colors cursor-pointer ${
@@ -402,7 +418,7 @@ export default function AdminChatsView({
                   <strong className="text-slate-700 dark:text-slate-200">
                     {lastMessage.senderRole === 'admin' ? 'Admin' : chat.studentName}:
                   </strong>{' '}
-                  {lastMessage.type === 'audio' ? '🎤 Audio xabar' : lastMessage.text}
+                  {lastMessage.type === 'audio' ? '🎤 Audio xabar' : formatChatMessageText(lastMessage.text)}
                 </span>
               )}
             </div>
@@ -458,9 +474,12 @@ export default function AdminChatsView({
                             fileName="audio_message.webm"
                             timestamp={msg.createdAt}
                           />
+                          {msg.text && (
+                            <p className="text-xs leading-relaxed whitespace-pre-wrap break-words mt-1.5 opacity-95">{formatChatMessageText(msg.text)}</p>
+                          )}
                         </div>
                       ) : (
-                        <p className="text-xs leading-relaxed whitespace-pre-wrap break-words">{msg.text}</p>
+                        <p className="text-xs leading-relaxed whitespace-pre-wrap break-words">{formatChatMessageText(msg.text)}</p>
                       )}
                     </div>
 
@@ -503,11 +522,11 @@ export default function AdminChatsView({
                       <button
                         type="button"
                         onClick={stopAndSendVoiceRecording}
-                        title="To'xtatish va yuborish (Stop)"
+                        title="To'xtatish va yuborish"
                         className="px-3.5 h-8 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-[17px]">stop</span>
-                        <span>Stop & Yuborish</span>
+                        <span>To'xtatish va yuborish</span>
                       </button>
                     </div>
                   </div>
@@ -533,7 +552,7 @@ export default function AdminChatsView({
                     <button
                       type="submit"
                       disabled={isSendingHere || !String(replyTexts[chat.studentId] || '').trim()}
-                      title="Xabarni yuborish (Send)"
+                      title="Xabarni yuborish"
                       className="w-10 h-10 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center shadow-sm transition-all cursor-pointer shrink-0 disabled:opacity-50"
                     >
                       <span className="material-symbols-outlined text-[19px]">send</span>
@@ -555,7 +574,7 @@ export default function AdminChatsView({
         <div>
           <h2 className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2.5">
             <span className="material-symbols-outlined text-indigo-500 text-[28px]">forum</span>
-            <span>Talabalar bilan Support Chatlar</span>
+            <span>Talabalar bilan yordam chatlari</span>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-300 font-bold">
               {chats.length} ta chat
             </span>
@@ -566,7 +585,7 @@ export default function AdminChatsView({
             )}
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Har bir talabaning savollari alohida cardda ko'rinadi — matn yoki audioxabar orqali javob bering.
+            Har bir talabaning savollari alohida kartochkada ko'rinadi — matn yoki audio xabar orqali javob bering.
           </p>
         </div>
 
@@ -612,8 +631,8 @@ export default function AdminChatsView({
             <span className="material-symbols-outlined text-[32px]">chat_bubble_outline</span>
           </div>
           <h3 className="text-lg font-black text-slate-900 dark:text-white">Hozircha talabalardan xabar kelmagan</h3>
-          <p className="text-xs text-slate-500 max-w-md mx-auto">
-            Talabalar Student paneldagi pastki o'ng Support Chat orqali xabar yozganida shu yerda har bir talaba uchun alohida card paydo bo'ladi.
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+            Talabalar Student paneldagi pastki o'ng Yordam chati orqali xabar yozganida shu yerda har bir talaba uchun alohida kartochka paydo bo'ladi.
           </p>
         </div>
       ) : (

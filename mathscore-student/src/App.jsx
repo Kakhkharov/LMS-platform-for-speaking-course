@@ -959,6 +959,22 @@ export default function App() {
     }
   }, [supportChatOpen, supportChatThread.messages?.length]);
 
+  const formatChatMessageText = (raw) => {
+    if (!raw || typeof raw !== 'string') return '';
+    let str = raw;
+    for (let i = 0; i < 2; i++) {
+      const prev = str;
+      str = str
+        .replace(/&quot;/g, '"')
+        .replace(/&#x27;|&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&');
+      if (prev === str) break;
+    }
+    return str;
+  };
+
   const handleToggleSupportChat = () => {
     const next = !supportChatOpen;
     setSupportChatOpen(next);
@@ -7335,7 +7351,7 @@ export default function App() {
                       {supportChatThread.adminName || 'Azizbek'}
                     </h4>
                     <p className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
-                      Support Chat • Onlayn
+                      Yordam chati • Onlayn
                     </p>
                   </div>
                 </div>
@@ -7363,7 +7379,7 @@ export default function App() {
                         senderName: 'Azizbek',
                         senderAvatar: supportChatThread.adminAvatar || '',
                         type: 'text',
-                        text: 'Hello! I am Azizbek. How can I help you?'
+                        text: 'Assalomu alaykum! Men Azizbekman. Sizga qanday yordam bera olaman?'
                       }
                     ]
                 ).map((msg) => {
@@ -7397,12 +7413,12 @@ export default function App() {
                                 className="w-full"
                               />
                               {msg.text && (
-                                <p className="text-[11px] text-slate-700 dark:text-slate-200 px-2 pt-1.5 pb-0.5">{msg.text}</p>
+                                <p className="text-[11px] text-slate-700 dark:text-slate-200 px-2 pt-1.5 pb-0.5">{formatChatMessageText(msg.text)}</p>
                               )}
                             </div>
                           ) : (
                             <div className="inline-block rounded-2xl rounded-tl-sm bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700 px-3.5 py-2 text-xs leading-relaxed shadow-xs">
-                              {msg.text}
+                              {formatChatMessageText(msg.text)}
                             </div>
                           )}
                         </div>
@@ -7412,7 +7428,7 @@ export default function App() {
                   return (
                     <div key={msg.id} className="flex justify-end">
                       <div className="max-w-[82%] rounded-2xl rounded-br-sm bg-[#2D3139] dark:bg-primary text-white px-3.5 py-2 text-xs leading-relaxed shadow-xs">
-                        {msg.text}
+                        {formatChatMessageText(msg.text)}
                       </div>
                     </div>
                   );
@@ -7430,7 +7446,7 @@ export default function App() {
                     type="text"
                     value={supportChatInput}
                     onChange={(e) => setSupportChatInput(e.target.value)}
-                    placeholder="Text message"
+                    placeholder="Xabaringizni yozing..."
                     className="flex-1 bg-transparent text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none min-w-0"
                   />
                   <button
@@ -7453,7 +7469,7 @@ export default function App() {
             type="button"
             data-testid="student-support-chat-toggle"
             onClick={handleToggleSupportChat}
-            title="Support Chat (Azizbek bilan aloqa)"
+            title="Yordam chati (Azizbek bilan aloqa)"
             className="w-14 h-14 rounded-full bg-primary hover:bg-primary/95 text-on-primary shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center relative cursor-pointer"
           >
             {supportChatOpen ? (

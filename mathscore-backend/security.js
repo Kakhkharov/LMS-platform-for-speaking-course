@@ -110,12 +110,10 @@ function sanitizeInput(req, res, next) {
         return val;
       }
 
-      // Clean typical HTML tags to prevent injections but allow math/formula syntax
+      // Clean typical HTML tags to prevent injections but allow math/formula syntax and quotes/apostrophes
       return val
         .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#x27;');
+        .replace(/>/g, '&gt;');
     }
     if (Array.isArray(val)) {
       return val.map((item) => sanitize(item, keyName));

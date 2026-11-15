@@ -2184,6 +2184,22 @@ app.delete('/api/support-admins/:id', authenticateToken, requireRole('admin'), a
 });
 
 // ==================== SUPPORT CHATS (ADMIN <-> INDIVIDUAL STUDENT) ====================
+const decodeChatEntities = (str) => {
+  if (!str || typeof str !== 'string') return '';
+  let out = str;
+  for (let i = 0; i < 2; i++) {
+    const prev = out;
+    out = out
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;|&#39;/g, "'")
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&');
+    if (prev === out) break;
+  }
+  return out;
+};
+
 app.get('/api/support-chats/my', authenticateToken, async (req, res) => {
   try {
     const sid = String(req.user.id);
@@ -2209,7 +2225,7 @@ app.get('/api/support-chats/my', authenticateToken, async (req, res) => {
             senderName: 'Azizbek',
             senderAvatar: azizbek.avatar || '',
             type: 'text',
-            text: 'Hello! I am Azizbek. How can I help you?',
+            text: 'Assalomu alaykum! Men Azizbekman. Sizga qanday yordam bera olaman?',
             audioUrl: null,
             duration: null,
             createdAt: new Date().toISOString()
@@ -2229,13 +2245,18 @@ app.get('/api/support-chats/my', authenticateToken, async (req, res) => {
     }
 
     const hydratedMessages = (thread.messages || []).map(m => {
+      const decodedText = decodeChatEntities(m.text);
       if (m.senderRole === 'admin') {
         return {
           ...m,
+          text: decodedText,
           senderAvatar: m.senderId === azizbek.id || !m.senderAvatar ? (azizbek.avatar || m.senderAvatar || '') : m.senderAvatar
         };
       }
-      return m;
+      return {
+        ...m,
+        text: decodedText
+      };
     });
 
     res.json({
@@ -2254,7 +2275,7 @@ app.get('/api/support-chats/my', authenticateToken, async (req, res) => {
 
 app.post('/api/support-chats/my/messages', authenticateToken, async (req, res) => {
   try {
-    const cleanText = String(req.body?.text || '').trim();
+    const cleanText = decodeChatEntities(String(req.body?.text || '')).trim();
     if (!cleanText) {
       return res.status(400).json({ error: "Xabar matnini kiriting." });
     }
@@ -2279,7 +2300,7 @@ app.post('/api/support-chats/my/messages', authenticateToken, async (req, res) =
             senderName: 'Azizbek',
             senderAvatar: azizbek.avatar || '',
             type: 'text',
-            text: 'Hello! I am Azizbek. How can I help you?',
+            text: 'Assalomu alaykum! Men Azizbekman. Sizga qanday yordam bera olaman?',
             audioUrl: null,
             duration: null,
             createdAt: new Date().toISOString()
@@ -2338,11 +2359,12 @@ app.get('/api/support-chats', authenticateToken, requireRole('admin'), async (re
       .filter(th => th && Array.isArray(th.messages) && th.messages.some(m => m.senderRole === 'student'))
       .map(th => {
         const stu = studentMap.get(String(th.studentId));
-        const messages = (th.messages || []).map(m =>
-          m.senderRole === 'admin'
-            ? { ...m, senderAvatar: m.senderAvatar || azizbek.avatar || '' }
-            : m
-        );
+        const messages = (th.messages || []).map(m => {
+          const decoded = decodeChatEntities(m.text);
+          return m.senderRole === 'admin'
+            ? { ...m, text: decoded, senderAvatar: m.senderAvatar || azizbek.avatar || '' }
+            : { ...m, text: decoded };
+        });
         const lastMsg = messages[messages.length - 1] || null;
         return {
           studentId: th.studentId,
@@ -2380,7 +2402,7 @@ app.post('/api/support-chats/:studentId/messages', authenticateToken, requireRol
     }
 
     const azizbek = await getPrimaryAzizbekProfile();
-    const rawText = String(req.body?.text || '').replace(/[<>]/g, '').trim();
+    const rawText = decodeChatEntities(String(req.body?.text || '').replace(/[<>]/g, '')).trim();
     let audioUrl = '';
     if (req.file) {
       audioUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
@@ -2404,7 +2426,7 @@ app.post('/api/support-chats/:studentId/messages', authenticateToken, requireRol
             senderName: 'Azizbek',
             senderAvatar: azizbek.avatar || '',
             type: 'text',
-            text: 'Hello! I am Azizbek. How can I help you?',
+            text: 'Assalomu alaykum! Men Azizbekman. Sizga qanday yordam bera olaman?',
             audioUrl: null,
             duration: null,
             createdAt: new Date().toISOString()

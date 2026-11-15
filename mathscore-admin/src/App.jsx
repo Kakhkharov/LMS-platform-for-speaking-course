@@ -2960,7 +2960,7 @@ function App() {
                 { id: 'design', icon: 'palette', label: 'Design' },
                 { id: 'settings', icon: 'settings', label: 'Sozlamalar' },
                 { id: 'students', icon: 'group', label: 'Talabalar' },
-                { id: 'chats', icon: 'forum', label: 'Chats', badge: totalUnreadChats },
+                { id: 'chats', icon: 'forum', label: 'Chatlar', badge: totalUnreadChats },
                 { id: 'support-admins', icon: 'admin_panel_settings', label: 'Support admin' }
               ].map(item => {
                 if (item.hasSubmenu) {
