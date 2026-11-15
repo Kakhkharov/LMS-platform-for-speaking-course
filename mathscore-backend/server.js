@@ -993,14 +993,32 @@ app.post('/api/auth/login', authRateLimiter, async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Elektron pochta va parolni kiriting.' });
 
-  const cleanEmail = String(email).trim();
-  let user = await db.prisma.user.findUnique({ where: { email: cleanEmail } });
+  const cleanEmail = String(email || '').trim().toLowerCase();
+  const rawPassword = String(password || '');
+  const cleanPassword = rawPassword.trim();
+
+  let user = await db.prisma.user.findFirst({
+    where: {
+      email: { equals: cleanEmail, mode: 'insensitive' }
+    }
+  });
   if (!user) {
     const allUsers = await db.prisma.user.findMany();
-    user = allUsers.find(u => String(u.email || '').toLowerCase() === cleanEmail.toLowerCase()) || null;
+    user = allUsers.find(u => String(u.email || '').trim().toLowerCase() === cleanEmail) || null;
   }
 
-  if (!user || !bcrypt.compareSync(password, user.password)) {
+  let isPasswordValid = false;
+  if (user && user.password) {
+    if (bcrypt.compareSync(rawPassword, user.password)) {
+      isPasswordValid = true;
+    } else if (cleanPassword !== rawPassword && bcrypt.compareSync(cleanPassword, user.password)) {
+      isPasswordValid = true;
+    } else if (/^pr-\d+$/i.test(cleanPassword)) {
+      isPasswordValid = bcrypt.compareSync(cleanPassword.toUpperCase(), user.password);
+    }
+  }
+
+  if (!user || !isPasswordValid) {
     db.logSecurityIncident({ type: 'FAILED_LOGIN', severity: 'HIGH', message: `Failed login attempt for user: ${email}`, ip: req.ip });
     broadcastToDashboard('sec_log', { type: 'FAILED_LOGIN', severity: 'HIGH', message: `Noto'g'ri parol: ${email}`, ip: req.ip });
     return res.status(401).json({ error: 'Elektron pochta yoki parol noto\'g\'ri.' });
@@ -1552,16 +1570,21 @@ app.post('/api/students/resend-mail', authenticateToken, requireRole('admin'), a
 app.post('/api/students/bulk-resend-passwords', authenticateToken, requireRole('admin'), async (req, res) => {
   try {
     const { emails = [], filterCourse = 'IELTS Speaking Masterclass', tariff = 'VIP' } = req.body;
-    let queryWhere = { role: 'student' };
-    if (Array.isArray(emails) && emails.length > 0) {
-      const cleanList = emails.map(e => String(e).trim().toLowerCase());
-      queryWhere.email = { in: cleanList };
-    }
 
-    const students = await db.prisma.user.findMany({
-      where: queryWhere,
+    let students = await db.prisma.user.findMany({
+      where: { role: 'student' },
       include: { userCourses: { include: { course: true } } }
     });
+
+    if (Array.isArray(emails) && emails.length > 0) {
+      const cleanList = emails.map(e => String(e).trim().toLowerCase());
+      students = students.filter(s => {
+        const cleanE = String(s.email || '').replace(/\.archived\.\d+/, '').trim().toLowerCase();
+        return cleanList.includes(cleanE);
+      });
+    } else {
+      students = students.filter(s => !String(s.email || '').includes('.archived'));
+    }
 
     const results = [];
     const studentLoginUrl = `${getPublicOrigin(req)}/student`;
@@ -1570,7 +1593,7 @@ app.post('/api/students/bulk-resend-passwords', authenticateToken, requireRole('
     if (!dbDataOtp.oneTimePasswordUsers) dbDataOtp.oneTimePasswordUsers = {};
 
     for (const std of students) {
-      const cleanEmail = std.email.replace(/\.archived\.\d+/, '');
+      const cleanEmail = String(std.email || '').replace(/\.archived\.\d+/, '').trim();
       const oneTimePassword = `PR-${crypto.randomInt(100000, 999999)}`;
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(oneTimePassword, salt);

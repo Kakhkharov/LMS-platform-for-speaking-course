@@ -3384,8 +3384,8 @@ export default function App() {
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const email = e.target.elements.email.value;
-                const password = e.target.elements.password.value;
+                const email = String(e.target.elements.email?.value || '').trim();
+                const password = String(e.target.elements.password?.value || '').trim();
 
                 try {
                   const response = await fetch(`${API_BASE}/api/auth/login`, {

@@ -19,4 +19,14 @@ build/
 coverage/
 *.log
 mathscore-backend/prisma/migrations_sqlite/
+mathscore-backend/test_*.js
+mathscore-backend/scratch_*.js
+mathscore-backend/check_*.js
+mathscore-backend/find_*.js
+mathscore-backend/build_*.js
+mathscore-backend/password_audit.json
+mathscore-backend/railway_students.json
+mathscore-backend/students_status.json
+mathscore-backend/unified_students_list.json
+
 

@@ -72,10 +72,10 @@ const globalRateLimiter = rateLimit({
 
 // Stricter rate limiting for auth endpoints (login brute-force protection)
 const authRateLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 30, // Limit each IP to 30 failed login/reset requests per 10 minutes
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  max: 100, // Limit each IP to 100 failed login/reset requests per 5 minutes
   skipSuccessfulRequests: true,
-  message: { error: 'Kirish urinishlari ko\'payib ketdi. 10 daqiqa kuting.' },
+  message: { error: 'Kirish urinishlari ko\'payib ketdi. Xavfsizlik maqsadida 5 daqiqa kuting yoki parolni qayta tiklang.' },
   handler: (req, res, next, options) => {
     db.logSecurityIncident({
       type: 'BRUTE_FORCE_SUSPICION',
