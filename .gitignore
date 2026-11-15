@@ -24,9 +24,14 @@ mathscore-backend/scratch_*.js
 mathscore-backend/check_*.js
 mathscore-backend/find_*.js
 mathscore-backend/build_*.js
+mathscore-backend/filter_*.js
+mathscore-backend/execute_*.js
+mathscore-backend/retry_*.js
 mathscore-backend/password_audit.json
 mathscore-backend/railway_students.json
 mathscore-backend/students_status.json
 mathscore-backend/unified_students_list.json
+mathscore-backend/target_students_to_resend.json
+mathscore-backend/resend_execution_results.json
 
 
