@@ -25,6 +25,12 @@ if (!process.env.GMAIL_WEBAPP_URL) {
 
 function resolveBannerPath() {
   const candidates = [
+    path.resolve(__dirname, 'public', 'email_banner.jpg'),
+    path.resolve(__dirname, 'image', 'email_banner.jpg'),
+    path.resolve(__dirname, '..', 'image', 'email_banner.jpg'),
+    path.resolve(process.cwd(), 'image', 'email_banner.jpg'),
+    path.resolve(process.cwd(), 'mathscore-backend', 'public', 'email_banner.jpg'),
+    path.resolve(__dirname, 'public', 'banner_02.png'),
     path.resolve(__dirname, 'image', 'banner_02.png'),
     path.resolve(__dirname, '..', 'image', 'banner_02.png'),
     path.resolve(process.cwd(), 'image', 'banner_02.png'),
@@ -39,7 +45,7 @@ function resolveBannerPath() {
 
 const BANNER_02_PATH = resolveBannerPath() || path.resolve(__dirname, '..', 'image', 'banner_02.png');
 const BANNER_CID = 'practise-banner-02@practise.uz';
-const BANNER_PUBLIC_URL = process.env.BANNER_URL || 'https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/banner_02.png';
+const BANNER_PUBLIC_URL = process.env.BANNER_URL || 'https://practise.uz/email_banner.jpg';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -93,10 +99,11 @@ async function deliverMail(mailOptions) {
 function buildBannerEmail(bodyHtml) {
   const activeBannerPath = resolveBannerPath();
   const hasBanner = Boolean(activeBannerPath && fs.existsSync(activeBannerPath));
+  const bannerFilename = activeBannerPath ? path.basename(activeBannerPath) : 'email_banner.jpg';
   const attachments = hasBanner
     ? [
         {
-          filename: 'banner_02.png',
+          filename: bannerFilename,
           path: activeBannerPath,
           cid: BANNER_CID
         }
@@ -106,11 +113,13 @@ function buildBannerEmail(bodyHtml) {
   const html = `
     <div style="background-color: #f8fafc; padding: 20px 12px; font-family: 'Segoe UI', Arial, sans-serif;">
       <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06); color: #0f172a;">
-        ${hasBanner ? `
-        <div style="width: 100%; background: #0f172a; line-height: 0;">
-          <img src="${BANNER_PUBLIC_URL}" alt="Practise Platform Banner" style="display: block; width: 100%; max-width: 600px; height: auto; border: 0;" />
-        </div>
-        ` : ''}
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #0f172a;">
+          <tr>
+            <td align="center" style="padding: 0; margin: 0; line-height: 0;">
+              <img src="${BANNER_PUBLIC_URL}" alt="Practise Platform Banner" width="600" style="display: block; width: 100%; max-width: 600px; height: auto; border: 0; outline: none; text-decoration: none;" />
+            </td>
+          </tr>
+        </table>
         <div style="padding: 26px 24px 22px;">
           <div style="font-size: 18px; font-weight: 800; color: #4f46e5; letter-spacing: -0.02em; margin-bottom: 14px;">Practise</div>
           ${bodyHtml}
