@@ -83,6 +83,7 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
       deadlineIso: '',
       deadlineDisplay: ''
     })),
+    homeworkTasksMeta: [],
     courses: [],
     totalStudents: 0,
     homeworkReport: [],
@@ -202,9 +203,25 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
   }, [progressData.courses, courses, students]);
 
   // Filtered Homework rows
+  const visibleHomeworkTasksMeta = useMemo(() => {
+    const meta = Array.isArray(progressData.homeworkTasksMeta) && progressData.homeworkTasksMeta.length > 0
+      ? progressData.homeworkTasksMeta
+      : Array.from({ length: 6 }, (_, i) => ({
+          id: `hw_${i + 1}`,
+          index: i + 1,
+          title: `Homework ${i + 1}`,
+          label: `HW ${i + 1}`,
+          dateDisplay: '—'
+        }));
+    if (!dateFilter) return meta;
+    return meta.filter(m => m.dateIso === dateFilter || m.deadlineIso === dateFilter);
+  }, [progressData.homeworkTasksMeta, dateFilter]);
+
   const filteredHomeworkRows = useMemo(() => {
     const rows = Array.isArray(progressData.homeworkReport) ? progressData.homeworkReport : [];
     const q = searchQuery.trim().toLowerCase();
+    const visibleTaskIdSet = new Set(visibleHomeworkTasksMeta.map(m => String(m.id || m.index)));
+
     return rows.filter(row => {
       if (q) {
         const matchName = (row.fullName || '').toLowerCase().includes(q);
@@ -218,21 +235,23 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
         const matchedCourse = rowCourses.some(c => c.toLowerCase() === courseFilter.toLowerCase());
         if (!matchedCourse) return false;
       }
-      if (colorFilter !== 'all' && row.rowColor !== colorFilter) {
-        return false;
+      if (colorFilter !== 'all') {
+        const cells = Array.isArray(row.taskCells) ? row.taskCells : (Array.isArray(row.days) ? row.days : []);
+        const hasMatch = cells.some(
+          d => (!dateFilter || visibleTaskIdSet.has(String(d.taskId || d.index))) && d.effectiveColor === colorFilter
+        );
+        if (!hasMatch && row.rowColor !== colorFilter) return false;
       }
       if (dateFilter) {
         const dates = [
           ...(Array.isArray(row.homeworkDateIsos) ? row.homeworkDateIsos : []),
-          ...(Array.isArray(row.challengeDateIsos) ? row.challengeDateIsos : []),
-          row.homeworkDateIso,
-          row.challengesDateIso
+          row.homeworkDateIso
         ].filter(Boolean);
-        if (!dates.includes(dateFilter)) return false;
+        if (dates.length > 0 && !dates.includes(dateFilter)) return false;
       }
       return true;
     });
-  }, [progressData.homeworkReport, searchQuery, courseFilter, colorFilter, dateFilter]);
+  }, [progressData.homeworkReport, visibleHomeworkTasksMeta, searchQuery, courseFilter, colorFilter, dateFilter]);
 
   // Visible Challenge Days (All 30 days by default, or filtered by dateFilter)
   const visibleChallengeDaysMeta = useMemo(() => {
@@ -691,15 +710,21 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
           <p className="text-xs font-bold text-slate-500">Progress jadvallari yuklanmoqda...</p>
         </div>
       ) : activeReport === 'homework' ? (
-        /* ==================== REPORT A: HOMEWORK REPORT ==================== */
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-sm overflow-hidden">
-          <div className="px-4 py-2.5 bg-slate-50 dark:bg-slate-800/70 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div className="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md bg-[#1F4E37] text-white font-black text-[11px]">
-                Homework Report
+        /* ==================== REPORT A: HOMEWORK REPORT (MATRIX VIEW) ==================== */
+        <div className="space-y-3">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3.5 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+              <span className="flex items-center gap-1.5">
+                <span className="w-4 h-4 rounded bg-emerald-500 inline-block border border-emerald-600" />
+                <span>Deadline ichida — Yashil</span>
               </span>
-              <span className="text-slate-500 dark:text-slate-400">
-                Topshiriqlar, uyga vazifalar va Challenges bajarilish jadvali
+              <span className="flex items-center gap-1.5">
+                <span className="w-4 h-4 rounded bg-amber-400 inline-block border border-amber-500" />
+                <span>Deadlinedan keyin — Sariq</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-4 h-4 rounded bg-rose-500 inline-block border border-rose-600" />
+                <span>Tashlanmagan — Qizil</span>
               </span>
             </div>
             <div className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">
@@ -707,40 +732,78 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-xs min-w-[1060px]" data-testid="admin-homework-report-table">
-              <thead>
-                <tr className="bg-[#1F4E37] text-white font-bold">
-                  <th className="px-3 py-3 border border-[#173c2a] text-center w-12">#</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a]">Talabaning ism-familiyasi</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a]">Gmail pochtasi</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a]">Kurs nomi</th>
-                  <th className="px-3 py-3 border border-[#173c2a] text-center">Topshiriq berilgan sana</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a] text-center">Topshiriqlar</th>
-                  <th className="px-3 py-3 border border-[#173c2a] text-center">Challenges Date</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a] text-center">Challenges</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a] text-center">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredHomeworkRows.length === 0 ? (
-                  <tr>
-                    <td colSpan={9} className="px-4 py-10 text-center text-slate-500 dark:text-slate-400 font-semibold">
-                      Tanlangan filtrlar bo'yicha talaba topilmadi.
-                    </td>
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left text-xs min-w-[1380px]" data-testid="admin-homework-report-table">
+                <thead>
+                  <tr className="bg-[#163b29] text-emerald-100 text-[10px] font-bold">
+                    <th className="px-2.5 py-1.5 border border-[#123021] text-center sticky left-0 z-20 bg-[#163b29] w-12">
+                      Sana
+                    </th>
+                    <th className="px-3 py-1.5 border border-[#123021] sticky left-12 z-20 bg-[#163b29] min-w-[190px]">
+                      Homework Tasks
+                    </th>
+                    <th className="px-3 py-1.5 border border-[#123021] min-w-[190px]">
+                      Aloqa
+                    </th>
+                    <th className="px-3 py-1.5 border border-[#123021] min-w-[180px]">
+                      Yo'nalish
+                    </th>
+                    {visibleHomeworkTasksMeta.map(meta => (
+                      <th
+                        key={`admin_hw_date_${meta.id || meta.index}`}
+                        className="px-1.5 py-1.5 border border-[#123021] text-center whitespace-nowrap font-mono min-w-[68px]"
+                        title={meta.title}
+                      >
+                        {meta.dateDisplay}
+                      </th>
+                    ))}
                   </tr>
-                ) : (
-                  filteredHomeworkRows.map((row) => {
-                    const badge = getRowColorBadge(row.rowColor);
-                    return (
+
+                  <tr className="bg-[#1F4E37] text-white font-bold">
+                    <th className="px-2.5 py-2.5 border border-[#173c2a] text-center sticky left-0 z-20 bg-[#1F4E37] w-12">
+                      #
+                    </th>
+                    <th className="px-3 py-2.5 border border-[#173c2a] sticky left-12 z-20 bg-[#1F4E37] min-w-[190px]">
+                      Full name
+                    </th>
+                    <th className="px-3 py-2.5 border border-[#173c2a] min-w-[190px]">
+                      Gmail pochtasi
+                    </th>
+                    <th className="px-3 py-2.5 border border-[#173c2a] min-w-[180px]">
+                      Kurs nomi
+                    </th>
+                    {visibleHomeworkTasksMeta.map(meta => (
+                      <th
+                        key={`admin_hw_col_${meta.id || meta.index}`}
+                        className="px-2 py-2.5 border border-[#173c2a] text-center whitespace-nowrap min-w-[68px]"
+                        title={meta.title}
+                      >
+                        {meta.label || `HW ${meta.index}`}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredHomeworkRows.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={4 + visibleHomeworkTasksMeta.length}
+                        className="px-4 py-10 text-center text-slate-500 dark:text-slate-400 font-semibold"
+                      >
+                        Tanlangan filtrlar bo'yicha talaba topilmadi.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredHomeworkRows.map(row => (
                       <tr
                         key={row.userId}
                         className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
                       >
-                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-center font-black text-slate-800 dark:text-slate-100">
+                        <td className="px-2.5 py-2.5 border border-slate-200 dark:border-slate-700 text-center font-black sticky left-0 z-10 text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-900">
                           {row.rank}
                         </td>
-                        <td className="px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 font-bold text-slate-900 dark:text-white">
+                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 font-bold sticky left-12 z-10 text-slate-900 dark:text-white whitespace-nowrap bg-white dark:bg-slate-900">
                           <div className="flex items-center justify-between gap-2">
                             <span>{row.fullName}</span>
                             <span
@@ -754,59 +817,31 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
                             </span>
                           </div>
                         </td>
-                        <td className="px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium">
+                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">
                           {row.email}
                         </td>
-                        <td className="px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold">
+                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold">
                           {row.courseName}
                         </td>
-                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-center font-mono text-[11px] text-slate-700 dark:text-slate-300 whitespace-nowrap">
-                          {row.homeworkDate}
-                        </td>
-                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-center">
-                          <div className="font-black text-sm text-slate-900 dark:text-white">
-                            {row.homeworkDone}
-                          </div>
-                          <div className="flex items-center justify-center gap-1 flex-wrap mt-0.5 text-[10px] font-bold">
-                            <span className="text-emerald-600 dark:text-emerald-400">Bajardi: {row.homeworkDone}</span>
-                            <span className="text-slate-300 dark:text-slate-600">|</span>
-                            <span className="text-rose-600 dark:text-rose-400">Bajarmadi: {row.homeworkNotDone}</span>
-                            <span className="text-slate-300 dark:text-slate-600">|</span>
-                            <span className="text-slate-500 dark:text-slate-400">Jami: {row.homeworkTotal}</span>
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-center font-mono text-[11px] text-slate-700 dark:text-slate-300 whitespace-nowrap">
-                          {row.challengesDate}
-                        </td>
-                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-center">
-                          <div className="font-black text-sm text-slate-900 dark:text-white">
-                            {row.challengeDone}
-                          </div>
-                          <div className="flex items-center justify-center gap-1 flex-wrap mt-0.5 text-[10px] font-bold">
-                            <span className="text-emerald-600 dark:text-emerald-400">Bajardi: {row.challengeDone}</span>
-                            <span className="text-slate-300 dark:text-slate-600">|</span>
-                            <span className="text-rose-600 dark:text-rose-400">Bajarmadi: {row.challengeNotDone}</span>
-                            <span className="text-slate-300 dark:text-slate-600">|</span>
-                            <span className="text-slate-500 dark:text-slate-400">Jami: {row.challengeTotal}</span>
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 border border-slate-200 dark:border-slate-700 text-center">
-                          <div className="flex flex-col items-center gap-1">
-                            <span className="font-black text-sm text-slate-950 dark:text-white">
-                              {row.totalCompleted}
-                              <span className="text-[10px] font-bold text-slate-400"> / {row.totalAssigned}</span>
-                            </span>
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black border ${badge.cls}`}>
-                              {badge.label}
-                            </span>
-                          </div>
-                        </td>
+                        {visibleHomeworkTasksMeta.map(meta => {
+                          const cell = (row.taskCells || row.days || []).find(d => String(d.taskId) === String(meta.id) || Number(d.index) === Number(meta.index)) || {
+                            effectiveColor: 'none'
+                          };
+                          const dimmed = colorFilter !== 'all' && cell.effectiveColor !== colorFilter;
+                          return (
+                            <td
+                              key={`${row.userId}_${meta.id || meta.index}`}
+                              title={`${row.fullName} · ${meta.title} (${meta.dateDisplay}) — ${getColorLabelUz(cell.effectiveColor)}`}
+                              className={`border border-slate-200 dark:border-slate-700 p-0 h-9 min-w-[68px] ${getChallengeCellClass(cell.effectiveColor, dimmed)}`}
+                            />
+                          );
+                        })}
                       </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       ) : (

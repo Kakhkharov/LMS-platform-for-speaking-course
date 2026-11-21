@@ -286,6 +286,7 @@ function App() {
   };
 
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false); // 10-talab: Mobil & Planshet menyu boshqaruvi
   const [isAddingStudent, setIsAddingStudent] = useState(false);
   const [isResendingMail, setIsResendingMail] = useState(false);
   const [newStudent, setNewStudent] = useState({
@@ -2802,14 +2803,29 @@ function App() {
         <div className="h-screen w-screen overflow-hidden flex flex-col bg-slate-50/50 dark:bg-slate-950/50 relative z-10">
 
           {/* Header */}
-          <header className="modern-card fixed top-3 left-4 right-4 h-16 flex items-center justify-between px-6 z-40 rounded-2xl shrink-0">
-            <div className="flex items-center gap-3 select-none cursor-pointer group py-1">
-              <img
-                src={darkMode ? "/logo-03.svg" : "/logo-01.svg"}
-                alt={settings.brandName || 'Practise'}
-                className="h-10 sm:h-11 w-auto max-w-[160px] object-contain transition-transform group-hover:scale-105"
-              />
-              <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">{settings.brandName || 'Practise'}</span>
+          <header className="modern-card fixed top-3 left-3 sm:left-4 right-3 sm:right-4 h-16 flex items-center justify-between px-3 sm:px-6 z-40 rounded-2xl shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 select-none">
+              {/* 10-talab: Mobil & Planshet Gamburger menyu tugmasi */}
+              <button
+                type="button"
+                onClick={() => setMobileSidebarOpen(true)}
+                className="lg:hidden w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-100 transition-colors cursor-pointer shrink-0 border border-slate-200 dark:border-slate-700"
+                title="Barcha menyularni ochish"
+              >
+                <span className="material-symbols-outlined text-[24px]">menu</span>
+              </button>
+
+              <div
+                onClick={() => { setCurrentPage('dashboard'); syncData(); }}
+                className="flex items-center gap-2 sm:gap-3 cursor-pointer group py-1"
+              >
+                <img
+                  src={darkMode ? "/logo-03.svg" : "/logo-01.svg"}
+                  alt={settings.brandName || 'Practise'}
+                  className="h-9 sm:h-11 w-auto max-w-[120px] sm:max-w-[160px] object-contain transition-transform group-hover:scale-105"
+                />
+                <span className="text-lg sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white hidden sm:inline">{settings.brandName || 'Practise'}</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 sm:gap-4">
@@ -2931,7 +2947,129 @@ function App() {
             </div>
           </header>
 
-          <div className="flex flex-1 pt-[88px] px-4 pb-3 gap-5 h-screen overflow-hidden">
+          {/* 10-talab: Mobil, Planshet va iPad uchun to'liq interaktiv Sidebar Drawer */}
+          {mobileSidebarOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden animate-fade-in flex">
+              {/* Qoraytirilgan orqa fon (Backdrop) */}
+              <div
+                className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+                onClick={() => setMobileSidebarOpen(false)}
+              />
+
+              {/* Drawer Paneli */}
+              <div className="relative w-72 sm:w-80 max-w-[85vw] h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-2xl z-50 p-4 flex flex-col justify-between overflow-y-auto">
+                <div className="space-y-4">
+                  {/* Drawer Header */}
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={darkMode ? "/logo-03.svg" : "/logo-01.svg"}
+                        alt={settings.brandName || 'Practise'}
+                        className="h-8 w-auto object-contain"
+                      />
+                      <span className="font-black text-lg text-slate-900 dark:text-white">{settings.brandName || 'Practise'}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setMobileSidebarOpen(false)}
+                      className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">close</span>
+                    </button>
+                  </div>
+
+                  {/* Yangi Talaba Qo'shish Tezkor Tugmasi */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewStudent({ name: '', email: '', course: courses[0]?.title || '', status: 'Online', deadline: '', tariff: 'VIP' });
+                      setShowAddStudentModal(true);
+                      setMobileSidebarOpen(false);
+                    }}
+                    className="w-full py-2.5 px-3.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">person_add</span>
+                    <span>+ Yangi O'quvchi Qo'shish</span>
+                  </button>
+
+                  {/* Mobil Menyu Ro'yxati */}
+                  <nav className="space-y-1">
+                    {[
+                      { id: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
+                      { id: 'students', icon: 'group', label: 'Talabalar', badge: students.length },
+                      { id: 'tasks', icon: 'assignment', label: 'Homework' },
+                      { id: 'challenges', icon: 'military_tech', label: '30 day Challenge' },
+                      { id: 'progress', icon: 'monitoring', label: 'Progress Report' },
+                      { id: 'courses', icon: 'smart_display', label: 'Videolar' },
+                      { id: 'tests', icon: 'quiz', label: 'Testlar' },
+                      { id: 'test-results', icon: 'grade', label: 'Test natijalari' },
+                      { id: 'library', icon: 'menu_book', label: 'Library' },
+                      { id: 'live-classes', icon: 'videocam', label: 'Live Classes' },
+                      { id: 'practise', icon: 'record_voice_over', label: 'Speaking Practise' },
+                      { id: 'leaderboard', icon: 'leaderboard', label: 'Leaderboard' },
+                      { id: 'chats', icon: 'forum', label: 'Chatlar', badge: totalUnreadChats },
+                      { id: 'categories', icon: 'category', label: 'Kategoriyalar' },
+                      { id: 'support-admins', icon: 'admin_panel_settings', label: 'Support admin' },
+                      { id: 'settings', icon: 'settings', label: 'Sozlamalar' }
+                    ].map(item => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          setCurrentPage(item.id);
+                          setSearchQuery('');
+                          setMobileSidebarOpen(false);
+                          syncData();
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${
+                          currentPage === item.id
+                            ? 'bg-indigo-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                          <span>{item.label}</span>
+                        </div>
+                        {item.badge ? (
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                            currentPage === item.id ? 'bg-white/20 text-white' : 'bg-indigo-100 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-300'
+                          }`}>
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+
+                {/* Footer: Admin info & Chiqish */}
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <img
+                      src={getAuthMediaUrl(adminProfile.avatar) || getInitialsAvatar(adminProfile.name)}
+                      alt="Admin"
+                      className="w-8 h-8 rounded-full object-cover shrink-0"
+                    />
+                    <div className="truncate text-left">
+                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{adminProfile.name}</p>
+                      <p className="text-[10px] text-slate-400 uppercase">{adminProfile.role}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="p-2 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors cursor-pointer"
+                    title="Chiqish"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">logout</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-1 pt-[88px] px-2 sm:px-4 pb-3 gap-5 h-screen overflow-hidden">
 
             {/* Modern Sidebar (Frozen) */}
             <aside className="w-56 shrink-0 rounded-[24px] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-[0_2px_12px_rgba(0,0,0,0.03)] h-full flex flex-col p-2.5 gap-1 z-30 overflow-y-auto hidden lg:flex select-none">
@@ -2948,7 +3086,7 @@ function App() {
                   subItems: [
                     { id: 'tests', icon: 'quiz', label: 'Testlar' },
                     { id: 'test-results', icon: 'grade', label: 'Test natijalari' },
-                    { id: 'tasks', icon: 'assignment', label: 'Topşiriqlar' },
+                    { id: 'tasks', icon: 'assignment', label: 'Homework' },
                     { id: 'progress', icon: 'monitoring', label: 'Progress' }
                   ]
                 },
@@ -5682,13 +5820,16 @@ function App() {
             </main>
           </div>
 
-          {/* Add Student Modal */}
+          {/* Add Student Modal (Mobil va planshetga moslangan) */}
           {showAddStudentModal && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-              <div className="modern-card w-full max-w-md p-8 space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white">Yangi Talaba Qöşiş</h3>
-                  <button onClick={() => setShowAddStudentModal(false)} className="w-8 h-8 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-900 dark:text-white"><span className="material-symbols-outlined">close</span></button>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+              <div className="modern-card w-full max-w-md p-5 sm:p-8 space-y-4 sm:space-y-6 max-h-[92vh] overflow-y-auto shadow-2xl">
+                <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                  <h3 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-indigo-500">person_add</span>
+                    <span>Yangi Talaba Qo'shish</span>
+                  </h3>
+                  <button onClick={() => setShowAddStudentModal(false)} className="w-8 h-8 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-900 dark:text-white cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-700"><span className="material-symbols-outlined text-[18px]">close</span></button>
                 </div>
                 <form onSubmit={handleAddStudentSubmit} className="space-y-4">
                   <div className="space-y-1">

@@ -74,6 +74,7 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
       deadlineIso: '',
       deadlineDisplay: ''
     })),
+    homeworkTasksMeta: [],
     courses: [],
     totalStudents: 0,
     myStudentId: profile?.id || null,
@@ -174,9 +175,25 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
     return rows.find(r => r.isSelf || (profile?.id && String(r.userId) === String(profile.id))) || null;
   }, [progressData.challengesReport, profile?.id]);
 
+  const visibleHomeworkTasksMeta = useMemo(() => {
+    const meta = Array.isArray(progressData.homeworkTasksMeta) && progressData.homeworkTasksMeta.length > 0
+      ? progressData.homeworkTasksMeta
+      : Array.from({ length: 6 }, (_, i) => ({
+          id: `hw_${i + 1}`,
+          index: i + 1,
+          title: `Homework ${i + 1}`,
+          label: `HW ${i + 1}`,
+          dateDisplay: '—'
+        }));
+    if (!dateFilter) return meta;
+    return meta.filter(m => m.dateIso === dateFilter || m.deadlineIso === dateFilter);
+  }, [progressData.homeworkTasksMeta, dateFilter]);
+
   const filteredHomeworkRows = useMemo(() => {
     const rows = Array.isArray(progressData.homeworkReport) ? progressData.homeworkReport : [];
     const q = searchQuery.trim().toLowerCase();
+    const visibleTaskIdSet = new Set(visibleHomeworkTasksMeta.map(m => String(m.id || m.index)));
+
     return rows.filter(row => {
       if (q) {
         const matchName = (row.fullName || '').toLowerCase().includes(q);
@@ -189,21 +206,23 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
           : String(row.courseName || '').split(',').map(x => x.trim());
         if (!rowCourses.some(c => c.toLowerCase() === courseFilter.toLowerCase())) return false;
       }
-      if (colorFilter !== 'all' && row.rowColor !== colorFilter) {
-        return false;
+      if (colorFilter !== 'all') {
+        const cells = Array.isArray(row.taskCells) ? row.taskCells : (Array.isArray(row.days) ? row.days : []);
+        const hasMatch = cells.some(
+          d => (!dateFilter || visibleTaskIdSet.has(String(d.taskId || d.index))) && d.effectiveColor === colorFilter
+        );
+        if (!hasMatch && row.rowColor !== colorFilter) return false;
       }
       if (dateFilter) {
         const dates = [
           ...(Array.isArray(row.homeworkDateIsos) ? row.homeworkDateIsos : []),
-          ...(Array.isArray(row.challengeDateIsos) ? row.challengeDateIsos : []),
-          row.homeworkDateIso,
-          row.challengesDateIso
+          row.homeworkDateIso
         ].filter(Boolean);
-        if (!dates.includes(dateFilter)) return false;
+        if (dates.length > 0 && !dates.includes(dateFilter)) return false;
       }
       return true;
     });
-  }, [progressData.homeworkReport, searchQuery, courseFilter, colorFilter, dateFilter]);
+  }, [progressData.homeworkReport, visibleHomeworkTasksMeta, searchQuery, courseFilter, colorFilter, dateFilter]);
 
   const visibleChallengeDaysMeta = useMemo(() => {
     const meta = Array.isArray(progressData.challengeDaysMeta) ? progressData.challengeDaysMeta : [];
@@ -491,97 +510,133 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
         </div>
       ) : activeReport === 'homework' ? (
         /* ==================== STUDENT HOMEWORK REPORT (VIEW MODE) ==================== */
-        <div className="bg-surface rounded-2xl border border-outline-variant shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-left text-xs min-w-[980px]" data-testid="student-homework-table">
-              <thead>
-                <tr className="bg-[#1F4E37] text-white font-bold">
-                  <th className="px-3 py-3 border border-[#173c2a] text-center w-12">#</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a]">Talabaning ism-familiyasi</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a]">Gmail pochtasi</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a]">Kurs nomi</th>
-                  <th className="px-3 py-3 border border-[#173c2a] text-center">Topshiriq berilgan sana</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a] text-center">Topshiriqlar</th>
-                  <th className="px-3 py-3 border border-[#173c2a] text-center">Challenges Date</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a] text-center">Challenges</th>
-                  <th className="px-3.5 py-3 border border-[#173c2a] text-center">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredHomeworkRows.length === 0 ? (
-                  <tr>
-                    <td colSpan={9} className="px-4 py-10 text-center text-outline font-semibold">
-                      Tanlangan filtrlar bo'yicha ma'lumot topilmadi.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredHomeworkRows.map(row => {
-                    const isSelf = row.isSelf || (profile?.id && String(row.userId) === String(profile.id));
-                    const badge = getRowColorBadge(row.rowColor);
-                    return (
-                      <tr
-                        key={row.userId}
-                        data-testid={isSelf ? 'student-homework-self-row' : undefined}
-                        className={`transition-colors ${
-                          isSelf
-                            ? 'bg-amber-500/15 ring-1 ring-inset ring-amber-500/50'
-                            : 'hover:bg-surface-container/50'
-                        }`}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-4 px-1 text-[11px] font-bold text-outline">
+            <span className="flex items-center gap-1.5">
+              <span className="w-3.5 h-3.5 rounded bg-emerald-500 inline-block" />
+              <span>Deadline ichida — Yashil</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-3.5 h-3.5 rounded bg-amber-400 inline-block" />
+              <span>Deadlinedan keyin — Sariq</span>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-3.5 h-3.5 rounded bg-rose-500 inline-block" />
+              <span>Tashlanmagan — Qizil</span>
+            </span>
+          </div>
+
+          <div className="bg-surface rounded-2xl border border-outline-variant shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left text-xs min-w-[1380px]" data-testid="student-homework-table">
+                <thead>
+                  <tr className="bg-[#163b29] text-emerald-100 text-[10px] font-bold">
+                    <th className="px-2.5 py-1.5 border border-[#123021] text-center sticky left-0 z-20 bg-[#163b29] w-12">
+                      Sana
+                    </th>
+                    <th className="px-3 py-1.5 border border-[#123021] sticky left-12 z-20 bg-[#163b29] min-w-[190px]">
+                      Homework Tasks
+                    </th>
+                    <th className="px-3 py-1.5 border border-[#123021] min-w-[180px]">
+                      Aloqa
+                    </th>
+                    <th className="px-3 py-1.5 border border-[#123021] min-w-[170px]">
+                      Yo'nalish
+                    </th>
+                    {visibleHomeworkTasksMeta.map(meta => (
+                      <th
+                        key={`hw_date_${meta.id || meta.index}`}
+                        className="px-1.5 py-1.5 border border-[#123021] text-center whitespace-nowrap font-mono min-w-[66px]"
+                        title={meta.title}
                       >
-                        <td className="px-3 py-2.5 border border-outline-variant text-center font-black text-on-surface">
-                          {row.rank}
-                        </td>
-                        <td className="px-3.5 py-2.5 border border-outline-variant font-bold text-on-surface">
-                          <div className="flex items-center gap-2">
-                            <span>{row.fullName}</span>
-                            {isSelf && (
-                              <span className="px-2 py-0.5 rounded-full bg-amber-500 text-white text-[9px] font-black">
-                                SIZ
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-3.5 py-2.5 border border-outline-variant text-outline font-medium">
-                          {row.email}
-                        </td>
-                        <td className="px-3.5 py-2.5 border border-outline-variant text-on-surface font-semibold">
-                          {row.courseName}
-                        </td>
-                        <td className="px-3 py-2.5 border border-outline-variant text-center font-mono text-[11px] text-outline whitespace-nowrap">
-                          {row.homeworkDate}
-                        </td>
-                        <td className="px-3 py-2.5 border border-outline-variant text-center">
-                          <div className="font-black text-sm text-on-surface">{row.homeworkDone}</div>
-                          <div className="text-[10px] font-bold text-outline">
-                            Bajardi: {row.homeworkDone} · Bajarmadi: {row.homeworkNotDone} · Jami: {row.homeworkTotal}
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 border border-outline-variant text-center font-mono text-[11px] text-outline whitespace-nowrap">
-                          {row.challengesDate}
-                        </td>
-                        <td className="px-3 py-2.5 border border-outline-variant text-center">
-                          <div className="font-black text-sm text-on-surface">{row.challengeDone}</div>
-                          <div className="text-[10px] font-bold text-outline">
-                            Bajardi: {row.challengeDone} · Bajarmadi: {row.challengeNotDone} · Jami: {row.challengeTotal}
-                          </div>
-                        </td>
-                        <td className="px-3 py-2.5 border border-outline-variant text-center">
-                          <div className="flex flex-col items-center gap-1">
-                            <span className="font-black text-sm text-on-surface">
-                              {row.totalCompleted}
-                              <span className="text-[10px] font-bold text-outline"> / {row.totalAssigned}</span>
-                            </span>
-                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black border ${badge.cls}`}>
-                              {badge.label}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
+                        {meta.dateDisplay}
+                      </th>
+                    ))}
+                  </tr>
+
+                  <tr className="bg-[#1F4E37] text-white font-bold">
+                    <th className="px-2.5 py-2.5 border border-[#173c2a] text-center sticky left-0 z-20 bg-[#1F4E37] w-12">
+                      #
+                    </th>
+                    <th className="px-3 py-2.5 border border-[#173c2a] sticky left-12 z-20 bg-[#1F4E37] min-w-[190px]">
+                      Full name
+                    </th>
+                    <th className="px-3 py-2.5 border border-[#173c2a] min-w-[180px]">
+                      Gmail pochtasi
+                    </th>
+                    <th className="px-3 py-2.5 border border-[#173c2a] min-w-[170px]">
+                      Kurs nomi
+                    </th>
+                    {visibleHomeworkTasksMeta.map(meta => (
+                      <th
+                        key={`hw_col_${meta.id || meta.index}`}
+                        className="px-2 py-2.5 border border-[#173c2a] text-center whitespace-nowrap min-w-[66px]"
+                        title={meta.title}
+                      >
+                        {meta.label || `HW ${meta.index}`}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredHomeworkRows.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={4 + visibleHomeworkTasksMeta.length}
+                        className="px-4 py-10 text-center text-outline font-semibold"
+                      >
+                        Ma'lumot topilmadi.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredHomeworkRows.map(row => {
+                      const isSelf = row.isSelf || (profile?.id && String(row.userId) === String(profile.id));
+                      return (
+                        <tr
+                          key={row.userId}
+                          data-testid={isSelf ? 'student-homework-self-row' : undefined}
+                          className={isSelf ? 'bg-amber-500/15' : ''}
+                        >
+                          <td className={`px-2.5 py-2.5 border border-outline-variant text-center font-black sticky left-0 z-10 text-on-surface bg-surface ${isSelf ? 'shadow-[inset_0_0_0_9999px_rgba(245,158,11,0.16)]' : ''}`}>
+                            {row.rank}
+                          </td>
+                          <td className={`px-3 py-2.5 border border-outline-variant font-bold sticky left-12 z-10 text-on-surface whitespace-nowrap bg-surface ${isSelf ? 'shadow-[inset_0_0_0_9999px_rgba(245,158,11,0.16)]' : ''}`}>
+                            <div className="flex items-center gap-2">
+                              <span>{row.fullName}</span>
+                              {isSelf && (
+                                <span className="px-2 py-0.5 rounded-full bg-amber-500 text-white text-[9px] font-black">
+                                  SIZ
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-3 py-2.5 border border-outline-variant text-outline font-medium whitespace-nowrap">
+                            {row.email}
+                          </td>
+                          <td className="px-3 py-2.5 border border-outline-variant text-on-surface font-semibold">
+                            {row.courseName}
+                          </td>
+                          {visibleHomeworkTasksMeta.map(meta => {
+                            const cell = (row.taskCells || row.days || []).find(d => String(d.taskId) === String(meta.id) || Number(d.index) === Number(meta.index)) || {
+                              effectiveColor: 'none'
+                            };
+                            const dimmed = colorFilter !== 'all' && cell.effectiveColor !== colorFilter;
+                            return (
+                              <td
+                                key={`${row.userId}_${meta.id || meta.index}`}
+                                data-testid={`student-hw-cell-${row.userId}-${meta.index}`}
+                                title={`${row.fullName} · ${meta.title} (${meta.dateDisplay}) — ${getColorLabelUz(cell.effectiveColor)}`}
+                                className={`border border-outline-variant p-0 h-9 min-w-[66px] ${getChallengeCellClass(cell.effectiveColor, dimmed)}`}
+                              />
+                            );
+                          })}
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       ) : (

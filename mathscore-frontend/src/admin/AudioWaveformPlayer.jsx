@@ -125,8 +125,13 @@ export default function AudioWaveformPlayer({
     if (Number(fileSize) > 0) setKnownSize(Number(fileSize));
   }, [resolvedSrc, fallbackBars, durationSeconds, fileSize]);
 
+  // Decode real waveform bars & determine byte size (Optimized: Katta audiolarni yuklamaydi)
   useEffect(() => {
     if (!resolvedSrc) return;
+    // Katta audio fayllarni fonida to'liq xotiraga yuklab brauzerni qotirishdan asrash
+    if (fileSize && fileSize > 2.5 * 1024 * 1024) return;
+    if (!resolvedSrc.startsWith('blob:') && fileSize && fileSize > 1.5 * 1024 * 1024) return;
+
     let cancelled = false;
     const controller = new AbortController();
 
@@ -135,6 +140,10 @@ export default function AudioWaveformPlayer({
         const res = await fetch(resolvedSrc, { signal: controller.signal });
         if (!res.ok) return;
         const contentLen = Number(res.headers.get('content-length') || 0);
+        if (contentLen > 2.5 * 1024 * 1024) {
+          if (!fileSize && contentLen > 0) setKnownSize(contentLen);
+          return;
+        }
         const arrBuf = await res.arrayBuffer();
         if (cancelled) return;
 

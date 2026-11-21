@@ -409,6 +409,14 @@ const studentTests = [
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('login');
+
+  // 2-talab: O'chirilgan bo'limlar (Kurslarim, Library, Sertifikatlarim, Testlar markazi, Imtixon natijalari) ga kirishni bloklash
+  useEffect(() => {
+    const deletedPages = ['courses', 'library', 'certificates', 'test-center', 'test-results', 'test-interface'];
+    if (deletedPages.includes(currentPage)) {
+      setCurrentPage('dashboard');
+    }
+  }, [currentPage]);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('theme');
@@ -3110,32 +3118,26 @@ export default function App() {
     } catch (err) {}
   };
 
-  // 2-talab: Sidebar menyu stilidagi to'liq menyular ro'yxati
+  // 2-talab: Sidebar menyu stilidagi to'liq menyular ro'yxati (Talab bo'yicha tozalandi)
   const sidebarNavItems = [
     { name: 'Dashboard', icon: 'dashboard', page: 'dashboard' },
-    { name: 'Kurslarim', icon: 'menu_book', page: 'courses' },
-    { name: 'Library', icon: 'local_library', page: 'library' },
     {
-      name: 'My tasks',
+      name: 'General English',
       icon: 'checklist',
       hasSubmenu: true,
       subItems: [
-        { name: 'Topshiriqlar', icon: 'assignment', page: 'tasks' },
+        { name: 'Homework', icon: 'assignment', page: 'tasks' },
         { name: 'Grammar', icon: 'spellcheck', page: 'grammar' },
         { name: 'Speaking partner', icon: 'record_voice_over', page: 'speaking-partner' },
         { name: 'Challenges', icon: 'emoji_events', page: 'challenges' },
         { name: 'Speaking practise', icon: 'record_voice_over', page: 'practise' },
-        { name: 'Testlar markazi', icon: 'quiz', page: 'test-center' },
+        { name: 'Battle', icon: 'swords', page: 'battle' },
         { name: 'Games', icon: 'sports_esports', page: 'games' },
         { name: 'Vocabulary', icon: 'translate', page: 'vocabulary' }
       ]
     },
-    { name: 'Battle', icon: 'swords', page: 'battle' },
     { name: 'My Progress', icon: 'monitoring', page: 'my-progress' },
     { name: 'Leaderboard', icon: 'leaderboard', page: 'leaderboard' },
-    { name: 'Sertifikatlarim', icon: 'workspace_premium', page: 'certificates' },
-    { name: 'Testlar markazi', icon: 'fact_check', page: 'test-center' },
-    { name: 'Imtixon natijalari', icon: 'insights', page: 'test-results' },
     { name: 'Settings', icon: 'settings', page: 'profile' }
   ];
 
@@ -3777,7 +3779,7 @@ export default function App() {
                   <span className="font-outfit text-xl sm:text-2xl font-black tracking-tight text-on-surface">Practise</span>
                 </div>
 
-                {/* Horizontal Navbar */}
+                {/* Horizontal Navbar (2-rasm: Kurslarim va Sertifikatlarim o'rniga Homework va Challenge) */}
                 <nav className="hidden md:flex gap-1.5 items-center ml-6 text-xs font-semibold">
                   <button
                     onClick={() => setCurrentPage('dashboard')}
@@ -3786,16 +3788,16 @@ export default function App() {
                     Dashboard
                   </button>
                   <button
-                    onClick={() => setCurrentPage('courses')}
-                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'courses' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
+                    onClick={() => setCurrentPage('tasks')}
+                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'tasks' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
                   >
-                    Kurslarim
+                    Homework
                   </button>
                   <button
-                    onClick={() => setCurrentPage('certificates')}
-                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'certificates' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
+                    onClick={() => setCurrentPage('challenges')}
+                    className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${currentPage === 'challenges' ? 'bg-primary/10 text-primary font-bold' : 'text-outline hover:text-on-surface hover:bg-surface-container-low'}`}
                   >
-                    Sertifikatlarim
+                    Challenge
                   </button>
                 </nav>
               </div>
@@ -4130,10 +4132,10 @@ export default function App() {
 
                   <div className="pt-3 border-t border-outline-variant space-y-2">
                     <button
-                      onClick={() => { if (courses.length > 0) { setActiveCourse(courses[0]); setCurrentPage('courses'); setIsSidebarOpen(false); } }}
+                      onClick={() => { setCurrentPage('tasks'); setIsSidebarOpen(false); }}
                       className="w-full bg-primary text-on-primary font-semibold text-xs py-2 px-3 rounded-lg hover:bg-primary/95 transition-colors cursor-pointer"
                     >
-                      Darslarni boşlaş
+                      Homeworkni boshlash
                     </button>
                     <button
                       onClick={handleLogout}
@@ -4192,16 +4194,10 @@ export default function App() {
                               <div className="pt-2">
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    if (courses.length > 0) {
-                                      setActiveCourse(courses[0]);
-                                      setActiveLesson(courses[0].lessons?.[0] || null);
-                                    }
-                                    setCurrentPage('courses');
-                                  }}
+                                  onClick={() => setCurrentPage('tasks')}
                                   className="design-btn-primary inline-flex items-center gap-2 bg-white hover:bg-amber-50 text-slate-950 font-outfit font-extrabold text-xs sm:text-sm px-6 py-3 rounded-full shadow-lg shadow-black/30 active:scale-95 transition-all cursor-pointer"
                                 >
-                                  <span>Continue learning</span>
+                                  <span>Start Homework</span>
                                   <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M5 12h14" />
                                     <path d="m12 5 7 7-7 7" />
@@ -5044,8 +5040,8 @@ export default function App() {
                   </div>
                 )}
 
-                {/* -------------------- LMS COURSE PLAYER VIEW -------------------- */}
-                {currentPage === 'courses' && (
+                {/* Kurslarim o'chirildi (2-talab) */}
+                {false && currentPage === 'courses' && (
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-fade-in">
 
                     <div className="lg:col-span-8 flex flex-col gap-4">
@@ -5269,8 +5265,8 @@ export default function App() {
                   </div>
                 )}
 
-                {/* -------------------- SERTIFIKATLARIM VIEW -------------------- */}
-                {currentPage === 'certificates' && (
+                {/* Sertifikatlarim o'chirildi (2-talab) */}
+                {false && currentPage === 'certificates' && (
                   <div className="space-y-6 animate-fade-in">
                     {/* Page Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-outline-variant">
@@ -5488,8 +5484,8 @@ export default function App() {
                   )
                 )}
 
-                {/* -------------------- 4-TALAB: 2-RASMDAGI LIBRARY VIEW (3D Kitob javonlari) -------------------- */}
-                {currentPage === 'library' && (
+                {/* Library o'chirildi (2-talab) */}
+                {false && currentPage === 'library' && (
                   isSectionLocked('library') ? (
                     <div className="bg-surface rounded-3xl p-8 sm:p-10 border border-outline-variant text-center space-y-4 shadow-xs max-w-xl mx-auto mt-6">
                       <div className="w-16 h-16 rounded-2xl bg-amber-500/15 text-amber-500 flex items-center justify-center mx-auto">
@@ -5654,8 +5650,8 @@ export default function App() {
                   <LeaderboardView profile={profile} />
                 )}
 
-                {/* -------------------- TEST CENTER / PORTAL VIEW -------------------- */}
-                {currentPage === 'test-center' && (
+                {/* Testlar markazi o'chirildi (2-talab) */}
+                {false && currentPage === 'test-center' && (
                   <div className="space-y-6 animate-fade-in">
                     <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
@@ -6077,8 +6073,8 @@ export default function App() {
                   </div>
                 )}
 
-                {/* -------------------- TEST RESULTS VIEW -------------------- */}
-                {currentPage === 'test-results' && !quizResult && (
+                {/* Test natijalari o'chirildi (2-talab) */}
+                {false && currentPage === 'test-results' && !quizResult && (
                   <div className="text-center py-12 space-y-4 animate-fade-in">
                     <span className="material-symbols-outlined text-4xl text-outline block">query_stats</span>
                     <h2 className="font-outfit text-lg font-bold text-on-surface">Topshirilgan testlar topilmadi</h2>
@@ -6092,7 +6088,7 @@ export default function App() {
                   </div>
                 )}
 
-                {currentPage === 'test-results' && quizResult && (() => {
+                {false && currentPage === 'test-results' && quizResult && (() => {
                   const reviewList = Array.isArray(quizResult.reviews) ? quizResult.reviews : [];
                   const revCorrectCount = reviewList.length > 0 ? reviewList.filter(r => r.isCorrect).length : null;
                   const revEarned = reviewList.length > 0 ? reviewList.reduce((acc, r) => acc + (Number(r.awardedMarks) || 0), 0) : null;

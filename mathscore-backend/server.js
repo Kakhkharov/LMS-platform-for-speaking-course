@@ -3214,8 +3214,8 @@ app.post('/api/tasks', upload.single('file'), async (req, res) => {
     let fileName = '';
     let fileSize = 0;
     if (req.file) {
-      if (req.file.size > 20 * 1024 * 1024) {
-        return res.status(400).json({ error: "Xatolik: Fayl hajmi 20 MB dan oshmasligi kerak!" });
+      if (req.file.size > 70 * 1024 * 1024) {
+        return res.status(400).json({ error: "Xatolik: Fayl hajmi 70 MB dan oshmasligi kerak!" });
       }
       fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
       fileName = req.file.originalname;
@@ -3497,13 +3497,18 @@ app.post('/api/tasks/:id/submit', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: "Fayl yuklanmadi." });
     }
 
-    if (req.file.size > 20 * 1024 * 1024) {
-      return res.status(400).json({ error: "Xatolik: Fayl hajmi 20 MB dan oshmasligi kerak!" });
+    const allowedExts = ['.pdf', '.doc', '.docx', '.mp3', '.wav', '.webm', '.ogg', '.m4a', '.aac', '.mp4', '.opus', '.flac', '.zip'];
+    const ext = path.extname(req.file.originalname).toLowerCase();
+    const isAudio = ['.mp3', '.wav', '.webm', '.ogg', '.m4a', '.aac', '.opus', '.flac'].includes(ext) || (req.file.mimetype && req.file.mimetype.startsWith('audio/'));
+    const isRecordedMic = req.file.originalname.includes('ovozli_yechim') || req.file.originalname.includes('recording');
+    const maxLimitBytes = (isAudio && !isRecordedMic) ? 70 * 1024 * 1024 : 50 * 1024 * 1024;
+    const maxLimitLabel = (isAudio && !isRecordedMic) ? '70 MB' : '50 MB';
+
+    if (req.file.size > maxLimitBytes) {
+      return res.status(400).json({ error: `Xatolik: Fayl hajmi ${maxLimitLabel} dan oshmasligi kerak!` });
     }
 
-    const allowedExts = ['.pdf', '.doc', '.docx', '.mp3', '.wav', '.webm', '.ogg', '.m4a', '.aac', '.mp4', '.opus'];
-    const ext = path.extname(req.file.originalname).toLowerCase();
-    if (!allowedExts.includes(ext)) {
+    if (!allowedExts.includes(ext) && !isAudio) {
       return res.status(400).json({ error: "Xatolik: Faqat .pdf, .doc, .docx yoki audio fayllar qabul qilinadi!" });
     }
 
@@ -4699,6 +4704,22 @@ async function buildProgressReportsPayload(dbData, authUser = null) {
   ]);
 
   const tasks = Array.isArray(dbData?.tasks) ? dbData.tasks : [];
+  const sortedTasks = [...tasks].sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+  const homeworkTasksMeta = sortedTasks.map((t, idx) => {
+    const dateIso = toTashkentYmd(t.createdAt) || toTashkentYmd(t.deadline);
+    const deadlineIso = toTashkentYmd(t.deadline);
+    return {
+      id: t.id,
+      index: idx + 1,
+      title: decodeProgressText(t.title || `Homework ${idx + 1}`),
+      label: `HW ${idx + 1}`,
+      dateIso,
+      dateDisplay: dateIso ? formatYmdToDisplay(dateIso) : '—',
+      deadlineIso,
+      deadlineDisplay: deadlineIso ? formatYmdToDisplay(deadlineIso) : '',
+      deadline: t.deadline || null
+    };
+  });
   const challenges = [...(Array.isArray(dbData?.challenges) ? dbData.challenges : [])]
     .sort((a, b) => Number(a.day) - Number(b.day));
   const overrides = (dbData?.challengeProgressOverrides && typeof dbData.challengeProgressOverrides === 'object')
@@ -4898,6 +4919,41 @@ async function buildProgressReportsPayload(dbData, authUser = null) {
       }
     }
 
+    const homeworkCells = homeworkTasksMeta.map(meta => {
+      const t = sortedTasks.find(x => String(x.id) === String(meta.id));
+      if (!t) return { taskId: meta.id, index: meta.index, effectiveColor: 'none' };
+      const applies = doesTaskApplyToStudent(t, enrolledLowerSet, s.course);
+      if (!applies) {
+        return {
+          taskId: meta.id,
+          index: meta.index,
+          title: meta.title,
+          label: meta.label,
+          dateDisplay: meta.dateDisplay,
+          effectiveColor: 'none',
+          statusText: 'Biriktirilmagan'
+        };
+      }
+      const sub = findTaskSubmissionForStudent(t, s);
+      let effectiveColor = 'none';
+      if (sub) {
+        const c = evaluateTimingColor(sub.submittedAt, t.deadline, false);
+        effectiveColor = c === 'green' ? 'green' : 'yellow';
+      } else {
+        effectiveColor = 'red'; // 7-talab: Topshirilmagan bo'lsa qizil rang
+      }
+      return {
+        taskId: meta.id,
+        index: meta.index,
+        title: meta.title,
+        label: meta.label,
+        dateDisplay: meta.dateDisplay,
+        effectiveColor,
+        submittedAt: sub?.submittedAt || null,
+        grade: sub?.grade || null
+      };
+    });
+
     const isSelf = authUser?.id ? String(s.id) === String(authUser.id) : false;
 
     rawHomeworkRows.push({
@@ -4927,7 +4983,9 @@ async function buildProgressReportsPayload(dbData, authUser = null) {
       totalCompleted,
       totalAssigned,
       totalOnTime,
-      rowColor
+      rowColor,
+      days: homeworkCells,
+      taskCells: homeworkCells
     });
 
     rawChallengesRows.push({
@@ -4971,6 +5029,7 @@ async function buildProgressReportsPayload(dbData, authUser = null) {
   return {
     generatedAt: new Date().toISOString(),
     challengeDaysMeta,
+    homeworkTasksMeta,
     courses: Array.from(courseSet).sort((a, b) => a.localeCompare(b, 'uz')),
     totalStudents: homeworkReport.length,
     myStudentId: authUser?.role === 'student' ? authUser.id : null,

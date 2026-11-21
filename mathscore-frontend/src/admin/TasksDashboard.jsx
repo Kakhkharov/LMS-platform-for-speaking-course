@@ -136,16 +136,17 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
   const [formTitle, setFormTitle] = useState('');
   const [formDesc, setFormDesc] = useState('');
   const [formDueDate, setFormDueDate] = useState(getDefaultFutureDate);
+  const [formDueTime, setFormDueTime] = useState('23:59'); // 11-talab: Soatni belgilash imkoni
   const [formLink, setFormLink] = useState('');
   const [formFile, setFormFile] = useState(null);
   const [formFileError, setFormFileError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 1 soniyalik interval bilan teskari hisobni yangilab turish
+  // Optimallashtirilgan: har 10 soniyada teskari hisobni yangilab turish (CPU ni bo'shatish)
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(Date.now());
-    }, 1000);
+    }, 10000);
     return () => clearInterval(timer);
   }, []);
 
@@ -182,7 +183,8 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
     } catch (e) {}
 
     fetchTasks();
-    const interval = setInterval(fetchTasks, 3000);
+    // SSE real-time ishlaydi, shuning uchun polling fallback 20 soniyada bir
+    const interval = setInterval(fetchTasks, 20000);
 
     let es = null;
     try {
@@ -206,23 +208,25 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
     };
   }, []);
 
-  // Sync grading inputs when viewingTask opens or updates
+  // Sync grading inputs when viewingTask opens or updates (Stabil: cheksiz re-render bo'lmaydi)
   useEffect(() => {
     if (currentViewingTask && currentViewingTask.submissions) {
       setGradingState(prev => {
+        let changed = false;
         const next = { ...prev };
         currentViewingTask.submissions.forEach(sub => {
           if (!next[sub.id]) {
+            changed = true;
             next[sub.id] = {
               grade: sub.grade || '',
               feedback: sub.feedback || ''
             };
           }
         });
-        return next;
+        return changed ? next : prev;
       });
     }
-  }, [currentViewingTask]);
+  }, [currentViewingTask?.id, currentViewingTask?.submissions?.length]);
 
   // Format countdown: 5d 09h 21m 42s (1-rasmga 1 ga 1)
   const formatCountdown = (deadlineIso) => {
@@ -246,11 +250,12 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
   };
 
   // Preview countdown in Add Modal
-  const getPreviewCountdown = (dateStr) => {
+  const getPreviewCountdown = (dateStr, timeStr = '23:59') => {
     if (!dateStr) return 'Day: 00  Hour: 00  Min: 00  Sec: 00';
-    const target = dateStr.includes('T') ? new Date(dateStr).getTime() : new Date(dateStr + 'T23:59:59').getTime();
+    const combinedStr = dateStr.includes('T') ? dateStr : `${dateStr}T${timeStr || '23:59'}:00`;
+    const target = new Date(combinedStr).getTime();
     const diff = target - currentTime;
-    if (diff <= 0) return 'Day: 00  Hour: 00  Min: 00  Sec: 00';
+    if (isNaN(target) || diff <= 0) return 'Muddati tugagan';
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -260,7 +265,7 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
     return `Day: ${days}   Hour: ${hours}   Min: ${minutes}   Sec: ${seconds}`;
   };
 
-  // File upload change (Max 20 MB)
+  // File upload change (Max 70 MB)
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -268,9 +273,9 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
       setFormFileError('');
       return;
     }
-    const maxSizeBytes = 20 * 1024 * 1024; // 20 MB
+    const maxSizeBytes = 70 * 1024 * 1024; // 70 MB
     if (file.size > maxSizeBytes) {
-      setFormFileError(`Xatolik: Fayl hajmi 20 MB dan oshmasligi kerak! (${(file.size / (1024 * 1024)).toFixed(1)} MB)`);
+      setFormFileError(`Xatolik: Fayl hajmi 70 MB dan oshmasligi kerak! (${(file.size / (1024 * 1024)).toFixed(1)} MB)`);
       setFormFile(null);
       e.target.value = '';
     } else {
@@ -292,7 +297,7 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
     }
 
     setIsSubmitting(true);
-    const deadlineIso = new Date(formDueDate + 'T23:59:59').toISOString();
+    const deadlineIso = new Date(`${formDueDate}T${formDueTime || '23:59'}:00`).toISOString();
     const courseTitleStr = selectedCourses.join(', ') || 'All Courses';
 
     try {
@@ -1367,8 +1372,8 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
                 </div>
               </div>
 
-              {/* 4. Due Date * va Time (auto) yonma-yon (3-rasm) */}
-              <div className="grid grid-cols-2 gap-3">
+              {/* 4. Due Date * va Time (Soat) (5-rasm, 11-talab) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Due Date */}
                 <div>
                   <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
@@ -1397,16 +1402,32 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
                   </div>
                 </div>
 
-                {/* Time (auto) */}
+                {/* Due Time (11-talab: Soatni kiritish) */}
                 <div>
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5">
-                    Time (auto)
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+                    <span>Deadline Time (Soat) <span className="text-rose-500">*</span></span>
+                    <span className="text-[10px] font-mono text-slate-400">HH:MM</span>
                   </span>
-                  <div className="h-[41px] flex items-center gap-1.5 px-3 bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700 rounded-xl text-[10px] font-mono font-bold text-slate-600 dark:text-slate-300">
-                    <span className="material-symbols-outlined text-blue-500 text-[15px]">schedule</span>
-                    <span className="truncate">{getPreviewCountdown(formDueDate)}</span>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-blue-500 text-[18px] pointer-events-none">
+                      schedule
+                    </span>
+                    <input
+                      type="time"
+                      value={formDueTime}
+                      onChange={(e) => setFormDueTime(e.target.value)}
+                      required
+                      className="w-full pl-10 pr-3 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-800 dark:text-white cursor-pointer focus:border-blue-500 focus:outline-hidden"
+                    />
                   </div>
                 </div>
+              </div>
+
+              {/* Time Countdown Preview */}
+              <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700 rounded-xl text-[11px] font-mono font-bold text-slate-600 dark:text-slate-300">
+                <span className="material-symbols-outlined text-blue-500 text-[16px]">timer</span>
+                <span className="text-[10px] uppercase font-sans text-slate-400">Qolgan vaqt:</span>
+                <span className="truncate text-blue-600 dark:text-blue-400">{getPreviewCountdown(formDueDate, formDueTime)}</span>
               </div>
 
               {/* 5. Rewards: Coins & XP (Vazifa uchun ajratilgan coinlar va XP ballar) */}

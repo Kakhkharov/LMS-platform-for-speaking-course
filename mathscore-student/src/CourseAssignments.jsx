@@ -10,6 +10,12 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import AudioWaveformPlayer, { isAudioMediaFile, resolveAudioMediaUrl } from './AudioWaveformPlayer';
 
+export function isImageMediaFile(fileName = '', fileUrl = '') {
+  const combined = `${fileName || ''} ${fileUrl || ''}`.toLowerCase();
+  if (combined.startsWith('data:image/')) return true;
+  return /\.(png|jpe?g|webp|gif|svg|bmp)(\?|#|$)/i.test(combined);
+}
+
 export default function CourseAssignments({
   currentCourseTitle,
   studentId = null,
@@ -35,6 +41,15 @@ export default function CourseAssignments({
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [recordedAudios, setRecordedAudios] = useState({}); // { [taskId]: { blob, url, seconds, createdAt } }
   const [selectedFilePreviews, setSelectedFilePreviews] = useState({}); // { [taskId]: objectUrl }
+  const [viewingImageTask, setViewingImageTask] = useState(null); // 8-talab: Rasm modalida audio yozish
+
+  const handleCloseImageModal = () => {
+    if (viewingImageTask && recordingTaskId === viewingImageTask.id) {
+      alert("Diqqat: Audio yozuv davom etmoqda! Rasm yopilmaydi. Avval mikrofonni to'xtating (■ To'xtatish)!");
+      return;
+    }
+    setViewingImageTask(null);
+  };
   const mediaRecorderRef = React.useRef(null);
   const audioStreamRef = React.useRef(null);
   const audioTimerRef = React.useRef(null);
@@ -337,7 +352,7 @@ export default function CourseAssignments({
     return (task.courseTitle || '').toLowerCase().trim().includes(selectedCourseFilter.toLowerCase().trim());
   });
 
-  // Talaba fayl tanlaganda (.pdf, .doc, .docx, audio - max 20mb)
+  // Talaba fayl tanlaganda (.pdf, .doc, .docx, audio - audio max 70mb, hujjat max 50mb)
   const handleStudentFileSelect = (taskId, e) => {
     const file = e.target.files[0];
     if (!file) {
@@ -352,12 +367,15 @@ export default function CourseAssignments({
       return;
     }
 
-    // 20 MB hajmni tekshirish
-    const maxSizeBytes = 20 * 1024 * 1024;
+    const isAudio = isAudioMediaFile(file.name, file.type);
+    const maxSizeBytes = isAudio ? 70 * 1024 * 1024 : 50 * 1024 * 1024;
+    const maxMbText = isAudio ? '70 MB' : '50 MB';
+
+    // Hajmni tekshirish (Audio max 70 MB, Hujjat max 50 MB)
     if (file.size > maxSizeBytes) {
       setFileErrors(prev => ({
         ...prev,
-        [taskId]: `Xatolik: Fayl hajmi 20 MB dan oshmasligi kerak! (${(file.size / (1024 * 1024)).toFixed(1)} MB)`
+        [taskId]: `Xatolik: Fayl hajmi ${maxMbText} dan oshmasligi kerak! (${(file.size / (1024 * 1024)).toFixed(1)} MB)`
       }));
       setSelectedFiles(prev => ({ ...prev, [taskId]: null }));
       e.target.value = '';
@@ -365,12 +383,12 @@ export default function CourseAssignments({
     }
 
     // Formatni tekshirish
-    const validExtensions = ['.pdf', '.doc', '.docx', '.mp3', '.wav', '.ogg', '.m4a', '.webm', '.aac', '.opus', '.mp4', '.zip'];
+    const validExtensions = ['.pdf', '.doc', '.docx', '.mp3', '.wav', '.ogg', '.m4a', '.webm', '.aac', '.opus', '.flac', '.mp4', '.zip'];
     const ext = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
-    if (!validExtensions.includes(ext)) {
+    if (!validExtensions.includes(ext) && !file.type.startsWith('audio/')) {
       setFileErrors(prev => ({
         ...prev,
-        [taskId]: "Xatolik: Faqat .pdf, .doc, .docx yoki audio formatdagi fayllar qabul qilinadi!"
+        [taskId]: "Xatolik: Faqat .pdf, .doc, .docx yoki audio (.mp3, .wav, .m4a, .ogg, .webm, .aac) formatdagi fayllar qabul qilinadi!"
       }));
       setSelectedFiles(prev => ({ ...prev, [taskId]: null }));
       e.target.value = '';
@@ -381,7 +399,7 @@ export default function CourseAssignments({
     setSelectedFiles(prev => ({ ...prev, [taskId]: file }));
     setSelectedFilePreviews(prev => {
       if (prev[taskId]) URL.revokeObjectURL(prev[taskId]);
-      if (isAudioMediaFile(file.name, file.type)) {
+      if (isAudio) {
         return { ...prev, [taskId]: URL.createObjectURL(file) };
       }
       const next = { ...prev };
@@ -449,6 +467,10 @@ export default function CourseAssignments({
     const recorded = recordedAudios[taskId];
 
     if (!file && recorded && recorded.blob) {
+      if (recorded.blob.size > 50 * 1024 * 1024) {
+        alert(`Xatolik: Yozilgan audio hajmi 50 MB dan oshmasligi kerak! (${(recorded.blob.size / (1024 * 1024)).toFixed(1)} MB)`);
+        return;
+      }
       file = new File([recorded.blob], `ovozli_yechim_${Date.now()}.webm`, { type: 'audio/webm' });
     }
 
@@ -665,7 +687,7 @@ export default function CourseAssignments({
                       </p>
                     </div>
 
-                    {/* Fayl yuklab olish va Visual Audio Waveform Player (Dark/Light mode mos) */}
+                    {/* Fayl yuklab olish, Rasm ko'rish va Visual Audio Waveform Player */}
                     <div className="flex flex-col gap-2.5 pt-1">
                       {(task.fileUrl || task.fileName) && (
                         isAudioMediaFile(task.fileName, task.fileUrl) && task.fileUrl ? (
@@ -677,6 +699,43 @@ export default function CourseAssignments({
                             onDownload={() => handleDownloadTaskFile(task)}
                             className="w-full max-w-md"
                           />
+                        ) : isImageMediaFile(task.fileName, task.fileUrl) && task.fileUrl ? (
+                          <div className="space-y-2">
+                            <div
+                              onClick={() => setViewingImageTask(task)}
+                              className="group relative inline-block max-w-sm rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-900/5 shadow-xs cursor-pointer hover:shadow-md transition-all"
+                              title="Rasmni platformaning o'zida ochish va audio yozish"
+                            >
+                              <img
+                                src={resolveAudioMediaUrl(task.fileUrl) || task.fileUrl}
+                                alt={task.fileName || task.title}
+                                className="w-full max-h-48 sm:max-h-56 object-contain rounded-2xl group-hover:scale-102 transition-transform"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 text-white font-bold text-xs p-2">
+                                <span className="material-symbols-outlined text-[20px]">zoom_in</span>
+                                <span>Rasmni ochish va ovoz yozish</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <button
+                                type="button"
+                                onClick={() => setViewingImageTask(task)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300 rounded-xl text-xs font-bold border border-indigo-200 dark:border-indigo-800 transition-colors cursor-pointer"
+                              >
+                                <span className="material-symbols-outlined text-[16px]">visibility</span>
+                                <span>Rasmni ko'rish va audio yozish 🎙️</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDownloadTaskFile(task)}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 rounded-xl text-xs font-bold border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                              >
+                                <span className="material-symbols-outlined text-[15px]">download</span>
+                                <span>Yuklab olish</span>
+                              </button>
+                            </div>
+                          </div>
                         ) : (
                           <div>
                             <button
@@ -999,7 +1058,7 @@ export default function CourseAssignments({
                       <div className="dashboard-subcard bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-slate-200/70 dark:border-slate-700 space-y-3">
                         <div>
                           <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
-                            Yechimni yuklash (.pdf, .doc, .docx - max 20 MB):
+                            Yechimni yuklash (.pdf, .doc, .docx, audio - max 70 MB):
                           </label>
 
                           <div className="flex items-center gap-2">
@@ -1007,7 +1066,7 @@ export default function CourseAssignments({
                               Выберите файл
                               <input
                                 type="file"
-                                accept=".pdf,.doc,.docx,.mp3,.wav,.ogg,.m4a,.webm,.aac,.mp4"
+                                accept=".pdf,.doc,.docx,.mp3,.wav,.ogg,.m4a,.webm,.aac,.opus,.flac,.mp4,audio/*"
                                 onChange={(e) => handleStudentFileSelect(task.id, e)}
                                 className="hidden"
                               />
@@ -1168,6 +1227,122 @@ export default function CourseAssignments({
               <p className="text-[11px] italic text-amber-800 dark:text-amber-300 mt-1.5 bg-amber-50 dark:bg-amber-950/40 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/40">
                 "{pushNotification.feedback}"
               </p>
+            )}
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* 8-talab: Rasm modalida audio yozish (yozuv to'xtatilmaguncha rasm yopilmaydi) */}
+      {viewingImageTask && typeof document !== 'undefined' && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] bg-black/85 backdrop-blur-sm flex flex-col p-3 sm:p-6 overflow-hidden animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) handleCloseImageModal();
+          }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3 text-white pb-3 shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="material-symbols-outlined text-indigo-400 text-[24px]">image</span>
+              <div className="truncate">
+                <h3 className="font-bold text-sm sm:text-base truncate">{viewingImageTask.title}</h3>
+                <p className="text-[11px] text-slate-300 truncate">Topshiriq rasmi · Audio yozib topshirishingiz mumkin</p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleCloseImageModal}
+              className={`p-2 rounded-xl transition-all cursor-pointer flex items-center gap-1 text-xs font-bold ${
+                recordingTaskId === viewingImageTask.id
+                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30'
+                  : 'bg-white/10 hover:bg-white/20 text-white'
+              }`}
+              title={recordingTaskId === viewingImageTask.id ? "Ovoz yozilmoqda - avval to'xtating!" : "Yopish"}
+            >
+              {recordingTaskId === viewingImageTask.id && <span className="material-symbols-outlined text-[16px] animate-pulse">lock</span>}
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+
+          {/* Rasm ko'rinishi */}
+          <div className="flex-1 min-h-0 flex items-center justify-center p-2 overflow-auto">
+            <img
+              src={resolveAudioMediaUrl(viewingImageTask.fileUrl) || viewingImageTask.fileUrl}
+              alt={viewingImageTask.fileName || viewingImageTask.title}
+              className="max-h-full max-w-full object-contain rounded-2xl shadow-2xl border border-white/10 select-none"
+            />
+          </div>
+
+          {/* Pastki interaktiv Audio yozish paneli */}
+          <div className="shrink-0 mt-3 bg-slate-900/90 border border-white/15 rounded-2xl p-3 sm:p-4 text-white shadow-2xl max-w-2xl w-full mx-auto backdrop-blur-md">
+            {recordingTaskId === viewingImageTask.id ? (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 animate-fade-in">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-3.5 h-3.5 rounded-full bg-rose-500 animate-ping inline-block" />
+                  <span className="font-black text-rose-400 text-sm">
+                    Audio yozilmoqda: {formatSeconds(recordingSeconds)}
+                  </span>
+                  <span className="text-[10px] text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30 font-bold">
+                    Rasm ochiq qoladi
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => stopAudioRecording(viewingImageTask.id)}
+                  className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-rose-600/30 flex items-center gap-1.5 transition-all cursor-pointer active:scale-95"
+                >
+                  <span className="material-symbols-outlined text-[16px]">stop</span>
+                  <span>Audio yozuvni to'xtatish</span>
+                </button>
+              </div>
+            ) : recordedAudios[viewingImageTask.id] ? (
+              <div className="space-y-2 animate-fade-in">
+                <div className="flex items-center justify-between text-xs font-bold text-emerald-400">
+                  <span className="flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                    Audio muvaffaqiyatli yozildi ({formatSeconds(recordedAudios[viewingImageTask.id].seconds)})
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => startAudioRecording(viewingImageTask.id)}
+                      className="text-indigo-300 hover:underline text-[11px] cursor-pointer"
+                    >
+                      Qayta yozish
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => discardAudioRecording(viewingImageTask.id)}
+                      className="text-rose-400 hover:underline text-[11px] cursor-pointer"
+                    >
+                      O'chirish
+                    </button>
+                  </div>
+                </div>
+                <audio
+                  src={recordedAudios[viewingImageTask.id].url}
+                  controls
+                  className="w-full h-10 rounded-xl"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="text-xs text-slate-300 text-center sm:text-left">
+                  <p className="font-bold">Rasmni ko'rib ovozli javob yozish</p>
+                  <p className="text-[10px] text-slate-400">Yozish paytida rasm to'xtatmaguningizcha yopilmaydi</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => startAudioRecording(viewingImageTask.id)}
+                  className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[18px]">mic</span>
+                  <span>Ovoz yozishni boshlash</span>
+                </button>
+              </div>
             )}
           </div>
         </div>,
