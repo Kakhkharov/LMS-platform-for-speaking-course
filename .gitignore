@@ -13,6 +13,7 @@ dist/
 dev.db
 dev.db-journal
 uploads/
+!mathscore-frontend/public/uploads/
 .idea/
 .vscode/
 build/

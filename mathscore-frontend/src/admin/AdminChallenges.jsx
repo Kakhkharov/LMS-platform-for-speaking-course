@@ -8,7 +8,33 @@ const API_BASE =
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
         ['5173', '5174', '5175'].includes(window.location.port))
         ? 'http://localhost:5000'
-        : '');
+        : 'https://marvelous-nourishment-production-c87958d0.up.railway.app');
+
+const resolveChallengeImageUrl = (url) => {
+  if (!url) return '';
+  let str = String(url).trim();
+  if (str.includes('localhost:5000') || str.includes('127.0.0.1:5000')) {
+    const idx = str.indexOf('/uploads/');
+    if (idx !== -1) {
+      str = str.substring(idx);
+    }
+  }
+  if (str.startsWith('/uploads/') || str.startsWith('uploads/')) {
+    const cleanPath = str.startsWith('/') ? str : `/${str}`;
+    return API_BASE ? `${API_BASE}${cleanPath}` : cleanPath;
+  }
+  return str;
+};
+
+const getRelativeUploadPath = (url) => {
+  if (!url) return '';
+  const str = String(url).trim();
+  const idx = str.indexOf('/uploads/');
+  if (idx !== -1) {
+    return str.substring(idx);
+  }
+  return '';
+};
 
 const cleanDisplayText = (str) =>
   String(str || '')
@@ -923,15 +949,28 @@ export default function AdminChallenges() {
               <div className="relative h-28 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
                 {ch.image ? (
                   <img
-                    src={ch.image}
-                    alt={ch.title}
+                    src={resolveChallengeImageUrl(ch.image)}
+                    alt=""
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      const rel = getRelativeUploadPath(ch.image);
+                      if (rel && !e.currentTarget.src.endsWith(rel)) {
+                        e.currentTarget.src = rel;
+                        return;
+                      }
+                      e.currentTarget.style.display = 'none';
+                      const fb = e.currentTarget.nextElementSibling;
+                      if (fb) fb.style.display = 'flex';
+                    }}
                   />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-400/25 via-orange-400/20 to-indigo-500/25">
-                    <ImageIcon className="w-7 h-7 text-amber-500" />
-                  </div>
-                )}
+                ) : null}
+                <div
+                  className={`w-full h-full items-center justify-center bg-gradient-to-br from-amber-400/25 via-orange-400/20 to-indigo-500/25 ${
+                    ch.image ? 'hidden' : 'flex'
+                  }`}
+                >
+                  <ImageIcon className="w-7 h-7 text-amber-500" />
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
 
                 <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-amber-500 text-white font-outfit text-[10px] font-black uppercase tracking-wider shadow-xs">
@@ -1027,7 +1066,18 @@ export default function AdminChallenges() {
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-5 h-28 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative">
                       {dayForm.image ? (
-                        <img src={dayForm.image} alt="Cover" className="w-full h-full object-cover" />
+                        <img
+                          src={resolveChallengeImageUrl(dayForm.image)}
+                          alt="Cover"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const rel = getRelativeUploadPath(dayForm.image);
+                            if (rel && !e.currentTarget.src.endsWith(rel)) {
+                              e.currentTarget.src = rel;
+                              return;
+                            }
+                          }}
+                        />
                       ) : (
                         <span className="text-[11px] font-semibold text-slate-400">Rasm tanlanmagan</span>
                       )}
@@ -1151,7 +1201,17 @@ export default function AdminChallenges() {
                     <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                       {dayForm.images.map((imgUrl, idx) => (
                         <div key={idx} className="relative group h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
-                          <img src={imgUrl} alt={`Rasm ${idx + 1}`} className="w-full h-full object-cover" />
+                          <img
+                            src={resolveChallengeImageUrl(imgUrl)}
+                            alt={`Rasm ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const rel = getRelativeUploadPath(imgUrl);
+                              if (rel && !e.currentTarget.src.endsWith(rel)) {
+                                e.currentTarget.src = rel;
+                              }
+                            }}
+                          />
                           <button
                             type="button"
                             onClick={() =>

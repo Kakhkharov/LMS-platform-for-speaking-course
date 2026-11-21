@@ -4221,10 +4221,27 @@ function formatChallengeForClient(ch, authUser = null) {
   const completedBy = Array.isArray(ch.completedBy) ? ch.completedBy : [];
   const submissionsObj = (ch.submissions && typeof ch.submissions === 'object') ? ch.submissions : {};
   const mySubmission = authUser?.id ? (submissionsObj[authUser.id] || null) : null;
+
+  const sanitizeUrl = (url) => {
+    if (!url || typeof url !== 'string') return url;
+    if (url.includes('localhost:5000') || url.includes('127.0.0.1:5000')) {
+      const idx = url.indexOf('/uploads/');
+      if (idx !== -1) {
+        return url.substring(idx);
+      }
+    }
+    return url;
+  };
+
+  const image = sanitizeUrl(ch.image);
+  const rawImages = Array.isArray(ch.images) ? ch.images : (ch.image ? [ch.image] : []);
+  const images = rawImages.map(sanitizeUrl);
+
   return {
     ...ch,
+    image,
+    images,
     streakBonus: ch.streakBonus ?? 2,
-    images: Array.isArray(ch.images) ? ch.images : (ch.image ? [ch.image] : []),
     tasks: Array.isArray(ch.tasks) ? ch.tasks : [],
     completed: authUser?.id ? completedBy.includes(authUser.id) : false,
     mySubmission,

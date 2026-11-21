@@ -340,9 +340,9 @@
       "day": 1,
       "title": "Day 1: Speaking Practice",
       "description": "Day 1 mavzusi bo&#x27;yicha berilgan materiallarni ko&#x27;rib chiqing va vazifalarni o&#x27;z muddatida bajaring.",
-      "image": "http://localhost:5000/uploads/ad154cfd-1700-4d74-abdd-cd3853bd899d.jpg",
+      "image": "https://marvelous-nourishment-production-c87958d0.up.railway.app/uploads/1409dd1e-f0f8-4fd7-ad52-de1c682fe201.jpg",
       "images": [
-        "http://localhost:5000/uploads/ad154cfd-1700-4d74-abdd-cd3853bd899d.jpg"
+        "https://marvelous-nourishment-production-c87958d0.up.railway.app/uploads/1409dd1e-f0f8-4fd7-ad52-de1c682fe201.jpg"
       ],
       "tasks": [
         "1. Mavzu materiallari va rasmlarini diqqat bilan o‘rganing",

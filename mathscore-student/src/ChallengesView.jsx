@@ -8,7 +8,33 @@ const API_BASE =
         (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') &&
         ['5173', '5174', '5175'].includes(window.location.port))
         ? 'http://localhost:5000'
-        : '');
+        : 'https://marvelous-nourishment-production-c87958d0.up.railway.app');
+
+const resolveChallengeImageUrl = (url) => {
+  if (!url) return '';
+  let str = String(url).trim();
+  if (str.includes('localhost:5000') || str.includes('127.0.0.1:5000')) {
+    const idx = str.indexOf('/uploads/');
+    if (idx !== -1) {
+      str = str.substring(idx);
+    }
+  }
+  if (str.startsWith('/uploads/') || str.startsWith('uploads/')) {
+    const cleanPath = str.startsWith('/') ? str : `/${str}`;
+    return API_BASE ? `${API_BASE}${cleanPath}` : cleanPath;
+  }
+  return str;
+};
+
+const getRelativeUploadPath = (url) => {
+  if (!url) return '';
+  const str = String(url).trim();
+  const idx = str.indexOf('/uploads/');
+  if (idx !== -1) {
+    return str.substring(idx);
+  }
+  return '';
+};
 
 const cleanDisplayText = (str) =>
   String(str || '')
@@ -326,17 +352,30 @@ export default function ChallengesView({ currentUser, darkMode, onStatsUpdate, o
                   <div className="relative h-28 sm:h-32 w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
                     {ch.image ? (
                       <img
-                        src={ch.image}
-                        alt={ch.title}
+                        src={resolveChallengeImageUrl(ch.image)}
+                        alt=""
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
+                        onError={(e) => {
+                          const rel = getRelativeUploadPath(ch.image);
+                          if (rel && !e.currentTarget.src.endsWith(rel)) {
+                            e.currentTarget.src = rel;
+                            return;
+                          }
+                          e.currentTarget.style.display = 'none';
+                          const fb = e.currentTarget.nextElementSibling;
+                          if (fb) fb.style.display = 'flex';
+                        }}
                       />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-500/20 to-indigo-500/20">
-                        <TrophyIcon className="w-8 h-8 text-amber-500" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                    ) : null}
+                    <div
+                      className={`w-full h-full items-center justify-center bg-gradient-to-br from-amber-500/20 to-indigo-500/20 ${
+                        ch.image ? 'hidden' : 'flex'
+                      }`}
+                    >
+                      <TrophyIcon className="w-8 h-8 text-amber-500" />
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none" />
 
                     {/* Day Number */}
                     <div className="absolute top-2 left-2 z-10">
@@ -426,13 +465,30 @@ export default function ChallengesView({ currentUser, darkMode, onStatsUpdate, o
               {/* Hero Cover */}
               <div className="relative h-44 sm:h-52 w-full overflow-hidden shrink-0 bg-slate-800">
                 {selectedChallenge.image ? (
-                  <img src={selectedChallenge.image} alt={selectedChallenge.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-amber-500 to-orange-600">
-                    <TrophyIcon className="w-12 h-12 text-white" />
-                  </div>
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/25" />
+                  <img
+                    src={resolveChallengeImageUrl(selectedChallenge.image)}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const rel = getRelativeUploadPath(selectedChallenge.image);
+                      if (rel && !e.currentTarget.src.endsWith(rel)) {
+                        e.currentTarget.src = rel;
+                        return;
+                      }
+                      e.currentTarget.style.display = 'none';
+                      const fb = e.currentTarget.nextElementSibling;
+                      if (fb) fb.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div
+                  className={`w-full h-full items-center justify-center bg-gradient-to-r from-amber-500 to-orange-600 ${
+                    selectedChallenge.image ? 'hidden' : 'flex'
+                  }`}
+                >
+                  <TrophyIcon className="w-12 h-12 text-white" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/25 pointer-events-none" />
 
                 <button
                   type="button"
@@ -563,19 +619,30 @@ export default function ChallengesView({ currentUser, darkMode, onStatsUpdate, o
                           Rasmlar ({gallery.length} ta)
                         </h4>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                          {gallery.map((imgUrl, idx) => (
-                            <div
-                              key={idx}
-                              onClick={() => setLightboxUrl(imgUrl)}
-                              className="relative h-28 rounded-2xl overflow-hidden border border-outline-variant cursor-zoom-in group"
-                            >
-                              <img
-                                src={imgUrl}
-                                alt={`Challenge image ${idx + 1}`}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                            </div>
-                          ))}
+                          {gallery.map((imgUrl, idx) => {
+                            const fullUrl = resolveChallengeImageUrl(imgUrl);
+                            const relUrl = getRelativeUploadPath(imgUrl);
+                            return (
+                              <div
+                                key={idx}
+                                onClick={() => setLightboxUrl(fullUrl)}
+                                className="relative h-28 rounded-2xl overflow-hidden border border-outline-variant cursor-zoom-in group bg-slate-100 dark:bg-slate-800"
+                              >
+                                <img
+                                  src={fullUrl}
+                                  alt=""
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                  onError={(e) => {
+                                    if (relUrl && !e.currentTarget.src.endsWith(relUrl)) {
+                                      e.currentTarget.src = relUrl;
+                                      return;
+                                    }
+                                    e.currentTarget.parentElement.style.display = 'none';
+                                  }}
+                                />
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -657,7 +724,17 @@ export default function ChallengesView({ currentUser, darkMode, onStatsUpdate, o
             onClick={() => setLightboxUrl('')}
             className="fixed inset-0 z-[100000] bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
           >
-            <img src={lightboxUrl} alt="Full preview" className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain" />
+            <img
+              src={resolveChallengeImageUrl(lightboxUrl)}
+              alt="Full preview"
+              className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain"
+              onError={(e) => {
+                const rel = getRelativeUploadPath(lightboxUrl);
+                if (rel && !e.currentTarget.src.endsWith(rel)) {
+                  e.currentTarget.src = rel;
+                }
+              }}
+            />
           </div>,
           document.body
         )}
