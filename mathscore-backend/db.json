@@ -70,14 +70,15 @@
   ],
   "tasks": [
     {
-      "id": 1794393592165,
-      "courseTitle": "Speak Skill",
+      "id": 1795020000000,
+      "courseTitle": "IELTS Speaking Masterclass",
       "courses": [
-        "Speak Skill"
+        "All Courses",
+        "IELTS Speaking Masterclass"
       ],
-      "title": "aaaa",
-      "description": "ssss",
-      "deadline": "2026-11-18T18:59:59.000Z",
+      "title": "Homework 1",
+      "description": "Vazifani audio shaklida yuboring hurmatli shogird!",
+      "deadline": "2026-11-18T23:59:00.000Z",
       "linkUrl": "",
       "fileUrl": "",
       "fileName": "",
@@ -85,74 +86,53 @@
       "coins": 50,
       "xp": 100,
       "tasksCount": 1,
-      "uploadedStudentsCount": 0,
+      "uploadedStudentsCount": 2,
       "linksCount": 0,
-      "submissions": [],
-      "createdAt": "2026-11-11T10:39:52.165Z"
-    },
-    {
-      "id": 1794243648677,
-      "courseTitle": "Speak Skill",
-      "courses": [
-        "Speak Skill"
-      ],
-      "title": "Speech Time",
-      "description": "izoh",
-      "deadline": "2026-11-11T18:59:59.000Z",
-      "linkUrl": "https://youtube.com/shorts/C7xc68iFm_A?si=ZkEGT_geeEKpvpWs",
-      "fileUrl": "http://localhost:5000/uploads/f8974a79-6f2a-4861-9e59-69ab0e1bf8b7.png",
-      "fileName": "01 poster.png",
-      "fileSize": 2156532,
-      "coins": 150,
-      "xp": 150,
-      "tasksCount": 1,
-      "uploadedStudentsCount": 1,
-      "linksCount": 1,
       "submissions": [
         {
-          "id": 1794243726075,
-          "studentName": "Azizbek Turg`unboyev",
-          "studentId": "9d66fc1c-2fc9-486d-a4de-58e3a41f7f96",
-          "studentEmail": "demouserrr333@gmail.com",
-          "studentPhone": "+998 50 773 44 17",
-          "studentAvatar": "http://localhost:5000/uploads/a99a7336-2627-4eb9-8b16-a9e4a2f9f728.jpg",
-          "fileName": "ovozli_yechim_1794250690837.webm",
-          "fileUrl": "http://localhost:5000/uploads/636f13e9-28f0-43a9-91c7-50c52a3aa13b.webm",
-          "fileSize": 68882,
-          "submittedAt": "2026-11-09T18:58:10.963Z",
-          "attemptNumber": 2,
-          "attemptsAllowed": 2,
+          "id": 1795021024000,
+          "studentName": "Marjona Muxammadiyeva",
+          "studentId": "2899aa7a-537b-4efa-88e4-1e450cf58ab3",
+          "studentEmail": "safarovaferuza140@gmail.com",
+          "studentPhone": "+998 90 072 44 41",
+          "studentAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=256&auto=format&fit=crop",
+          "fileName": "ovozli_yechim_1795021022245.webm",
+          "fileUrl": "https://marvelous-nourishment-production-c87958d0.up.railway.app/uploads/950475ba-f2c4-415e-b1a7-632db2c5bd73.webm",
+          "fileSize": 4613734,
+          "duration": "04:45",
+          "submittedAt": "2026-11-18T16:57:04.000Z",
+          "attemptNumber": 1,
+          "attemptsAllowed": 1,
           "resubmitAllowed": false,
-          "grade": "55",
-          "feedback": "qayta topshiring",
-          "resubmitGrantedAt": "2026-11-09T17:03:22.778Z",
-          "gradedAt": "2026-11-09T18:58:49.889Z",
-          "gradedBy": "Malika",
-          "resubmittedAt": "2026-11-09T18:58:10.963Z",
-          "previousSubmissions": [
-            {
-              "fileName": "ovozli_yechim_1794243726034.webm",
-              "fileUrl": "http://localhost:5000/uploads/8467c3c4-2be9-4bf3-a96e-d6c6c34177a2.webm",
-              "fileSize": 107522,
-              "submittedAt": "2026-11-09T17:02:06.075Z",
-              "grade": "20",
-              "feedback": "qayta topshiring",
-              "attemptNumber": 1
-            }
-          ]
+          "grade": null,
+          "feedback": ""
+        },
+        {
+          "id": 1795022498000,
+          "studentName": "Komola Abjalilova",
+          "studentId": "39bc2715-e49d-4eaf-8d29-be111a14d8e1",
+          "studentEmail": "kamola00002012@gmail.com",
+          "studentPhone": "+998 93 257 59 56",
+          "studentAvatar": "https://marvelous-nourishment-production-c87958d0.up.railway.app/uploads/8a013267-3a58-4fd1-8d3d-46981145e8a4.jpg",
+          "fileName": "ovozli_yechim_1795022496846.webm",
+          "fileUrl": "https://marvelous-nourishment-production-c87958d0.up.railway.app/uploads/8cc46c96-37a5-4ca4-8d77-2e78110a73ec.webm",
+          "fileSize": 3460300,
+          "duration": "00:55",
+          "submittedAt": "2026-11-18T17:21:40.000Z",
+          "attemptNumber": 1,
+          "attemptsAllowed": 1,
+          "resubmitAllowed": false,
+          "grade": null,
+          "feedback": ""
         }
       ],
-      "createdAt": "2026-11-09T17:00:48.677Z"
+      "createdAt": "2026-11-18T10:00:00.000Z"
     },
     {
       "id": 1794235721439,
-      "courseTitle": "IELTS Speaking Masterclass (Band 8.0+), General English Speaking & Fluency, Pronunciation & American Accent Training, Everyday English Conversations & Idioms, Business English Spoken Communication",
+      "courseTitle": "IELTS Speaking Masterclass",
       "courses": [
-        "IELTS Speaking Masterclass (Band 8.0+)",
-        "General English Speaking & Fluency",
-        "Pronunciation & American Accent Training",
-        "Everyday English Conversations & Idioms",
-        "Business English Spoken Communication"
+        "IELTS Speaking Masterclass"
       ],
       "title": "audio task",
       "description": "vazifani audio shaklida yuboring hurmatli shogird!",
@@ -188,13 +168,9 @@
     },
     {
       "id": 1794162500272,
-      "courseTitle": "IELTS Speaking Masterclass (Band 8.0+), General English Speaking & Fluency, Pronunciation & American Accent Training, Everyday English Conversations & Idioms, Business English Spoken Communication",
+      "courseTitle": "IELTS Speaking Masterclass",
       "courses": [
-        "IELTS Speaking Masterclass (Band 8.0+)",
-        "General English Speaking & Fluency",
-        "Pronunciation & American Accent Training",
-        "Everyday English Conversations & Idioms",
-        "Business English Spoken Communication"
+        "IELTS Speaking Masterclass"
       ],
       "title": "New Task English",
       "description": "qisqacha",
@@ -1851,5 +1827,19 @@
   "gamificationResetBy": "turgunboevsss@gmail.com",
   "liveClassesInitialized": true,
   "libraryInitialized": true,
-  "defaultCoursesSeeded": true
+  "defaultCoursesSeeded": true,
+  "courses": [
+    {
+      "id": "3029c72c-07bf-4465-86d5-1b43b82600f2",
+      "title": "IELTS Speaking Masterclass",
+      "category": "Speaking Course",
+      "instructor": "Musurmon Qahharov",
+      "price": "249000",
+      "image": "https://cdn.jsdelivr.net/gh/Kakhkharov/LMS-platform-for-speaking-course@main/image/course_default_cover.jpg",
+      "description": "IELTS Speaking Masterclass bo'yicha to'liq ta'lim dasturi.",
+      "createdAt": "2026-11-15T07:09:35.732Z",
+      "updatedAt": "2026-11-15T13:55:52.124Z",
+      "lessons": []
+    }
+  ]
 }

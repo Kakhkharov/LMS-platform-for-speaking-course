@@ -14,11 +14,45 @@ const INITIAL_TASKS = [];
 
 export default function TasksDashboard({ adminProfile, courses = [], students = [] }) {
   const [tasks, setTasks] = useState([]);
+  const [liveCourses, setLiveCourses] = useState(courses || []);
   const initialNotifSeededRef = useRef(false);
 
-  const courseTitlesFromCourses = (courses || []).map(c => typeof c === 'string' ? c : (c.title || c.name)).filter(Boolean);
-  const courseTitlesFromStudents = (students || []).map(s => s?.course).filter(c => c && !['barchasi', 'all'].includes(String(c).toLowerCase()));
-  const availableCourses = Array.from(new Set([...courseTitlesFromCourses, ...courseTitlesFromStudents].map(s => String(s).trim()).filter(Boolean)));
+  // Synchronize courses with live API /api/courses
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCourses = async () => {
+      try {
+        const token = localStorage.getItem('admin_token') || localStorage.getItem('token');
+        const res = await fetch(`${API_BASE}/api/courses`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && Array.isArray(data) && data.length > 0) {
+            setLiveCourses(data);
+          }
+        }
+      } catch (e) {
+        console.warn('Courses fetch error in TasksDashboard:', e);
+      }
+    };
+    fetchCourses();
+    return () => { isMounted = false; };
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(courses) && courses.length > 0) {
+      setLiveCourses(courses);
+    }
+  }, [courses]);
+
+  // Faqatgina haqiqatda mavjud va faol kurslar ro'yxatini olish (o'chirilgan yoki eskirgan kurslar chiqmasin - 3-rasm)
+  const sourceCourses = (liveCourses && liveCourses.length > 0) ? liveCourses : courses;
+  const courseTitlesFromCourses = (sourceCourses || [])
+    .map(c => typeof c === 'string' ? c : (c.title || c.name))
+    .map(s => String(s).trim())
+    .filter(Boolean);
+  const availableCourses = Array.from(new Set(courseTitlesFromCourses));
 
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -118,10 +152,10 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
 
   const allKnownCourses = (availableCourses && availableCourses.length > 0)
     ? availableCourses
-    : ['IELTS Speaking Masterclass (Band 8.0+)', 'General English Speaking & Fluency', 'Pronunciation & American Accent Training', 'Everyday English Conversations & Idioms', 'Business English Spoken Communication'];
+    : ['IELTS Speaking Masterclass'];
 
   // Form states for Add Task (3-rasm)
-  const [selectedCourses, setSelectedCourses] = useState([allKnownCourses[0] || 'IELTS Speaking Masterclass (Band 8.0+)']);
+  const [selectedCourses, setSelectedCourses] = useState([allKnownCourses[0] || 'IELTS Speaking Masterclass']);
 
   useEffect(() => {
     if (allKnownCourses.length === 0) return;
@@ -517,7 +551,7 @@ export default function TasksDashboard({ adminProfile, courses = [], students = 
         <div>
           <button
             onClick={() => {
-              setSelectedCourses(allKnownCourses.length > 0 ? [allKnownCourses[0]] : ['IELTS Speaking Masterclass (Band 8.0+)']);
+              setSelectedCourses(allKnownCourses.length > 0 ? [allKnownCourses[0]] : ['IELTS Speaking Masterclass']);
               setShowAddTaskModal(true);
             }}
             className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md shadow-blue-500/20 transition-all cursor-pointer"

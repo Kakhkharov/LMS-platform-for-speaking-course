@@ -4959,6 +4959,14 @@ async function buildProgressReportsPayload(dbData, authUser = null) {
       } else {
         effectiveColor = 'red'; // 7-talab: Topshirilmagan bo'lsa qizil rang
       }
+      // Check manual override for this homework task cell
+      const manualHwColor = dbData.homeworkProgressOverrides?.[s.id]?.[String(meta.id)];
+      let isOverridden = false;
+      if (manualHwColor && ['green', 'yellow', 'red'].includes(manualHwColor)) {
+        effectiveColor = manualHwColor;
+        isOverridden = true;
+      }
+
       return {
         taskId: meta.id,
         index: meta.index,
@@ -4966,6 +4974,7 @@ async function buildProgressReportsPayload(dbData, authUser = null) {
         label: meta.label,
         dateDisplay: meta.dateDisplay,
         effectiveColor,
+        isOverridden,
         submittedAt: sub?.submittedAt || null,
         grade: sub?.grade || null
       };
@@ -5124,6 +5133,60 @@ app.put('/api/progress/challenges/override', authenticateToken, requireRole('adm
     res.json({ success: true, ...updatedPayload });
   } catch (err) {
     console.error('Challenge override error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/api/progress/homework/override', authenticateToken, requireRole('admin'), async (req, res) => {
+  try {
+    const userId = String(req.body?.userId || '').trim();
+    const taskId = String(req.body?.taskId || req.body?.day || '').trim();
+    const rawColor = String(req.body?.color || '').trim().toLowerCase();
+
+    if (!userId) {
+      return res.status(400).json({ error: 'Talaba ID si kiritilishi shart.' });
+    }
+    if (!taskId) {
+      return res.status(400).json({ error: 'Topshiriq ID si kiritilishi shart.' });
+    }
+    if (!['green', 'yellow', 'red', 'auto', 'clear', 'none', ''].includes(rawColor)) {
+      return res.status(400).json({ error: "Rang faqat 'green', 'yellow', 'red' yoki 'auto' bo'lishi mumkin." });
+    }
+
+    const targetStudent = await db.prisma.user.findUnique({ where: { id: userId }, select: { id: true, role: true } });
+    if (!targetStudent) {
+      return res.status(404).json({ error: 'Talaba topilmadi.' });
+    }
+
+    const dbData = readLandingDB();
+    if (!dbData.homeworkProgressOverrides || typeof dbData.homeworkProgressOverrides !== 'object') {
+      dbData.homeworkProgressOverrides = {};
+    }
+    if (!dbData.homeworkProgressOverrides[userId] || typeof dbData.homeworkProgressOverrides[userId] !== 'object') {
+      dbData.homeworkProgressOverrides[userId] = {};
+    }
+
+    if (['green', 'yellow', 'red'].includes(rawColor)) {
+      dbData.homeworkProgressOverrides[userId][taskId] = rawColor;
+    } else {
+      delete dbData.homeworkProgressOverrides[userId][taskId];
+      if (Object.keys(dbData.homeworkProgressOverrides[userId]).length === 0) {
+        delete dbData.homeworkProgressOverrides[userId];
+      }
+    }
+
+    writeLandingDB(dbData);
+    broadcastToDashboard('progress_update', {
+      source: 'manual_homework_override',
+      userId,
+      taskId,
+      color: ['green', 'yellow', 'red'].includes(rawColor) ? rawColor : 'auto'
+    });
+
+    const updatedPayload = await buildProgressReportsPayload(dbData, req.user);
+    res.json({ success: true, ...updatedPayload });
+  } catch (err) {
+    console.error('Homework override error:', err);
     res.status(500).json({ error: err.message });
   }
 });

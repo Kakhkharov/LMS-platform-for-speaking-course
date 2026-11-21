@@ -105,7 +105,23 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
   const [courseFilter, setCourseFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('');
 
-  // Manual paint state for 30-Day Challenges Report
+  // Horizontal scroll table refs (2-talab: scroll left, scroll right)
+  const homeworkTableContainerRef = useRef(null);
+  const challengesTableContainerRef = useRef(null);
+
+  const scrollHomeworkTable = (offset) => {
+    if (homeworkTableContainerRef.current) {
+      homeworkTableContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
+
+  const scrollChallengesTable = (offset) => {
+    if (challengesTableContainerRef.current) {
+      challengesTableContainerRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
+
+  // Manual paint state for 30-Day Challenges Report & Homework Report (1-rasm va 2-rasm)
   const [paintBrush, setPaintBrush] = useState('inspect'); // 'inspect' | 'green' | 'yellow' | 'red' | 'auto'
   const [selectedCell, setSelectedCell] = useState(null); // { userId, fullName, day, dayMeta, cell }
   const [savingCellKey, setSavingCellKey] = useState('');
@@ -327,6 +343,48 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
       showToast(err.message, 'error');
     } finally {
       setSavingCellKey('');
+    }
+  };
+
+  // Manual homework color override API call (1-rasm va 2-rasm: Homework reportda ham qo'lda bo'yash)
+  const applyManualHomeworkCellColor = async (userId, taskId, color, studentName = '', taskTitle = '') => {
+    const cellKey = `hw_${userId}_${taskId}`;
+    setSavingCellKey(cellKey);
+    try {
+      const token = localStorage.getItem('admin_token') || localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/api/progress/homework/override`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ userId, taskId, color })
+      });
+      if (res.status === 401 || res.status === 403) {
+        onSessionExpiredRef.current?.();
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || 'Rangni saqlashda xatolik');
+      }
+      const { generatedAt: _ignoredTs, ...comparable } = data || {};
+      lastPayloadSigRef.current = JSON.stringify(comparable);
+      hasLoadedRef.current = true;
+      setProgressData(data);
+      const actionText = color === 'auto' ? 'avtomatik holatga qaytarildi' : `${getColorLabelUz(color)} rangga bo'yaldi`;
+      showToast(`${studentName || 'Talaba'} · ${taskTitle || 'Homework'} ${actionText}`);
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setSavingCellKey('');
+    }
+  };
+
+  const handleHomeworkCellClick = (row, cell, taskMeta) => {
+    if (paintBrush !== 'inspect') {
+      applyManualHomeworkCellColor(row.userId, cell.taskId || taskMeta.id, paintBrush, row.fullName, taskMeta.title);
+      return;
     }
   };
 
@@ -712,7 +770,9 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
       ) : activeReport === 'homework' ? (
         /* ==================== REPORT A: HOMEWORK REPORT (MATRIX VIEW) ==================== */
         <div className="space-y-3">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3.5 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+          {/* Legend + Manual Paint Brush Bar + Horizontal Scroll Buttons (1-rasm va 2-rasm) */}
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-3.5 shadow-2xs flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+            {/* Color rules legend */}
             <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-slate-700 dark:text-slate-300">
               <span className="flex items-center gap-1.5">
                 <span className="w-4 h-4 rounded bg-emerald-500 inline-block border border-emerald-600" />
@@ -726,14 +786,65 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
                 <span className="w-4 h-4 rounded bg-rose-500 inline-block border border-rose-600" />
                 <span>Tashlanmagan — Qizil</span>
               </span>
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold ml-2">
+                Ko'rsatilmoqda: <strong className="text-slate-900 dark:text-white">{filteredHomeworkRows.length}</strong> talaba
+              </span>
             </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">
-              Ko'rsatilmoqda: <strong className="text-slate-900 dark:text-white">{filteredHomeworkRows.length}</strong> talaba
+
+            {/* Manual Painting Tools + Scroll Controls */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-black text-slate-600 dark:text-slate-300 mr-1 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[16px] text-indigo-500">palette</span>
+                  Qo'lda bo'yash:
+                </span>
+                {BRUSH_OPTIONS.map(b => (
+                  <button
+                    key={b.id}
+                    type="button"
+                    data-testid={`hw-paint-brush-${b.id}`}
+                    onClick={() => {
+                      setPaintBrush(b.id);
+                      if (b.id !== 'inspect') setSelectedCell(null);
+                    }}
+                    className={`px-2.5 py-1.5 rounded-xl text-[11px] font-black border flex items-center gap-1 transition-all cursor-pointer ${
+                      paintBrush === b.id
+                        ? `${b.cls} ring-2 ring-offset-1 ring-indigo-500 dark:ring-offset-slate-900 shadow-xs scale-[1.02]`
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[14px]">{b.icon}</span>
+                    <span>{b.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Scroll buttons (2-talab) */}
+              <div className="flex items-center gap-1 border-l border-slate-200 dark:border-slate-700 pl-2">
+                <button
+                  type="button"
+                  onClick={() => scrollHomeworkTable(-300)}
+                  className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  title="Jadvalni chapga surish (Scroll left)"
+                >
+                  <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                  <span className="hidden sm:inline">Chapga</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollHomeworkTable(300)}
+                  className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  title="Jadvalni o'ngga surish (Scroll right)"
+                >
+                  <span className="hidden sm:inline">O'ngga</span>
+                  <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+                </button>
+              </div>
             </div>
           </div>
 
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
+            <div ref={homeworkTableContainerRef} className="overflow-x-auto scroll-smooth">
               <table className="w-full border-collapse text-left text-xs min-w-[1380px]" data-testid="admin-homework-report-table">
                 <thead>
                   <tr className="bg-[#163b29] text-emerald-100 text-[10px] font-bold">
@@ -825,15 +936,29 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
                         </td>
                         {visibleHomeworkTasksMeta.map(meta => {
                           const cell = (row.taskCells || row.days || []).find(d => String(d.taskId) === String(meta.id) || Number(d.index) === Number(meta.index)) || {
+                            taskId: meta.id,
                             effectiveColor: 'none'
                           };
                           const dimmed = colorFilter !== 'all' && cell.effectiveColor !== colorFilter;
+                          const isSaving = savingCellKey === `hw_${row.userId}_${meta.id}`;
                           return (
                             <td
                               key={`${row.userId}_${meta.id || meta.index}`}
-                              title={`${row.fullName} · ${meta.title} (${meta.dateDisplay}) — ${getColorLabelUz(cell.effectiveColor)}`}
-                              className={`border border-slate-200 dark:border-slate-700 p-0 h-9 min-w-[68px] ${getChallengeCellClass(cell.effectiveColor, dimmed)}`}
-                            />
+                              onClick={() => handleHomeworkCellClick(row, cell, meta)}
+                              title={`${row.fullName} · ${meta.title} (${meta.dateDisplay}) — ${getColorLabelUz(cell.effectiveColor)}${cell.isOverridden ? " (Qo'lda bo'yalgan)" : ''}`}
+                              className={`border border-slate-200 dark:border-slate-700 p-0 h-9 min-w-[68px] transition-all relative ${getChallengeCellClass(cell.effectiveColor, dimmed)} ${
+                                paintBrush !== 'inspect' ? 'cursor-crosshair hover:opacity-85' : 'cursor-pointer'
+                              }`}
+                            >
+                              {isSaving && (
+                                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                </div>
+                              )}
+                              {cell.isOverridden && !isSaving && (
+                                <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-white shadow-xs" title="Qo'lda tahrirlangan" />
+                              )}
+                            </td>
                           );
                         })}
                       </tr>
@@ -869,37 +994,61 @@ export default function AdminProgress({ courses = [], students = [], onSessionEx
               </span>
             </div>
 
-            {/* Manual Painting Tools */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-[11px] font-black text-slate-600 dark:text-slate-300 mr-1 flex items-center gap-1">
-                <span className="material-symbols-outlined text-[16px] text-indigo-500">palette</span>
-                Qo'lda bo'yash:
-              </span>
-              {BRUSH_OPTIONS.map(b => (
+            {/* Manual Painting Tools + Scroll Controls */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-black text-slate-600 dark:text-slate-300 mr-1 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[16px] text-indigo-500">palette</span>
+                  Qo'lda bo'yash:
+                </span>
+                {BRUSH_OPTIONS.map(b => (
+                  <button
+                    key={b.id}
+                    type="button"
+                    data-testid={`paint-brush-${b.id}`}
+                    onClick={() => {
+                      setPaintBrush(b.id);
+                      if (b.id !== 'inspect') setSelectedCell(null);
+                    }}
+                    className={`px-2.5 py-1.5 rounded-xl text-[11px] font-black border flex items-center gap-1 transition-all cursor-pointer ${
+                      paintBrush === b.id
+                        ? `${b.cls} ring-2 ring-offset-1 ring-indigo-500 dark:ring-offset-slate-900 shadow-xs scale-[1.02]`
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[14px]">{b.icon}</span>
+                    <span>{b.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Scroll buttons (2-talab) */}
+              <div className="flex items-center gap-1 border-l border-slate-200 dark:border-slate-700 pl-2">
                 <button
-                  key={b.id}
                   type="button"
-                  data-testid={`paint-brush-${b.id}`}
-                  onClick={() => {
-                    setPaintBrush(b.id);
-                    if (b.id !== 'inspect') setSelectedCell(null);
-                  }}
-                  className={`px-2.5 py-1.5 rounded-xl text-[11px] font-black border flex items-center gap-1 transition-all cursor-pointer ${
-                    paintBrush === b.id
-                      ? `${b.cls} ring-2 ring-offset-1 ring-indigo-500 dark:ring-offset-slate-900 shadow-xs scale-[1.02]`
-                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
-                  }`}
+                  onClick={() => scrollChallengesTable(-300)}
+                  className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  title="Jadvalni chapga surish (Scroll left)"
                 >
-                  <span className="material-symbols-outlined text-[14px]">{b.icon}</span>
-                  <span>{b.label}</span>
+                  <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                  <span className="hidden sm:inline">Chapga</span>
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => scrollChallengesTable(300)}
+                  className="px-2.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                  title="Jadvalni o'ngga surish (Scroll right)"
+                >
+                  <span className="hidden sm:inline">O'ngga</span>
+                  <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* 30-Day Spreadsheet Matrix */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
+            <div ref={challengesTableContainerRef} className="overflow-x-auto scroll-smooth">
               <table className="w-full border-collapse text-left text-xs min-w-[1400px]" data-testid="admin-challenges-report-table">
                 <thead>
                   {/* Row 1: Dates above Day 1..Day 30 */}

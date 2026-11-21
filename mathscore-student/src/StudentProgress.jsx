@@ -99,6 +99,22 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
   const [courseFilter, setCourseFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('');
 
+  // Table horizontal scroll refs (2-talab: scroll left, scroll right)
+  const homeworkTableRef = useRef(null);
+  const challengesTableRef = useRef(null);
+
+  const scrollHomeworkTable = (offset) => {
+    if (homeworkTableRef.current) {
+      homeworkTableRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
+
+  const scrollChallengesTable = (offset) => {
+    if (challengesTableRef.current) {
+      challengesTableRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+    }
+  };
+
   const fetchProgress = useCallback(async ({ silent = false } = {}) => {
     const isInitialLoad = !hasLoadedRef.current;
     if (!silent && isInitialLoad) {
@@ -511,23 +527,47 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
       ) : activeReport === 'homework' ? (
         /* ==================== STUDENT HOMEWORK REPORT (VIEW MODE) ==================== */
         <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-4 px-1 text-[11px] font-bold text-outline">
-            <span className="flex items-center gap-1.5">
-              <span className="w-3.5 h-3.5 rounded bg-emerald-500 inline-block" />
-              <span>Deadline ichida — Yashil</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-3.5 h-3.5 rounded bg-amber-400 inline-block" />
-              <span>Deadlinedan keyin — Sariq</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-3.5 h-3.5 rounded bg-rose-500 inline-block" />
-              <span>Tashlanmagan — Qizil</span>
-            </span>
+          <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+            <div className="flex flex-wrap items-center gap-4 text-[11px] font-bold text-outline">
+              <span className="flex items-center gap-1.5">
+                <span className="w-3.5 h-3.5 rounded bg-emerald-500 inline-block" />
+                <span>Deadline ichida — Yashil</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3.5 h-3.5 rounded bg-amber-400 inline-block" />
+                <span>Deadlinedan keyin — Sariq</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3.5 h-3.5 rounded bg-rose-500 inline-block" />
+                <span>Tashlanmagan — Qizil</span>
+              </span>
+            </div>
+
+            {/* Scroll buttons (2-talab) */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => scrollHomeworkTable(-300)}
+                className="px-2.5 py-1.5 rounded-xl border border-outline-variant bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                title="Jadvalni chapga surish (Scroll left)"
+              >
+                <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                <span className="hidden sm:inline">Chapga</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollHomeworkTable(300)}
+                className="px-2.5 py-1.5 rounded-xl border border-outline-variant bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                title="Jadvalni o'ngga surish (Scroll right)"
+              >
+                <span className="hidden sm:inline">O'ngga</span>
+                <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+              </button>
+            </div>
           </div>
 
           <div className="bg-surface rounded-2xl border border-outline-variant shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
+            <div ref={homeworkTableRef} className="overflow-x-auto scroll-smooth">
               <table className="w-full border-collapse text-left text-xs min-w-[1380px]" data-testid="student-homework-table">
                 <thead>
                   <tr className="bg-[#163b29] text-emerald-100 text-[10px] font-bold">
@@ -642,23 +682,47 @@ export default function StudentProgress({ profile = null, onPremiumRequired = nu
       ) : (
         /* ==================== STUDENT 30-DAY CHALLENGES REPORT (VIEW MODE) ==================== */
         <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-4 px-1 text-[11px] font-bold text-outline">
-            <span className="flex items-center gap-1.5">
-              <span className="w-3.5 h-3.5 rounded bg-emerald-500 inline-block" />
-              <span>Deadline ichida — Yashil</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-3.5 h-3.5 rounded bg-amber-400 inline-block" />
-              <span>Deadlinedan keyin — Sariq</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-3.5 h-3.5 rounded bg-rose-500 inline-block" />
-              <span>Tashlanmagan — Qizil</span>
-            </span>
+          <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+            <div className="flex flex-wrap items-center gap-4 text-[11px] font-bold text-outline">
+              <span className="flex items-center gap-1.5">
+                <span className="w-3.5 h-3.5 rounded bg-emerald-500 inline-block" />
+                <span>Deadline ichida — Yashil</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3.5 h-3.5 rounded bg-amber-400 inline-block" />
+                <span>Deadlinedan keyin — Sariq</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-3.5 h-3.5 rounded bg-rose-500 inline-block" />
+                <span>Tashlanmagan — Qizil</span>
+              </span>
+            </div>
+
+            {/* Scroll buttons (2-talab) */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => scrollChallengesTable(-300)}
+                className="px-2.5 py-1.5 rounded-xl border border-outline-variant bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                title="Jadvalni chapga surish (Scroll left)"
+              >
+                <span className="material-symbols-outlined text-[15px]">arrow_back</span>
+                <span className="hidden sm:inline">Chapga</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollChallengesTable(300)}
+                className="px-2.5 py-1.5 rounded-xl border border-outline-variant bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-bold flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-2xs"
+                title="Jadvalni o'ngga surish (Scroll right)"
+              >
+                <span className="hidden sm:inline">O'ngga</span>
+                <span className="material-symbols-outlined text-[15px]">arrow_forward</span>
+              </button>
+            </div>
           </div>
 
           <div className="bg-surface rounded-2xl border border-outline-variant shadow-xs overflow-hidden">
-            <div className="overflow-x-auto">
+            <div ref={challengesTableRef} className="overflow-x-auto scroll-smooth">
               <table className="w-full border-collapse text-left text-xs min-w-[1380px]" data-testid="student-challenges-table">
                 <thead>
                   <tr className="bg-[#163b29] text-emerald-100 text-[10px] font-bold">
